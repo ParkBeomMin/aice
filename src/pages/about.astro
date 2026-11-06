@@ -1,25 +1,65 @@
 ---
 import Base from '../layouts/Base.astro';
 import { pageUrl, withBase } from '../lib/paths';
+import { getManifests } from '../lib/content';
+import { getDecks, totalCards } from '../lib/cards';
+const packs = getManifests();
+const questionCount = packs.reduce((n, p) => n + p.question_count, 0);
+const decks = getDecks();
+const ic = {
+  exam: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+  check: '<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>',
+  book: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/>',
+  cards: '<rect x="3" y="6" width="14" height="14" rx="2"/><path d="M7 2h12a2 2 0 0 1 2 2v12"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+  cc: '<circle cx="12" cy="12" r="9"/><path d="M10.5 9.5a3 3 0 1 0 0 5M17 9.5a3 3 0 1 0 0 5"/>',
+};
+const svg = (k: keyof typeof ic) => `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ic[k]}</svg>`;
 ---
-<Base kind="policy" title="소개" description="AICE 실전 모의고사 사이트 소개: 비공식 개인 학습 프로젝트" crumbs={[{ label: '소개' }]}>
-  <h1>소개</h1>
-  <p>AICE Associate 시험을 준비하며 직접 만든 연습 문제를, 브라우저에서 바로 풀어볼 수 있게 공개하는 개인 학습 프로젝트입니다.</p>
-  <h2>비공식 안내</h2>
-  <ul>
-    <li>KT 등 AICE 시험 주관사와 관련이 없습니다. 실제 시험 문항을 복제하지 않고 직접 만든 문제와 데이터만 사용합니다.</li>
-    <li>사이트의 자동 채점 결과는 자체 연습용이며, 공식 AICE 점수나 합격 여부와 무관합니다.</li>
-  </ul>
-  <h2>무엇을 할 수 있나요</h2>
-  <ul>
-    <li><a href={pageUrl('exams')}>모의고사</a>를 하나의 노트북으로 셀 단위로 풀기 (Python 은 브라우저 안에서 실행)</li>
-    <li>실전 모드: 제한시간 안에 풀고 제출하면 자동 채점과 문항별 피드백 확인</li>
-    <li>문제별 해설과 정답 예시 확인, 풀이 노트북(.ipynb) 내려받아 Jupyter나 Colab에서 이어 풀기</li>
-  </ul>
-  <h2>콘텐츠 라이선스</h2>
-  <ul>
-    <li><a href={pageUrl('cards')}>개념 카드</a>와 모의고사 합성 데이터셋은 <a href="https://creativecommons.org/licenses/by/4.0/deed.ko" rel="license noopener">CC BY 4.0</a> 으로 공개합니다. 다른 곳에 쓸 때는 출처(ParkBeomMin, AICE 실전 모의고사)를 밝혀 주세요.</li>
-    <li>라이선스는 각 콘텐츠가 공개된 시점부터 적용됩니다. 사이트 코드와 디자인에는 적용되지 않습니다.</li>
-  </ul>
-  <p>자세한 사용법은 <a href={withBase('guide/')}>이용 안내</a>, 문의는 <a href={withBase('contact/')}>문의</a> 페이지를 봐 주세요.</p>
+<Base kind="policy" title="소개" description="AICE 실전 모의고사 사이트 소개: AICE Associate 대비 무료 모의고사와 개념 카드를 제공하는 비공식 개인 학습 프로젝트" crumbs={[{ label: '소개' }]}>
+  <div class="ab">
+    <header class="ab-hero">
+      <p class="ab-kicker">AICE Associate 대비 개인 학습 프로젝트</p>
+      <h1>시험 전에, 실전처럼 한 번 풀어보세요</h1>
+      <p>AICE Associate 시험을 준비하며 직접 만든 연습 문제를 누구나 브라우저에서 바로 풀어볼 수 있게 공개했어요. 설치도, 회원 가입도 필요 없어요.</p>
+      <ul class="ab-stats" aria-label="공개 콘텐츠">
+        <li><strong>{packs.length}회차</strong><span>모의고사</span></li>
+        <li><strong>{questionCount}문항</strong><span>자동 채점</span></li>
+        <li><strong>{totalCards()}장</strong><span>개념 카드 ({decks.length}개 주제)</span></li>
+        <li><strong>0원</strong><span>무료</span></li>
+      </ul>
+    </header>
+
+    <section aria-labelledby="ab-what">
+      <h2 id="ab-what">이 사이트에서 할 수 있는 것</h2>
+      <div class="g-grid ab-grid">
+        <a class="g-tile ab-tile" href={pageUrl('exams')}><span class="g-ic" set:html={svg('exam')} /><h3>실전 모의고사</h3><p>90분 타이머를 켜고 실제 시험처럼 노트북 셀에 코드를 작성하고 실행해요.</p></a>
+        <div class="g-tile"><span class="g-ic" set:html={svg('check')} /><h3>자동 채점</h3><p>제출하면 브라우저 안에서 코드를 다시 실행해 문항별 결과와 피드백을 보여줘요.</p></div>
+        <div class="g-tile"><span class="g-ic" set:html={svg('book')} /><h3>해설과 정답 코드</h3><p>문항마다 풀이 방법과 정답 예시를 확인하고, 노트북을 내려받아 Jupyter나 Colab에서 이어 풀 수 있어요.</p></div>
+        <a class="g-tile ab-tile" href={pageUrl('cards')}><span class="g-ic" set:html={svg('cards')} /><h3>개념 카드</h3><p>질문을 보고 떠올린 뒤 카드를 뒤집어 확인해요. 틀린 문항과 관련된 카드만 골라 복습할 수도 있어요.</p></a>
+      </div>
+    </section>
+
+    <section class="g-note" aria-labelledby="ab-notice">
+      <h2 id="ab-notice">비공식 사이트예요</h2>
+      <ul class="g-notes">
+        <li><span class="g-ic sm" set:html={svg('info')} /><div><strong>시험 주관사와 관련이 없어요</strong><p>KT 등 AICE 시험 주관사와 관련 없는 개인 프로젝트예요. 실제 시험 문항을 복제하지 않고, 직접 만든 문제와 합성 데이터만 사용해요.</p></div></li>
+        <li><span class="g-ic sm" set:html={svg('check')} /><div><strong>점수는 연습용이에요</strong><p>자동 채점 결과는 자체 연습용이며, 공식 AICE 점수나 합격 여부와 관계없어요.</p></div></li>
+      </ul>
+    </section>
+
+    <section class="ab-license" aria-labelledby="ab-lic">
+      <span class="g-ic" set:html={svg('cc')} />
+      <div>
+        <h2 id="ab-lic">콘텐츠 라이선스</h2>
+        <p><a href={pageUrl('cards')}>개념 카드</a>와 모의고사 합성 데이터셋은 <a href="https://creativecommons.org/licenses/by/4.0/deed.ko" rel="license noopener">CC BY 4.0</a> 으로 공개해요. 다른 곳에 쓸 때는 출처(ParkBeomMin, AICE 실전 모의고사)를 밝혀 주세요.</p>
+        <p class="ab-sub">라이선스는 각 콘텐츠가 공개된 시점부터 적용되며, 사이트 코드와 디자인에는 적용되지 않아요.</p>
+      </div>
+    </section>
+
+    <div class="g-cta">
+      <div><strong>궁금한 점이 있나요?</strong><p>사용법은 이용 안내에, 문제 오류나 채점 이의는 문의 페이지에 남겨 주세요.</p></div>
+      <div class="g-cta-actions"><a class="btn" href={withBase('guide/')}>이용 안내</a><a href={withBase('contact/')}>문의하기</a></div>
+    </div>
+  </div>
 </Base>
