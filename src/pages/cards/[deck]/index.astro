@@ -4,6 +4,8 @@ import { getDecks, cardQuestions, CARD_DIFFICULTY_LABEL, runtimeLabel, type Publ
 import { getManifest } from '../../../lib/content';
 import { pageUrl } from '../../../lib/paths';
 import { jsonForScript } from '../../../lib/page-config';
+import AdSlot from '../../../components/AdSlot.astro';
+
 
 export function getStaticPaths() {
   return getDecks().map((d) => ({ params: { deck: d.deck_id }, props: { d } }));
@@ -61,6 +63,8 @@ const progressCfg = { decks: [{ id: d.deck_id, cards: d.cards.map((c) => ({ id: 
         ))}
       </ol>
     </section>
+
+    <AdSlot kind="carddeck" unit="content" />
 
     {d.license === 'CC-BY-4.0' && (
       <p class="cd-license">이 덱의 개념 카드는 <a href="https://creativecommons.org/licenses/by/4.0/deed.ko" rel="license noopener">CC BY 4.0</a> 으로 공개해요. 다른 곳에 쓸 때는 출처(ParkBeomMin, AICE 실전 모의고사)를 밝혀 주세요.</p>

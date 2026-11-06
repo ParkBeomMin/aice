@@ -3,6 +3,8 @@ import Base from '../../layouts/Base.astro';
 import { getDecks, totalCards } from '../../lib/cards';
 import { pageUrl } from '../../lib/paths';
 import { jsonForScript } from '../../lib/page-config';
+import AdSlot from '../../components/AdSlot.astro';
+
 const decks = getDecks();
 const ICONS: Record<string, string> = {
   'pandas-basics': '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M10 4v16"/>',
@@ -48,6 +50,7 @@ const progressCfg = { decks: decks.map((d) => ({ id: d.deck_id, cards: d.cards.m
         </li>
       ))}
     </ul>
+    <AdSlot kind="cardlist" unit="content" />
     <p class="cl-note">학습 기록은 이 브라우저에만 저장돼요. 다른 기기와 동기화되지 않아요.</p>
   </div>
   <script type="application/json" id="cards-progress-config" set:html={jsonForScript(progressCfg)}></script>

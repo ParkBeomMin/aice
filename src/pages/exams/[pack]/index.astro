@@ -2,6 +2,8 @@
 import Base from '../../../layouts/Base.astro';
 import { getManifests, DIFFICULTY_LABEL, topicLabel, formatBytes, type Manifest } from '../../../lib/content';
 import { pageUrl, withBase } from '../../../lib/paths';
+import AdSlot from '../../../components/AdSlot.astro';
+
 
 export function getStaticPaths() {
   return getManifests().map((m) => ({ params: { pack: m.pack_id }, props: { m } }));
@@ -57,6 +59,8 @@ const topics = [...new Set(m.questions.map((q) => topicLabel(q.topic)))];
         ))}
       </ol>
     </section>
+
+    <AdSlot kind="pack" unit="content" />
 
     {m.datasets.length > 0 && (
       <section aria-labelledby="ex-ds">

@@ -22,10 +22,9 @@ jobs:
       # 광고·정책 시행일은 저장소 Variables 로만 켠다 (기본 비활성). 게시자 ID 예: ca-pub-7426857657290789
       PUBLIC_ADS_ENABLED: ${{ vars.ADS_ENABLED }}
       PUBLIC_ADSENSE_CLIENT: ${{ vars.ADSENSE_CLIENT }}
-      # EEA·UK·스위스 대상 Google 인증 CMP 설정을 확인한 뒤에만 1 (없으면 광고 비활성)
-      PUBLIC_ADS_CMP_READY: ${{ vars.ADS_CMP_READY }}
+      # 유럽(EEA, 영국, 스위스) 동의 메시지는 AdSense 개인 정보 보호 및 메시지에서 별도 설정 (나중에)
       PUBLIC_POLICY_DATE: ${{ vars.POLICY_DATE }}
-      EXPECT_ADS: ${{ vars.ADS_ENABLED == '1' && vars.ADS_CMP_READY == '1' && '1' || '0' }}
+      EXPECT_ADS: ${{ vars.ADS_ENABLED == '1' && '1' || '0' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

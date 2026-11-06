@@ -425,3 +425,7 @@ button.btn.btn-ghost { border: 1px solid #c9d6f7; }
 @media (max-width: 640px) { .ex-card { padding: 18px; } .ex-card-actions .btn { flex: 1; text-align: center; } .ex-ds { flex-wrap: wrap; } }
 @media (prefers-reduced-motion: reduce) { .ex-card { transition: none; } }
 .ex .g-mode h3 { margin: 0; font-size: 17px; } .ex .g-mode-head { margin-bottom: 10px; } .ex .g-chip { margin-bottom: 2px; }
+/* 배너 광고: 버튼과 떨어진 위치, "광고" 표시, 채워지지 않으면 자리 숨김 */
+.ad-slot { margin: 36px 0; padding-top: 10px; border-top: 1px solid var(--line); }
+.ad-label { margin: 0 0 6px; font-size: 11px; color: var(--muted); letter-spacing: .04em; }
+.ad-slot:has(ins.adsbygoogle[data-ad-status="unfilled"]) { display: none; }

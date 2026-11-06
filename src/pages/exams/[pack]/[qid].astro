@@ -3,6 +3,8 @@ import Base from '../../../layouts/Base.astro';
 import { getManifests, getQuestion, DIFFICULTY_LABEL, topicLabel, formatBytes, type Manifest, type PublicQuestion } from '../../../lib/content';
 import { pageUrl, withBase } from '../../../lib/paths';
 import { cardMap, questionLinks } from '../../../lib/cards';
+import AdSlot from '../../../components/AdSlot.astro';
+
 
 export function getStaticPaths() {
   return getManifests().flatMap((m) =>
@@ -68,6 +70,8 @@ const desc = `${m.title} ${q.question_id.toUpperCase()}, ${topicLabel(q.topic)},
         </ul>
       </section>
     )}
+
+    <AdSlot kind="question" unit="explanation" />
 
     <nav class="pager" aria-label="문항 이동">
       {prev ? <a href={pageUrl('exams', m.pack_id, prev)}>← {prev.toUpperCase()}</a> : <span />}

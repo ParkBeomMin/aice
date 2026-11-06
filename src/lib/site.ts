@@ -4,8 +4,11 @@ import { isProduction } from './content';
 export const SITE_NAME = 'AICE 실전 모의고사';
 export const CONTACT_URL = 'https://github.com/ParkBeomMin/aice/issues';
 export const ADSENSE_CLIENT = (import.meta.env.PUBLIC_ADSENSE_CLIENT ?? '') as string;
-/** 광고는 기본 OFF. 켜려면 게시자 ID + PUBLIC_ADS_ENABLED=1 + PUBLIC_ADS_CMP_READY=1 (EEA, UK, 스위스 대상 Google 인증 CMP 설정을 운영자가 확인) 모두 필요 */
-export const ADS_ENABLED = isProduction && import.meta.env.PUBLIC_ADS_ENABLED === '1' && import.meta.env.PUBLIC_ADS_CMP_READY === '1' && /^ca-pub-\d{10,20}$/.test(ADSENSE_CLIENT);
+/** 광고는 기본 OFF. 켜려면 production 빌드 + PUBLIC_ADS_ENABLED=1 + 게시자 ID.
+ *  유럽(EEA, 영국, 스위스) 동의 메시지(Google 인증 CMP)는 사용자 결정으로 나중에 설정 (2026-11-06). 설정 전에는 해당 지역에 광고가 제한될 수 있음 */
+export const ADS_ENABLED = isProduction && import.meta.env.PUBLIC_ADS_ENABLED === '1' && /^ca-pub-\d{10,20}$/.test(ADSENSE_CLIENT);
+/** AdSense 디스플레이 광고 단위 (반응형). 자동 광고는 AdSense 에서 parkbeommin.github.io/aice 섹션 제외 */
+export const AD_SLOTS = { content: '5859561171', explanation: '3403742045' } as const;
 export const OPERATOR = 'ParkBeomMin (GitHub)';
 /** 정책 시행일 (공개 시 CI 변수로 지정). 없으면 '공개 전 초안' */
 export const POLICY_DATE = (import.meta.env.PUBLIC_POLICY_DATE ?? '') as string;

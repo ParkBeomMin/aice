@@ -94,11 +94,10 @@ PUBLIC_REPO_NAME=aice npm run verify:dist    # 링크, noindex, 광고 정책 �
 | 변수 | 설명 |
 |---|---|
 | `POLICY_DATE` | 개인정보처리방침 시행일 (YYYY-MM-DD) |
-| `ADS_ENABLED` | `1`이면 광고 사용 (아래 두 값도 필요) |
+| `ADS_ENABLED` | `1`이면 광고 사용 (`ADSENSE_CLIENT`도 필요) |
 | `ADSENSE_CLIENT` | AdSense 게시자 ID |
-| `ADS_CMP_READY` | EEA, 영국, 스위스용 Google 인증 동의 관리 설정을 마쳤을 때만 `1` |
 
-광고를 켜도 풀이, 실전, 채점 결과, 개념 카드 학습 화면에는 광고를 넣지 않아요. `ads.txt`는 호스트 루트(`parkbeommin.github.io`)에 있는 파일을 그대로 사용해요.
+광고는 자동 광고 대신 정해진 자리에 배너로 넣어요 (홈, 모의고사 목록, 회차 소개, 문항 해설, 개념 카드 목록과 덱 페이지의 본문 아래). 풀이, 실전, 채점 결과, 개념 카드 학습 화면, 정책 페이지에는 넣지 않아요. 유럽(EEA, 영국, 스위스) 방문자용 동의 메시지는 아직 설정 전이라, 그 지역에는 광고가 제한될 수 있어요. `ads.txt`는 호스트 루트(`parkbeommin.github.io`)에 있는 파일을 그대로 사용해요.
 
 ### 이전 공부 노트
 

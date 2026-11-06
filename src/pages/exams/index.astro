@@ -2,6 +2,8 @@
 import Base from '../../layouts/Base.astro';
 import { getManifests } from '../../lib/content';
 import { pageUrl, withBase } from '../../lib/paths';
+import AdSlot from '../../components/AdSlot.astro';
+
 const packs = getManifests();
 ---
 <Base kind="list" title="모의고사 목록" description="AICE Associate 실전 모의고사 회차 목록. 브라우저에서 Python 코드를 작성하고 자동 채점까지 받아보세요." crumbs={[{ label: '모의고사' }]}>
@@ -36,6 +38,8 @@ const packs = getManifests();
         </li>
       ))}
     </ul>
+
+    <AdSlot kind="list" unit="content" />
 
     <aside class="ex-tip">
       <strong>처음 풀어보시나요?</strong>
