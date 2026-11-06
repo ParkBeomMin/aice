@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q04",
   "public_id": "associate-001-q04",
-  "revision": 1,
+  "revision": 2,
   "title": "그룹별 이탈률",
   "topic": "pandas",
   "difficulty": "medium",
-  "prompt": "`df_raw`를 `membership_type`으로 묶어 `churn_30d` 평균(이탈률)을 구하고, 인덱스를 문자 오름차순 정렬한 Series를 `churn_by_membership`에 저장하시오. 결과를 출력하시오.",
+  "prompt": "`df_raw`를 `membership_type`별로 묶어 그룹별 이탈률을 구하시오.\n\n1. 그룹별 `churn_30d` 평균(이탈률)을 계산하시오.\n2. 인덱스를 문자 오름차순으로 정렬한 Series를 `churn_by_membership`에 저장하시오.\n3. 결과를 출력하시오.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",

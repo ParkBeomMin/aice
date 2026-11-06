@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q05",
   "public_id": "associate-001-q05",
-  "revision": 1,
+  "revision": 2,
   "title": "상관계수",
   "topic": "pandas",
   "difficulty": "easy",
-  "prompt": "`df_raw`의 `days_since_last_login`과 `churn_30d` 사이의 Pearson 상관계수를 계산하여 실수 `login_churn_corr`에 저장하시오. 소수점 4자리로 출력하시오(저장 값은 반올림하지 않아도 됨).",
+  "prompt": "`df_raw`의 `days_since_last_login`과 `churn_30d` 사이의 Pearson 상관계수를 계산하여 실수 `login_churn_corr`에 저장하시오.\n\n- 결과는 소수점 4자리로 출력하시오.\n- 저장하는 값은 반올림하지 않아도 됩니다.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",

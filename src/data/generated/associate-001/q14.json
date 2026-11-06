@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q14",
   "public_id": "associate-001-q14",
-  "revision": 2,
+  "revision": 3,
   "title": "분류 임계값 변경에 따른 Precision, Recall, F1 평가",
   "topic": "machine_learning",
   "difficulty": "medium",
-  "prompt": "`lr_model`의 `predict_proba(X_test_scaled)[:, 1]`로 양성 클래스(`churn_30d=1`) 확률을 구해 `lr_prob`에 저장하시오. 기본 임계값 0.5 대신 0.4를 적용하여 확률이 0.4 이상이면 1, 아니면 0으로 예측한 정수 배열을 `lr_pred_04`에 저장하시오. `y_test` 기준 Precision, Recall, F1을 계산해 `lr_precision_04`, `lr_recall_04`, `lr_f1_04`에 저장하고 세 값을 출력하시오.",
+  "prompt": "분류 임계값을 0.4로 바꿨을 때의 성능을 평가하시오.\n\n1. `lr_model`의 `predict_proba(X_test_scaled)[:, 1]`로 양성 클래스(`churn_30d=1`) 확률을 구해 `lr_prob`에 저장하시오.\n2. 기본 임계값 0.5 대신 0.4를 적용하여, 확률이 0.4 이상이면 1, 아니면 0으로 예측한 정수 배열을 `lr_pred_04`에 저장하시오.\n3. `y_test` 기준 Precision, Recall, F1을 계산해 `lr_precision_04`, `lr_recall_04`, `lr_f1_04`에 저장하시오.\n4. 세 값을 출력하시오.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",

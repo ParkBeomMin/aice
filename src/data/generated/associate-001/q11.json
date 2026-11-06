@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q11",
   "public_id": "associate-001-q11",
-  "revision": 2,
+  "revision": 3,
   "title": "랜덤포레스트 학습",
   "topic": "machine_learning",
   "difficulty": "easy",
-  "prompt": "`RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=1)`를 `X_train`, `y_train`으로 학습하고 `rf_model`에 저장하시오. 학습한 모델은 q09에서 만든 `X_test`, `y_test`로 평가됩니다.",
+  "prompt": "랜덤포레스트 모델을 학습하시오.\n\n1. `RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=1)`를 `X_train`, `y_train`으로 학습하시오.\n2. 학습한 모델을 `rf_model`에 저장하시오.\n\n학습한 모델은 q09에서 만든 `X_test`, `y_test`로 평가됩니다.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",

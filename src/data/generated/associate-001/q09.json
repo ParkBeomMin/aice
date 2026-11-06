@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q09",
   "public_id": "associate-001-q09",
-  "revision": 2,
+  "revision": 3,
   "title": "훈련/평가 분리와 표준화",
   "topic": "machine_learning",
   "difficulty": "hard",
-  "prompt": "`df_model`의 `churn_30d`를 `y`, 나머지를 `X`로 분리하고, `train_test_split(test_size=0.2, random_state=42, stratify=y)`로 `X_train`, `X_test`, `y_train`, `y_test`를 생성하시오. 숫자형 원본 특징 `days_since_signup`, `sessions_last_30d`, `avg_session_minutes`, `completion_rate`, `quiz_avg_score`, `days_since_last_login`, `support_tickets_30d`, `payment_delay_days`만 `StandardScaler`로 표준화하되 훈련 데이터에서만 fit 한 후, 훈련 및 평가 DataFrame `X_train_scaled`, `X_test_scaled`를 만드시오. 원-핫 컬럼은 0/1 그대로 유지하시오. fit 한 scaler를 `scaler`에 저장하시오. (참고: 이 회차는 q06과 q07의 결측 대체 및 이상값 기준을 전체 데이터에서 계산한 탐색 실습 흐름입니다. 실제 모델 평가에서는 평가 데이터 정보가 섞이지 않도록 분할 후 훈련 데이터에서만 전처리 기준을 학습(fit)하는 것이 원칙입니다.)",
+  "prompt": "`df_model`을 훈련 데이터와 평가 데이터로 나누고, 숫자형 특징을 표준화하시오.\n\n1. `churn_30d`를 `y`, 나머지 컬럼을 `X`로 분리하시오.\n2. `train_test_split(test_size=0.2, random_state=42, stratify=y)`로 `X_train`, `X_test`, `y_train`, `y_test`를 생성하시오.\n3. 숫자형 원본 특징 8개(`days_since_signup`, `sessions_last_30d`, `avg_session_minutes`, `completion_rate`, `quiz_avg_score`, `days_since_last_login`, `support_tickets_30d`, `payment_delay_days`)만 `StandardScaler`로 표준화하시오. 원-핫 컬럼은 0/1 그대로 유지하시오.\n4. scaler는 훈련 데이터에서만 fit 한 후, 훈련 및 평가 DataFrame `X_train_scaled`, `X_test_scaled`를 만드시오.\n5. fit 한 scaler를 `scaler`에 저장하시오.\n\n> 참고: 이 회차는 q06과 q07의 결측 대체 및 이상값 기준을 전체 데이터에서 계산한 탐색 실습 흐름입니다. 실제 모델 평가에서는 평가 데이터 정보가 섞이지 않도록 분할 후 훈련 데이터에서만 전처리 기준을 학습(fit)하는 것이 원칙입니다.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",

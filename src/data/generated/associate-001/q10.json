@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q10",
   "public_id": "associate-001-q10",
-  "revision": 2,
+  "revision": 3,
   "title": "로지스틱 회귀 학습",
   "topic": "machine_learning",
   "difficulty": "easy",
-  "prompt": "`LogisticRegression(max_iter=1000, random_state=42)`를 `X_train_scaled`, `y_train`으로 학습하고 `lr_model`에 저장하시오. 학습한 모델은 q09에서 만든 `X_test_scaled`, `y_test`로 평가됩니다.",
+  "prompt": "로지스틱 회귀 모델을 학습하시오.\n\n1. `LogisticRegression(max_iter=1000, random_state=42)`를 `X_train_scaled`, `y_train`으로 학습하시오.\n2. 학습한 모델을 `lr_model`에 저장하시오.\n\n학습한 모델은 q09에서 만든 `X_test_scaled`, `y_test`로 평가됩니다.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",

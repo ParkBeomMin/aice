@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q02",
   "public_id": "associate-001-q02",
-  "revision": 1,
+  "revision": 2,
   "title": "데이터 품질 파악",
   "topic": "pandas",
   "difficulty": "easy",
-  "prompt": "`df_raw`의 전체 행 개수를 정수 `row_count`에 저장하고, `quiz_avg_score` 컬럼의 결측 개수를 정수 `missing_quiz_count`에 저장하시오. 두 값을 출력하시오.",
+  "prompt": "`df_raw`의 데이터 규모와 결측 현황을 확인하시오.\n\n1. 전체 행 개수를 정수 `row_count`에 저장하시오.\n2. `quiz_avg_score` 컬럼의 결측 개수를 정수 `missing_quiz_count`에 저장하시오.\n3. 두 값을 출력하시오.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",

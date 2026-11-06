@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q03",
   "public_id": "associate-001-q03",
-  "revision": 1,
+  "revision": 2,
   "title": "조건 필터",
   "topic": "pandas",
   "difficulty": "easy",
-  "prompt": "`df_raw`에서 `sessions_last_30d >= 8` 이고 `completion_rate >= 0.5`인 수강생만 선택하여 `active_learners` DataFrame에 저장하시오. 원본 행과 컬럼 구조를 유지하시오.",
+  "prompt": "`df_raw`에서 아래 두 조건을 모두 만족하는 수강생만 선택하여 `active_learners` DataFrame에 저장하시오.\n\n- `sessions_last_30d >= 8`\n- `completion_rate >= 0.5`\n\n원본의 행과 컬럼 구조를 그대로 유지하시오.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",

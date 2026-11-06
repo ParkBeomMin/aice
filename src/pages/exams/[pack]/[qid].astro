@@ -4,6 +4,7 @@ import { getManifests, getQuestion, DIFFICULTY_LABEL, topicLabel, formatBytes, t
 import { pageUrl, withBase } from '../../../lib/paths';
 import { cardMap, questionLinks } from '../../../lib/cards';
 import AdSlot from '../../../components/AdSlot.astro';
+import { renderMarkdown } from '../../../lib/notebook/markdown';
 
 
 export function getStaticPaths() {
@@ -26,7 +27,7 @@ const desc = `${m.title} ${q.question_id.toUpperCase()}, ${topicLabel(q.topic)},
   <article class="question" data-public-id={q.public_id} data-revision={q.revision}>
     <p class="meta">{topicLabel(q.topic)} | 난이도 <span class={`badge ${q.difficulty}`}>{DIFFICULTY_LABEL[q.difficulty]}</span> | r{q.revision} | <span class="grading-support" data-graded={graded ? '1' : '0'}>{graded ? '자동 채점 지원' : q.grading.type === 'self_check' || q.runtime.type === 'external' ? '자동 채점 미지원 (자기 점검)' : '자동 채점 미지원'}</span></p>
     <h1>{label}</h1>
-    <div class="prompt">{q.prompt}</div>
+    <div class="prompt nb-md" set:html={renderMarkdown(q.prompt)} />
 
     {q.datasets.length > 0 && (
       <section>
@@ -50,7 +51,7 @@ const desc = `${m.title} ${q.question_id.toUpperCase()}, ${topicLabel(q.topic)},
         <details>
           <summary>정답 코드와 해설 보기 (먼저 직접 풀어보세요)</summary>
           {q.answer.available && <pre class="code"><code>{q.answer.code}</code></pre>}
-          {q.explanation.available && <div class="prompt">{q.explanation.body_md}</div>}
+          {q.explanation.available && <div class="explain nb-md" set:html={renderMarkdown(q.explanation.body_md ?? '')} />}
         </details>
       ) : (
         <p class="notice">해설 준비 중입니다.</p>

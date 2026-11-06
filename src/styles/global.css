@@ -441,3 +441,14 @@ button.btn.btn-ghost { border: 1px solid #c9d6f7; }
 .ex-scenario-body p { color: #2f3846; }
 .ex-dataset .ex-ds { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
 .ex-cols { margin-top: -1px; border-top-left-radius: 0; border-top-right-radius: 0; }
+/* 문제 지시문, 해설 가독성 */
+.prompt.nb-md { white-space: normal; line-height: 1.75; }
+.prompt.nb-md p, .explain p { margin: 0 0 10px; }
+.nb-md ol, .nb-md ul { margin: 6px 0 12px; padding-left: 22px; }
+.nb-md li { margin: 4px 0; line-height: 1.7; }
+.nb-md li::marker { color: var(--accent); font-weight: 700; }
+.nb-md blockquote { font-size: 14px; color: #5b4a12; border-radius: 0 8px 8px 0; }
+.explain { margin-top: 12px; padding: 4px 4px 0; line-height: 1.75; }
+.explain pre { white-space: pre; }
+.nb-md pre code { background: none; padding: 0; border-radius: 0; color: inherit; font-size: 13.5px; }
+.explain pre { margin: 10px 0 14px; }

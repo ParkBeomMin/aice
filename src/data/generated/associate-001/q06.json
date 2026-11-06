@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q06",
   "public_id": "associate-001-q06",
-  "revision": 1,
+  "revision": 2,
   "title": "중앙값 결측 대체",
   "topic": "preprocessing",
   "difficulty": "medium",
-  "prompt": "`df_raw`를 복사해 `df_clean`을 만든 후, `quiz_avg_score`의 누락값을 원본 `df_raw['quiz_avg_score']`의 관측 중앙값으로 대체하시오. 다른 컬럼과 기존 비결측값은 보존하시오.",
+  "prompt": "`quiz_avg_score`의 결측값을 중앙값으로 대체하시오.\n\n1. `df_raw`를 복사해 `df_clean`을 만드시오.\n2. `df_clean`의 `quiz_avg_score` 누락값을 원본 `df_raw['quiz_avg_score']`의 관측 중앙값으로 대체하시오.\n\n다른 컬럼과 기존 비결측값은 그대로 보존하시오.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",

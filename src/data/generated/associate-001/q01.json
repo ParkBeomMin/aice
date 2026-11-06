@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q01",
   "public_id": "associate-001-q01",
-  "revision": 1,
+  "revision": 2,
   "title": "파일 로딩",
   "topic": "pandas",
   "difficulty": "easy",
-  "prompt": "`pandas`를 이용하여 `learners.csv`를 읽고 `df_raw`라는 DataFrame에 저장하시오. `learner_id`는 일반 컬럼으로 보존하시오.",
+  "prompt": "`pandas`를 이용하여 `learners.csv`를 읽고 `df_raw`라는 DataFrame에 저장하시오.\n\n- `learner_id`는 인덱스가 아닌 일반 컬럼으로 보존하시오.",
   "starter_code": "import pandas as pd\n\n# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",

@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q12",
   "public_id": "associate-001-q12",
-  "revision": 1,
+  "revision": 2,
   "title": "로지스틱 회귀 평가",
   "topic": "machine_learning",
   "difficulty": "medium",
-  "prompt": "`lr_model`로 `X_test_scaled`의 이탈 여부를 예측하여 `lr_pred`에 저장하고, `y_test` 기준 `accuracy_score`와 `f1_score`를 계산하여 `lr_accuracy`, `lr_f1`에 저장하시오.",
+  "prompt": "로지스틱 회귀 모델의 성능을 평가하시오.\n\n1. `lr_model`로 `X_test_scaled`의 이탈 여부를 예측하여 `lr_pred`에 저장하시오.\n2. `y_test` 기준 `accuracy_score`를 계산하여 `lr_accuracy`에 저장하시오.\n3. `y_test` 기준 `f1_score`를 계산하여 `lr_f1`에 저장하시오.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",

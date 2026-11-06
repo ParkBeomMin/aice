@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q07",
   "public_id": "associate-001-q07",
-  "revision": 1,
+  "revision": 2,
   "title": "IQR 이상값 처리",
   "topic": "preprocessing",
   "difficulty": "medium",
-  "prompt": "`df_clean['avg_session_minutes']`의 1사분위수(Q1), 3사분위수(Q3), IQR을 계산하고 상한 `Q3 + 1.5×IQR`을 초과하는 값을 상한으로 제한하시오. 하한은 수정하지 말고 `df_clean`에 반영하시오. 제한에 사용한 상한을 실수 `session_upper_bound`에 저장하시오.",
+  "prompt": "`df_clean['avg_session_minutes']`의 이상값을 IQR 기준으로 처리하시오.\n\n1. 1사분위수(Q1), 3사분위수(Q3), IQR을 계산하시오.\n2. 상한 `Q3 + 1.5×IQR`을 초과하는 값을 상한으로 제한하여 `df_clean`에 반영하시오. 하한은 수정하지 마시오.\n3. 제한에 사용한 상한을 실수 `session_upper_bound`에 저장하시오.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",

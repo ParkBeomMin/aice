@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q13",
   "public_id": "associate-001-q13",
-  "revision": 2,
+  "revision": 3,
   "title": "모델 비교",
   "topic": "machine_learning",
   "difficulty": "medium",
-  "prompt": "`rf_model`로 `X_test`를 예측한 값을 `rf_pred`, 그 정확도를 `rf_accuracy`, F1을 `rf_f1`에 저장하시오. 두 모델의 F1 점수(`lr_f1`, `rf_f1`)를 비교하고 더 높은 모델 이름을 `best_model_name`에 문자열 `logistic` 또는 `random_forest`로 저장하시오. 동률이면 `logistic`을 선택하시오. 두 모델의 F1은 모두 `y_test` 기준이며, 로지스틱 회귀는 `lr_model`이 `X_test_scaled`를 예측한 결과입니다.",
+  "prompt": "랜덤포레스트 모델을 평가하고 두 모델을 비교하시오.\n\n1. `rf_model`로 `X_test`를 예측한 값을 `rf_pred`에 저장하시오.\n2. 그 정확도를 `rf_accuracy`, F1을 `rf_f1`에 저장하시오.\n3. 두 모델의 F1 점수(`lr_f1`, `rf_f1`)를 비교하여, 더 높은 모델 이름을 `best_model_name`에 문자열 `logistic` 또는 `random_forest`로 저장하시오. 동률이면 `logistic`을 선택하시오.\n\n두 모델의 F1은 모두 `y_test` 기준이며, 로지스틱 회귀는 `lr_model`이 `X_test_scaled`를 예측한 결과입니다.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",

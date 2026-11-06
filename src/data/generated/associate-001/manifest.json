@@ -11,142 +11,142 @@
     {
       "question_id": "q01",
       "public_id": "associate-001-q01",
-      "revision": 1,
+      "revision": 2,
       "title": "파일 로딩",
       "topic": "pandas",
       "difficulty": "easy",
       "file": "q01.json",
-      "sha256": "4b03152cbb091e6734fd681af9ad9c1c860c857d07910640a63a00afeb0feb19"
+      "sha256": "a7e7047558cf2c4c22518da6194c86f807537db2d69eb9e428fbb37b5dc424ea"
     },
     {
       "question_id": "q02",
       "public_id": "associate-001-q02",
-      "revision": 1,
+      "revision": 2,
       "title": "데이터 품질 파악",
       "topic": "pandas",
       "difficulty": "easy",
       "file": "q02.json",
-      "sha256": "341d1a9d669d66f13963717415c31f75c366ac736176684cab98eb9e13c3a59a"
+      "sha256": "cdccfd7ca29bea7fd48872a4b1434944333e5b8eff0de713b02ed0690f252451"
     },
     {
       "question_id": "q03",
       "public_id": "associate-001-q03",
-      "revision": 1,
+      "revision": 2,
       "title": "조건 필터",
       "topic": "pandas",
       "difficulty": "easy",
       "file": "q03.json",
-      "sha256": "ee433ae4ba1ade55d888a91292e6259db6782c8557247f277078d8fca6ead3f0"
+      "sha256": "bda8d19e31db389a39df09bd427096b3b8a9acc915ccd9b426f0cff2c1c850b0"
     },
     {
       "question_id": "q04",
       "public_id": "associate-001-q04",
-      "revision": 1,
+      "revision": 2,
       "title": "그룹별 이탈률",
       "topic": "pandas",
       "difficulty": "medium",
       "file": "q04.json",
-      "sha256": "c749baf25c37cc7e690b95ba8b14f855a477ec133dbb6b34ca55fc6dd76c79dd"
+      "sha256": "bd78f5eb37feb2b8af9da259a5d3487519b7e96962dcc19b2a1b5ddcc8dff71c"
     },
     {
       "question_id": "q05",
       "public_id": "associate-001-q05",
-      "revision": 1,
+      "revision": 2,
       "title": "상관계수",
       "topic": "pandas",
       "difficulty": "easy",
       "file": "q05.json",
-      "sha256": "cbb59f3292d0457f79b50a4b1e5fd100172b5f69d55368a7b1d2e748a53dc471"
+      "sha256": "b49d3afbecea699aae5cc0b59089c2874208c06fd974d7b82c84eabc61b0d126"
     },
     {
       "question_id": "q06",
       "public_id": "associate-001-q06",
-      "revision": 1,
+      "revision": 2,
       "title": "중앙값 결측 대체",
       "topic": "preprocessing",
       "difficulty": "medium",
       "file": "q06.json",
-      "sha256": "866e241e33f7bfc1d1ac54720374f128b318240a93250c0c8c079353f2739648"
+      "sha256": "1e43246b4e5cfc5465056b6f6ef3a3ef374ec531981c43f1eac18f272853c5c5"
     },
     {
       "question_id": "q07",
       "public_id": "associate-001-q07",
-      "revision": 1,
+      "revision": 2,
       "title": "IQR 이상값 처리",
       "topic": "preprocessing",
       "difficulty": "medium",
       "file": "q07.json",
-      "sha256": "4936fea6c75c28b3b5bce6940c27aebb7424cca28fbae43d111d57313b376386"
+      "sha256": "4bb74234e11af07dfc88896188dd9fa7076cf8570e84a81eda2519b6fd821256"
     },
     {
       "question_id": "q08",
       "public_id": "associate-001-q08",
-      "revision": 1,
+      "revision": 2,
       "title": "원-핫 인코딩",
       "topic": "preprocessing",
       "difficulty": "medium",
       "file": "q08.json",
-      "sha256": "e93ca55f79862a4619ffb33f74d07373382d1e1f27e928d6a8916f96e06e0adf"
+      "sha256": "5dad30dffe215ef116620835f5f21c8122785f6ab88f0398c3808896cf23e197"
     },
     {
       "question_id": "q09",
       "public_id": "associate-001-q09",
-      "revision": 2,
+      "revision": 3,
       "title": "훈련/평가 분리와 표준화",
       "topic": "machine_learning",
       "difficulty": "hard",
       "file": "q09.json",
-      "sha256": "097bb02c6c54e9f9792569e926d91ed4d14f4a3bb23920bcd5bc3ba61f23a5eb"
+      "sha256": "b13934a887a53b0d29bfa726ca9d2feb51b5cea880c165bae3b3b7b25a118009"
     },
     {
       "question_id": "q10",
       "public_id": "associate-001-q10",
-      "revision": 2,
+      "revision": 3,
       "title": "로지스틱 회귀 학습",
       "topic": "machine_learning",
       "difficulty": "easy",
       "file": "q10.json",
-      "sha256": "67fa1ea39862338174ea5203a9f6206508acae4f824deabc9c02dafea15000b8"
+      "sha256": "bd97686e9cefb71dff0b1d63b31480955373da9787a64c1b85b01b865bfdb6fd"
     },
     {
       "question_id": "q11",
       "public_id": "associate-001-q11",
-      "revision": 2,
+      "revision": 3,
       "title": "랜덤포레스트 학습",
       "topic": "machine_learning",
       "difficulty": "easy",
       "file": "q11.json",
-      "sha256": "60537eed3bd2a6ce47293576d07bc3ba187b77dfc4c457bbcf33159e4c19ba3e"
+      "sha256": "12e17cd52a9f0dee87eb5b8178967522c159667bb9e9787376b864d484a6465e"
     },
     {
       "question_id": "q12",
       "public_id": "associate-001-q12",
-      "revision": 1,
+      "revision": 2,
       "title": "로지스틱 회귀 평가",
       "topic": "machine_learning",
       "difficulty": "medium",
       "file": "q12.json",
-      "sha256": "2977b261dd9ea457feb0ab15dc2b6f364f47fa3f89a3bc333d615f65f425ceb3"
+      "sha256": "cb3ebcb11b0b9e6fdba41e191aaf1edb592bb66b3c0da57b2314ea971b95503b"
     },
     {
       "question_id": "q13",
       "public_id": "associate-001-q13",
-      "revision": 2,
+      "revision": 3,
       "title": "모델 비교",
       "topic": "machine_learning",
       "difficulty": "medium",
       "file": "q13.json",
-      "sha256": "c6e0ca47f27da594859a49cac42588c9b997c59288314a78b025c8d593ac2bbb"
+      "sha256": "79f1014e93ce9a7422364388e4aab5b3849a405b62bdf3a2b679491a5768726b"
     },
     {
       "question_id": "q14",
       "public_id": "associate-001-q14",
-      "revision": 2,
+      "revision": 3,
       "title": "분류 임계값 변경에 따른 Precision, Recall, F1 평가",
       "topic": "machine_learning",
       "difficulty": "medium",
       "file": "q14.json",
-      "sha256": "b2b072a6d5f0fa47dafa1ffa9a41bb6106b69ad2612ef6d368c2107e101691fe"
+      "sha256": "7033e54ca2d89a8eeb54f5f9538940c26971ff275b3e2a49df818f78dd7a020c"
     }
   ],
   "scenario_md": "온라인 교육 플랫폼 LearnFlow(가상)는 수강생이 학습을 그만두고 떠나는 이탈 문제를 줄이려고 합니다. 최근 30일 동안의 학습 활동 기록을 바탕으로, 앞으로 30일 안에 이탈할 가능성이 높은 수강생을 미리 찾아 맞춤 안내를 보내려고 합니다.\n\n여러분은 데이터 분석 담당자로서 수강생 데이터를 탐색하고, 결측값과 이상값을 처리한 뒤, 이탈 여부를 예측하는 분류 모델을 만들고 성능을 평가해야 합니다.\n\n- 분석 목표: 수강생의 30일 내 이탈 여부(`churn_30d`) 예측\n- 데이터: `learners.csv` (수강생 1,400명, 14개 컬럼)\n- 진행 순서: 데이터 탐색(1~5번) → 데이터 전처리(6~9번) → 모델 학습과 평가(10~14번)\n\n> 모든 데이터는 실제 개인과 관계없는 합성 데이터입니다.",
@@ -237,13 +237,13 @@
     "version": "0.1.0",
     "content_contract": "1.3.0"
   },
-  "source_fingerprint": "530097665d59e0c8c372a5c40ce67f4b3775fa263355592f97c80a5f83bfbf84",
+  "source_fingerprint": "6a709f2387f97b57dd9738a5647d96fd2e8b45e8746f943e7ceac350b06289cb",
   "notebook": {
     "kind": "question_notebook",
     "format": "nbformat4.5",
-    "url_path": "content/associate-001/notebooks/associate-001-questions-12a9f8013206.ipynb",
-    "sha256": "12a9f8013206e3df79a48427da752129f6426b826de8083610f520099058bfe5",
-    "size_bytes": 13187,
+    "url_path": "content/associate-001/notebooks/associate-001-questions-0ee1fde50236.ipynb",
+    "sha256": "0ee1fde50236e2c18e7054834679e3b58a174f6a4af2ed050077204b6b930bc5",
+    "size_bytes": 14323,
     "question_ids": [
       "q01",
       "q02",
