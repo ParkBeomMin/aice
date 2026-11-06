@@ -1,20 +1,45 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getManifests } from '../../lib/content';
-import { pageUrl } from '../../lib/paths';
+import { pageUrl, withBase } from '../../lib/paths';
 const packs = getManifests();
 ---
-<Base kind="list" title="모의고사 목록" description="AICE Associate 실전 모의고사 회차 목록" crumbs={[{ label: '모의고사' }]}>
-  <h1>모의고사 목록</h1>
-  <ul class="cards">
-    {packs.map((p) => (
-      <li class="card">
-        <a href={pageUrl('exams', p.pack_id)}>
-          <h2>{p.title}</h2>
-          <p>{p.summary}</p>
-          <p class="meta">{p.question_count}문항 | 제한시간 {p.time_limit_minutes}분</p>
-        </a>
-      </li>
-    ))}
-  </ul>
+<Base kind="list" title="모의고사 목록" description="AICE Associate 실전 모의고사 회차 목록. 브라우저에서 Python 코드를 작성하고 자동 채점까지 받아보세요." crumbs={[{ label: '모의고사' }]}>
+  <div class="ex">
+    <header class="ab-hero ex-hero">
+      <p class="ab-kicker">AICE Associate 실전 대비</p>
+      <h1>모의고사</h1>
+      <p>회차마다 하나의 데이터셋으로 데이터 탐색부터 모델 평가까지 실제 시험 흐름대로 풀어요. 연습 모드로 천천히 풀거나, 실전 모드로 시간을 재고 풀 수 있어요.</p>
+    </header>
+
+    <ul class="ex-list">
+      {packs.map((p, i) => (
+        <li class="ex-card">
+          <div class="ex-card-main">
+            <div class="ex-tags">
+              <span class="ex-round">{i + 1}회차</span>
+              {p.mock ? <span class="g-chip">합성 데이터 (MOCK)</span> : <span class="g-chip">합성 데이터</span>}
+            </div>
+            <h2><a href={pageUrl('exams', p.pack_id)}>{p.title}</a></h2>
+            <p>{p.summary}</p>
+            <ul class="ex-facts" aria-label="회차 정보">
+              <li><strong>{p.question_count}</strong>문항</li>
+              <li><strong>{p.time_limit_minutes}</strong>분</li>
+              <li>자동 채점</li>
+            </ul>
+          </div>
+          <div class="ex-card-actions">
+            <a class="btn" href={pageUrl('exams', p.pack_id, 'exam')}>실전 모드로 풀기</a>
+            <a class="btn btn-ghost" href={pageUrl('exams', p.pack_id, 'practice')}>연습 모드</a>
+            <a class="cl-more" href={pageUrl('exams', p.pack_id)}>회차 소개와 해설</a>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <aside class="ex-tip">
+      <strong>처음 풀어보시나요?</strong>
+      <span>Python 실행 환경을 처음 한 번 내려받는 데 시간이 조금 걸려요. 풀이 방법과 채점 방식은 <a href={withBase('guide/')}>이용 안내</a>에 정리해 뒀어요.</span>
+    </aside>
+  </div>
 </Base>
