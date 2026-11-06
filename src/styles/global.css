@@ -452,3 +452,4 @@ button.btn.btn-ghost { border: 1px solid #c9d6f7; }
 .explain pre { white-space: pre; }
 .nb-md pre code { background: none; padding: 0; border-radius: 0; color: inherit; font-size: 13.5px; }
 .explain pre { margin: 10px 0 14px; }
+.nb-md hr { border: 0; border-top: 1px solid var(--line); margin: 18px 0; }

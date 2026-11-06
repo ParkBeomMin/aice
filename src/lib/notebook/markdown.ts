@@ -1,5 +1,5 @@
 // 노트북 마크다운 셀용 최소 렌더러. 모든 텍스트를 먼저 HTML 이스케이프하므로 원본의 HTML/스크립트는 실행되지 않는다.
-// 지원: #~###### 제목, 문단, - / * 목록, 1. 목록, > 인용, ``` 코드 블록, `인라인 코드`, **굵게**, | 표 |
+// 지원: #~###### 제목, 문단, - / * 목록, 1. 목록, > 인용, ``` 코드 블록, `인라인 코드`, **굵게**, | 표 |, --- 구분선
 export function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
@@ -37,6 +37,7 @@ export function renderMarkdown(src: string): string {
       out.push(`<div class="md-table"><table><thead><tr>${head.map((c) => `<th scope="col">${c}</th>`).join('')}</tr></thead><tbody>${body.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`);
       continue;
     }
+    if (/^\s*(-{3,}|\*{3,})\s*$/.test(line)) { flushPara(); flushList(); out.push('<hr>'); continue; }
     const h = /^(#{1,6})\s+(.*)$/.exec(line);
     if (h) { flushPara(); flushList(); const n = Math.min(h[1].length + 1, 6); out.push(`<h${n}>${inline(h[2])}</h${n}>`); continue; }
     const ul = /^\s*[-*]\s+(.*)$/.exec(line);
