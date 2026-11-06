@@ -119,7 +119,7 @@ for (const p of bank.packs ?? []) {
   if (sha(mp) !== p.manifest_sha256) errors.push(`${p.manifest_file} 해시 불일치`);
   const m = JSON.parse(readFileSync(mp, 'utf8'));
   if (production && (m.mock || m.mode !== 'production')) errors.push(`${p.pack_id}: mock/preview 팩은 운영 배포 불가`);
-  if (m.schema_version !== '1.2.0') { errors.push(`${p.manifest_file}: manifest 계약 ${m.schema_version} — 1.2.0 필요 (acf content build 로 재생성)`); continue; }
+  if (m.schema_version !== '1.3.0') { errors.push(`${p.manifest_file}: manifest 계약 ${m.schema_version}, 1.3.0 필요 (acf content build 로 재생성)`); continue; }
   const mErrs = schemaErrs('publish-manifest', m, p.manifest_file);
   if (mErrs.length) { errors.push(...mErrs); continue; }
   if (m.pack_id !== p.pack_id || m.question_count !== m.questions.length) errors.push(`${p.manifest_file}: pack_id/question_count 가 bank-index·문항 목록과 불일치`);

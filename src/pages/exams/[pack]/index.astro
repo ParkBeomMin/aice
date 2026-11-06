@@ -3,6 +3,7 @@ import Base from '../../../layouts/Base.astro';
 import { getManifests, DIFFICULTY_LABEL, topicLabel, formatBytes, type Manifest } from '../../../lib/content';
 import { pageUrl, withBase } from '../../../lib/paths';
 import AdSlot from '../../../components/AdSlot.astro';
+import { renderMarkdown } from '../../../lib/notebook/markdown';
 
 
 export function getStaticPaths() {
@@ -26,6 +27,13 @@ const topics = [...new Set(m.questions.map((q) => topicLabel(q.topic)))];
         <li><strong>{topics.length}개</strong><span>영역 ({topics.join(', ')})</span></li>
       </ul>
     </header>
+
+    {m.scenario_md && (
+      <section class="ex-scenario" aria-labelledby="ex-sc">
+        <h2 id="ex-sc">문제 상황</h2>
+        <div class="nb-md ex-scenario-body" set:html={renderMarkdown(m.scenario_md)} />
+      </section>
+    )}
 
     <section aria-labelledby="ex-modes">
       <h2 id="ex-modes">풀이 방법 고르기</h2>
@@ -64,15 +72,29 @@ const topics = [...new Set(m.questions.map((q) => topicLabel(q.topic)))];
 
     {m.datasets.length > 0 && (
       <section aria-labelledby="ex-ds">
-        <h2 id="ex-ds">데이터셋</h2>
+        <h2 id="ex-ds">데이터 설명</h2>
         {m.datasets.map((d) => (
-          <div class="ab-license ex-ds">
-            <span class="g-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>
-            <div>
-              <strong>{d.url_path.split('/').pop()}</strong> <span class="ex-sub">({formatBytes(d.size_bytes)})</span>
-              <p class="ab-sub">{d.license}</p>
+          <div class="ex-dataset">
+            <div class="ab-license ex-ds">
+              <span class="g-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>
+              <div>
+                <strong>{d.url_path.split('/').pop()}</strong> <span class="ex-sub">({formatBytes(d.size_bytes)}{d.columns ? `, ${d.columns.length}개 컬럼` : ''})</span>
+                <p class="ab-sub">{d.license}</p>
+              </div>
+              <a class="btn btn-ghost btn-sm" href={withBase(d.url_path)} download>내려받기</a>
             </div>
-            <a class="btn btn-ghost btn-sm" href={withBase(d.url_path)} download>내려받기</a>
+            {d.columns && (
+              <div class="md-table ex-cols">
+                <table>
+                  <thead><tr><th scope="col">컬럼</th><th scope="col">타입</th><th scope="col">설명</th></tr></thead>
+                  <tbody>
+                    {d.columns.map((c) => (
+                      <tr class:list={[{ 'is-target': c.target }]}><td><code>{c.name}</code></td><td>{c.type}</td><td>{c.target ? <strong>{c.description}</strong> : c.description}</td></tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         ))}
       </section>

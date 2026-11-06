@@ -2,12 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://aice-content-factory.local/content/publish-manifest.schema.json",
   "title": "Publish manifest",
-  "description": "회차별 공개 매니페스트 1.2.0 (1.1.0 + grading). 파일 해시로 무결성 확인. 시각 등 비결정 값 없음. 이전 계약: publish-manifest-1.1.0 / -1.0.0",
+  "description": "회차별 공개 매니페스트 1.2.0 (1.1.0 + grading). 파일 해시로 무결성 확인. 시각 등 비결정 값 없음. 이전 계약: publish-manifest-1.1.0 / -1.0.0 1.3.0: scenario_md, datasets[].columns",
   "type": "object",
   "properties": {
     "schema_version": {
       "type": "string",
-      "const": "1.2.0"
+      "const": "1.3.0"
     },
     "pack_id": {
       "type": "string",
@@ -115,6 +115,41 @@
           "license": {
             "type": "string",
             "minLength": 1
+          },
+          "columns": {
+            "type": "array",
+            "maxItems": 60,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "type",
+                "description"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+                },
+                "type": {
+                  "enum": [
+                    "문자열",
+                    "정수",
+                    "실수"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 200,
+                  "pattern": "^[^—·]*$"
+                },
+                "target": {
+                  "type": "boolean"
+                }
+              }
+            }
           }
         },
         "required": [
@@ -139,7 +174,7 @@
         },
         "content_contract": {
           "type": "string",
-          "const": "1.2.0"
+          "const": "1.3.0"
         }
       },
       "required": [
@@ -241,6 +276,13 @@
           "uniqueItems": true
         }
       }
+    },
+    "scenario_md": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 3000
     }
   },
   "required": [
@@ -257,7 +299,8 @@
     "generator",
     "source_fingerprint",
     "notebook",
-    "grading"
+    "grading",
+    "scenario_md"
   ],
   "additionalProperties": false
 }

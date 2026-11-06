@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "pack_id": "associate-001",
   "title": "AICE Associate 실전 연습 모의고사 1회차: 온라인 교육 수강생 이탈 예측",
   "summary": "가상의 교육 플랫폼 LearnFlow 수강생 1,400명의 최근 30일 학습 기록으로 데이터 탐색, 전처리, 이탈 예측 모델링까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
@@ -149,27 +149,101 @@
       "sha256": "b2b072a6d5f0fa47dafa1ffa9a41bb6106b69ad2612ef6d368c2107e101691fe"
     }
   ],
+  "scenario_md": "온라인 교육 플랫폼 LearnFlow(가상)는 수강생이 학습을 그만두고 떠나는 이탈 문제를 줄이려고 합니다. 최근 30일 동안의 학습 활동 기록을 바탕으로, 앞으로 30일 안에 이탈할 가능성이 높은 수강생을 미리 찾아 맞춤 안내를 보내려고 합니다.\n\n여러분은 데이터 분석 담당자로서 수강생 데이터를 탐색하고, 결측값과 이상값을 처리한 뒤, 이탈 여부를 예측하는 분류 모델을 만들고 성능을 평가해야 합니다.\n\n- 분석 목표: 수강생의 30일 내 이탈 여부(`churn_30d`) 예측\n- 데이터: `learners.csv` (수강생 1,400명, 14개 컬럼)\n- 진행 순서: 데이터 탐색(1~5번) → 데이터 전처리(6~9번) → 모델 학습과 평가(10~14번)\n\n> 모든 데이터는 실제 개인과 관계없는 합성 데이터입니다.",
   "datasets": [
     {
       "dataset_id": "learners",
       "url_path": "content/associate-001/datasets/learners.csv",
       "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
       "size_bytes": 91796,
-      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74",
+      "columns": [
+        {
+          "name": "learner_id",
+          "type": "문자열",
+          "description": "수강생 고유 번호 (LF00001~LF01400). 식별용이라 모델 입력에는 쓰지 않습니다."
+        },
+        {
+          "name": "membership_type",
+          "type": "문자열",
+          "description": "멤버십 등급: Basic, Plus, Premium"
+        },
+        {
+          "name": "signup_channel",
+          "type": "문자열",
+          "description": "가입 경로: Search(검색), SNS, Referral(지인 추천), Ads(광고)"
+        },
+        {
+          "name": "course_category",
+          "type": "문자열",
+          "description": "주로 수강하는 강의 분야: Data, Business, Design, Language"
+        },
+        {
+          "name": "device_type",
+          "type": "문자열",
+          "description": "주로 사용하는 기기: Desktop, Mobile, Tablet"
+        },
+        {
+          "name": "days_since_signup",
+          "type": "정수",
+          "description": "가입 후 지난 일수 (일)"
+        },
+        {
+          "name": "sessions_last_30d",
+          "type": "정수",
+          "description": "최근 30일 학습 접속 횟수 (회)"
+        },
+        {
+          "name": "avg_session_minutes",
+          "type": "실수",
+          "description": "최근 30일 1회 평균 학습 시간 (분)"
+        },
+        {
+          "name": "completion_rate",
+          "type": "실수",
+          "description": "수강 중인 강의의 진도율 (0~1, 1이면 100%)"
+        },
+        {
+          "name": "quiz_avg_score",
+          "type": "실수",
+          "description": "퀴즈 평균 점수 (0~100점)"
+        },
+        {
+          "name": "days_since_last_login",
+          "type": "정수",
+          "description": "마지막 접속 후 지난 일수 (일)"
+        },
+        {
+          "name": "support_tickets_30d",
+          "type": "정수",
+          "description": "최근 30일 고객센터 문의 건수 (건)"
+        },
+        {
+          "name": "payment_delay_days",
+          "type": "정수",
+          "description": "수강료 결제가 늦어진 일수 (일)"
+        },
+        {
+          "name": "churn_30d",
+          "type": "정수",
+          "description": "예측 대상. 다음 30일 안에 이탈하면 1, 계속 수강하면 0",
+          "target": true
+        }
+      ]
     }
   ],
   "generator": {
     "name": "acf content build",
     "version": "0.1.0",
-    "content_contract": "1.2.0"
+    "content_contract": "1.3.0"
   },
-  "source_fingerprint": "34231d9b7947bf4c60d30f80a8dec8d60f6a3daf9a6e793660c1f8b7c4f50728",
+  "source_fingerprint": "530097665d59e0c8c372a5c40ce67f4b3775fa263355592f97c80a5f83bfbf84",
   "notebook": {
     "kind": "question_notebook",
     "format": "nbformat4.5",
-    "url_path": "content/associate-001/notebooks/associate-001-questions-db734ad4b346.ipynb",
-    "sha256": "db734ad4b3463239e89bfda13be3ae97ec4af21dbb7ec7c62d141ddbf906a72e",
-    "size_bytes": 11201,
+    "url_path": "content/associate-001/notebooks/associate-001-questions-12a9f8013206.ipynb",
+    "sha256": "12a9f8013206e3df79a48427da752129f6426b826de8083610f520099058bfe5",
+    "size_bytes": 13187,
     "question_ids": [
       "q01",
       "q02",

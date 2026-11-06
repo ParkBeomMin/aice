@@ -2,10 +2,11 @@
 import bank from '../data/generated/bank-index.json';
 
 export type Difficulty = 'easy' | 'medium' | 'hard';
-export interface PublicDataset { dataset_id: string; url_path: string; sha256: string; size_bytes: number; license: string }
+export interface DatasetColumn { name: string; type: '문자열' | '정수' | '실수'; description: string; target?: boolean }
+export interface PublicDataset { dataset_id: string; url_path: string; sha256: string; size_bytes: number; license: string; columns?: DatasetColumn[] }
 export interface ManifestQuestion { question_id: string; public_id: string; revision: number; title: string; topic: string; difficulty: Difficulty; file: string; sha256: string }
 export interface Manifest {
-  pack_id: string; title: string; summary: string; mode: 'preview' | 'production'; mock: boolean;
+  pack_id: string; title: string; summary: string; scenario_md: string | null; mode: 'preview' | 'production'; mock: boolean;
   time_limit_minutes: number; question_count: number; questions: ManifestQuestion[]; datasets: PublicDataset[];
   notebook: { kind: 'question_notebook'; format: string; url_path: string; sha256: string; size_bytes: number; question_ids: string[] };
   grading: { kind: 'grading_bundle'; url_path: string; sha256: string; size_bytes: number; engine_version: string; grading_version: string; question_ids: string[] } | null;

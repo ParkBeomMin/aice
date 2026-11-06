@@ -429,3 +429,15 @@ button.btn.btn-ghost { border: 1px solid #c9d6f7; }
 .ad-slot { margin: 36px 0; padding-top: 10px; border-top: 1px solid var(--line); }
 .ad-label { margin: 0 0 6px; font-size: 11px; color: var(--muted); letter-spacing: .04em; }
 .ad-slot:has(ins.adsbygoogle[data-ad-status="unfilled"]) { display: none; }
+/* 문제 상황, 데이터 설명 표 (회차 소개, 노트북 공용) */
+.md-table { overflow-x: auto; margin: 10px 0; border: 1px solid var(--line); border-radius: 12px; }
+.md-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.md-table th, .md-table td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.md-table th { background: var(--soft); font-weight: 600; white-space: nowrap; }
+.md-table tr:last-child td { border-bottom: 0; }
+.md-table td:first-child { white-space: nowrap; }
+.md-table tr.is-target td { background: #f5f8ff; }
+.ex-scenario-body { border: 1px solid var(--line); border-radius: 14px; padding: 6px 20px 10px; background: #fff; }
+.ex-scenario-body p { color: #2f3846; }
+.ex-dataset .ex-ds { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.ex-cols { margin-top: -1px; border-top-left-radius: 0; border-top-right-radius: 0; }
