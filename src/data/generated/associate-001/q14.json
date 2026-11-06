@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q14",
+  "public_id": "associate-001-q14",
+  "revision": 2,
+  "title": "분류 임계값 변경에 따른 Precision, Recall, F1 평가",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "`lr_model`의 `predict_proba(X_test_scaled)[:, 1]`로 양성 클래스(`churn_30d=1`) 확률을 구해 `lr_prob`에 저장하시오. 기본 임계값 0.5 대신 0.4를 적용하여 확률이 0.4 이상이면 1, 아니면 0으로 예측한 정수 배열을 `lr_pred_04`에 저장하시오. `y_test` 기준 Precision, Recall, F1을 계산해 `lr_precision_04`, `lr_recall_04`, `lr_f1_04`에 저장하고 세 값을 출력하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** 분류 모델의 `predict_proba()`로 양성 클래스(이탈=1) 확률을 구한 뒤, 예측 임계값을 기본 0.5에서 **0.4로 낮춰** Precision, Recall, F1의 변화를 확인한다.\n\n```python\nfrom sklearn.metrics import precision_score, recall_score, f1_score\n\nlr_prob = lr_model.predict_proba(X_test_scaled)[:, 1]\nlr_pred_04 = (lr_prob >= 0.4).astype(int)\nlr_precision_04 = precision_score(y_test, lr_pred_04)\nlr_recall_04 = recall_score(y_test, lr_pred_04)\nlr_f1_04 = f1_score(y_test, lr_pred_04)\nprint(lr_precision_04, lr_recall_04, lr_f1_04)\n```\n\n**기준 결과(현 데이터, 지정 모델):** Precision 약 `0.6897`, Recall 약 `0.6742`, F1 약 `0.6818`. 임계값 0.5에서는 F1이 약 `0.6369`이다.\n\n**해석:** 임계값을 낮추면 양성으로 판정하는 사례가 늘어나 재현율이 높아지고, 정밀도는 낮아질 수 있다. 어떤 임계값이 유리한지는 놓친 이탈자를 더 중시하는지, 잘못된 이탈 경보를 더 중시하는지에 따라 달라진다. 이번 데이터에서 F1이 높아졌다는 사실만으로 실제 운영 임계값이 0.4여야 한다고 단정할 수 없다.\n\n**흔한 오류:** 음성 클래스 확률(`[:, 0]`) 사용, 임계값을 0.5로 유지, Precision과 Recall 값을 바꿔 저장, `y_test`가 아닌 훈련 정답으로 평가하는 것.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import precision_score, recall_score\nlr_prob = lr_model.predict_proba(X_test_scaled)[:, 1]\nlr_pred_04 = (lr_prob >= 0.4).astype(int)\nlr_precision_04 = precision_score(y_test, lr_pred_04)\nlr_recall_04 = recall_score(y_test, lr_pred_04)\nlr_f1_04 = f1_score(y_test, lr_pred_04)\nprint(lr_precision_04, lr_recall_04, lr_f1_04)"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q02",
+  "public_id": "associate-001-q02",
+  "revision": 1,
+  "title": "데이터 품질 파악",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "`df_raw`의 전체 행 개수를 정수 `row_count`에 저장하고, `quiz_avg_score` 컬럼의 결측 개수를 정수 `missing_quiz_count`에 저장하시오. 두 값을 출력하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** `len(df_raw)` 또는 `df_raw.shape[0]`가 행 수다. `isna().sum()`은 열의 결측 개수를 세며, `0`과 빈 문자열을 임의로 결측으로 취급하지 않는다.\n\n```python\nrow_count = int(len(df_raw))\nmissing_quiz_count = int(df_raw['quiz_avg_score'].isna().sum())\nprint(row_count, missing_quiz_count)\n```\n**기준 결과:** `1400`, `91`. **흔한 오류:** `count()`는 결측을 제외한 개수를 반환한다. 이 문항은 결측 개수를 묻는다.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "row_count = int(len(df_raw))\nmissing_quiz_count = int(df_raw['quiz_avg_score'].isna().sum())\nprint(row_count, missing_quiz_count)"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

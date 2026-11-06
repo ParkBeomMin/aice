@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "mode": "production",
+  "packs": [
+    {
+      "pack_id": "associate-001",
+      "title": "AICE Associate 실전 연습 모의고사 1회차: 온라인 교육 수강생 이탈 예측",
+      "summary": "가상의 교육 플랫폼 LearnFlow 수강생 1,400명의 최근 30일 학습 기록으로 데이터 탐색, 전처리, 이탈 예측 모델링까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+      "question_count": 14,
+      "mock": false,
+      "manifest_file": "associate-001/manifest.json",
+      "manifest_sha256": "49686009e8c61912584548f8900436c3e93e43b4e209b5533a4b0760fa7a3851"
+    }
+  ]
+}

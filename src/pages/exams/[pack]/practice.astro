@@ -1,0 +1,24 @@
+---
+import Base from '../../../layouts/Base.astro';
+import NotebookShell from '../../../components/NotebookShell.astro';
+import { getManifests, type Manifest } from '../../../lib/content';
+import { pageUrl } from '../../../lib/paths';
+import { pageConfig, jsonForScript } from '../../../lib/page-config';
+
+export function getStaticPaths() {
+  return getManifests().map((m) => ({ params: { pack: m.pack_id }, props: { m } }));
+}
+const { m } = Astro.props as { m: Manifest };
+const cfg = pageConfig(m);
+---
+<Base kind="practice" noindex title={`${m.title} 노트북 풀이`} description={`${m.title}을 하나의 노트북에서 셀 단위로 풀어보세요. ${m.question_count}문항.`}
+      wide crumbs={[{ label: '모의고사', href: pageUrl('exams') }, { label: m.title, href: pageUrl('exams', m.pack_id) }, { label: '노트북 풀이' }]}>
+  <NotebookShell m={m} mode="practice" examUrl={cfg.urls.exam} />
+  <script type="application/json" id="acf-config" set:html={jsonForScript(cfg)}></script>
+</Base>
+<script>
+  import { startNotebook } from '../../../scripts/notebook-app.ts';
+  import { setupPracticeGrading } from '../../../scripts/grading-ui.ts';
+  const ctrl = startNotebook({ mode: 'practice' });
+  setupPracticeGrading(ctrl);
+</script>

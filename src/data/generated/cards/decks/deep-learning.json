@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0.0",
+  "deck_id": "deep-learning",
+  "revision": 3,
+  "title": "딥러닝 기초",
+  "summary": "Dense, sigmoid, 손실 함수, 반복 학습과 EarlyStopping",
+  "intro_md": "딥러닝 모델은 여러 층과 활성화 함수를 연결해 예측합니다. 이진 분류에서는 sigmoid 출력층과 binary_crossentropy 손실 함수를 흔히 사용합니다. epoch는 전체 데이터를 반복하는 횟수이고 batch_size는 한 번에 처리하는 표본 수입니다. 훈련 손실만 낮아지는 것보다 검증 손실이 어떻게 움직이는지도 중요합니다. 이 덱의 TensorFlow 코드는 개념 참고용이며 현재 사이트의 Pyodide에서 직접 실행하지 않습니다.",
+  "learning_objectives": [
+    "Dense, sigmoid, binary_crossentropy의 역할을 간단한 이진 분류 모델과 연결한다.",
+    "epoch, batch_size, EarlyStopping과 훈련 손실, 검증 손실을 구분한다."
+  ],
+  "seo": {
+    "title": "딥러닝 기초 개념 카드 | AICE Associate 학습",
+    "description": "딥러닝의 Dense 층, sigmoid, binary_crossentropy, epoch, batch_size, EarlyStopping과 과적합 징후를 6개 카드로 정리합니다."
+  },
+  "tags": [
+    "deep_learning"
+  ],
+  "publication_status": "approved",
+  "license": "CC-BY-4.0",
+  "cards": [
+    {
+      "card_id": "dl-001",
+      "revision": 1,
+      "front": "Dense 층은 무엇을 하나?",
+      "back": "이전 층의 출력들을 가중합하고 활성화 함수로 변환하는 완전연결 층이다.",
+      "code_example": "Dense(16, activation=\"relu\")",
+      "code_language": "python",
+      "code_runtime": "external_only",
+      "tags": [
+        "deep_learning",
+        "dense"
+      ],
+      "difficulty": "intermediate",
+      "content_digest": "19b451bf49ff1d1e"
+    },
+    {
+      "card_id": "dl-002",
+      "revision": 1,
+      "front": "이진 분류 출력층에 sigmoid를 쓰는 이유는?",
+      "back": "출력을 0에서 1 사이 값으로 만들어 양성 클래스 확률처럼 해석할 수 있다.",
+      "code_example": "Dense(1, activation=\"sigmoid\")",
+      "code_language": "python",
+      "code_runtime": "external_only",
+      "tags": [
+        "deep_learning",
+        "sigmoid"
+      ],
+      "difficulty": "intermediate",
+      "content_digest": "4ab30f584c438ec6"
+    },
+    {
+      "card_id": "dl-003",
+      "revision": 1,
+      "front": "binary_crossentropy는 언제 쓰나?",
+      "back": "정답이 0/1인 이진 분류에서 확률 예측을 학습할 때 널리 사용한다.",
+      "code_example": "model.compile(loss=\"binary_crossentropy\", optimizer=\"adam\")",
+      "code_language": "python",
+      "code_runtime": "external_only",
+      "tags": [
+        "deep_learning",
+        "loss"
+      ],
+      "difficulty": "intermediate",
+      "content_digest": "abf1505bf6564d0c"
+    },
+    {
+      "card_id": "dl-004",
+      "revision": 1,
+      "front": "epoch와 batch_size의 차이는?",
+      "back": "epoch는 전체 학습 데이터 반복 횟수, batch_size는 한 번에 처리하는 샘플 수다.",
+      "code_example": "model.fit(X, y, epochs=10, batch_size=32)",
+      "code_language": "python",
+      "code_runtime": "external_only",
+      "tags": [
+        "deep_learning",
+        "epoch"
+      ],
+      "difficulty": "intermediate",
+      "content_digest": "6807ba48ca777e17"
+    },
+    {
+      "card_id": "dl-005",
+      "revision": 1,
+      "front": "EarlyStopping은 왜 쓰나?",
+      "back": "검증 지표 개선이 멈추면 학습을 중단해 과적합과 불필요한 학습을 줄인다.",
+      "code_example": "EarlyStopping(monitor=\"val_loss\", patience=3)",
+      "code_language": "python",
+      "code_runtime": "external_only",
+      "tags": [
+        "deep_learning",
+        "early-stopping"
+      ],
+      "difficulty": "intermediate",
+      "content_digest": "2e167d6dd886e15f"
+    },
+    {
+      "card_id": "dl-006",
+      "revision": 2,
+      "front": "훈련 손실만 감소하면 좋은 모델일까?",
+      "back": "아니다. 훈련 손실이 낮아져도 검증 손실이 증가한다면 과적합을 의심해야 한다.",
+      "code_example": "plt.plot(history.history[\"loss\"])\nplt.plot(history.history[\"val_loss\"])",
+      "code_language": "python",
+      "code_runtime": "external_only",
+      "tags": [
+        "deep_learning",
+        "validation",
+        "overfitting"
+      ],
+      "difficulty": "intermediate",
+      "content_digest": "39a93e8e3c2116ac"
+    }
+  ]
+}

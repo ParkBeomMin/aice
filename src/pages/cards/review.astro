@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import CardStudy from '../../components/CardStudy.astro';
+import { getDecks, studyPayload } from '../../lib/cards';
+import { pageUrl } from '../../lib/paths';
+---
+<Base kind="cardreview" noindex title="개념 카드 복습" description="다시 볼 카드와 모의고사 결과에서 추천한 카드를 모아 복습해요."
+      crumbs={[{ label: '개념 카드', href: pageUrl('cards') }, { label: '복습' }]}>
+  <h1 class="cs-title">복습</h1>
+  <p class="cs-sub">모든 덱에서 ‘다시 볼게요’ 로 표시한 카드와 내용이 바뀐 카드를 모았어요.</p>
+  <CardStudy mode="review" decks={studyPayload(getDecks())} />
+</Base>

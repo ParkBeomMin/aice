@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q10",
+  "public_id": "associate-001-q10",
+  "revision": 2,
+  "title": "로지스틱 회귀 학습",
+  "topic": "machine_learning",
+  "difficulty": "easy",
+  "prompt": "`LogisticRegression(max_iter=1000, random_state=42)`를 `X_train_scaled`, `y_train`으로 학습하고 `lr_model`에 저장하시오. 학습한 모델은 q09에서 만든 `X_test_scaled`, `y_test`로 평가됩니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** `X_train_scaled`와 `y_train`으로 이진 분류 모델을 학습한다. 예측 대상은 `churn_30d`다.\n\n```python\nfrom sklearn.linear_model import LogisticRegression\nlr_model = LogisticRegression(max_iter=1000, random_state=42).fit(\n    X_train_scaled, y_train\n)\n```\n**검증:** 학습된 모델 클래스와 입력 차원, 동일 평가 입력에서의 예측을 비교한다. **흔한 오류:** 테스트 데이터까지 섞어서 fit하거나 표준화되지 않은 데이터를 사용하는 것.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.linear_model import LogisticRegression\nlr_model = LogisticRegression(max_iter=1000, random_state=42).fit(X_train_scaled, y_train)"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

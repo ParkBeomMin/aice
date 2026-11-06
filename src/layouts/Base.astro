@@ -1,0 +1,65 @@
+---
+import '../styles/global.css';
+import { withBase } from '../lib/paths';
+import { isProduction } from '../lib/content';
+import { cardsEnabled } from '../lib/cards';
+import { adsAllowed, ADSENSE_CLIENT, type PageKind } from '../lib/site';
+
+interface Props { title: string; description: string; crumbs?: { label: string; href?: string }[]; wide?: boolean; kind?: PageKind; noindex?: boolean }
+const { title, description, crumbs = [], wide = false, kind = 'policy', noindex = false } = Astro.props;
+const ads = adsAllowed(kind);
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const fullTitle = title === 'AICE 실전 모의고사' ? title : `${title} | AICE 실전 모의고사`;
+---
+<!doctype html>
+<html lang="ko" data-acf-debug={isProduction ? undefined : "1"} data-page-kind={kind} data-ads={ads ? '1' : '0'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {(!isProduction || noindex) && <meta name="robots" content="noindex, nofollow" />}
+    {ads && <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`} crossorigin="anonymous"></script>}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+    <link rel="sitemap" href={withBase('sitemap.xml')} />
+  </head>
+  <body>
+    <a class="skip" href="#main">본문으로 건너뛰기</a>
+    {!isProduction && (
+      <div class="preview-banner" role="note">미리보기 빌드입니다. 합성(MOCK) 데이터이며 검색엔진에 노출되지 않습니다.</div>
+    )}
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href={withBase()}>AICE 실전 모의고사</a>
+        <nav aria-label="주요 메뉴">
+          <a href={withBase('exams/')}>모의고사</a>
+          {cardsEnabled() && <a href={withBase('cards/')}>개념 카드</a>}
+          <a href={withBase('guide/')}>이용 안내</a>
+        </nav>
+      </div>
+    </header>
+    {crumbs.length > 0 && (
+      <nav class:list={["crumbs", wide ? "wrap-wide" : "wrap"]} aria-label="현재 위치">
+        <ol>
+          <li><a href={withBase()}>홈</a></li>
+          {crumbs.map((c) => <li>{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>)}
+        </ol>
+      </nav>
+    )}
+    <main id="main" class:list={[wide ? "wrap-wide" : "wrap"]}>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>직접 제작한 AICE Associate 대비 연습 문제입니다. 실제 시험 문항을 복제하지 않습니다.</p>
+        <p>이 사이트는 AICE 시험 주관사와 관련이 없는 개인 학습 프로젝트입니다.</p>
+        <p class="footer-links"><a href={withBase('about/')}>소개</a> | <a href={withBase('guide/')}>이용 안내</a> | <a href={withBase('privacy/')}>개인정보처리방침</a> | <a href={withBase('contact/')}>문의</a></p>
+      </div>
+    </footer>
+  </body>
+</html>

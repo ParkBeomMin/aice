@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q11",
+  "public_id": "associate-001-q11",
+  "revision": 2,
+  "title": "랜덤포레스트 학습",
+  "topic": "machine_learning",
+  "difficulty": "easy",
+  "prompt": "`RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=1)`를 `X_train`, `y_train`으로 학습하고 `rf_model`에 저장하시오. 학습한 모델은 q09에서 만든 `X_test`, `y_test`로 평가됩니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** 지정한 `RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=1)`를 원본 숫자 피처와 원-핫 피처를 포함한 `X_train`으로 학습한다.\n\n```python\nfrom sklearn.ensemble import RandomForestClassifier\nrf_model = RandomForestClassifier(\n    n_estimators=100, random_state=42, n_jobs=1\n).fit(X_train, y_train)\n```\n**검증:** 모형 종류, 100개 트리, 학습된 상태 및 테스트 예측 일치. **흔한 오류:** 의도와 다른 분할 또는 서로 다른 시드 사용.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.ensemble import RandomForestClassifier\nrf_model = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=1).fit(X_train, y_train)"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

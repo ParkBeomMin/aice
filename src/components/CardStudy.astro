@@ -1,0 +1,89 @@
+---
+// 개념 카드 학습 화면 (study, review 공용). 정답은 JSON 설정에만 있고, 뒤집기 전에는 DOM 에 넣지 않는다.
+import { jsonForScript } from '../lib/page-config';
+import { pageUrl } from '../lib/paths';
+interface Props { mode: 'deck' | 'review'; decks: unknown[]; deckId?: string }
+const { mode, decks, deckId } = Astro.props;
+const cfg = { mode, deckId: deckId ?? null, decks, urls: { list: pageUrl('cards'), review: pageUrl('cards', 'review'), deck: pageUrl('cards') } };
+---
+<section class="cs" id="cs-root" data-mode={mode}>
+  <p class="cs-notice" id="cs-store-notice" role="status" hidden>이 브라우저에 학습 기록을 저장할 수 없어요. 지금 창에서는 그대로 학습할 수 있지만, 창을 닫으면 기록이 사라져요.</p>
+  <div class="cs-reco" id="cs-reco" hidden>
+    <p id="cs-reco-text"></p>
+    <button type="button" class="cs-link" id="cs-reco-clear">추천 해제하고 다시 볼 카드 전체 보기</button>
+  </div>
+  <div class="cs-toolbar">
+    <div class="cs-filters" role="group" aria-label="카드 범위">
+      <button type="button" data-filter="all" aria-pressed="true">전체 <span class="cs-n" data-n="all"></span></button>
+      <button type="button" data-filter="new" aria-pressed="false">아직 안 본 카드 <span class="cs-n" data-n="new"></span></button>
+      <button type="button" data-filter="review" aria-pressed="false">다시 볼 카드 <span class="cs-n" data-n="review"></span></button>
+    </div>
+    <button type="button" class="cs-shuffle" id="cs-shuffle" aria-pressed="false">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+      섞기
+    </button>
+  </div>
+
+  <div id="cs-main">
+    <div class="cs-progress">
+      <span class="cs-count" id="cs-count"></span>
+      <div class="cs-bar" aria-hidden="true"><span id="cs-bar-fill"></span></div>
+      <span class="cs-stat" id="cs-stat"></span>
+    </div>
+    <article class="cs-card" id="cs-card" aria-labelledby="cs-front">
+      <div class="cs-meta"><span id="cs-deck"></span><span class="cs-state" id="cs-state"></span></div>
+      <div class="cs-face">
+        <p class="cs-label">질문</p>
+        <h2 id="cs-front" tabindex="-1"></h2>
+      </div>
+      <button type="button" class="cs-flip" id="cs-flip" aria-expanded="false" aria-controls="cs-back">정답 보기 <kbd>Space</kbd></button>
+      <div class="cs-back" id="cs-back" hidden>
+        <p class="cs-label">정답</p>
+        <p class="cs-answer" id="cs-answer"></p>
+        <figure class="cs-code" id="cs-code-wrap" hidden>
+          <figcaption id="cs-code-cap"></figcaption>
+          <pre><code id="cs-code"></code></pre>
+        </figure>
+      </div>
+    </article>
+    <div class="cs-rate" role="group" aria-label="이 카드 평가">
+      <button type="button" class="cs-known" id="cs-known" disabled>알아요 <kbd>1</kbd></button>
+      <button type="button" class="cs-again" id="cs-again" disabled>다시 볼게요 <kbd>2</kbd></button>
+    </div>
+    <p class="cs-rate-hint" id="cs-rate-hint">정답을 확인한 뒤에 평가할 수 있어요.</p>
+    <div class="cs-nav">
+      <button type="button" id="cs-prev">← 이전</button>
+      <button type="button" id="cs-next">다음 →</button>
+    </div>
+  </div>
+
+  <div class="cs-panel" id="cs-done" hidden tabindex="-1">
+    <h2>이번 학습을 마쳤어요</h2>
+    <p id="cs-done-text"></p>
+    <div class="cs-panel-actions">
+      <button type="button" class="btn" id="cs-done-review">다시 볼 카드만 복습</button>
+      <button type="button" class="btn btn-ghost" id="cs-done-restart">처음부터 다시 보기</button>
+      <a href={cfg.urls.list}>덱 목록으로</a>
+    </div>
+  </div>
+  <div class="cs-panel" id="cs-empty" hidden tabindex="-1">
+    <h2 id="cs-empty-title"></h2>
+    <p id="cs-empty-text"></p>
+    <div class="cs-panel-actions">
+      <button type="button" class="btn btn-ghost" id="cs-empty-all">전체 카드 보기</button>
+      <a href={cfg.urls.list}>덱 목록으로</a>
+    </div>
+  </div>
+
+  <div class="cs-foot">
+    <p class="cs-help">단축키: Space 또는 Enter 뒤집기, ←→ 이동, 1 알아요, 2 다시 볼게요</p>
+    <button type="button" class="cs-link" id="cs-reset">{mode === 'deck' ? '이 덱 학습 기록 초기화' : '전체 학습 기록 초기화'}</button>
+  </div>
+  <p class="sr" aria-live="polite" id="cs-live"></p>
+  <noscript><p class="cs-notice">카드 학습 화면은 JavaScript 가 필요해요. 덱 소개 페이지에서 카드 내용을 볼 수 있어요.</p></noscript>
+  <script type="application/json" id="cards-config" set:html={jsonForScript(cfg)}></script>
+</section>
+<script>
+  import { startCardStudy } from '../scripts/cards-app.ts';
+  void startCardStudy();
+</script>

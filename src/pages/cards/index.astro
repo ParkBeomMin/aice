@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getDecks, totalCards } from '../../lib/cards';
+import { pageUrl } from '../../lib/paths';
+import { jsonForScript } from '../../lib/page-config';
+const decks = getDecks();
+const ICONS: Record<string, string> = {
+  'pandas-basics': '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M10 4v16"/>',
+  'eda-statistics': '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  preprocessing: '<path d="M3 5h18l-7 8v6l-4-2v-4z"/>',
+  visualization: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+  modeling: '<circle cx="12" cy="12" r="3"/><circle cx="4" cy="6" r="2"/><circle cx="20" cy="6" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><path d="M6 7l4 3M18 7l-4 3M6 17l4-3M18 17l-4-3"/>',
+  evaluation: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  'deep-learning': '<circle cx="5" cy="7" r="2"/><circle cx="5" cy="17" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="12" r="2"/><path d="M7 7l3-1.5M7 7l3 4.5M7 17l3-4.5M7 17l3 1.5M14 5.5l3 5.5M14 12h3M14 18.5l3-5.5"/>',
+};
+const icon = (id: string) => `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[id] ?? '<rect x="4" y="5" width="16" height="14" rx="2"/>'}</svg>`;
+const progressCfg = { decks: decks.map((d) => ({ id: d.deck_id, cards: d.cards.map((c) => ({ id: c.card_id, dg: c.content_digest })) })) };
+---
+<Base kind="cardlist" noindex={decks.length === 0} title="개념 카드" description={`AICE Associate 대비 핵심 개념 ${totalCards()}개를 주제별 카드로 익히세요. 질문을 보고 떠올린 뒤 정답과 코드 예시로 확인하는 무료 복습 카드.`}
+      crumbs={[{ label: '개념 카드' }]}>
+  <div class="cl">
+    <header class="cl-hero">
+      <h1>개념 카드</h1>
+      <p>질문을 보고 답을 떠올린 다음, 카드를 뒤집어 정답과 코드 예시로 확인해요. {decks.length}개 주제, {totalCards()}장으로 시험 전 기초를 빠르게 점검할 수 있어요.</p>
+      {decks.length === 0 && <p class="cl-note">개념 카드를 준비하고 있어요. 곧 공개할게요.</p>}
+      <div class="cl-hero-actions" hidden={decks.length === 0}>
+        {decks.length > 0 && <a class="btn" href={pageUrl('cards', decks[0].deck_id, 'study')}>첫 덱부터 시작하기</a>}
+        <a class="btn btn-ghost" id="cards-review-cta" href={pageUrl('cards', 'review')} hidden>다시 볼 카드 <span id="cards-review-n">0</span>장 복습</a>
+      </div>
+    </header>
+    <ul class="cl-grid">
+      {decks.map((d) => (
+        <li class="cl-deck" data-deck-id={d.deck_id}>
+          <div class="cl-deck-head">
+            <span class="cl-ic" set:html={icon(d.deck_id)} />
+            <span class="cl-count">{d.cards.length}장</span>
+          </div>
+          <h2><a href={pageUrl('cards', d.deck_id)}>{d.title}</a></h2>
+          <p>{d.summary}</p>
+          <div class="cl-progress">
+            <div class="cl-bar" aria-hidden="true"><span class="cl-fill"></span></div>
+            <span class="cl-ptext">아직 학습 기록이 없어요</span>
+          </div>
+          <div class="cl-actions">
+            <a class="btn btn-sm" href={pageUrl('cards', d.deck_id, 'study')}>학습하기</a>
+            <a class="cl-more" href={pageUrl('cards', d.deck_id)}>개념 정리 보기</a>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <p class="cl-note">학습 기록은 이 브라우저에만 저장돼요. 다른 기기와 동기화되지 않아요.</p>
+  </div>
+  <script type="application/json" id="cards-progress-config" set:html={jsonForScript(progressCfg)}></script>
+</Base>
+<script>
+  import { startCardProgress } from '../../scripts/cards-list.ts';
+  void startCardProgress();
+</script>

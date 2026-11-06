@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0.0",
+  "deck_id": "visualization",
+  "revision": 3,
+  "title": "데이터 시각화",
+  "summary": "분포와 관계를 보여 주는 그래프 선택과 해석",
+  "intro_md": "그래프는 종류마다 보여 주는 질문이 다릅니다. 수치형 변수의 빈도 분포에는 히스토그램, 중앙값과 사분위 범위에는 상자그림, 두 수치형 변수의 관계에는 산점도가 어울립니다. 범주별 건수와 범주별 평균은 계산 방법이 다르므로 차트를 만들기 전에 무엇을 비교하는지 먼저 정해야 합니다. 축 이름과 단위를 붙이고, 집단 간 분포를 비교할 때는 그룹별 상자그림을 활용해 보세요.",
+  "learning_objectives": [
+    "히스토그램, 상자그림, 산점도, 막대그래프를 데이터 목적에 맞게 선택한다.",
+    "축 이름과 단위를 표시하고 집단별 분포를 비교할 수 있는 그래프를 만든다."
+  ],
+  "seo": {
+    "title": "데이터 시각화 개념 카드 | AICE Associate 학습",
+    "description": "히스토그램, 상자그림, 산점도, 범주별 막대그래프의 차이를 익히고 matplotlib의 fig, ax와 축 레이블 사용법을 연습합니다."
+  },
+  "tags": [
+    "visualization"
+  ],
+  "publication_status": "approved",
+  "license": "CC-BY-4.0",
+  "cards": [
+    {
+      "card_id": "viz-001",
+      "revision": 1,
+      "front": "히스토그램은 무엇을 확인할 때 쓰나?",
+      "back": "수치형 변수의 분포와 빈도를 확인할 때 사용한다.",
+      "code_example": "plt.hist(df[\"score\"], bins=20)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "visualization",
+        "histogram"
+      ],
+      "difficulty": "basic",
+      "content_digest": "efd1108cbde7dd40"
+    },
+    {
+      "card_id": "viz-002",
+      "revision": 1,
+      "front": "박스플롯에서 확인하는 정보는?",
+      "back": "중앙값, 사분위수, 수염과 잠재적 이상값을 요약한다.",
+      "code_example": "plt.boxplot(df[\"score\"].dropna())",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "visualization",
+        "boxplot"
+      ],
+      "difficulty": "basic",
+      "content_digest": "29b79a821dd4a2d7"
+    },
+    {
+      "card_id": "viz-003",
+      "revision": 1,
+      "front": "산점도는 어떤 관계를 보여 주나?",
+      "back": "두 수치형 변수의 관계와 점들의 패턴을 보여 준다.",
+      "code_example": "plt.scatter(df[\"age\"], df[\"score\"])",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "visualization",
+        "scatter"
+      ],
+      "difficulty": "basic",
+      "content_digest": "baa7acdb97b7c03f"
+    },
+    {
+      "card_id": "viz-004",
+      "revision": 1,
+      "front": "범주별 건수를 그리는 대표 그래프는?",
+      "back": "범주별 빈도를 보여 주는 막대그래프를 쓴다.",
+      "code_example": "df[\"tier\"].value_counts().plot.bar()",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "visualization",
+        "bar"
+      ],
+      "difficulty": "basic",
+      "content_digest": "37c3de3fe1ff8084"
+    },
+    {
+      "card_id": "viz-005",
+      "revision": 1,
+      "front": "plt.subplots()의 fig와 ax는?",
+      "back": "fig는 전체 그림, ax는 그래프를 그리는 영역이다.",
+      "code_example": "fig, ax = plt.subplots()\nax.plot([1,2],[2,3])",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "visualization",
+        "matplotlib"
+      ],
+      "difficulty": "basic",
+      "content_digest": "5221de73c6ed266f"
+    },
+    {
+      "card_id": "viz-006",
+      "revision": 1,
+      "front": "그래프에 축 이름을 붙이는 이유는?",
+      "back": "관찰한 값의 의미와 단위를 독자가 이해할 수 있도록 한다.",
+      "code_example": "plt.xlabel(\"Age\")\nplt.ylabel(\"Score\")",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "visualization",
+        "labels"
+      ],
+      "difficulty": "basic",
+      "content_digest": "56fff121a694b2a4"
+    },
+    {
+      "card_id": "viz-007",
+      "revision": 2,
+      "front": "그룹별 점수 분포는 어떻게 비교할까?",
+      "back": "그룹별 상자그림을 나란히 그려 중앙값과 사분위 범위, 잠재적 이상값을 비교한다.",
+      "code_example": "df.boxplot(column=\"score\", by=\"tier\")",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "visualization",
+        "boxplot",
+        "group_comparison"
+      ],
+      "difficulty": "basic",
+      "content_digest": "002e81a46b67dc4b"
+    },
+    {
+      "card_id": "viz-008",
+      "revision": 1,
+      "front": "그룹별 평균을 시각화하려면?",
+      "back": "그룹별 평균을 계산한 뒤 막대그래프로 표현한다.",
+      "code_example": "df.groupby(\"tier\")[\"score\"].mean().plot.bar()",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "visualization",
+        "groupby"
+      ],
+      "difficulty": "basic",
+      "content_digest": "b928c2c33d5751e0"
+    }
+  ]
+}

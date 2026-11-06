@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q08",
+  "public_id": "associate-001-q08",
+  "revision": 1,
+  "title": "원-핫 인코딩",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "`df_clean`에서 `learner_id`를 제거하고 `membership_type`, `signup_channel`, `course_category`, `device_type`을 `pd.get_dummies(..., dtype=int)`로 원-핫 인코딩하시오. `churn_30d`는 그대로 포함하고 결과 DataFrame을 `df_model`에 저장하시오. 모든 입력 컬럼은 수치형이어야 하며 결측값이 없어야 합니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** 사람 식별용 `learner_id`를 제외하고 4개 범주형 컬럼만 `get_dummies(dtype=int)`로 변환한다. `churn_30d`는 타깃이므로 보존한다.\n\n```python\ndf_model = pd.get_dummies(\n    df_clean.drop(columns=['learner_id']),\n    columns=['membership_type','signup_channel','course_category','device_type'],\n    dtype=int\n)\n```\n**기준 결과:** `(1400,23)`, 모든 열이 수치형이며 결측 없음. **흔한 오류:** 타깃을 제거하거나, `drop_first=True`를 명시 없이 사용하거나, 인코딩할 열을 놓치는 것.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "df_model = pd.get_dummies(df_clean.drop(columns=['learner_id']),\n                          columns=['membership_type', 'signup_channel', 'course_category', 'device_type'], dtype=int)"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

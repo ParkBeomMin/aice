@@ -1,0 +1,141 @@
+{
+  "policy_version": "1.3.0",
+  "description": "공개 사이트 파일 정책. Python(acf content verify/export-site)과 Node(scripts/verify-content.mjs, CI)가 같은 파일을 읽는다. 정규식은 Python re 와 JS RegExp 공통 문법만 사용.",
+  "forbidden_suffixes": [
+    ".ipynb",
+    ".mp4",
+    ".mov",
+    ".mkv",
+    ".wav",
+    ".m4a",
+    ".mp3",
+    ".pem",
+    ".key",
+    ".p12",
+    ".sqlite",
+    ".db"
+  ],
+  "forbidden_names": [
+    "episode.json",
+    "run_state.json",
+    "ingest.json",
+    "pack.json",
+    "answer_key.ipynb",
+    "attempt.ipynb"
+  ],
+  "forbidden_name_prefixes": [
+    ".env"
+  ],
+  "max_file_bytes": 52428800,
+  "text_suffixes": [
+    ".json",
+    ".js",
+    ".mjs",
+    ".ts",
+    ".astro",
+    ".md",
+    ".txt",
+    ".yml",
+    ".yaml",
+    ".csv",
+    ".html",
+    ".css",
+    ".svg"
+  ],
+  "secret_patterns": [
+    "sk-[A-Za-z0-9_-]{16,}",
+    "ghp_[A-Za-z0-9]{20,}",
+    "github_pat_[A-Za-z0-9_]{20,}",
+    "-----BEGIN [A-Z ]*PRIVATE KEY-----",
+    "AKIA[0-9A-Z]{16}",
+    "xox[baprs]-[A-Za-z0-9-]{10,}",
+    "AIza[0-9A-Za-z_-]{35}",
+    "tskey-[A-Za-z0-9-]{10,}"
+  ],
+  "public_dir_allowlist": [
+    "favicon.svg"
+  ],
+  "generated_dir": "src/data/generated",
+  "public_content_dir": "public/content",
+  "export_files": [
+    "package.json",
+    "package-lock.json",
+    "astro.config.mjs",
+    "tsconfig.json",
+    "README.md",
+    ".gitignore",
+    ".nvmrc",
+    ".github/workflows/deploy.yml"
+  ],
+  "export_dirs": [
+    "src",
+    "public",
+    "scripts",
+    "policy"
+  ],
+  "export_skip_dirs": [
+    "node_modules",
+    "dist",
+    ".astro",
+    ".cache"
+  ],
+  "notebook": {
+    "description": "공개 문제 노트북 예외 규칙. manifest.notebook 에 등록되고 아래 구조를 정확히 따르는 파일만 .ipynb 금지에서 예외.",
+    "name_regex": "^[a-z0-9][a-z0-9_-]{2,63}-questions-[0-9a-f]{12}\\.ipynb$",
+    "nbformat": 4,
+    "nbformat_minor": 5,
+    "allowed_metadata_keys": [
+      "kernelspec",
+      "language_info",
+      "acf_public"
+    ],
+    "fixed_cells": [
+      "exam-intro",
+      "setup-datasets"
+    ],
+    "prompt_template": "## 문제 {n}. {title}\n\n{prompt}",
+    "markdown_keys": [
+      "cell_type",
+      "id",
+      "metadata",
+      "source"
+    ],
+    "code_keys": [
+      "cell_type",
+      "execution_count",
+      "id",
+      "metadata",
+      "outputs",
+      "source"
+    ]
+  },
+  "public_schemas": [
+    "public-bank",
+    "publish-manifest",
+    "public-question",
+    "public-grading-profile",
+    "public-cards-index",
+    "public-card-deck",
+    "public-question-card-links"
+  ],
+  "public_schema_dir": "policy/schemas",
+  "source_scan_paths": [
+    "src",
+    "public",
+    "scripts",
+    "policy",
+    ".github"
+  ],
+  "grading": {
+    "description": "공개 채점 규칙 묶음. manifest.grading 에 등록·해시 일치·스키마 통과한 파일만 허용",
+    "name_regex": "^[a-z0-9][a-z0-9_-]{2,63}-grading-[0-9a-f]{12}\\.json$",
+    "engine_version": "1.2.0",
+    "preview_review_status": [
+      "tested",
+      "approved"
+    ],
+    "production_review_status": [
+      "approved"
+    ]
+  }
+}

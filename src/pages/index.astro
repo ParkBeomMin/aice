@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import { getManifests } from '../lib/content';
+import { pageUrl } from '../lib/paths';
+const packs = getManifests();
+---
+<Base kind="home" title="AICE 실전 모의고사" description="AICE Associate 대비 무료 실전 모의고사. 브라우저에서 파이썬 코드를 작성하고 채점과 해설까지 확인하세요.">
+  <section class="hero">
+    <h1>AICE Associate 실전 모의고사</h1>
+    <p>실제 시험처럼 90분 동안 파이썬 데이터 분석 문제를 풀고, 문제별 정답 코드와 해설로 복습하세요.</p>
+    <a class="btn" href={pageUrl('exams')}>모의고사 보러가기</a>
+  </section>
+  <section>
+    <h2>최근 모의고사</h2>
+    <ul class="cards">
+      {packs.map((p) => (
+        <li class="card">
+          <a href={pageUrl('exams', p.pack_id)}>
+            <h3>{p.title}</h3>
+            <p>{p.summary}</p>
+            <p class="meta">{p.question_count}문항 | {p.time_limit_minutes}분{p.mock && ' | 합성 데이터'}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+  <section class="study" aria-labelledby="study-title">
+    <h2 id="study-title">이렇게 공부하세요</h2>
+    <p class="study-lead">세 단계로 실전 감각과 복습을 한 번에 챙겨요.</p>
+    <ol class="steps">
+      <li class="step">
+        <span class="step-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6M12 2v3"/></svg>
+        </span>
+        <span class="step-no">STEP 1</span>
+        <h3>실전 응시</h3>
+        <p>90분 타이머를 켜고 14문항을 실제 시험처럼 직접 풀어요.</p>
+      </li>
+      <li class="step">
+        <span class="step-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>
+        </span>
+        <span class="step-no">STEP 2</span>
+        <h3>채점과 해설</h3>
+        <p>문제별 채점 결과와 정답 코드, 해설로 틀린 부분을 확인해요.</p>
+      </li>
+      <li class="step">
+        <span class="step-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor"/></svg>
+        </span>
+        <span class="step-no">STEP 3</span>
+        <h3>영상 복습</h3>
+        <p>실제 풀이 과정을 녹화한 유튜브 영상으로 흐름을 익혀요.</p>
+      </li>
+    </ol>
+  </section>
+</Base>

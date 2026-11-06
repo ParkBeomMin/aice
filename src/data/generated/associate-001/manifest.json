@@ -1,0 +1,214 @@
+{
+  "schema_version": "1.2.0",
+  "pack_id": "associate-001",
+  "title": "AICE Associate 실전 연습 모의고사 1회차: 온라인 교육 수강생 이탈 예측",
+  "summary": "가상의 교육 플랫폼 LearnFlow 수강생 1,400명의 최근 30일 학습 기록으로 데이터 탐색, 전처리, 이탈 예측 모델링까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+  "mode": "production",
+  "mock": false,
+  "time_limit_minutes": 90,
+  "question_count": 14,
+  "questions": [
+    {
+      "question_id": "q01",
+      "public_id": "associate-001-q01",
+      "revision": 1,
+      "title": "파일 로딩",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q01.json",
+      "sha256": "4b03152cbb091e6734fd681af9ad9c1c860c857d07910640a63a00afeb0feb19"
+    },
+    {
+      "question_id": "q02",
+      "public_id": "associate-001-q02",
+      "revision": 1,
+      "title": "데이터 품질 파악",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q02.json",
+      "sha256": "341d1a9d669d66f13963717415c31f75c366ac736176684cab98eb9e13c3a59a"
+    },
+    {
+      "question_id": "q03",
+      "public_id": "associate-001-q03",
+      "revision": 1,
+      "title": "조건 필터",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q03.json",
+      "sha256": "ee433ae4ba1ade55d888a91292e6259db6782c8557247f277078d8fca6ead3f0"
+    },
+    {
+      "question_id": "q04",
+      "public_id": "associate-001-q04",
+      "revision": 1,
+      "title": "그룹별 이탈률",
+      "topic": "pandas",
+      "difficulty": "medium",
+      "file": "q04.json",
+      "sha256": "c749baf25c37cc7e690b95ba8b14f855a477ec133dbb6b34ca55fc6dd76c79dd"
+    },
+    {
+      "question_id": "q05",
+      "public_id": "associate-001-q05",
+      "revision": 1,
+      "title": "상관계수",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q05.json",
+      "sha256": "cbb59f3292d0457f79b50a4b1e5fd100172b5f69d55368a7b1d2e748a53dc471"
+    },
+    {
+      "question_id": "q06",
+      "public_id": "associate-001-q06",
+      "revision": 1,
+      "title": "중앙값 결측 대체",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q06.json",
+      "sha256": "866e241e33f7bfc1d1ac54720374f128b318240a93250c0c8c079353f2739648"
+    },
+    {
+      "question_id": "q07",
+      "public_id": "associate-001-q07",
+      "revision": 1,
+      "title": "IQR 이상값 처리",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q07.json",
+      "sha256": "4936fea6c75c28b3b5bce6940c27aebb7424cca28fbae43d111d57313b376386"
+    },
+    {
+      "question_id": "q08",
+      "public_id": "associate-001-q08",
+      "revision": 1,
+      "title": "원-핫 인코딩",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q08.json",
+      "sha256": "e93ca55f79862a4619ffb33f74d07373382d1e1f27e928d6a8916f96e06e0adf"
+    },
+    {
+      "question_id": "q09",
+      "public_id": "associate-001-q09",
+      "revision": 2,
+      "title": "훈련/평가 분리와 표준화",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q09.json",
+      "sha256": "097bb02c6c54e9f9792569e926d91ed4d14f4a3bb23920bcd5bc3ba61f23a5eb"
+    },
+    {
+      "question_id": "q10",
+      "public_id": "associate-001-q10",
+      "revision": 2,
+      "title": "로지스틱 회귀 학습",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q10.json",
+      "sha256": "67fa1ea39862338174ea5203a9f6206508acae4f824deabc9c02dafea15000b8"
+    },
+    {
+      "question_id": "q11",
+      "public_id": "associate-001-q11",
+      "revision": 2,
+      "title": "랜덤포레스트 학습",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q11.json",
+      "sha256": "60537eed3bd2a6ce47293576d07bc3ba187b77dfc4c457bbcf33159e4c19ba3e"
+    },
+    {
+      "question_id": "q12",
+      "public_id": "associate-001-q12",
+      "revision": 1,
+      "title": "로지스틱 회귀 평가",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q12.json",
+      "sha256": "2977b261dd9ea457feb0ab15dc2b6f364f47fa3f89a3bc333d615f65f425ceb3"
+    },
+    {
+      "question_id": "q13",
+      "public_id": "associate-001-q13",
+      "revision": 2,
+      "title": "모델 비교",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q13.json",
+      "sha256": "c6e0ca47f27da594859a49cac42588c9b997c59288314a78b025c8d593ac2bbb"
+    },
+    {
+      "question_id": "q14",
+      "public_id": "associate-001-q14",
+      "revision": 2,
+      "title": "분류 임계값 변경에 따른 Precision, Recall, F1 평가",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q14.json",
+      "sha256": "b2b072a6d5f0fa47dafa1ffa9a41bb6106b69ad2612ef6d368c2107e101691fe"
+    }
+  ],
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "generator": {
+    "name": "acf content build",
+    "version": "0.1.0",
+    "content_contract": "1.2.0"
+  },
+  "source_fingerprint": "34231d9b7947bf4c60d30f80a8dec8d60f6a3daf9a6e793660c1f8b7c4f50728",
+  "notebook": {
+    "kind": "question_notebook",
+    "format": "nbformat4.5",
+    "url_path": "content/associate-001/notebooks/associate-001-questions-db734ad4b346.ipynb",
+    "sha256": "db734ad4b3463239e89bfda13be3ae97ec4af21dbb7ec7c62d141ddbf906a72e",
+    "size_bytes": 11201,
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  },
+  "grading": {
+    "kind": "grading_bundle",
+    "url_path": "content/associate-001/grading/associate-001-grading-01111406b5b7.json",
+    "sha256": "01111406b5b7f1e751637e4fcff2272411a59b3620a527c26d2f0af42f757be1",
+    "size_bytes": 42962,
+    "engine_version": "1.2.0",
+    "grading_version": "associate-001-g0a0850a4a1e5",
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q09",
+  "public_id": "associate-001-q09",
+  "revision": 2,
+  "title": "훈련/평가 분리와 표준화",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "`df_model`의 `churn_30d`를 `y`, 나머지를 `X`로 분리하고, `train_test_split(test_size=0.2, random_state=42, stratify=y)`로 `X_train`, `X_test`, `y_train`, `y_test`를 생성하시오. 숫자형 원본 특징 `days_since_signup`, `sessions_last_30d`, `avg_session_minutes`, `completion_rate`, `quiz_avg_score`, `days_since_last_login`, `support_tickets_30d`, `payment_delay_days`만 `StandardScaler`로 표준화하되 훈련 데이터에서만 fit 한 후, 훈련 및 평가 DataFrame `X_train_scaled`, `X_test_scaled`를 만드시오. 원-핫 컬럼은 0/1 그대로 유지하시오. fit 한 scaler를 `scaler`에 저장하시오. (참고: 이 회차는 q06과 q07의 결측 대체 및 이상값 기준을 전체 데이터에서 계산한 탐색 실습 흐름입니다. 실제 모델 평가에서는 평가 데이터 정보가 섞이지 않도록 분할 후 훈련 데이터에서만 전처리 기준을 학습(fit)하는 것이 원칙입니다.)",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** 타깃 `churn_30d`를 `y`, 나머지 특징을 `X`에 저장한다. `stratify=y`와 `random_state=42`로 훈련/평가를 분리하고, `StandardScaler`는 **훈련 데이터에서만 fit**한다. 평가 데이터에는 훈련 데이터에서 학습한 동일한 스케일러로 transform만 적용한다. 원-핫 인코딩 컬럼은 0/1을 유지한다.\n\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\n\ny = df_model['churn_30d']\nX = df_model.drop(columns=['churn_30d'])\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.2, random_state=42, stratify=y\n)\nnum_cols = [\n    'days_since_signup', 'sessions_last_30d', 'avg_session_minutes',\n    'completion_rate', 'quiz_avg_score', 'days_since_last_login',\n    'support_tickets_30d', 'payment_delay_days'\n]\nscaler = StandardScaler().fit(X_train[num_cols])\nX_train_scaled = X_train.copy()\nX_test_scaled = X_test.copy()\nX_train_scaled[num_cols] = scaler.transform(X_train[num_cols])\nX_test_scaled[num_cols] = scaler.transform(X_test[num_cols])\n```\n\n**기준 결과:** 훈련 1,120행, 평가 280행. **흔한 오류:** `X_test` 또는 전체 `X`로 `scaler.fit()`을 호출하거나 원-핫 컬럼까지 표준화하는 것.\n\n**실제 모델 평가에서 중요한 점:** 이번 회차는 q06~q07에서 탐색과 전처리 실습을 먼저 진행했으므로 중앙값과 IQR 상한을 전체 데이터에서 구했다. 그러나 엄밀한 학습/평가 파이프라인에서는 **결측 대체와 이상값 처리 기준도 분할 후 훈련 데이터에서만 학습해야 한다.** 같은 분할을 사용한 비교에서 이번 데이터의 로지스틱 회귀 지표는 변하지 않았고 랜덤포레스트 지표 차이는 약 0.004였지만, 일반적으로 데이터 누설이 안전하다는 뜻은 아니다.\n\n**Pyodide(pandas 3) 주의:** 정수형 컬럼을 복사한 DataFrame에 실수 배열을 `.loc[:, num_cols] = ...` 형태로 한 번에 대입하면 dtype 오류가 발생할 수 있다. 위 예시처럼 `X_train_scaled[num_cols] = ...` 방식으로 컬럼을 지정하면 이 문제를 피할 수 있다.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\ny = df_model['churn_30d']\nX = df_model.drop(columns=['churn_30d'])\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\nnum_cols = ['days_since_signup', 'sessions_last_30d', 'avg_session_minutes', 'completion_rate', 'quiz_avg_score',\n            'days_since_last_login', 'support_tickets_30d', 'payment_delay_days']\nscaler = StandardScaler().fit(X_train[num_cols])\nX_train_scaled = X_train.copy()\nX_test_scaled = X_test.copy()\nX_train_scaled[num_cols] = scaler.transform(X_train[num_cols])\nX_test_scaled[num_cols] = scaler.transform(X_test[num_cols])"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

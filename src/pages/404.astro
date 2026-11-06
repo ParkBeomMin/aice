@@ -1,0 +1,9 @@
+---
+import Base from '../layouts/Base.astro';
+import { pageUrl, withBase } from '../lib/paths';
+---
+<Base kind="error" noindex title="페이지를 찾을 수 없어요" description="요청한 페이지가 없습니다.">
+  <h1>페이지를 찾을 수 없어요</h1>
+  <p>주소가 바뀌었거나 없는 페이지입니다.</p>
+  <p><a class="btn" href={pageUrl('exams')}>모의고사 목록</a> <a href={withBase()}>홈</a></p>
+</Base>

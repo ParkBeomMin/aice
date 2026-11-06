@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q01",
+  "public_id": "associate-001-q01",
+  "revision": 1,
+  "title": "파일 로딩",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "`pandas`를 이용하여 `learners.csv`를 읽고 `df_raw`라는 DataFrame에 저장하시오. `learner_id`는 일반 컬럼으로 보존하시오.",
+  "starter_code": "import pandas as pd\n\n# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** `pd.read_csv('learners.csv')`로 1,400행, 14열 DataFrame `df_raw`를 만든다. `learner_id`는 학생 구별용 ID이며 인덱스로 바꾸지 않는다. 이 단계에서 `churn_30d`를 임의로 제외하지 않는다.\n\n**정답 코드:**\n```python\nimport pandas as pd\ndf_raw = pd.read_csv('learners.csv')\n```\n**검증:** `df_raw.shape == (1400,14)`, `learner_id`가 열에 남고 ID가 고유. **흔한 오류:** 구분자를 잘못 지정하거나 `index_col=0`으로 ID를 인덱스로 만드는 것.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "import pandas as pd\ndf_raw = pd.read_csv('learners.csv')"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

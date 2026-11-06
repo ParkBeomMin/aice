@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0.0",
+  "deck_id": "evaluation",
+  "revision": 3,
+  "title": "모델 평가 지표",
+  "summary": "혼동행렬, Precision, Recall, F1, 임계값과 AUC",
+  "intro_md": "분류 모델의 성능은 정확도 하나로 설명하기 어렵습니다. 이탈 고객처럼 양성과 음성의 비율이 다를 때는 정밀도와 재현율을 함께 확인해야 합니다. F1은 두 지표의 균형을 나타내고, 분류 임계값을 바꾸면 같은 모델이라도 양성 판정 결과가 달라집니다. 교차 검증은 여러 분할의 성능을 살펴보는 방법이며, ROC-AUC는 특정 임계값 하나의 정확도를 뜻하지 않습니다.",
+  "learning_objectives": [
+    "혼동행렬을 바탕으로 정확도, 정밀도, 재현율, F1을 구분한다.",
+    "분류 임계값이 예측 결과에 미치는 영향과 교차 검증의 목적, ROC-AUC의 의미를 설명한다."
+  ],
+  "seo": {
+    "title": "모델 평가 지표 개념 카드 | AICE Associate 학습",
+    "description": "Accuracy, Precision, Recall, F1, ROC-AUC의 차이와 임계값 0.4 적용 예시를 익힙니다. 불균형 분류에서 평가지표를 선택하는 방법을 확인하세요."
+  },
+  "tags": [
+    "evaluation"
+  ],
+  "publication_status": "approved",
+  "license": "CC-BY-4.0",
+  "cards": [
+    {
+      "card_id": "metric-001",
+      "revision": 1,
+      "front": "혼동행렬의 TP는 무엇인가?",
+      "back": "실제 양성 데이터를 모델이 양성으로 맞힌 수다.",
+      "code_example": "tn, fp, fn, tp = confusion_matrix(y,p).ravel()",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "metrics",
+        "confusion-matrix"
+      ],
+      "difficulty": "basic",
+      "content_digest": "707067737ea56e30"
+    },
+    {
+      "card_id": "metric-002",
+      "revision": 1,
+      "front": "정확도의 의미는?",
+      "back": "전체 예측 중 맞힌 예측의 비율이다. 클래스 불균형에서는 오해를 줄 수 있다.",
+      "code_example": "acc = accuracy_score(y_true, y_pred)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "metrics",
+        "accuracy"
+      ],
+      "difficulty": "basic",
+      "content_digest": "9df8bbc8fbf95b94"
+    },
+    {
+      "card_id": "metric-003",
+      "revision": 1,
+      "front": "Precision은 언제 중요할까?",
+      "back": "양성이라고 예측한 것 중 실제 양성 비율로, 거짓 양성 비용이 클 때 중요하다.",
+      "code_example": "p = precision_score(y_true, y_pred)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "metrics",
+        "precision"
+      ],
+      "difficulty": "basic",
+      "content_digest": "d58d88df51b6e1b5"
+    },
+    {
+      "card_id": "metric-004",
+      "revision": 1,
+      "front": "Recall은 언제 중요할까?",
+      "back": "실제 양성을 얼마나 찾아냈는지 나타내며 거짓 음성 비용이 클 때 중요하다.",
+      "code_example": "r = recall_score(y_true, y_pred)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "metrics",
+        "recall"
+      ],
+      "difficulty": "basic",
+      "content_digest": "378e92c389db0df5"
+    },
+    {
+      "card_id": "metric-005",
+      "revision": 1,
+      "front": "F1 점수는 무엇을 결합하나?",
+      "back": "정밀도와 재현율의 조화평균으로 둘의 균형을 나타낸다.",
+      "code_example": "f1 = f1_score(y_true, y_pred)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "metrics",
+        "f1"
+      ],
+      "difficulty": "basic",
+      "content_digest": "355dd9dea6b528b0"
+    },
+    {
+      "card_id": "metric-006",
+      "revision": 1,
+      "front": "분류 임계값을 낮추면 보통 어떻게 되나?",
+      "back": "양성 예측이 늘어 Recall은 오르기 쉽고 Precision은 떨어질 수 있다.",
+      "code_example": "pred = (proba >= 0.4).astype(int)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "metrics",
+        "threshold"
+      ],
+      "difficulty": "basic",
+      "content_digest": "f20c443ce1bec50e"
+    },
+    {
+      "card_id": "metric-007",
+      "revision": 2,
+      "front": "교차 검증은 왜 사용하나?",
+      "back": "여러 훈련 및 검증 분할에서 평가해 한 번의 분할에 대한 우연을 줄인다.",
+      "code_example": "scores = cross_val_score(model, X, y, cv=5)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "metrics",
+        "cross-validation"
+      ],
+      "difficulty": "basic",
+      "content_digest": "6aad887e23080e08"
+    },
+    {
+      "card_id": "metric-008",
+      "revision": 2,
+      "front": "ROC-AUC는 무엇을 평가하나?",
+      "back": "여러 임계값에 걸친 양성과 음성 구분 성능을 요약한다.",
+      "code_example": "auc = roc_auc_score(y_true, proba)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "metrics",
+        "roc-auc"
+      ],
+      "difficulty": "basic",
+      "content_digest": "ded84245f483a285"
+    }
+  ]
+}

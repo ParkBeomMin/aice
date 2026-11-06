@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q07",
+  "public_id": "associate-001-q07",
+  "revision": 1,
+  "title": "IQR 이상값 처리",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "`df_clean['avg_session_minutes']`의 1사분위수(Q1), 3사분위수(Q3), IQR을 계산하고 상한 `Q3 + 1.5×IQR`을 초과하는 값을 상한으로 제한하시오. 하한은 수정하지 말고 `df_clean`에 반영하시오. 제한에 사용한 상한을 실수 `session_upper_bound`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** Q1=20.9, Q3=38.7, IQR=17.8, 상방 상한=65.4. 상한 초과 값만 65.4로 제한하고 하한 값은 건드리지 않는다.\n\n```python\nq1 = df_clean['avg_session_minutes'].quantile(0.25)\nq3 = df_clean['avg_session_minutes'].quantile(0.75)\nsession_upper_bound = float(q3 + 1.5 * (q3 - q1))\ndf_clean['avg_session_minutes'] = (\n    df_clean['avg_session_minutes'].clip(upper=session_upper_bound)\n)\n```\n**기준 결과:** 상한 초과 57행 처리. **흔한 오류:** 이상값을 행 삭제하거나 `clip(lower=...)`도 함께 지정해 문제의 범위를 바꾸는 것.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "q1 = df_clean['avg_session_minutes'].quantile(0.25)\nq3 = df_clean['avg_session_minutes'].quantile(0.75)\nsession_upper_bound = float(q3 + 1.5 * (q3 - q1))\ndf_clean['avg_session_minutes'] = df_clean['avg_session_minutes'].clip(upper=session_upper_bound)"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

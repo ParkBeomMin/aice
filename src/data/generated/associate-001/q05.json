@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q05",
+  "public_id": "associate-001-q05",
+  "revision": 1,
+  "title": "상관계수",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "`df_raw`의 `days_since_last_login`과 `churn_30d` 사이의 Pearson 상관계수를 계산하여 실수 `login_churn_corr`에 저장하시오. 소수점 4자리로 출력하시오(저장 값은 반올림하지 않아도 됨).",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** `Series.corr()`의 기본 Pearson 상관계수로 마지막 로그인 이후 경과 일수와 이탈 여부의 **선형 관련성**을 측정한다.\n\n```python\nlogin_churn_corr = df_raw['days_since_last_login'].corr(df_raw['churn_30d'])\nprint(round(login_churn_corr, 4))\n```\n**기준 결과:** 약 `0.3608`. 이는 양의 상관관계이며 인과관계를 뜻하지 않는다. **흔한 오류:** 문자열 컬럼을 포함한 전체 `df.corr()` 호출로 불필요한 오류를 발생시키는 것.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "login_churn_corr = df_raw['days_since_last_login'].corr(df_raw['churn_30d'])\nprint(round(login_churn_corr, 4))"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

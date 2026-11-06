@@ -1,0 +1,1664 @@
+{
+  "schema_version": "1.3.0",
+  "pack_id": "associate-001",
+  "engine_version": "1.2.0",
+  "grading_version": "associate-001-g0a0850a4a1e5",
+  "questions": {
+    "q01": {
+      "question_id": "q01",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [],
+      "points": 1,
+      "checks": [
+        {
+          "id": "df-type",
+          "label": "df_raw 에 DataFrame 저장",
+          "probe": {
+            "kind": "var_type",
+            "var": "df_raw"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "DataFrame"
+          },
+          "weight": 1,
+          "feedback": "df_raw 에 DataFrame 을 저장하세요."
+        },
+        {
+          "id": "df-shape",
+          "label": "CSV 전체 행과 열 불러오기",
+          "probe": {
+            "kind": "df_shape",
+            "var": "df_raw"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              1400,
+              14
+            ]
+          },
+          "weight": 2,
+          "feedback": "불러온 행/열 수가 learners.csv 와 다릅니다."
+        },
+        {
+          "id": "id-kept",
+          "label": "learner_id 일반 컬럼 보존",
+          "probe": {
+            "kind": "columns",
+            "var": "df_raw"
+          },
+          "expect": {
+            "op": "contains_all",
+            "value": [
+              "learner_id"
+            ]
+          },
+          "weight": 1,
+          "feedback": "learner_id 를 인덱스가 아니라 일반 컬럼으로 두세요."
+        }
+      ]
+    },
+    "q02": {
+      "question_id": "q02",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "row-count",
+          "label": "전체 행 수",
+          "probe": {
+            "kind": "value",
+            "var": "row_count"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 1400
+          },
+          "weight": 1,
+          "feedback": "row_count 가 전체 행 수와 다릅니다."
+        },
+        {
+          "id": "missing-quiz",
+          "label": "quiz_avg_score 결측 개수",
+          "probe": {
+            "kind": "value",
+            "var": "missing_quiz_count"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 91
+          },
+          "weight": 1,
+          "feedback": "missing_quiz_count 가 quiz_avg_score 결측 개수와 다릅니다 (count() 는 결측이 아닌 값의 개수)."
+        }
+      ]
+    },
+    "q03": {
+      "question_id": "q03",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "subset-shape",
+          "label": "조건에 맞는 행과 열 수",
+          "probe": {
+            "kind": "df_shape",
+            "var": "active_learners"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              551,
+              14
+            ]
+          },
+          "weight": 1,
+          "feedback": "active_learners 의 행/열 수가 기대와 다릅니다 (두 조건 모두, 경계값 포함 >=)."
+        },
+        {
+          "id": "subset-values",
+          "label": "선택된 수강생 일치",
+          "probe": {
+            "kind": "column_stat",
+            "var": "active_learners",
+            "column": "sessions_last_30d",
+            "stat": "sum"
+          },
+          "expect": {
+            "op": "approx",
+            "value": 7058
+          },
+          "weight": 1,
+          "feedback": "선택된 행이 기대와 다릅니다."
+        }
+      ]
+    },
+    "q04": {
+      "question_id": "q04",
+      "profile": "associate-v1",
+      "profile_revision": 2,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "rates",
+          "label": "등급별 이탈률 Series",
+          "probe": {
+            "kind": "value",
+            "var": "churn_by_membership"
+          },
+          "expect": {
+            "op": "approx",
+            "abs_tol": 1e-09,
+            "rel_tol": 1e-09,
+            "value": {
+              "__series__": {
+                "index": [
+                  "Basic",
+                  "Plus",
+                  "Premium"
+                ],
+                "values": [
+                  0.4190340909090909,
+                  0.2708860759493671,
+                  0.14950166112956811
+                ]
+              }
+            }
+          },
+          "weight": 2,
+          "feedback": "churn_by_membership 의 등급별 이탈률(평균)이 기대와 다릅니다."
+        },
+        {
+          "id": "printed",
+          "label": "결과 출력",
+          "probe": {
+            "kind": "output_numbers"
+          },
+          "expect": {
+            "op": "approx_contains",
+            "abs_tol": 0.0001,
+            "rel_tol": 0,
+            "value": {
+              "__series__": {
+                "index": [
+                  "Basic",
+                  "Plus",
+                  "Premium"
+                ],
+                "values": [
+                  0.4190340909090909,
+                  0.2708860759493671,
+                  0.14950166112956811
+                ]
+              }
+            }
+          },
+          "weight": 1,
+          "feedback": "등급별 이탈률을 출력하세요."
+        },
+        {
+          "id": "sorted",
+          "label": "인덱스 문자 오름차순",
+          "probe": {
+            "kind": "series_index",
+            "var": "churn_by_membership"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              "Basic",
+              "Plus",
+              "Premium"
+            ]
+          },
+          "weight": 1,
+          "feedback": "churn_by_membership 의 인덱스를 문자 오름차순으로 정렬하세요."
+        }
+      ]
+    },
+    "q05": {
+      "question_id": "q05",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "corr",
+          "label": "Pearson 상관계수",
+          "probe": {
+            "kind": "value",
+            "var": "login_churn_corr"
+          },
+          "expect": {
+            "op": "approx",
+            "abs_tol": 5e-05,
+            "rel_tol": 0,
+            "value": 0.3607690985204945
+          },
+          "weight": 2,
+          "feedback": "login_churn_corr 가 days_since_last_login 과 churn_30d 의 상관계수와 다릅니다."
+        },
+        {
+          "id": "printed",
+          "label": "소수점 4자리 출력",
+          "probe": {
+            "kind": "output_numbers"
+          },
+          "expect": {
+            "op": "approx_contains",
+            "abs_tol": 5e-05,
+            "rel_tol": 0,
+            "value": 0.3607690985204945
+          },
+          "weight": 1,
+          "feedback": "상관계수를 출력하세요."
+        }
+      ]
+    },
+    "q06": {
+      "question_id": "q06",
+      "profile": "associate-v1",
+      "profile_revision": 3,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "no-null",
+          "label": "quiz_avg_score 결측 없음",
+          "probe": {
+            "kind": "null_count",
+            "var": "df_clean",
+            "column": "quiz_avg_score"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 0
+          },
+          "weight": 1,
+          "feedback": "df_clean 의 quiz_avg_score 에 결측이 남아 있습니다."
+        },
+        {
+          "id": "median-fill",
+          "label": "결측 위치마다 원본 중앙값으로 대체",
+          "probe": {
+            "kind": "imputation_from_source",
+            "var": "df_clean",
+            "source": "df_raw",
+            "column": "quiz_avg_score",
+            "stat": "median"
+          },
+          "expect": {
+            "op": "approx",
+            "value": {
+              "filled_dev": 0,
+              "kept_dev": 0,
+              "same_rows": true
+            },
+            "abs_tol": 1e-09,
+            "rel_tol": 0
+          },
+          "weight": 3,
+          "feedback": "원래 결측이었던 위치를 원본 관측 중앙값으로 채우고, 나머지 값과 행은 그대로 두세요."
+        },
+        {
+          "id": "original-kept",
+          "label": "원본 df_raw 그대로",
+          "probe": {
+            "kind": "frame_unchanged",
+            "var": "df_raw",
+            "source": "df_raw"
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "same_rows": true,
+              "same_columns": true,
+              "changed_columns": []
+            }
+          },
+          "weight": 1,
+          "feedback": "원본 df_raw 가 바뀌었습니다. copy() 한 df_clean 에서만 처리하세요."
+        },
+        {
+          "id": "others-kept",
+          "label": "다른 컬럼과 행 보존",
+          "probe": {
+            "kind": "frame_unchanged",
+            "var": "df_clean",
+            "source": "df_raw",
+            "except_columns": [
+              "quiz_avg_score"
+            ]
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "same_rows": true,
+              "same_columns": true,
+              "changed_columns": []
+            }
+          },
+          "weight": 1,
+          "feedback": "quiz_avg_score 외의 컬럼, 행, 순서를 바꾸지 마세요."
+        }
+      ]
+    },
+    "q07": {
+      "question_id": "q07",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q06"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "upper",
+          "label": "IQR 상한 계산",
+          "probe": {
+            "kind": "value",
+            "var": "session_upper_bound"
+          },
+          "expect": {
+            "op": "approx",
+            "value": 65.4
+          },
+          "weight": 1,
+          "feedback": "session_upper_bound 가 Q3 + 1.5×IQR 과 다릅니다."
+        },
+        {
+          "id": "capped-max",
+          "label": "상한 초과값 제한",
+          "probe": {
+            "kind": "column_stat",
+            "var": "df_clean",
+            "column": "avg_session_minutes",
+            "stat": "max"
+          },
+          "expect": {
+            "op": "approx",
+            "value": 65.4
+          },
+          "weight": 1,
+          "feedback": "상한을 넘는 값이 남아 있거나 다른 값으로 바뀌었습니다."
+        },
+        {
+          "id": "rows-kept",
+          "label": "행 삭제 없음",
+          "probe": {
+            "kind": "length",
+            "var": "df_clean"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 1400
+          },
+          "weight": 1,
+          "feedback": "행을 삭제하지 말고 상한으로 제한(clip)하세요."
+        },
+        {
+          "id": "values",
+          "label": "전체 값 일치",
+          "probe": {
+            "kind": "column_stat",
+            "var": "df_clean",
+            "column": "avg_session_minutes",
+            "stat": "sum"
+          },
+          "expect": {
+            "op": "approx",
+            "value": 43641.5
+          },
+          "weight": 1,
+          "feedback": "avg_session_minutes 처리 결과가 기대와 다릅니다 (하한은 수정하지 않음)."
+        }
+      ]
+    },
+    "q08": {
+      "question_id": "q08",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q07"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "columns",
+          "label": "인코딩 컬럼 구성",
+          "probe": {
+            "kind": "columns",
+            "var": "df_model"
+          },
+          "expect": {
+            "op": "set_eq",
+            "value": [
+              "days_since_signup",
+              "sessions_last_30d",
+              "avg_session_minutes",
+              "completion_rate",
+              "quiz_avg_score",
+              "days_since_last_login",
+              "support_tickets_30d",
+              "payment_delay_days",
+              "churn_30d",
+              "membership_type_Basic",
+              "membership_type_Plus",
+              "membership_type_Premium",
+              "signup_channel_Ads",
+              "signup_channel_Referral",
+              "signup_channel_SNS",
+              "signup_channel_Search",
+              "course_category_Business",
+              "course_category_Data",
+              "course_category_Design",
+              "course_category_Language",
+              "device_type_Desktop",
+              "device_type_Mobile",
+              "device_type_Tablet"
+            ]
+          },
+          "weight": 2,
+          "feedback": "df_model 의 컬럼 구성이 기대와 다릅니다 (learner_id 제거, 4개 범주형 원-핫, churn_30d 포함)."
+        },
+        {
+          "id": "numeric",
+          "label": "모든 컬럼 수치형",
+          "probe": {
+            "kind": "non_numeric_columns",
+            "var": "df_model"
+          },
+          "expect": {
+            "op": "eq",
+            "value": []
+          },
+          "weight": 1,
+          "feedback": "숫자가 아닌 컬럼이 남아 있습니다."
+        },
+        {
+          "id": "no-null",
+          "label": "결측 없음",
+          "probe": {
+            "kind": "null_count",
+            "var": "df_model"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 0
+          },
+          "weight": 1,
+          "feedback": "df_model 에 결측이 있습니다."
+        },
+        {
+          "id": "target",
+          "label": "타깃 churn_30d 보존",
+          "probe": {
+            "kind": "column_stat",
+            "var": "df_model",
+            "column": "churn_30d",
+            "stat": "sum"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 447
+          },
+          "weight": 1,
+          "feedback": "churn_30d 를 그대로 포함하세요."
+        }
+      ]
+    },
+    "q09": {
+      "question_id": "q09",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q08"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "split-size",
+          "label": "8:2 분할 크기",
+          "probe": {
+            "kind": "length",
+            "var": "X_train"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 1120
+          },
+          "weight": 1,
+          "feedback": "X_train 크기가 8:2 분할과 다릅니다."
+        },
+        {
+          "id": "same-split",
+          "label": "동일 분할(층화, random_state=42)",
+          "probe": {
+            "kind": "value",
+            "var": "y_test"
+          },
+          "expect": {
+            "op": "approx",
+            "value": {
+              "__series__": {
+                "index": [
+                  "552",
+                  "812",
+                  "26",
+                  "844",
+                  "1097",
+                  "1073",
+                  "1237",
+                  "44",
+                  "854",
+                  "519",
+                  "490",
+                  "348",
+                  "59",
+                  "1284",
+                  "454",
+                  "20",
+                  "196",
+                  "214",
+                  "1031",
+                  "1177",
+                  "439",
+                  "1194",
+                  "1069",
+                  "820",
+                  "116",
+                  "950",
+                  "249",
+                  "567",
+                  "1034",
+                  "1241",
+                  "1388",
+                  "243",
+                  "1372",
+                  "805",
+                  "1070",
+                  "1184",
+                  "1058",
+                  "101",
+                  "997",
+                  "160",
+                  "1006",
+                  "927",
+                  "207",
+                  "1279",
+                  "808",
+                  "399",
+                  "1394",
+                  "573",
+                  "329",
+                  "566",
+                  "1029",
+                  "1255",
+                  "822",
+                  "713",
+                  "1090",
+                  "680",
+                  "19",
+                  "1092",
+                  "999",
+                  "1206",
+                  "684",
+                  "1227",
+                  "250",
+                  "942",
+                  "155",
+                  "402",
+                  "308",
+                  "953",
+                  "180",
+                  "245",
+                  "991",
+                  "197",
+                  "1318",
+                  "61",
+                  "1068",
+                  "293",
+                  "1226",
+                  "1039",
+                  "1030",
+                  "971",
+                  "60",
+                  "1011",
+                  "409",
+                  "5",
+                  "1208",
+                  "560",
+                  "1221",
+                  "727",
+                  "510",
+                  "261",
+                  "901",
+                  "737",
+                  "835",
+                  "83",
+                  "600",
+                  "711",
+                  "1",
+                  "401",
+                  "234",
+                  "70",
+                  "530",
+                  "1139",
+                  "90",
+                  "866",
+                  "1008",
+                  "1309",
+                  "281",
+                  "606",
+                  "1190",
+                  "165",
+                  "1165",
+                  "443",
+                  "1127",
+                  "141",
+                  "729",
+                  "1140",
+                  "347",
+                  "832",
+                  "1119",
+                  "823",
+                  "771",
+                  "449",
+                  "734",
+                  "659",
+                  "406",
+                  "753",
+                  "1186",
+                  "828",
+                  "1096",
+                  "1133",
+                  "137",
+                  "556",
+                  "691",
+                  "98",
+                  "896",
+                  "666",
+                  "1152",
+                  "405",
+                  "1141",
+                  "662",
+                  "724",
+                  "580",
+                  "708",
+                  "1361",
+                  "1014",
+                  "246",
+                  "361",
+                  "298",
+                  "147",
+                  "1200",
+                  "1158",
+                  "1231",
+                  "548",
+                  "380",
+                  "1129",
+                  "703",
+                  "682",
+                  "813",
+                  "104",
+                  "1258",
+                  "171",
+                  "859",
+                  "1351",
+                  "121",
+                  "251",
+                  "542",
+                  "722",
+                  "1198",
+                  "260",
+                  "926",
+                  "366",
+                  "183",
+                  "877",
+                  "106",
+                  "817",
+                  "163",
+                  "30",
+                  "89",
+                  "456",
+                  "800",
+                  "941",
+                  "562",
+                  "1041",
+                  "1124",
+                  "381",
+                  "1017",
+                  "819",
+                  "621",
+                  "841",
+                  "34",
+                  "309",
+                  "1263",
+                  "1187",
+                  "969",
+                  "987",
+                  "1071",
+                  "430",
+                  "996",
+                  "1199",
+                  "1146",
+                  "314",
+                  "325",
+                  "915",
+                  "1335",
+                  "1246",
+                  "576",
+                  "669",
+                  "389",
+                  "1032",
+                  "1003",
+                  "1057",
+                  "14",
+                  "739",
+                  "949",
+                  "1205",
+                  "587",
+                  "1286",
+                  "363",
+                  "211",
+                  "367",
+                  "259",
+                  "152",
+                  "156",
+                  "961",
+                  "786",
+                  "328",
+                  "436",
+                  "1025",
+                  "492",
+                  "995",
+                  "3",
+                  "535",
+                  "132",
+                  "1275",
+                  "481",
+                  "330",
+                  "202",
+                  "1024",
+                  "851",
+                  "35",
+                  "836",
+                  "313",
+                  "51",
+                  "503",
+                  "867",
+                  "423",
+                  "1345",
+                  "687",
+                  "217",
+                  "898",
+                  "295",
+                  "501",
+                  "1077",
+                  "1189",
+                  "778",
+                  "265",
+                  "767",
+                  "663",
+                  "675",
+                  "922",
+                  "1220",
+                  "558",
+                  "690",
+                  "1117",
+                  "630",
+                  "658",
+                  "1346",
+                  "1130",
+                  "1132",
+                  "549",
+                  "53",
+                  "441",
+                  "1202",
+                  "1167",
+                  "81",
+                  "1368",
+                  "1085",
+                  "1365",
+                  "759",
+                  "458"
+                ],
+                "values": [
+                  1,
+                  0,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  0,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  1,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  1,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  1,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  1,
+                  0,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              }
+            }
+          },
+          "weight": 2,
+          "feedback": "y_test 가 지정한 분할(test_size=0.2, random_state=42, stratify=y)과 다릅니다."
+        },
+        {
+          "id": "fit-train",
+          "label": "훈련 데이터로만 fit",
+          "probe": {
+            "kind": "attr_number",
+            "var": "scaler",
+            "attr": "n_samples_seen_"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "length",
+              "var": "X_train"
+            }
+          },
+          "weight": 2,
+          "feedback": "scaler 를 훈련 데이터(X_train)로만 fit 하세요."
+        },
+        {
+          "id": "num-only",
+          "label": "수치 8개만 표준화",
+          "probe": {
+            "kind": "attr_number",
+            "var": "scaler",
+            "attr": "n_features_in_"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 8
+          },
+          "weight": 1,
+          "feedback": "지정한 수치형 8개 컬럼만 표준화하세요 (원-핫 컬럼 제외)."
+        },
+        {
+          "id": "test-transform",
+          "label": "평가 데이터 변환",
+          "probe": {
+            "kind": "column_stat",
+            "var": "X_test_scaled",
+            "column": "sessions_last_30d",
+            "stat": "mean"
+          },
+          "expect": {
+            "op": "approx",
+            "value": -0.021610244163789972
+          },
+          "weight": 1,
+          "feedback": "X_test_scaled 가 훈련 기준으로 변환되지 않았습니다."
+        },
+        {
+          "id": "onehot-kept",
+          "label": "원-핫 0/1 유지",
+          "probe": {
+            "kind": "column_stat",
+            "var": "X_train_scaled",
+            "column": "membership_type_Plus",
+            "stat": "sum"
+          },
+          "expect": {
+            "op": "approx",
+            "value": 310
+          },
+          "weight": 1,
+          "feedback": "원-핫 컬럼은 0/1 그대로 두세요."
+        }
+      ]
+    },
+    "q10": {
+      "question_id": "q10",
+      "profile": "associate-v1",
+      "profile_revision": 2,
+      "review_status": "approved",
+      "depends_on": [
+        "q09"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "class",
+          "label": "LogisticRegression 사용",
+          "probe": {
+            "kind": "class_name",
+            "var": "lr_model"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "LogisticRegression"
+          },
+          "weight": 1,
+          "feedback": "lr_model 에 LogisticRegression 을 저장하세요."
+        },
+        {
+          "id": "fitted",
+          "label": "모델 학습 완료",
+          "probe": {
+            "kind": "is_fitted",
+            "var": "lr_model"
+          },
+          "expect": {
+            "op": "truthy"
+          },
+          "weight": 1,
+          "feedback": "lr_model 이 학습(fit)되지 않았습니다."
+        },
+        {
+          "id": "params",
+          "label": "지정 하이퍼파라미터",
+          "probe": {
+            "kind": "model_params",
+            "var": "lr_model",
+            "keys": [
+              "max_iter",
+              "random_state"
+            ]
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "max_iter": 1000,
+              "random_state": 42
+            }
+          },
+          "weight": 1,
+          "feedback": "LogisticRegression(max_iter=1000, random_state=42) 로 만드세요."
+        },
+        {
+          "id": "trained-on",
+          "label": "표준화 훈련 데이터로 학습",
+          "probe": {
+            "kind": "predictions",
+            "model": "lr_model",
+            "X": "X_test_scaled"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "refit_predictions",
+              "model_class": "LogisticRegression",
+              "params": {
+                "max_iter": 1000,
+                "random_state": 42
+              },
+              "X_train": "X_train_scaled",
+              "y_train": "y_train",
+              "X_eval": "X_test_scaled"
+            }
+          },
+          "weight": 2,
+          "feedback": "X_train_scaled, y_train 으로 학습한 모델의 예측과 다릅니다."
+        }
+      ]
+    },
+    "q11": {
+      "question_id": "q11",
+      "profile": "associate-v1",
+      "profile_revision": 2,
+      "review_status": "approved",
+      "depends_on": [
+        "q09"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "class",
+          "label": "RandomForestClassifier 사용",
+          "probe": {
+            "kind": "class_name",
+            "var": "rf_model"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "RandomForestClassifier"
+          },
+          "weight": 1,
+          "feedback": "rf_model 에 RandomForestClassifier 를 저장하세요."
+        },
+        {
+          "id": "params",
+          "label": "n_estimators=100, random_state=42",
+          "probe": {
+            "kind": "model_params",
+            "var": "rf_model",
+            "keys": [
+              "n_estimators",
+              "random_state"
+            ]
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "n_estimators": 100,
+              "random_state": 42
+            }
+          },
+          "weight": 1,
+          "feedback": "RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=1) 로 만드세요."
+        },
+        {
+          "id": "fitted",
+          "label": "모델 학습 완료",
+          "probe": {
+            "kind": "is_fitted",
+            "var": "rf_model"
+          },
+          "expect": {
+            "op": "truthy"
+          },
+          "weight": 1,
+          "feedback": "rf_model 이 학습(fit)되지 않았습니다."
+        },
+        {
+          "id": "trained-on",
+          "label": "훈련 데이터로 학습한 예측",
+          "probe": {
+            "kind": "predictions",
+            "model": "rf_model",
+            "X": "X_test"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "refit_predictions",
+              "model_class": "RandomForestClassifier",
+              "params": {
+                "n_estimators": 100,
+                "random_state": 42,
+                "n_jobs": 1
+              },
+              "X_train": "X_train",
+              "y_train": "y_train",
+              "X_eval": "X_test"
+            }
+          },
+          "weight": 2,
+          "feedback": "X_train, y_train 과 지정한 설정으로 학습한 모델의 예측과 다릅니다."
+        }
+      ]
+    },
+    "q12": {
+      "question_id": "q12",
+      "profile": "associate-v1",
+      "profile_revision": 2,
+      "review_status": "approved",
+      "depends_on": [
+        "q10"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "pred",
+          "label": "평가 데이터 예측",
+          "probe": {
+            "kind": "value",
+            "var": "lr_pred"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "predictions",
+              "model": "lr_model",
+              "X": "X_test_scaled"
+            }
+          },
+          "weight": 1,
+          "feedback": "lr_pred 가 lr_model 로 X_test_scaled 를 예측한 결과와 다릅니다."
+        },
+        {
+          "id": "accuracy",
+          "label": "정확도",
+          "probe": {
+            "kind": "value",
+            "var": "lr_accuracy"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "accuracy",
+              "model": "lr_model",
+              "X": "X_test_scaled",
+              "y": "y_test"
+            }
+          },
+          "weight": 1,
+          "feedback": "lr_accuracy 가 lr_model 의 실제 정확도와 다릅니다."
+        },
+        {
+          "id": "f1",
+          "label": "F1 (양성=이탈)",
+          "probe": {
+            "kind": "value",
+            "var": "lr_f1"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "f1",
+              "model": "lr_model",
+              "X": "X_test_scaled",
+              "y": "y_test"
+            }
+          },
+          "weight": 1,
+          "feedback": "lr_f1 이 lr_model 의 실제 F1(양성 클래스 1)과 다릅니다."
+        }
+      ]
+    },
+    "q13": {
+      "question_id": "q13",
+      "profile": "associate-v1",
+      "profile_revision": 2,
+      "review_status": "approved",
+      "depends_on": [
+        "q11",
+        "q12"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "rf-pred",
+          "label": "랜덤포레스트 예측",
+          "probe": {
+            "kind": "value",
+            "var": "rf_pred"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "predictions",
+              "model": "rf_model",
+              "X": "X_test"
+            }
+          },
+          "weight": 1,
+          "feedback": "rf_pred 가 rf_model 로 X_test 를 예측한 결과와 다릅니다."
+        },
+        {
+          "id": "rf-accuracy",
+          "label": "랜덤포레스트 정확도",
+          "probe": {
+            "kind": "value",
+            "var": "rf_accuracy"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "accuracy",
+              "model": "rf_model",
+              "X": "X_test",
+              "y": "y_test"
+            }
+          },
+          "weight": 1,
+          "feedback": "rf_accuracy 가 rf_model 의 실제 정확도와 다릅니다."
+        },
+        {
+          "id": "rf-f1",
+          "label": "랜덤포레스트 F1",
+          "probe": {
+            "kind": "value",
+            "var": "rf_f1"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "f1",
+              "model": "rf_model",
+              "X": "X_test",
+              "y": "y_test"
+            }
+          },
+          "weight": 1,
+          "feedback": "rf_f1 이 rf_model 의 실제 F1 과 다릅니다."
+        },
+        {
+          "id": "best",
+          "label": "F1 기준 모델 선택",
+          "probe": {
+            "kind": "value",
+            "var": "best_model_name"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "best_model",
+              "metric": "f1",
+              "y": "y_test",
+              "tie": "logistic",
+              "candidates": [
+                {
+                  "name": "logistic",
+                  "model": "lr_model",
+                  "X": "X_test_scaled"
+                },
+                {
+                  "name": "random_forest",
+                  "model": "rf_model",
+                  "X": "X_test"
+                }
+              ]
+            }
+          },
+          "weight": 1,
+          "feedback": "best_model_name 은 두 모델의 F1 중 더 높은 쪽(동률이면 logistic)이어야 합니다."
+        }
+      ]
+    },
+    "q14": {
+      "question_id": "q14",
+      "profile": "associate-v1",
+      "profile_revision": 2,
+      "review_status": "approved",
+      "depends_on": [
+        "q10"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "prob",
+          "label": "양성 확률",
+          "probe": {
+            "kind": "value",
+            "var": "lr_prob"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "probabilities",
+              "model": "lr_model",
+              "X": "X_test_scaled"
+            }
+          },
+          "weight": 1,
+          "feedback": "lr_prob 는 lr_model.predict_proba(X_test_scaled)[:, 1] 이어야 합니다."
+        },
+        {
+          "id": "pred04",
+          "label": "임계값 0.4 예측",
+          "probe": {
+            "kind": "value",
+            "var": "lr_pred_04"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "predictions",
+              "model": "lr_model",
+              "X": "X_test_scaled",
+              "threshold": 0.4
+            }
+          },
+          "weight": 1,
+          "feedback": "lr_pred_04 가 확률 0.4 이상을 1 로 예측한 결과와 다릅니다."
+        },
+        {
+          "id": "precision",
+          "label": "Precision",
+          "probe": {
+            "kind": "value",
+            "var": "lr_precision_04"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "precision",
+              "model": "lr_model",
+              "X": "X_test_scaled",
+              "y": "y_test",
+              "threshold": 0.4
+            }
+          },
+          "weight": 1,
+          "feedback": "lr_precision_04 가 임계값 0.4 의 Precision 과 다릅니다."
+        },
+        {
+          "id": "recall",
+          "label": "Recall",
+          "probe": {
+            "kind": "value",
+            "var": "lr_recall_04"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "recall",
+              "model": "lr_model",
+              "X": "X_test_scaled",
+              "y": "y_test",
+              "threshold": 0.4
+            }
+          },
+          "weight": 1,
+          "feedback": "lr_recall_04 가 임계값 0.4 의 Recall 과 다릅니다."
+        },
+        {
+          "id": "f1",
+          "label": "F1",
+          "probe": {
+            "kind": "value",
+            "var": "lr_f1_04"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "f1",
+              "model": "lr_model",
+              "X": "X_test_scaled",
+              "y": "y_test",
+              "threshold": 0.4
+            }
+          },
+          "weight": 1,
+          "feedback": "lr_f1_04 가 임계값 0.4 의 F1 과 다릅니다."
+        }
+      ]
+    }
+  }
+}

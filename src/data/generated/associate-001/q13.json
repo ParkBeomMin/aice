@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q13",
+  "public_id": "associate-001-q13",
+  "revision": 2,
+  "title": "모델 비교",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "`rf_model`로 `X_test`를 예측한 값을 `rf_pred`, 그 정확도를 `rf_accuracy`, F1을 `rf_f1`에 저장하시오. 두 모델의 F1 점수(`lr_f1`, `rf_f1`)를 비교하고 더 높은 모델 이름을 `best_model_name`에 문자열 `logistic` 또는 `random_forest`로 저장하시오. 동률이면 `logistic`을 선택하시오. 두 모델의 F1은 모두 `y_test` 기준이며, 로지스틱 회귀는 `lr_model`이 `X_test_scaled`를 예측한 결과입니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** 랜덤포레스트의 `rf_pred`, `rf_accuracy`, `rf_f1`을 계산하고 같은 테스트 분할과 같은 양성 클래스 정의에서 F1을 비교한다. 동률이면 문제 정책대로 `logistic`을 선택한다.\n\n```python\nrf_pred = rf_model.predict(X_test)\nrf_accuracy = accuracy_score(y_test, rf_pred)\nrf_f1 = f1_score(y_test, rf_pred)\nbest_model_name = 'random_forest' if rf_f1 > lr_f1 else 'logistic'\n```\n**기준 결과:** RF 정확도 `0.76071428…`, F1 `0.55033557…`, `best_model_name='logistic'`. **해설:** 이 합성 데이터와 주어진 학습 설정에서는 로지스틱 회귀의 F1이 더 높다. 모든 데이터에서 로지스틱 회귀가 더 우수하다는 일반론은 아니다.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "rf_pred = rf_model.predict(X_test)\nrf_accuracy = accuracy_score(y_test, rf_pred)\nrf_f1 = f1_score(y_test, rf_pred)\nbest_model_name = 'random_forest' if rf_f1 > lr_f1 else 'logistic'\nprint(rf_accuracy, rf_f1, best_model_name)"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

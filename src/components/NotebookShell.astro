@@ -1,0 +1,46 @@
+---
+// 노트북 풀이 화면 (연습, 실전 공용). 실전은 시험 바(타이머, 제출)가 위에 붙는다.
+import { getQuestion, type Manifest } from '../lib/content';
+import { withBase } from '../lib/paths';
+interface Props { m: Manifest; mode: 'practice' | 'exam'; examUrl?: string }
+const { m, mode, examUrl } = Astro.props;
+const nbUrl = withBase(m.notebook.url_path);
+const runtimeMap = Object.fromEntries(m.questions.map((mq) => { const q = getQuestion(m.pack_id, mq.question_id)!; return [mq.question_id, { type: q.runtime.type, max_ms: q.runtime.max_execution_ms }]; }));
+const datasetSpecs = m.datasets.map((d) => ({ name: d.url_path.split('/').pop(), url: withBase(d.url_path), sha256: d.sha256, size: d.size_bytes }));
+---
+<div class="nb-page" data-mode={mode}>
+  <header class="nb-toolbar">
+    <div class="nb-title">
+      <h1>{m.title}{mode === 'exam' ? ' 실전 모드' : ''}</h1>
+      <p class="meta"><span id="nb-progress">문제 01 / {String(m.question_count).padStart(2, '0')}</span> | <span id="nb-status" role="status">노트북 불러오는 중…</span></p>
+    </div>
+    <div class="nb-actions">
+      <span class="kernel" id="nb-kernel" data-state="idle">● Python 시작 전</span>
+      <button type="button" id="nb-run-all" disabled>▶▶ 전체 실행</button>
+      <button type="button" id="nb-interrupt" disabled>■ 실행 중단</button>
+      <button type="button" id="nb-restart" disabled>↻ 커널 재시작</button>
+      <button type="button" id="nb-save" disabled>저장</button>
+      <button type="button" id="nb-reset" disabled>초기화</button>
+      <button type="button" id="nb-download" disabled>내 노트북 다운로드(.ipynb)</button>
+      {mode === 'practice' && <a class="btn-link" href={examUrl}>⏱ 실전 모드 ({m.time_limit_minutes}분)</a>}
+      {mode === 'practice' && <button type="button" id="nb-grade" disabled={!m.grading} title={m.grading ? '지금 코드로 연습용 자동 채점 (새 Python 에서 처음부터 다시 실행)' : '채점 규칙 없음'}>연습 채점</button>}
+    </div>
+  </header>
+  <p class="nb-note"><span id="nb-save-status">자동 저장: 이 브라우저에만 저장됩니다</span>. 시크릿 모드, 캐시 삭제, 다른 기기에서는 유지되지 않아요. Python 은 브라우저 안(Pyodide)에서 실행되며 첫 실행 때 수십 MB 를 내려받습니다. PC 권장.</p>
+  <div id="nb-notice" class="nb-notice" role="status" hidden></div>
+  <div id="grading-progress" class="grading-progress" role="status" hidden></div>
+  <div class="nb-layout">
+    <nav class="nb-nav" aria-label="문항 이동">
+      <div id="nb-nav">
+        {m.questions.map((q) => <a href={`#${q.question_id}-prompt`} data-qid={q.question_id}><span class="num">{q.question_id.slice(1)}</span><span class="t">{q.title}</span></a>)}
+      </div>
+      <ul class="nb-files">
+        <li><a href={nbUrl} download>문제 노트북 원본 (.ipynb)</a></li>
+        {m.datasets.map((d) => <li><a href={withBase(d.url_path)} download>{d.url_path.split('/').pop()}</a></li>)}
+      </ul>
+    </nav>
+    <div id="nb-root" class="nb-root" data-notebook-url={nbUrl} data-pack-id={m.pack_id} data-fingerprint={m.notebook.sha256} data-runtime={JSON.stringify(runtimeMap)} data-datasets={JSON.stringify(datasetSpecs)}>
+      <noscript>노트북 화면은 JavaScript 가 필요합니다. 왼쪽에서 노트북 파일을 내려받아 Jupyter/Colab 에서 열 수 있습니다.</noscript>
+    </div>
+  </div>
+</div>

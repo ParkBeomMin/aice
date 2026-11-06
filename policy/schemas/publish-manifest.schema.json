@@ -1,0 +1,263 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aice-content-factory.local/content/publish-manifest.schema.json",
+  "title": "Publish manifest",
+  "description": "회차별 공개 매니페스트 1.2.0 (1.1.0 + grading). 파일 해시로 무결성 확인. 시각 등 비결정 값 없음. 이전 계약: publish-manifest-1.1.0 / -1.0.0",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.2.0"
+    },
+    "pack_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{2,63}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "preview",
+        "production"
+      ]
+    },
+    "mock": {
+      "type": "boolean"
+    },
+    "time_limit_minutes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "question_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "question_id": {
+            "type": "string",
+            "pattern": "^q[0-9]{2}$"
+          },
+          "public_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": [
+              "easy",
+              "medium",
+              "hard"
+            ]
+          },
+          "file": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "question_id",
+          "public_id",
+          "revision",
+          "title",
+          "topic",
+          "difficulty",
+          "file",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "datasets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{2,63}$"
+          },
+          "url_path": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "license": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "dataset_id",
+          "url_path",
+          "sha256",
+          "size_bytes",
+          "license"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "generator": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "acf content build"
+        },
+        "version": {
+          "type": "string"
+        },
+        "content_contract": {
+          "type": "string",
+          "const": "1.2.0"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "content_contract"
+      ],
+      "additionalProperties": false
+    },
+    "source_fingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "notebook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "format",
+        "url_path",
+        "sha256",
+        "size_bytes",
+        "question_ids"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "question_notebook"
+        },
+        "format": {
+          "type": "string",
+          "const": "nbformat4.5"
+        },
+        "url_path": {
+          "type": "string",
+          "pattern": "^content/[a-z0-9][a-z0-9_-]{2,63}/notebooks/[a-z0-9][a-z0-9_-]{2,63}-questions-[0-9a-f]{12}\\.ipynb$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "question_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^q[0-9]{2}$"
+          }
+        }
+      }
+    },
+    "grading": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "url_path",
+        "sha256",
+        "size_bytes",
+        "engine_version",
+        "grading_version",
+        "question_ids"
+      ],
+      "properties": {
+        "kind": {
+          "const": "grading_bundle"
+        },
+        "url_path": {
+          "type": "string",
+          "pattern": "^content/[a-z0-9][a-z0-9_-]{2,63}/grading/[a-z0-9][a-z0-9_-]{2,63}-grading-[0-9a-f]{12}\\.json$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "engine_version": {
+          "type": "string"
+        },
+        "grading_version": {
+          "type": "string"
+        },
+        "question_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^q[0-9]{2}$"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "pack_id",
+    "title",
+    "summary",
+    "mode",
+    "mock",
+    "time_limit_minutes",
+    "question_count",
+    "questions",
+    "datasets",
+    "generator",
+    "source_fingerprint",
+    "notebook",
+    "grading"
+  ],
+  "additionalProperties": false
+}

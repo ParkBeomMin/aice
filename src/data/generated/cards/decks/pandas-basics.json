@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.0.0",
+  "deck_id": "pandas-basics",
+  "revision": 3,
+  "title": "Python과 Pandas 기초",
+  "summary": "CSV 읽기, 데이터 구조 확인, 행 선택과 그룹 집계",
+  "intro_md": "CSV를 읽었다고 곧바로 분석할 수 있는 것은 아닙니다. 먼저 DataFrame의 행과 열, 결측치, 자료형을 확인해야 합니다. Series와 DataFrame의 차이를 이해하면 한 열을 선택했을 때 예상과 다른 형태가 나오는 실수를 줄일 수 있습니다. loc는 인덱스 라벨을, iloc는 정수 위치를 기준으로 선택합니다. 실습에서는 조건 필터와 그룹별 평균까지 연결해 보세요.",
+  "learning_objectives": [
+    "Series와 DataFrame의 차이를 구분하고 데이터 모양과 자료형을 확인한다.",
+    "loc, iloc, 불리언 필터와 groupby로 필요한 행과 집계 결과를 추출한다."
+  ],
+  "seo": {
+    "title": "Python과 Pandas 기초 개념 카드 | AICE Associate 학습",
+    "description": "pandas의 Series와 DataFrame, CSV 읽기, loc와 iloc, 조건 필터링, groupby를 짧은 Python 코드로 익힙니다. 데이터 탐색을 시작하기 위한 8개 개념 카드."
+  },
+  "tags": [
+    "pandas"
+  ],
+  "publication_status": "approved",
+  "license": "CC-BY-4.0",
+  "cards": [
+    {
+      "card_id": "pd-001",
+      "revision": 2,
+      "front": "Series와 DataFrame의 차이는?",
+      "back": "Series는 1차원, DataFrame은 행과 열이 있는 2차원 자료 구조다.",
+      "code_example": "s = df[\"age\"]\nt = df[[\"age\"]]",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "pandas",
+        "series",
+        "dataframe"
+      ],
+      "difficulty": "basic",
+      "content_digest": "061c44d096b97797"
+    },
+    {
+      "card_id": "pd-002",
+      "revision": 1,
+      "front": "CSV를 DataFrame으로 읽는 함수는?",
+      "back": "pandas의 read_csv를 사용한다. 구분자와 인코딩을 필요에 따라 지정한다.",
+      "code_example": "df = pd.read_csv(\"learners.csv\")",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "pandas",
+        "read_csv"
+      ],
+      "difficulty": "basic",
+      "content_digest": "2fe44c2d6af5dada"
+    },
+    {
+      "card_id": "pd-003",
+      "revision": 1,
+      "front": "df.shape의 두 값은 무엇인가?",
+      "back": "(행 수, 열 수) 순서의 튜플이다. 행 수만 필요하면 len(df)도 가능하다.",
+      "code_example": "rows, cols = df.shape",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "pandas",
+        "shape",
+        "rows"
+      ],
+      "difficulty": "basic",
+      "content_digest": "29c9fe07eb7ad96b"
+    },
+    {
+      "card_id": "pd-004",
+      "revision": 1,
+      "front": "컬럼 자료형을 확인하는 속성은?",
+      "back": "df.dtypes를 이용한다. df.info()는 결측 현황도 요약한다.",
+      "code_example": "print(df.dtypes)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "pandas",
+        "dtypes"
+      ],
+      "difficulty": "basic",
+      "content_digest": "2b3552642e1b20af"
+    },
+    {
+      "card_id": "pd-005",
+      "revision": 1,
+      "front": "loc와 iloc의 선택 기준은?",
+      "back": "loc는 라벨, iloc는 정수 위치를 기준으로 선택한다.",
+      "code_example": "a = df.loc[0, \"age\"]\nb = df.iloc[0, 2]",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "pandas",
+        "loc",
+        "iloc"
+      ],
+      "difficulty": "basic",
+      "content_digest": "33a7c803bd8d402a"
+    },
+    {
+      "card_id": "pd-006",
+      "revision": 1,
+      "front": "조건에 맞는 행은 어떻게 선택하나?",
+      "back": "불리언 조건식을 대괄호 안에 사용한다.",
+      "code_example": "active = df[df[\"days_active\"] >= 10]",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "pandas",
+        "filter"
+      ],
+      "difficulty": "basic",
+      "content_digest": "6edd18e3c64c9133"
+    },
+    {
+      "card_id": "pd-007",
+      "revision": 1,
+      "front": "컬럼별 결측치 개수 확인 방법은?",
+      "back": "isna()로 결측 여부를 구하고 sum()으로 개수를 센다.",
+      "code_example": "missing = df.isna().sum()",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "pandas",
+        "missing",
+        "isna"
+      ],
+      "difficulty": "basic",
+      "content_digest": "90d5bc5e0e22af0f"
+    },
+    {
+      "card_id": "pd-008",
+      "revision": 1,
+      "front": "groupby().mean()은 무엇을 하나?",
+      "back": "그룹별 수치 컬럼의 평균을 계산한다.",
+      "code_example": "means = df.groupby(\"tier\")[\"score\"].mean()",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "pandas",
+        "groupby",
+        "mean"
+      ],
+      "difficulty": "basic",
+      "content_digest": "a2e810dad32098fa"
+    }
+  ]
+}

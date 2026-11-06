@@ -1,0 +1,79 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { getDecks, cardQuestions, CARD_DIFFICULTY_LABEL, runtimeLabel, type PublicDeck } from '../../../lib/cards';
+import { getManifest } from '../../../lib/content';
+import { pageUrl } from '../../../lib/paths';
+import { jsonForScript } from '../../../lib/page-config';
+
+export function getStaticPaths() {
+  return getDecks().map((d) => ({ params: { deck: d.deck_id }, props: { d } }));
+}
+const { d } = Astro.props as { d: PublicDeck };
+const decks = getDecks();
+const i = decks.findIndex((x) => x.deck_id === d.deck_id);
+const prev = decks[i - 1], next = decks[i + 1];
+const cq = cardQuestions();
+const qTitle = (p: string, q: string) => getManifest(p)?.questions.find((x) => x.question_id === q)?.title;
+const paras = d.intro_md.split(/\n{2,}/);
+const progressCfg = { decks: [{ id: d.deck_id, cards: d.cards.map((c) => ({ id: c.card_id, dg: c.content_digest })) }] };
+---
+<Base kind="carddeck" title={d.seo.title.replace(/ \| AICE.*$/, '')} description={d.seo.description}
+      crumbs={[{ label: '개념 카드', href: pageUrl('cards') }, { label: d.title }]}>
+  <div class="cd">
+    <header class="cd-hero cl-deck" data-deck-id={d.deck_id}>
+      <p class="cd-kicker">개념 카드 {d.cards.length}장</p>
+      <h1>{d.title}</h1>
+      {paras.map((p) => <p class="cd-intro">{p}</p>)}
+      <div class="cd-goals">
+        <strong>이 덱에서 익힐 것</strong>
+        <ul>{d.learning_objectives.map((o) => <li>{o}</li>)}</ul>
+      </div>
+      <div class="cl-progress">
+        <div class="cl-bar" aria-hidden="true"><span class="cl-fill"></span></div>
+        <span class="cl-ptext">아직 학습 기록이 없어요</span>
+      </div>
+      <div class="cd-actions">
+        <a class="btn" href={pageUrl('cards', d.deck_id, 'study')}>카드로 학습하기</a>
+        <a class="btn btn-ghost" href={pageUrl('cards')}>다른 덱 보기</a>
+      </div>
+    </header>
+
+    <section aria-labelledby="cd-list">
+      <h2 id="cd-list">개념 정리</h2>
+      <ol class="cd-cards">
+        {d.cards.map((c, n) => (
+          <li class="cd-card" id={c.card_id}>
+            <div class="cd-card-head"><span class="cd-no">{n + 1}</span><span class="cd-diff">{CARD_DIFFICULTY_LABEL[c.difficulty]}</span></div>
+            <h3>{c.front}</h3>
+            <p>{c.back}</p>
+            {c.code_example && (
+              <figure class="cs-code">
+                <figcaption>{runtimeLabel(c)}</figcaption>
+                <pre><code>{c.code_example}</code></pre>
+              </figure>
+            )}
+            {(cq.get(c.card_id) ?? []).length > 0 && (
+              <p class="cd-related">관련 모의고사 문항: {(cq.get(c.card_id) ?? []).map((x, k) => (
+                <>{k > 0 && ', '}<a href={pageUrl('exams', x.pack_id, x.question_id)}>{x.question_id.toUpperCase()}{qTitle(x.pack_id, x.question_id) ? ` ${qTitle(x.pack_id, x.question_id)}` : ''}</a></>
+              ))}</p>
+            )}
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    {d.license === 'CC-BY-4.0' && (
+      <p class="cd-license">이 덱의 개념 카드는 <a href="https://creativecommons.org/licenses/by/4.0/deed.ko" rel="license noopener">CC BY 4.0</a> 으로 공개해요. 다른 곳에 쓸 때는 출처(ParkBeomMin, AICE 실전 모의고사)를 밝혀 주세요.</p>
+    )}
+
+    <nav class="cd-pager" aria-label="다른 덱">
+      {prev ? <a href={pageUrl('cards', prev.deck_id)}>← {prev.title}</a> : <span />}
+      {next ? <a href={pageUrl('cards', next.deck_id)}>{next.title} →</a> : <span />}
+    </nav>
+  </div>
+  <script type="application/json" id="cards-progress-config" set:html={jsonForScript(progressCfg)}></script>
+</Base>
+<script>
+  import { startCardProgress } from '../../../scripts/cards-list.ts';
+  void startCardProgress();
+</script>

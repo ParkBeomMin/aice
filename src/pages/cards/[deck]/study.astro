@@ -1,0 +1,16 @@
+---
+import Base from '../../../layouts/Base.astro';
+import CardStudy from '../../../components/CardStudy.astro';
+import { getDecks, studyPayload, type PublicDeck } from '../../../lib/cards';
+import { pageUrl } from '../../../lib/paths';
+
+export function getStaticPaths() {
+  return getDecks().map((d) => ({ params: { deck: d.deck_id }, props: { d } }));
+}
+const { d } = Astro.props as { d: PublicDeck };
+---
+<Base kind="cardstudy" noindex title={`${d.title} 카드 학습`} description={`${d.title} 개념 카드 학습`}
+      crumbs={[{ label: '개념 카드', href: pageUrl('cards') }, { label: d.title, href: pageUrl('cards', d.deck_id) }, { label: '학습' }]}>
+  <h1 class="cs-title">{d.title}</h1>
+  <CardStudy mode="deck" deckId={d.deck_id} decks={studyPayload([d])} />
+</Base>

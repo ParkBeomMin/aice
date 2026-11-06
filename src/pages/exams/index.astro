@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getManifests } from '../../lib/content';
+import { pageUrl } from '../../lib/paths';
+const packs = getManifests();
+---
+<Base kind="list" title="모의고사 목록" description="AICE Associate 실전 모의고사 회차 목록" crumbs={[{ label: '모의고사' }]}>
+  <h1>모의고사 목록</h1>
+  <ul class="cards">
+    {packs.map((p) => (
+      <li class="card">
+        <a href={pageUrl('exams', p.pack_id)}>
+          <h2>{p.title}</h2>
+          <p>{p.summary}</p>
+          <p class="meta">{p.question_count}문항 | 제한시간 {p.time_limit_minutes}분</p>
+        </a>
+      </li>
+    ))}
+  </ul>
+</Base>

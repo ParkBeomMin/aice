@@ -1,0 +1,55 @@
+name: Deploy AICE site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PUBLIC_REPO_NAME: ${{ github.event.repository.name }}
+      # 광고·정책 시행일은 저장소 Variables 로만 켠다 (기본 비활성). 게시자 ID 예: ca-pub-7426857657290789
+      PUBLIC_ADS_ENABLED: ${{ vars.ADS_ENABLED }}
+      PUBLIC_ADSENSE_CLIENT: ${{ vars.ADSENSE_CLIENT }}
+      # EEA·UK·스위스 대상 Google 인증 CMP 설정을 확인한 뒤에만 1 (없으면 광고 비활성)
+      PUBLIC_ADS_CMP_READY: ${{ vars.ADS_CMP_READY }}
+      PUBLIC_POLICY_DATE: ${{ vars.POLICY_DATE }}
+      EXPECT_ADS: ${{ vars.ADS_ENABLED == '1' && vars.ADS_CMP_READY == '1' && '1' || '0' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Verify public content bundle (production only)
+        run: node scripts/verify-content.mjs --production
+      - name: Build
+        run: npm run build
+      - name: Check dist (base path, links, noindex, ads-per-page, no debug hooks)
+        run: node scripts/check-dist.mjs
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,73 @@
+---
+import Base from '../layouts/Base.astro';
+import { withBase } from '../lib/paths';
+import { CONTACT_URL, POLICY_DATE, ADS_ENABLED, OPERATOR } from '../lib/site';
+const toc = [
+  ['p1', '수집하는 정보'], ['p2', '브라우저에 저장되는 정보'], ['p3', '외부 서비스'],
+  ['p4', '이용자의 선택'], ['p5', '문의'], ['p6', '변경'],
+];
+---
+<Base kind="policy" title="개인정보처리방침" description="AICE 실전 모의고사 개인정보처리방침: 회원 가입과 서버 저장 없음, 브라우저 저장, 외부 서비스" crumbs={[{ label: '개인정보처리방침' }]}>
+  <div class="pv">
+    <header class="pv-hero">
+      <h1>개인정보처리방침</h1>
+      <p class="pv-meta"><span class="pv-pill" data-policy-date={POLICY_DATE || ''}>{POLICY_DATE ? `시행일: ${POLICY_DATE}` : '공개 전 초안입니다.'}</span><span class="pv-pill">운영자: {OPERATOR}</span></p>
+    </header>
+
+    <section class="pv-summary" aria-labelledby="pv-sum">
+      <h2 id="pv-sum">한눈에 보기</h2>
+      <ul>
+        <li><strong>회원 가입이 없어요</strong><span>이름이나 이메일을 받지 않고, 운영자 서버나 데이터베이스도 없어요.</span></li>
+        <li><strong>기록은 내 브라우저에만</strong><span>작성한 코드, 채점 결과, 개념 카드 학습 기록은 이 브라우저에만 저장되고 밖으로 보내지 않아요.</span></li>
+        <li><strong>외부 서비스는 최소한</strong><span>호스팅(GitHub Pages), Python 실행 파일(jsDelivr), 광고를 켤 경우 Google AdSense를 사용해요.</span></li>
+        <li><strong>문의는 공개 게시판</strong><span>GitHub Issues에 남긴 글은 누구나 볼 수 있으니 개인정보를 적지 마세요.</span></li>
+      </ul>
+    </section>
+
+    <nav class="pv-toc" aria-label="목차">
+      {toc.map(([id, t], i) => <a href={`#${id}`}><span>{i + 1}</span>{t}</a>)}
+    </nav>
+
+    <section class="pv-sec" id="p1">
+      <h2><span class="pv-no">1</span>수집하는 정보</h2>
+      <p>이 사이트는 회원 가입이나 로그인 기능이 없고, 운영자가 직접 운영하는 서버나 데이터베이스가 없습니다. 사이트는 이용자의 이름, 이메일, 작성한 코드를 운영자에게 자동으로 전송하지 않습니다.</p>
+      <p>단, 이용자가 <strong>GitHub Issues 에 직접 게시한 정보</strong>(GitHub 계정명, 이슈 본문, 첨부 코드, 화면 등)는 공개되어 누구나 열람할 수 있으며, 운영자는 문의 처리를 위해 해당 정보를 확인할 수 있습니다.</p>
+      <p>이슈 작성자는 게시 내용을 수정할 수 있으나, 이슈의 영구 삭제는 저장소 운영자의 권한에 따라 처리됩니다. 게시 정보의 삭제가 필요한 경우 운영자에게 요청할 수 있으며, GitHub 의 데이터 처리 및 보관에는 GitHub 의 정책이 적용됩니다.</p>
+    </section>
+
+    <section class="pv-sec" id="p2">
+      <h2><span class="pv-no">2</span>이용자 브라우저에 저장되는 정보</h2>
+      <ul>
+        <li>작성한 코드(자동 저장), 실전 시험 진행 상태, 제출한 코드와 채점 결과는 이용자 브라우저의 저장소(IndexedDB)에만 저장되며 외부로 전송되지 않습니다.</li>
+        <li>개념 카드의 최신 학습 표시(알아요, 다시 볼게요), 복습 횟수, 마지막 학습 시각은 브라우저 IndexedDB 에만 저장되며 운영자 서버로 전송하지 않습니다. 다른 기기와 동기화되지 않습니다.</li>
+        <li>모의고사 결과에서 추천한 개념 카드 목록은 같은 탭의 세션 저장소에만 잠시 보관되며, 탭을 닫으면 지워집니다.</li>
+        <li>브라우저 데이터를 삭제하면 지워지며, 운영자는 이를 복구할 수 없습니다.</li>
+      </ul>
+    </section>
+
+    <section class="pv-sec" id="p3">
+      <h2><span class="pv-no">3</span>외부 서비스</h2>
+      <div class="pv-svcs">
+        <div class="pv-svc"><h3>GitHub Pages <small>GitHub, Inc.</small></h3><span class="pv-tag">사이트 호스팅</span><p>접속 시 IP 주소 등 접속 기록이 GitHub 에 의해 처리될 수 있습니다.</p></div>
+        <div class="pv-svc"><h3>jsDelivr CDN</h3><span class="pv-tag">Python 실행 파일</span><p>브라우저에서 Python(Pyodide)을 실행하기 위한 파일을 내려받을 때 사용하며, 요청 정보(IP 주소 등)가 CDN 제공자에 의해 처리될 수 있습니다.</p></div>
+        <div class="pv-svc"><h3>Google AdSense</h3><span class="pv-tag">{ADS_ENABLED ? '광고' : '광고 (현재 미사용)'}</span><p>{ADS_ENABLED ? '일부 학습 콘텐츠 페이지(문제 풀이, 실전, 채점 결과 화면 제외)에 광고를 게재하며,' : '광고를 게재하는 경우 일부 학습 콘텐츠 페이지(문제 풀이, 실전, 채점 결과 화면 제외)에서'} Google 과 제3자 공급업체가 쿠키를 사용해 이용자의 이전 방문 기록을 바탕으로 광고를 제공할 수 있습니다. 맞춤 광고는 <a href="https://adssettings.google.com" rel="noopener">Google 광고 설정</a>에서 해제할 수 있습니다. 자세한 내용은 <a href="https://policies.google.com/technologies/ads" rel="noopener">Google 광고 정책</a>을 참고하세요.</p></div>
+        <div class="pv-svc"><h3>GitHub Issues <small>GitHub, Inc.</small></h3><span class="pv-tag">문의 창구</span><p>게시 내용과 계정명이 공개되므로 개인정보를 적지 마세요.</p></div>
+      </div>
+    </section>
+
+    <section class="pv-sec" id="p4">
+      <h2><span class="pv-no">4</span>이용자의 선택</h2>
+      <p>브라우저 설정에서 사이트 데이터(IndexedDB)와 쿠키를 언제든 삭제하거나 차단할 수 있습니다. 차단하면 자동 저장과 실전 모드가 동작하지 않을 수 있습니다.</p>
+    </section>
+
+    <section class="pv-sec" id="p5">
+      <h2><span class="pv-no">5</span>문의</h2>
+      <p>개인정보 관련 문의는 <a href={CONTACT_URL} rel="noopener">GitHub Issues</a> 로 남겨 주세요. (<a href={withBase('contact/')}>문의 안내</a>)</p>
+    </section>
+
+    <section class="pv-sec" id="p6">
+      <h2><span class="pv-no">6</span>변경</h2>
+      <p>이 방침이 바뀌면 이 페이지에 시행일과 함께 게시합니다.</p>
+    </section>
+  </div>
+</Base>

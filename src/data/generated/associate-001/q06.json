@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q06",
+  "public_id": "associate-001-q06",
+  "revision": 1,
+  "title": "중앙값 결측 대체",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "`df_raw`를 복사해 `df_clean`을 만든 후, `quiz_avg_score`의 누락값을 원본 `df_raw['quiz_avg_score']`의 관측 중앙값으로 대체하시오. 다른 컬럼과 기존 비결측값은 보존하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** `df_raw`를 그대로 보존하고, `df_clean`을 만들어 `quiz_avg_score`의 **결측 위치만** 관측 중앙값으로 채운다. 이미 값이 있는 행이나 다른 컬럼은 변경하지 않는다.\n\n```python\ndf_clean = df_raw.copy()\nmedian_quiz = df_raw['quiz_avg_score'].median()\ndf_clean['quiz_avg_score'] = df_clean['quiz_avg_score'].fillna(median_quiz)\n```\n\n**기준 결과:** 원본 중앙값은 `73.6`, 결측은 `91개`이며, 처리 후 `df_clean['quiz_avg_score']`에는 결측이 없다. 원본 `df_raw`에는 여전히 결측 91개가 남아야 한다.\n\n**흔한 오류:** 중앙값 대신 평균(약 `71.31`)으로 채우거나 `df_raw` 자체를 덮어쓰는 것. 결측이 없어졌다는 사실만으로 지정한 방법을 올바르게 사용했다고 볼 수 없다.\n\n**참고:** 이 데이터에서 퀴즈 점수는 이탈 여부와 상관관계가 매우 낮다. 결측 처리의 목적은 데이터 품질 확보이며, 전처리했다고 반드시 좋은 예측 특징이 되는 것은 아니다.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "df_clean = df_raw.copy()\ndf_clean['quiz_avg_score'] = df_clean['quiz_avg_score'].fillna(df_raw['quiz_avg_score'].median())"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

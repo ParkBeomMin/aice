@@ -1,0 +1,389 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aice-content-factory.local/content/public-grading-profile.schema.json",
+  "title": "Public grading bundle",
+  "description": "공개 채점 규칙 묶음 (팩당 1개, public/content/<pack>/grading/<pack>-grading-<sha12>.json). 브라우저 사용자가 볼 수 있음을 전제로 함 (정답 코드는 없음, 기대 결과값은 포함). 사람이 검토·테스트한 프로필만 포함 · 1.1.0: 검사 label 필수 · 1.2.0(엔진 1.1.0): 학생 상태 기반 독립 재계산 probe (이전 계약 파일 보존) · 1.3.0(엔진 1.2.0): frame_unchanged",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "pack_id",
+    "engine_version",
+    "grading_version",
+    "questions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.3.0"
+    },
+    "pack_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{2,63}$"
+    },
+    "engine_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "grading_version": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{2,63}-g[0-9a-f]{12}$"
+    },
+    "questions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^q[0-9]{2}$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/question"
+      }
+    }
+  },
+  "$defs": {
+    "probe": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "var_type",
+            "df_shape",
+            "length",
+            "columns",
+            "null_count",
+            "column_stat",
+            "non_numeric_columns",
+            "cell_result",
+            "output_numbers",
+            "output_text",
+            "frames",
+            "value",
+            "is_fitted",
+            "class_name",
+            "attr_number",
+            "metric",
+            "imputed_values",
+            "figure_count",
+            "bar_count",
+            "predictions",
+            "probabilities",
+            "refit_predictions",
+            "model_params",
+            "best_model",
+            "series_index",
+            "imputation_from_source",
+            "frame_unchanged"
+          ]
+        },
+        "var": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "model": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "X": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "y": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "column": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "exclude_columns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "maxItems": 200
+        },
+        "stat": {
+          "type": "string",
+          "enum": [
+            "mean",
+            "median",
+            "sum",
+            "min",
+            "max",
+            "std",
+            "nunique",
+            "count"
+          ]
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "accuracy",
+            "f1",
+            "mae",
+            "mse",
+            "precision",
+            "r2",
+            "recall"
+          ]
+        },
+        "attr": {
+          "type": "string",
+          "enum": [
+            "n_samples_seen_",
+            "n_features_in_",
+            "n_estimators",
+            "max_iter"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "X_train": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "y_train": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "X_eval": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "model_class": {
+          "type": "string",
+          "enum": [
+            "LogisticRegression",
+            "RandomForestClassifier"
+          ]
+        },
+        "params": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "max_iter": {
+              "type": "number"
+            },
+            "random_state": {
+              "type": "number"
+            },
+            "n_estimators": {
+              "type": "number"
+            },
+            "n_jobs": {
+              "type": "number"
+            },
+            "C": {
+              "type": "number"
+            },
+            "max_depth": {
+              "type": "number"
+            }
+          }
+        },
+        "keys": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "max_iter",
+              "random_state",
+              "n_estimators",
+              "n_jobs",
+              "C",
+              "max_depth"
+            ]
+          },
+          "uniqueItems": true,
+          "maxItems": 6
+        },
+        "threshold": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1
+        },
+        "candidates": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "model",
+              "X"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^[a-z0-9_]{1,40}$"
+              },
+              "model": {
+                "type": "string",
+                "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+              },
+              "X": {
+                "type": "string",
+                "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+              }
+            }
+          }
+        },
+        "tie": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]{1,40}$"
+        },
+        "except_columns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "uniqueItems": true,
+          "maxItems": 50
+        }
+      }
+    },
+    "expect": {
+      "type": "object",
+      "required": [
+        "op"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": [
+            "eq",
+            "approx",
+            "in_range",
+            "contains_all",
+            "excludes_all",
+            "set_eq",
+            "approx_contains",
+            "any_approx",
+            "text_contains_all",
+            "truthy"
+          ]
+        },
+        "value": {},
+        "ref_probe": {
+          "$ref": "#/$defs/probe"
+        },
+        "abs_tol": {
+          "type": "number",
+          "minimum": 0
+        },
+        "rel_tol": {
+          "type": "number",
+          "minimum": 0
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      }
+    },
+    "check": {
+      "type": "object",
+      "required": [
+        "id",
+        "probe",
+        "expect",
+        "weight",
+        "feedback",
+        "label"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,47}$"
+        },
+        "probe": {
+          "$ref": "#/$defs/probe"
+        },
+        "expect": {
+          "$ref": "#/$defs/expect"
+        },
+        "weight": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 100
+        },
+        "feedback": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        }
+      }
+    },
+    "question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "question_id",
+        "profile",
+        "profile_revision",
+        "review_status",
+        "depends_on",
+        "points",
+        "checks"
+      ],
+      "properties": {
+        "question_id": {
+          "type": "string",
+          "pattern": "^q[0-9]{2}$"
+        },
+        "profile": {
+          "type": "string"
+        },
+        "profile_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "review_status": {
+          "enum": [
+            "tested",
+            "approved"
+          ]
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^q[0-9]{2}$"
+          },
+          "uniqueItems": true
+        },
+        "points": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "checks": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "$ref": "#/$defs/check"
+          }
+        }
+      }
+    }
+  }
+}

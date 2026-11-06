@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.0.0",
+  "deck_id": "preprocessing",
+  "revision": 3,
+  "title": "데이터 전처리",
+  "summary": "결측치, 이상값, 인코딩, 훈련 기준 전처리",
+  "intro_md": "전처리는 데이터를 무조건 깨끗하게 만드는 작업이 아니라 모델에 적합한 입력을 만드는 과정입니다. 결측치는 삭제하거나 대체할 수 있고, IQR로 찾아낸 이상값은 맥락을 확인한 뒤 처리합니다. 범주형 변수를 숫자로 표현할 때는 불필요한 순서 정보가 생기지 않도록 주의하세요. 데이터 분할 후 중앙값, 스케일러 등 학습이 필요한 변환 기준은 훈련 데이터에서만 계산하는 것이 원칙입니다.",
+  "learning_objectives": [
+    "결측치와 이상값을 데이터의 의미에 맞는 방법으로 처리한다.",
+    "범주형 인코딩과 훈련 데이터 기반 표준화를 구분해 데이터 누설을 피한다."
+  ],
+  "seo": {
+    "title": "데이터 전처리 개념 카드 | AICE Associate 학습",
+    "description": "결측치 중앙값 대체, IQR 이상값 범위, 원-핫 인코딩, stratify, StandardScaler와 데이터 누설 방지를 학습합니다. 전처리 실수 예방을 위한 8장."
+  },
+  "tags": [
+    "preprocessing"
+  ],
+  "publication_status": "approved",
+  "license": "CC-BY-4.0",
+  "cards": [
+    {
+      "card_id": "prep-001",
+      "revision": 1,
+      "front": "수치형 결측값을 중앙값으로 채우려면?",
+      "back": "해당 컬럼의 median을 구한 뒤 fillna에 전달한다.",
+      "code_example": "s = df[\"score\"]\ndf[\"score\"] = s.fillna(s.median())",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "missing",
+        "median"
+      ],
+      "difficulty": "basic",
+      "content_digest": "5aeb9675eb8a45c4"
+    },
+    {
+      "card_id": "prep-002",
+      "revision": 1,
+      "front": "범주형 결측값을 최빈값으로 채우려면?",
+      "back": "mode()의 첫 번째 최빈값을 사용할 수 있다.",
+      "code_example": "df[\"tier\"] = df[\"tier\"].fillna(df[\"tier\"].mode()[0])",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "missing",
+        "mode"
+      ],
+      "difficulty": "basic",
+      "content_digest": "95f736f9d8f2f8d0"
+    },
+    {
+      "card_id": "prep-003",
+      "revision": 2,
+      "front": "IQR 이상값 상한 계산식은?",
+      "back": "Q3 + 1.5 × (Q3 - Q1)이다. 상한 밖의 값은 이상값 후보이며 무조건 삭제하지 않는다.",
+      "code_example": "upper = q3 + 1.5 * (q3 - q1)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "iqr",
+        "outliers"
+      ],
+      "difficulty": "basic",
+      "content_digest": "bbcad8193d84a3ed"
+    },
+    {
+      "card_id": "prep-004",
+      "revision": 2,
+      "front": "dropna와 fillna의 핵심 차이는?",
+      "back": "dropna는 결측 행이나 열을 삭제하고 fillna는 값을 대체한다.",
+      "code_example": "clean = df.dropna(subset=[\"score\"])",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "missing"
+      ],
+      "difficulty": "basic",
+      "content_digest": "23438b94ee0efc09"
+    },
+    {
+      "card_id": "prep-005",
+      "revision": 1,
+      "front": "원-핫 인코딩의 목적은?",
+      "back": "범주를 개별 이진 컬럼으로 표현해 모델 입력에 사용할 수 있게 한다.",
+      "code_example": "encoded = pd.get_dummies(df, columns=[\"tier\"])",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "onehot"
+      ],
+      "difficulty": "basic",
+      "content_digest": "5a04820d4f465c99"
+    },
+    {
+      "card_id": "prep-006",
+      "revision": 1,
+      "front": "레이블 인코딩의 주의점은?",
+      "back": "명목형 범주에 숫자 순서를 부여하면 가짜 순서가 생길 수 있다.",
+      "code_example": "codes = df[\"tier\"].astype(\"category\").cat.codes",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "encoding"
+      ],
+      "difficulty": "basic",
+      "content_digest": "4184c47ff4e67207"
+    },
+    {
+      "card_id": "prep-007",
+      "revision": 2,
+      "front": "stratify=y를 쓰는 이유는?",
+      "back": "학습 데이터와 평가 데이터에 타깃 클래스 비율이 비슷하게 유지되도록 분할한다.",
+      "code_example": "train_test_split(X, y, stratify=y, random_state=42)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "split",
+        "stratify"
+      ],
+      "difficulty": "basic",
+      "content_digest": "522ffedb673a0d02"
+    },
+    {
+      "card_id": "prep-008",
+      "revision": 2,
+      "front": "표준화 scaler는 어디서 fit하나?",
+      "back": "스케일러는 훈련 데이터에만 fit하고 평가 데이터에는 transform만 적용한다. 평가 정보 누설을 줄이기 위해서다.",
+      "code_example": "Xtr = scaler.fit_transform(X_train)\nXte = scaler.transform(X_test)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "scaler",
+        "leakage"
+      ],
+      "difficulty": "basic",
+      "content_digest": "a99d0948fa62c0c0"
+    }
+  ]
+}

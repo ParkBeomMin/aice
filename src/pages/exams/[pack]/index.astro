@@ -1,0 +1,50 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { getManifests, DIFFICULTY_LABEL, topicLabel, formatBytes, type Manifest } from '../../../lib/content';
+import { pageUrl, withBase } from '../../../lib/paths';
+
+export function getStaticPaths() {
+  return getManifests().map((m) => ({ params: { pack: m.pack_id }, props: { m } }));
+}
+const { m } = Astro.props as { m: Manifest };
+---
+<Base kind="pack" title={m.title} description={`${m.title}: ${m.question_count}문항, 제한시간 ${m.time_limit_minutes}분. ${m.summary}`}
+      crumbs={[{ label: '모의고사', href: pageUrl('exams') }, { label: m.title }]}>
+  <h1>{m.title}</h1>
+  <p>{m.summary}</p>
+  <dl class="facts">
+    <div><dt>문항</dt><dd>{m.question_count}</dd></div>
+    <div><dt>제한시간</dt><dd>{m.time_limit_minutes}분</dd></div>
+    <div><dt>유형</dt><dd>코딩 실습</dd></div>
+  </dl>
+  <p><a class="btn" href={pageUrl('exams', m.pack_id, 'practice')}>노트북으로 풀기</a> <a class="btn" href={pageUrl('exams', m.pack_id, 'exam')}>실전 모드 ({m.time_limit_minutes}분)</a> <a href={pageUrl('exams', m.pack_id, 'result')}>내 채점 결과</a></p>
+  <section class="modes">
+    <div class="mode"><h2>연습 모드</h2><p>{m.question_count}문항 노트북을 시간 제한 없이 셀 단위로 작성하고 실행. 원할 때 연습 채점</p></div>
+    <div class="mode"><h2>실전 모드</h2><p>{m.time_limit_minutes}분 타이머, 제출 후 자동 채점 (자체 연습용, 공식 점수 아님)</p></div>
+    <div class="mode"><h2>문제별 해설</h2><p>아래 문항을 눌러 정답 코드와 해설 확인</p></div>
+  </section>
+  <h2>문항별 해설</h2>
+  <table class="qtable">
+    <thead><tr><th scope="col">번호</th><th scope="col">제목</th><th scope="col">영역</th><th scope="col">난이도</th></tr></thead>
+    <tbody>
+      {m.questions.map((q) => (
+        <tr>
+          <td>{q.question_id.toUpperCase()}</td>
+          <td><a href={pageUrl('exams', m.pack_id, q.question_id)}>{q.title}</a></td>
+          <td>{topicLabel(q.topic)}</td>
+          <td><span class={`badge ${q.difficulty}`}>{DIFFICULTY_LABEL[q.difficulty]}</span></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  {m.datasets.length > 0 && (
+    <section>
+      <h2>데이터셋</h2>
+      <ul>
+        {m.datasets.map((d) => (
+          <li><a href={withBase(d.url_path)} download>{d.url_path.split('/').pop()}</a> ({formatBytes(d.size_bytes)}, {d.license})</li>
+        ))}
+      </ul>
+    </section>
+  )}
+</Base>

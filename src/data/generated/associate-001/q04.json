@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q04",
+  "public_id": "associate-001-q04",
+  "revision": 1,
+  "title": "그룹별 이탈률",
+  "topic": "pandas",
+  "difficulty": "medium",
+  "prompt": "`df_raw`를 `membership_type`으로 묶어 `churn_30d` 평균(이탈률)을 구하고, 인덱스를 문자 오름차순 정렬한 Series를 `churn_by_membership`에 저장하시오. 결과를 출력하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** 이진 변수의 평균은 1의 비율이다. `groupby('membership_type')['churn_30d'].mean()`으로 구한 후 인덱스를 정렬한다.\n\n```python\nchurn_by_membership = (\n    df_raw.groupby('membership_type')['churn_30d'].mean().sort_index()\n)\nprint(churn_by_membership)\n```\n**기준 결과:** Basic `0.419034`, Plus `0.270886`, Premium `0.149502`(반올림 4자리: 0.4190, 0.2709, 0.1495). **해석:** 이 샘플에서는 Basic의 이탈 비율이 가장 높다. 이 결과만으로 등급이 이탈의 인과적 원인이라고 단정할 수 없다. **흔한 오류:** 단순 가입자 수를 이탈률로 잘못 제출.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "churn_by_membership = df_raw.groupby('membership_type')['churn_30d'].mean().sort_index()\nprint(churn_by_membership)"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

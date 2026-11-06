@@ -1,0 +1,30 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { getManifests, type Manifest } from '../../../lib/content';
+import { pageUrl } from '../../../lib/paths';
+import { pageConfig, jsonForScript } from '../../../lib/page-config';
+import { cardMap, questionLinks } from '../../../lib/cards';
+
+export function getStaticPaths() {
+  return getManifests().map((m) => ({ params: { pack: m.pack_id }, props: { m } }));
+}
+const { m } = Astro.props as { m: Manifest };
+const cfg = pageConfig(m);
+// 개념 카드 추천 (T-07D): 문항 → 카드 연결과 카드 앞면, 덱 이름만 (공개 학습 콘텐츠). 점수, 답안은 이 페이지 밖으로 보내지 않는다
+const links = questionLinks(m.pack_id);
+const cm = cardMap();
+const cardReco = Object.keys(links).length ? { pack_id: m.pack_id, pack_title: m.title, links, cards: Object.fromEntries([...new Set(Object.values(links).flat())].filter((id) => cm.has(id)).map((id) => [id, { f: cm.get(id)!.card.front, deck: cm.get(id)!.deck_title, deck_id: cm.get(id)!.deck_id }])), review_url: pageUrl('cards', 'review'), cards_url: pageUrl('cards') } : null;
+---
+<Base kind="result" noindex title={`${m.title} 채점 결과`} description={`${m.title} 연습용 자동 채점 결과 (이 브라우저에 저장된 기록)`}
+      crumbs={[{ label: '모의고사', href: pageUrl('exams') }, { label: m.title, href: pageUrl('exams', m.pack_id) }, { label: '채점 결과' }]}>
+  <h1>채점 결과</h1>
+  <p class="disclaimer" role="note">자체 연습용 자동 채점입니다. 공식 AICE 시험 점수나 합격 여부와 무관하며, 결과는 이 브라우저에만 저장됩니다 (브라우저 데이터를 지우면 사라져요).</p>
+  <div id="rs-root" aria-live="polite"><p>결과를 불러오는 중…</p></div>
+  <div id="grading-progress" class="grading-progress" role="status" hidden></div>
+  <script type="application/json" id="acf-config" set:html={jsonForScript(cfg)}></script>
+  {cardReco && <script type="application/json" id="cards-reco-config" set:html={jsonForScript(cardReco)}></script>}
+</Base>
+<script>
+  import { startResultApp } from '../../../scripts/result-app.ts';
+  void startResultApp();
+</script>

@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q03",
+  "public_id": "associate-001-q03",
+  "revision": 1,
+  "title": "조건 필터",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "`df_raw`에서 `sessions_last_30d >= 8` 이고 `completion_rate >= 0.5`인 수강생만 선택하여 `active_learners` DataFrame에 저장하시오. 원본 행과 컬럼 구조를 유지하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** pandas에서는 두 비교식을 각각 괄호로 묶고 `&`로 결합한다. `and`는 Series 전체에 바로 적용할 수 없다.\n\n```python\nactive_learners = df_raw[(df_raw['sessions_last_30d'] >= 8) &\n                         (df_raw['completion_rate'] >= 0.5)]\n```\n**기준 결과:** 551행, 원본과 같은 14열. **흔한 오류:** OR(`|`)를 사용하거나 경계값 포함 조건 `>=`를 `>`로 바꾸는 것.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "active_learners = df_raw[(df_raw['sessions_last_30d'] >= 8) & (df_raw['completion_rate'] >= 0.5)]"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

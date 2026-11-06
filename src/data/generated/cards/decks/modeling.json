@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0.0",
+  "deck_id": "modeling",
+  "revision": 3,
+  "title": "머신러닝 모델링",
+  "summary": "분류 모델, 예측 확률, 재현성과 과적합",
+  "intro_md": "머신러닝에서는 예측 대상이 범주인지 연속값인지에 따라 문제 유형이 달라집니다. 로지스틱 회귀는 분류 확률을 계산하고, 랜덤포레스트는 여러 결정트리의 결과를 결합합니다. 모델을 만들 때는 난수를 고정해 실험을 재현하고, predict와 predict_proba의 차이를 확인하세요. 훈련 점수만 높은 모델은 과적합일 수 있으므로 평가 데이터 성능과 함께 판단해야 합니다.",
+  "learning_objectives": [
+    "분류 문제와 회귀 문제의 목적을 구분하고, 로지스틱 회귀와 랜덤포레스트의 특성을 설명한다.",
+    "훈련 성능과 평가 성능을 비교해 과적합과 데이터 누설 가능성을 점검한다."
+  ],
+  "seo": {
+    "title": "머신러닝 모델링 개념 카드 | AICE Associate 학습",
+    "description": "로지스틱 회귀, 랜덤포레스트, random_state, predict_proba, 과적합과 데이터 누설의 핵심을 예제 코드와 함께 비교합니다."
+  },
+  "tags": [
+    "machine_learning"
+  ],
+  "publication_status": "approved",
+  "license": "CC-BY-4.0",
+  "cards": [
+    {
+      "card_id": "ml-001",
+      "revision": 1,
+      "front": "분류와 회귀의 차이는?",
+      "back": "분류는 범주를, 회귀는 연속 수치값을 예측한다.",
+      "code_example": "y_class = [0,1,1]\ny_value = [3.2,4.1,5.0]",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "machine_learning",
+        "classification"
+      ],
+      "difficulty": "basic",
+      "content_digest": "cf04bcc35c226f12"
+    },
+    {
+      "card_id": "ml-002",
+      "revision": 1,
+      "front": "로지스틱 회귀의 대표적 활용은?",
+      "back": "이진 분류에 활용하며 클래스 확률도 예측할 수 있다.",
+      "code_example": "model = LogisticRegression(max_iter=1000)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "machine_learning",
+        "logistic"
+      ],
+      "difficulty": "basic",
+      "content_digest": "f3efe62a06b17638"
+    },
+    {
+      "card_id": "ml-003",
+      "revision": 1,
+      "front": "랜덤포레스트의 기본 아이디어는?",
+      "back": "여러 결정트리의 예측을 결합해 단일 트리의 불안정성을 줄인다.",
+      "code_example": "model = RandomForestClassifier(n_estimators=100, random_state=42)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "machine_learning",
+        "randomforest"
+      ],
+      "difficulty": "basic",
+      "content_digest": "a1aeb87103850c63"
+    },
+    {
+      "card_id": "ml-004",
+      "revision": 2,
+      "front": "random_state를 고정하는 이유는?",
+      "back": "데이터 분할과 모델의 난수 기반 결과를 다시 재현하기 쉽도록 한다.",
+      "code_example": "train_test_split(X, y, random_state=42)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "machine_learning",
+        "reproducibility"
+      ],
+      "difficulty": "basic",
+      "content_digest": "535cad0cbe6dcd39"
+    },
+    {
+      "card_id": "ml-005",
+      "revision": 1,
+      "front": "n_estimators는 무엇을 뜻하나?",
+      "back": "랜덤포레스트에서 사용하는 트리의 수다.",
+      "code_example": "RandomForestClassifier(n_estimators=100)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "machine_learning",
+        "hyperparameters"
+      ],
+      "difficulty": "basic",
+      "content_digest": "fec2ef49e0783b16"
+    },
+    {
+      "card_id": "ml-006",
+      "revision": 1,
+      "front": "predict와 predict_proba의 차이는?",
+      "back": "predict는 예측 클래스, predict_proba는 클래스별 예측 확률을 반환한다.",
+      "code_example": "labels = model.predict(X_test)\nprobs = model.predict_proba(X_test)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "machine_learning",
+        "predict"
+      ],
+      "difficulty": "basic",
+      "content_digest": "7b937a84832f015a"
+    },
+    {
+      "card_id": "ml-007",
+      "revision": 3,
+      "front": "과적합은 훈련 점수와 평가 점수에서 어떻게 보이나?",
+      "back": "훈련 점수가 높아도 평가 점수가 크게 낮으면 과적합을 의심한다. 두 결과를 함께 확인한다.",
+      "code_example": "train_score = model.score(X_train, y_train)\ntest_score = model.score(X_test, y_test)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "machine_learning",
+        "overfitting"
+      ],
+      "difficulty": "basic",
+      "content_digest": "c97e1841c3199c23"
+    },
+    {
+      "card_id": "ml-008",
+      "revision": 2,
+      "front": "데이터 누설이란 무엇인가?",
+      "back": "평가 때만 알 수 있는 정보를 훈련 과정에 사용하면 데이터 누설이다. 변환 기준은 훈련 데이터에서 구한다.",
+      "code_example": "scaler.fit(X_train)  # X_test 제외",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "machine_learning",
+        "leakage"
+      ],
+      "difficulty": "basic",
+      "content_digest": "34df83df40eed2ce"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0.0",
+  "mode": "production",
+  "decks": [
+    {
+      "deck_id": "pandas-basics",
+      "revision": 3,
+      "title": "Python과 Pandas 기초",
+      "summary": "CSV 읽기, 데이터 구조 확인, 행 선택과 그룹 집계",
+      "card_count": 8,
+      "file": "decks/pandas-basics.json",
+      "sha256": "12e2178d3414fb1414dbf6dd77e2fda32e525b5b2331b609a5107f791ae79186",
+      "publication_status": "approved"
+    },
+    {
+      "deck_id": "eda-statistics",
+      "revision": 3,
+      "title": "데이터 탐색과 통계",
+      "summary": "대표값, 분포, 비율, 상관관계의 해석",
+      "card_count": 8,
+      "file": "decks/eda-statistics.json",
+      "sha256": "27cd68e2be18b0de0fcd9d68b957032507910e1e8e0d9e593d30785348f20d3b",
+      "publication_status": "approved"
+    },
+    {
+      "deck_id": "preprocessing",
+      "revision": 3,
+      "title": "데이터 전처리",
+      "summary": "결측치, 이상값, 인코딩, 훈련 기준 전처리",
+      "card_count": 8,
+      "file": "decks/preprocessing.json",
+      "sha256": "6ea65f1fd3e820c085c6e0295c31b1576e7513657db85d9b52e827e83f6ae7bd",
+      "publication_status": "approved"
+    },
+    {
+      "deck_id": "visualization",
+      "revision": 3,
+      "title": "데이터 시각화",
+      "summary": "분포와 관계를 보여 주는 그래프 선택과 해석",
+      "card_count": 8,
+      "file": "decks/visualization.json",
+      "sha256": "7f310a53c936a596d34688f7c8eb17136812d763618c92f99bde69c2abbe0ace",
+      "publication_status": "approved"
+    },
+    {
+      "deck_id": "modeling",
+      "revision": 3,
+      "title": "머신러닝 모델링",
+      "summary": "분류 모델, 예측 확률, 재현성과 과적합",
+      "card_count": 8,
+      "file": "decks/modeling.json",
+      "sha256": "f1d59d00a268e1915a6efff39f0872e967b07f0e30aa21af4e07e082ee048fb8",
+      "publication_status": "approved"
+    },
+    {
+      "deck_id": "evaluation",
+      "revision": 3,
+      "title": "모델 평가 지표",
+      "summary": "혼동행렬, Precision, Recall, F1, 임계값과 AUC",
+      "card_count": 8,
+      "file": "decks/evaluation.json",
+      "sha256": "192339dfab1ee40667125d628b4a9d31d2ba8f22d217dd5c3934e7c9747f8e86",
+      "publication_status": "approved"
+    },
+    {
+      "deck_id": "deep-learning",
+      "revision": 3,
+      "title": "딥러닝 기초",
+      "summary": "Dense, sigmoid, 손실 함수, 반복 학습과 EarlyStopping",
+      "card_count": 6,
+      "file": "decks/deep-learning.json",
+      "sha256": "902ddc24e0a040ca9c93cc006c9bd878b9b53a916483b69d5eb1ded893d3cf21",
+      "publication_status": "approved"
+    }
+  ],
+  "question_links": [
+    {
+      "pack_id": "associate-001",
+      "file": "question-links/associate-001.json",
+      "sha256": "4fd7a4a4867b14c17e37d7502e9bfcfa13ce723da0b815713979a54157996665"
+    }
+  ]
+}

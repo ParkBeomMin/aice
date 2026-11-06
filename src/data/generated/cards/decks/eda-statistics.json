@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0.0",
+  "deck_id": "eda-statistics",
+  "revision": 3,
+  "title": "데이터 탐색과 통계",
+  "summary": "대표값, 분포, 비율, 상관관계의 해석",
+  "intro_md": "데이터 탐색의 첫 단계는 하나의 숫자만 보는 대신 분포와 집단 차이를 함께 이해하는 것입니다. 극단적인 값이 있으면 평균과 중앙값이 다르게 나타날 수 있고, 표본이 작은 그룹의 비율은 크게 흔들릴 수 있습니다. 상관계수는 두 수치형 변수의 선형 관계를 요약하지만, 인과관계를 증명하지 않고 비선형 관계도 놓칠 수 있습니다. 결과를 해석할 때는 요약 통계와 그래프를 함께 확인하세요.",
+  "learning_objectives": [
+    "평균, 중앙값, 표준편차, 사분위수로 데이터의 중심과 흩어짐을 설명한다.",
+    "범주별 비율과 상관계수를 표본 수, 인과관계, 비선형성의 한계와 함께 해석한다."
+  ],
+  "seo": {
+    "title": "데이터 탐색과 통계 개념 카드 | AICE Associate 학습",
+    "description": "평균과 중앙값의 차이, describe, 표준편차, 사분위수, 상관계수의 한계를 실습 예제로 정리합니다. 데이터 탐색에서 자주 틀리는 해석을 확인하세요."
+  },
+  "tags": [
+    "eda"
+  ],
+  "publication_status": "approved",
+  "license": "CC-BY-4.0",
+  "cards": [
+    {
+      "card_id": "eda-001",
+      "revision": 1,
+      "front": "평균보다 중앙값이 유용한 상황은?",
+      "back": "극단값이 많거나 분포가 치우쳤을 때 중앙값이 대표값으로 안정적이다.",
+      "code_example": "median = df[\"score\"].median()",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "statistics",
+        "median"
+      ],
+      "difficulty": "basic",
+      "content_digest": "065cacf426d58123"
+    },
+    {
+      "card_id": "eda-002",
+      "revision": 1,
+      "front": "describe()에서 얻을 수 있는 정보는?",
+      "back": "수치형 데이터의 개수, 평균, 표준편차, 사분위수 등을 요약한다.",
+      "code_example": "summary = df.describe()",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "statistics",
+        "describe"
+      ],
+      "difficulty": "basic",
+      "content_digest": "f21e4d71dfeef5b0"
+    },
+    {
+      "card_id": "eda-003",
+      "revision": 1,
+      "front": "value_counts(normalize=True)의 의미는?",
+      "back": "범주별 건수 대신 전체에서 차지하는 비율을 반환한다.",
+      "code_example": "ratio = df[\"tier\"].value_counts(normalize=True)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "eda",
+        "value_counts"
+      ],
+      "difficulty": "basic",
+      "content_digest": "29a3fe5150b3451c"
+    },
+    {
+      "card_id": "eda-004",
+      "revision": 1,
+      "front": "상관계수 -0.8은 무슨 의미인가?",
+      "back": "강한 음의 선형 관계를 뜻한다. 인과관계를 증명하지는 않는다.",
+      "code_example": "r = df[\"x\"].corr(df[\"y\"])",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "eda",
+        "correlation"
+      ],
+      "difficulty": "basic",
+      "content_digest": "d3a50f839dffcf2a"
+    },
+    {
+      "card_id": "eda-005",
+      "revision": 2,
+      "front": "상관계수가 0이면 관계가 없나?",
+      "back": "상관계수 0은 선형 관계가 거의 없다는 뜻이다. 곡선처럼 비선형 관계는 남아 있을 수 있다.",
+      "code_example": "plt.scatter(df[\"x\"], df[\"y\"])",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "eda",
+        "correlation"
+      ],
+      "difficulty": "basic",
+      "content_digest": "43c12d0aaccbc86d"
+    },
+    {
+      "card_id": "eda-006",
+      "revision": 1,
+      "front": "표준편차는 무엇을 나타내나?",
+      "back": "관측값이 평균 주변에서 퍼진 정도를 나타낸다.",
+      "code_example": "spread = df[\"score\"].std()",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "statistics",
+        "std"
+      ],
+      "difficulty": "basic",
+      "content_digest": "4e0d3bf5f997a589"
+    },
+    {
+      "card_id": "eda-007",
+      "revision": 1,
+      "front": "Q1과 Q3는 무엇인가?",
+      "back": "데이터를 정렬했을 때 각각 25%, 75% 위치의 사분위수다.",
+      "code_example": "q1 = s.quantile(0.25)\nq3 = s.quantile(0.75)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "statistics",
+        "quartile"
+      ],
+      "difficulty": "basic",
+      "content_digest": "2306c7c53db3a25c"
+    },
+    {
+      "card_id": "eda-008",
+      "revision": 1,
+      "front": "집단별 비율을 비교할 때 주의할 점은?",
+      "back": "집단별 표본 수를 함께 확인한다. 작은 집단의 비율은 불안정할 수 있다.",
+      "code_example": "n = df.groupby(\"tier\").size()",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "eda",
+        "groupby",
+        "ratio"
+      ],
+      "difficulty": "basic",
+      "content_digest": "7b73cfc921c3ae76"
+    }
+  ]
+}

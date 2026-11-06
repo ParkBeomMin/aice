@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-001",
+  "question_id": "q12",
+  "public_id": "associate-001-q12",
+  "revision": 1,
+  "title": "로지스틱 회귀 평가",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "`lr_model`로 `X_test_scaled`의 이탈 여부를 예측하여 `lr_pred`에 저장하고, `y_test` 기준 `accuracy_score`와 `f1_score`를 계산하여 `lr_accuracy`, `lr_f1`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-001/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261105, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**핵심:** `predict`한 `lr_pred`를 실제 `y_test`와 비교해 정확도와 F1을 구한다. F1은 이탈 클래스(양성)의 정밀도와 재현율을 반영해, 다수 클래스가 있는 문제에서 정확도만 보는 한계를 보완한다.\n\n```python\nfrom sklearn.metrics import accuracy_score, f1_score\nlr_pred = lr_model.predict(X_test_scaled)\nlr_accuracy = accuracy_score(y_test, lr_pred)\nlr_f1 = f1_score(y_test, lr_pred)\n```\n**기준 결과:** 정확도 `0.79642857…`, F1 `0.63694267…`. 다수 클래스로 모두 예측할 때 기준선 정확도는 약 `0.6807`이다. **주의:** 점수 하나만으로 모델의 공정성이나 배포 적합성을 보증하지 않는다.\n\n---"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import accuracy_score, f1_score\nlr_pred = lr_model.predict(X_test_scaled)\nlr_accuracy = accuracy_score(y_test, lr_pred)\nlr_f1 = f1_score(y_test, lr_pred)\nprint(lr_accuracy, lr_f1)"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

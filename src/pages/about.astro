@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import { pageUrl, withBase } from '../lib/paths';
+---
+<Base kind="policy" title="소개" description="AICE 실전 모의고사 사이트 소개: 비공식 개인 학습 프로젝트" crumbs={[{ label: '소개' }]}>
+  <h1>소개</h1>
+  <p>AICE Associate 시험을 준비하며 직접 만든 연습 문제를, 브라우저에서 바로 풀어볼 수 있게 공개하는 개인 학습 프로젝트입니다.</p>
+  <h2>비공식 안내</h2>
+  <ul>
+    <li>KT 등 AICE 시험 주관사와 관련이 없습니다. 실제 시험 문항을 복제하지 않고 직접 만든 문제와 데이터만 사용합니다.</li>
+    <li>사이트의 자동 채점 결과는 자체 연습용이며, 공식 AICE 점수나 합격 여부와 무관합니다.</li>
+  </ul>
+  <h2>무엇을 할 수 있나요</h2>
+  <ul>
+    <li><a href={pageUrl('exams')}>모의고사</a>를 하나의 노트북으로 셀 단위로 풀기 (Python 은 브라우저 안에서 실행)</li>
+    <li>실전 모드: 제한시간 안에 풀고 제출하면 자동 채점과 문항별 피드백 확인</li>
+    <li>문제별 해설과 정답 예시 확인, 풀이 노트북(.ipynb) 내려받아 Jupyter나 Colab에서 이어 풀기</li>
+  </ul>
+  <h2>콘텐츠 라이선스</h2>
+  <ul>
+    <li><a href={pageUrl('cards')}>개념 카드</a>와 모의고사 합성 데이터셋은 <a href="https://creativecommons.org/licenses/by/4.0/deed.ko" rel="license noopener">CC BY 4.0</a> 으로 공개합니다. 다른 곳에 쓸 때는 출처(ParkBeomMin, AICE 실전 모의고사)를 밝혀 주세요.</li>
+    <li>라이선스는 각 콘텐츠가 공개된 시점부터 적용됩니다. 사이트 코드와 디자인에는 적용되지 않습니다.</li>
+  </ul>
+  <p>자세한 사용법은 <a href={withBase('guide/')}>이용 안내</a>, 문의는 <a href={withBase('contact/')}>문의</a> 페이지를 봐 주세요.</p>
+</Base>
