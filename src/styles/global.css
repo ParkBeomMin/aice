@@ -453,3 +453,32 @@ button.btn.btn-ghost { border: 1px solid #c9d6f7; }
 .nb-md pre code { background: none; padding: 0; border-radius: 0; color: inherit; font-size: 13.5px; }
 .explain pre { margin: 10px 0 14px; }
 .nb-md hr { border: 0; border-top: 1px solid var(--line); margin: 18px 0; }
+/* 상단 메뉴 */
+.site-header { background: #fff; border-bottom: 1px solid var(--line); box-shadow: 0 1px 0 rgba(28, 35, 48, .02); }
+.site-header .wrap { height: 64px; gap: 12px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; letter-spacing: -.01em; }
+.brand:hover .brand-mark { transform: rotate(-6deg); }
+.brand-mark { display: inline-flex; width: 32px; height: 32px; align-items: center; justify-content: center; border-radius: 9px; background: linear-gradient(135deg, #2f66f0, #2556d8); color: #fff; font-size: 13px; font-weight: 800; letter-spacing: .02em; box-shadow: 0 2px 6px rgba(37, 86, 216, .25); transition: transform .2s; }
+.brand-text span { color: var(--accent); }
+.site-nav { display: flex; gap: 4px; }
+.site-nav a { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 10px; color: #3a4352; text-decoration: none; font-size: 15px; font-weight: 500; transition: background .15s, color .15s; }
+.site-nav a svg { opacity: .7; }
+.site-nav a:hover { background: var(--soft); color: var(--fg); }
+.site-nav a.is-active { background: #eef3ff; color: var(--accent); font-weight: 700; }
+.site-nav a.is-active svg { opacity: 1; }
+.site-nav a:focus-visible, .brand:focus-visible { outline: 3px solid #93b0f5; outline-offset: 2px; }
+@media (max-width: 640px) {
+  .site-header .wrap { height: 56px; }
+  .site-nav a svg { display: none; }
+  .site-nav a { padding: 7px 9px; font-size: 14px; }
+}
+@media (max-width: 400px) {
+  .brand-text span { display: none; }
+  .brand { font-size: 16px; gap: 8px; }
+  .brand-mark { width: 28px; height: 28px; font-size: 12px; }
+  .site-nav { gap: 2px; }
+  .site-nav a { padding: 6px 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .brand-mark, .site-nav a { transition: none; } }
+.site-header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 12px; }
+@media (max-width: 640px) { .site-header-inner { height: 56px; } }
