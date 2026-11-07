@@ -69,10 +69,39 @@ const navItems = [
       <slot />
     </main>
     <footer class="site-footer">
-      <div class="wrap">
-        <p>직접 제작한 AICE Associate 대비 연습 문제입니다. 실제 시험 문항을 복제하지 않습니다.</p>
-        <p>이 사이트는 AICE 시험 주관사와 관련이 없는 개인 학습 프로젝트입니다.</p>
-        <p class="footer-links"><a href={withBase('about/')}>소개</a> | <a href={withBase('guide/')}>이용 안내</a> | <a href={withBase('privacy/')}>개인정보처리방침</a> | <a href={withBase('contact/')}>문의</a></p>
+      <div class:list={[wide ? "wrap-wide" : "wrap", "footer-inner"]}>
+        <div class="footer-top">
+          <div class="footer-about">
+            <a class="brand footer-brand" href={withBase()} aria-label="AICE 실전 모의고사 홈">
+              <span class="brand-mark" aria-hidden="true">AI</span>
+              <span class="brand-text">AICE <span>실전 모의고사</span></span>
+            </a>
+            <p>브라우저에서 바로 풀고 자동 채점까지 받는 AICE Associate 무료 실전 모의고사예요.</p>
+          </div>
+          <nav class="footer-cols" aria-label="사이트 링크">
+            <div>
+              <h2>학습</h2>
+              <ul>
+                <li><a href={withBase('exams/')}>모의고사</a></li>
+                {cardsEnabled() && <li><a href={withBase('cards/')}>개념 카드</a></li>}
+                <li><a href={withBase('guide/')}>이용 안내</a></li>
+              </ul>
+            </div>
+            <div>
+              <h2>사이트</h2>
+              <ul>
+                <li><a href={withBase('about/')}>소개</a></li>
+                <li><a href={withBase('contact/')}>문의</a></li>
+                <li><a href={withBase('privacy/')}>개인정보처리방침</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <p>직접 제작한 AICE Associate 대비 연습 문제입니다. 실제 시험 문항을 복제하지 않습니다.</p>
+          <p>이 사이트는 AICE 시험 주관사와 관련이 없는 개인 학습 프로젝트입니다.</p>
+          <p class="footer-copy">개념 카드와 데이터셋 <a href="https://creativecommons.org/licenses/by/4.0/deed.ko" rel="license noopener">CC BY 4.0</a> | <a href="https://github.com/ParkBeomMin/aice" rel="noopener">GitHub</a></p>
+        </div>
       </div>
     </footer>
   </body>
