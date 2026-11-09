@@ -24,6 +24,8 @@ jobs:
       PUBLIC_ADSENSE_CLIENT: ${{ vars.ADSENSE_CLIENT }}
       # 유럽(EEA, 영국, 스위스) 동의 메시지는 AdSense 개인 정보 보호 및 메시지에서 별도 설정 (나중에)
       PUBLIC_POLICY_DATE: ${{ vars.POLICY_DATE }}
+      # Google Analytics 4 측정 ID (예: G-XXXXXXX). 비우면 통계 태그 없음
+      PUBLIC_GA_ID: ${{ vars.GA_ID }}
       EXPECT_ADS: ${{ vars.ADS_ENABLED == '1' && '1' || '0' }}
     steps:
       - uses: actions/checkout@v4

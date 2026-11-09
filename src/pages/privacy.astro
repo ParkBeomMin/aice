@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { withBase } from '../lib/paths';
-import { CONTACT_URL, POLICY_DATE, ADS_ENABLED, OPERATOR } from '../lib/site';
+import { CONTACT_URL, POLICY_DATE, ADS_ENABLED, OPERATOR, GA_ID } from '../lib/site';
 const toc = [
   ['p1', '수집하는 정보'], ['p2', '브라우저에 저장되는 정보'], ['p3', '외부 서비스'],
   ['p4', '이용자의 선택'], ['p5', '문의'], ['p6', '변경'],
@@ -19,7 +19,7 @@ const toc = [
       <ul>
         <li><strong>회원 가입이 없어요</strong><span>이름이나 이메일을 받지 않고, 운영자 서버나 데이터베이스도 없어요.</span></li>
         <li><strong>기록은 내 브라우저에만</strong><span>작성한 코드, 채점 결과, 개념 카드 학습 기록은 이 브라우저에만 저장되고 밖으로 보내지 않아요.</span></li>
-        <li><strong>외부 서비스는 최소한</strong><span>호스팅(GitHub Pages), Python 실행 파일(jsDelivr), 광고를 켤 경우 Google AdSense를 사용해요.</span></li>
+        <li><strong>외부 서비스는 최소한</strong><span>호스팅(GitHub Pages), Python 실행 파일(jsDelivr), 방문 통계(Google Analytics), 광고(Google AdSense)를 사용해요.</span></li>
         <li><strong>문의는 공개 게시판</strong><span>GitHub Issues에 남긴 글은 누구나 볼 수 있으니 개인정보를 적지 마세요.</span></li>
       </ul>
     </section>
@@ -51,6 +51,7 @@ const toc = [
         <div class="pv-svc"><h3>GitHub Pages <small>GitHub, Inc.</small></h3><span class="pv-tag">사이트 호스팅</span><p>접속 시 IP 주소 등 접속 기록이 GitHub 에 의해 처리될 수 있습니다.</p></div>
         <div class="pv-svc"><h3>jsDelivr CDN</h3><span class="pv-tag">Python 실행 파일</span><p>브라우저에서 Python(Pyodide)을 실행하기 위한 파일을 내려받을 때 사용하며, 요청 정보(IP 주소 등)가 CDN 제공자에 의해 처리될 수 있습니다.</p></div>
         <div class="pv-svc"><h3>Google AdSense</h3><span class="pv-tag">{ADS_ENABLED ? '광고' : '광고 (현재 미사용)'}</span><p>{ADS_ENABLED ? '일부 학습 콘텐츠 페이지(문제 풀이, 실전, 채점 결과 화면 제외)에 광고를 게재하며,' : '광고를 게재하는 경우 일부 학습 콘텐츠 페이지(문제 풀이, 실전, 채점 결과 화면 제외)에서'} Google 과 제3자 공급업체가 쿠키를 사용해 이용자의 이전 방문 기록을 바탕으로 광고를 제공할 수 있습니다. 맞춤 광고는 <a href="https://adssettings.google.com" rel="noopener">Google 광고 설정</a>에서 해제할 수 있습니다. 자세한 내용은 <a href="https://policies.google.com/technologies/ads" rel="noopener">Google 광고 정책</a>을 참고하세요.</p></div>
+        <div class="pv-svc"><h3>Google Analytics</h3><span class="pv-tag">{GA_ID ? '방문 통계' : '방문 통계 (현재 미사용)'}</span><p>사이트 개선을 위해 페이지 방문, 머문 시간, 유입 경로, 기기와 브라우저 종류, 대략적인 지역, 그리고 모의고사 시작, 제출, 점수 비율과 개념 카드 학습 완료 같은 이용 기록을 쿠키로 수집해 통계로만 봅니다. 작성한 코드와 답안은 보내지 않으며, 이름이나 이메일처럼 개인을 알아볼 수 있는 정보도 수집하지 않습니다. 수집된 정보는 Google 에 의해 처리되며, <a href="https://tools.google.com/dlpage/gaoptout?hl=ko" rel="noopener">Google 애널리틱스 차단 브라우저 부가기능</a>이나 브라우저 쿠키 차단으로 수집을 거부할 수 있습니다.</p></div>
         <div class="pv-svc"><h3>GitHub Issues <small>GitHub, Inc.</small></h3><span class="pv-tag">문의 창구</span><p>게시 내용과 계정명이 공개되므로 개인정보를 적지 마세요.</p></div>
       </div>
     </section>

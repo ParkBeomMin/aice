@@ -31,7 +31,7 @@ AICE Associate 시험을 준비하는 사람을 위한 무료 실전 모의고�
 - **서버가 없어요.** GitHub Pages에 올린 정적 사이트예요.
 - **Python은 브라우저 안에서 실행돼요.** [Pyodide](https://pyodide.org)(WebAssembly 버전 Python)를 Web Worker에서 실행해요. 처음 한 번 실행 환경(수십 MB)을 내려받아요.
 - **채점도 브라우저 안에서 해요.** 풀이 환경과 분리된 별도 Worker에서 제출 코드를 다시 실행하고, 미리 정해 둔 검사 항목만 확인해요.
-- **기록은 내 브라우저에만 저장돼요.** 작성한 코드, 시험 기록, 채점 결과, 개념 카드 학습 기록은 IndexedDB에만 저장되고 외부로 보내지 않아요. 브라우저 데이터를 지우면 함께 사라져요.
+- **기록은 내 브라우저에만 저장돼요.** 작성한 코드, 시험 기록, 채점 결과, 개념 카드 학습 기록은 IndexedDB에만 저장되고 외부로 보내지 않아요. 사이트 개선을 위한 방문 통계(Google Analytics)에도 코드나 답안은 보내지 않아요. 브라우저 데이터를 지우면 함께 사라져요.
 
 권장 환경은 PC의 최신 Chrome, Edge, Firefox, Safari예요.
 
@@ -94,6 +94,7 @@ PUBLIC_REPO_NAME=aice npm run verify:dist    # 링크, noindex, 광고 정책 �
 | 변수 | 설명 |
 |---|---|
 | `POLICY_DATE` | 개인정보처리방침 시행일 (YYYY-MM-DD) |
+| `GA_ID` | Google Analytics 4 측정 ID. 비우면 방문 통계를 수집하지 않아요 |
 | `ADS_ENABLED` | `1`이면 광고 사용 (`ADSENSE_CLIENT`도 필요) |
 | `ADSENSE_CLIENT` | AdSense 게시자 ID |
 

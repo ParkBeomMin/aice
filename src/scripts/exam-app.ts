@@ -9,6 +9,7 @@ import { startExamExclusive, type ExclusiveLocks } from '../lib/exam/start.ts';
 import { transition, crossedWarnings, formatRemaining, MonotonicDeadline, remainingMs } from '../lib/exam/exam-state.ts';
 import { acquireAttemptLock, locksAvailable, type AttemptLock } from '../lib/exam/exam-lock.ts';
 import { commitSubmission, SubmitError } from '../lib/grading/grading-runner.ts';
+import { track } from '../lib/analytics.ts';
 import { expose } from '../lib/debug.ts';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -68,6 +69,7 @@ export async function startExamApp() {
     // 두 탭이 동시에 시작해도 현재 개정판 시도는 하나만 (팩 단위 잠금 안에서 시작 화면과 같은 규칙으로 재확인)
     await startExamExclusive(store, (navigator as unknown as { locks: ExclusiveLocks }).locks, { packId: cfg.packId, fingerprint: cfg.fingerprint, timeLimitMinutes: cfg.timeLimitMinutes });
     bc?.postMessage({ type: 'changed' });
+    track('exam_start', { pack_id: cfg.packId });
     void route();
   }
 
@@ -134,6 +136,7 @@ export async function startExamApp() {
         const snap = await ctrl.snapshot();
         dbg.state = 'submitting';
         const { attempt } = await commitSubmission(store, cur, snap, reason, cfg, gen); // 같은 트랜잭션에서 세대 확인
+        track('exam_submit', { pack_id: cfg.packId, reason });
         bc?.postMessage({ type: 'changed' });
         ctrl.disposeKernel();
         dbg.state = 'grading';
@@ -164,7 +167,8 @@ export async function startExamApp() {
       dbg.state = 'grading';
       say('제출 완료. 채점 중입니다… (이 탭을 닫아도 제출본은 저장되어 있어 나중에 다시 채점할 수 있어요)');
       try {
-        await runGrading(store, cfg, att.attempt_id, gen);
+        const gr = await runGrading(store, cfg, att.attempt_id, gen);
+        track('exam_graded', { pack_id: cfg.packId, score_percent: gr.totals.percent ?? -1, correct: gr.totals.correct_count, gradable: gr.totals.gradable_count });
         if (lostDuringGrading) { dbg.state = 'lost'; say('채점 도중 다른 탭이 시험을 가져갔습니다. 결과는 그 탭(또는 결과 페이지)에서 확인하세요.', [['결과 페이지', () => { location.href = cfg.urls.result; }]]); return; }
         dbg.state = 'graded'; lock.release(); bc?.postMessage({ type: 'changed' });
         location.href = cfg.urls.result;

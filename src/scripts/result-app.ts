@@ -1,3 +1,4 @@
+import { track } from '../lib/analytics.ts';
 // T-06 결과 화면: IndexedDB 에 저장된 제출, 채점 결과를 렌더링 (외부 전송 없음). 모든 사용자 데이터는 textContent 로만 표시.
 import { recommendCards } from '../lib/cards-progress';
 import { saveReco } from './cards-store';
@@ -110,7 +111,7 @@ async function renderResult(store: ExamStore, cfg: PageConfig, a: Attempt, r: At
   const table = h('table', { className: 'qtable rs-table' },
     h('thead', {}, h('tr', {}, ...['번호', '문항', '결과', '점수', '피드백'].map((x) => h('th', { scope: 'col', textContent: x })))), h('tbody', {}, ...rows));
   const dl = h('button', { type: 'button', textContent: '내 제출 노트북 다운로드 (.ipynb)' });
-  dl.onclick = async () => { if (sub) downloadBlob(await submissionNotebook(cfg, sub.snapshot.cells), `${cfg.packId}-submission-${a.attempt_id.slice(-6)}.ipynb`); };
+  dl.onclick = async () => { track('notebook_download', { pack_id: cfg.packId, where: 'result' }); if (sub) downloadBlob(await submissionNotebook(cfg, sub.snapshot.cells), `${cfg.packId}-submission-${a.attempt_id.slice(-6)}.ipynb`); };
   const dj = h('button', { type: 'button', textContent: '결과 JSON 다운로드' });
   dj.onclick = () => downloadBlob(new Blob([JSON.stringify(r, null, 1)], { type: 'application/json' }), `${cfg.packId}-result-${a.attempt_id.slice(-6)}.json`);
   const again = h('p', { className: 'ex-actions' }, h('a', { className: 'btn', href: cfg.urls.exam, textContent: '실전 다시 풀기' }), ' ', h('a', { className: 'btn', href: cfg.urls.practice, textContent: '연습 모드' }), ' ', dl, ' ', dj);
@@ -131,7 +132,7 @@ function cardRecoSection(r: AttemptResult): HTMLElement | null {
   }
   const shown = ids.slice(0, 8);
   const go = h('button', { type: 'button', className: 'btn', textContent: `추천 카드 ${ids.length}장 복습하기` });
-  go.onclick = () => { saveReco({ pack_id: c.pack_id, pack_title: c.pack_title, card_ids: ids }); location.href = c.review_url; };
+  go.onclick = () => { track('card_reco_open', { pack_id: c.pack_id, cards: ids.length }); saveReco({ pack_id: c.pack_id, pack_title: c.pack_title, card_ids: ids }); location.href = c.review_url; };
   return h('section', { className: 'rs-cards', dataset: { recoCount: String(ids.length) } },
     h('h3', { textContent: '틀린 문항과 관련된 개념 카드' }),
     h('p', { className: 'rs-cards-sub', textContent: '오답, 부분 정답, 실행 오류 문항에 연결된 카드예요. 카드로 개념을 다시 확인해 보세요.' }),

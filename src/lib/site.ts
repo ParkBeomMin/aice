@@ -18,3 +18,6 @@ export type PageKind = 'home' | 'list' | 'pack' | 'question' | 'practice' | 'exa
   | 'cardlist' | 'carddeck' | 'cardstudy' | 'cardreview'; // T-07D 개념 카드: 목록, 덱 소개만 광고 후보, 학습, 복습 화면은 금지
 export const AD_PAGE_KINDS: PageKind[] = ['home', 'list', 'pack', 'question', 'cardlist', 'carddeck'];
 export const adsAllowed = (kind: PageKind) => ADS_ENABLED && AD_PAGE_KINDS.includes(kind);
+
+/** Google Analytics 4 측정 ID (production 빌드 + PUBLIC_GA_ID 일 때만). 광고와 별개로 모든 페이지에서 방문 통계만 수집 */
+export const GA_ID = (isProduction && /^G-[A-Z0-9]{6,12}$/.test(import.meta.env.PUBLIC_GA_ID ?? '')) ? (import.meta.env.PUBLIC_GA_ID as string) : '';

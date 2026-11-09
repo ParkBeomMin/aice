@@ -4,6 +4,7 @@ import { python } from '@codemirror/lang-python';
 import { keymap } from '@codemirror/view';
 import { Prec, Compartment, EditorState } from '@codemirror/state';
 import { renderMarkdown, escapeHtml } from '../lib/notebook/markdown';
+import { track } from '../lib/analytics';
 import { PyodideKernel, type KernelState, type ExecStatus } from '../lib/runtime/kernel-adapter.ts';
 import { renderOutput } from '../lib/runtime/output-render.ts';
 import type { DatasetSpec } from '../lib/runtime/worker-protocol.ts';
@@ -392,7 +393,7 @@ function setLocked(on: boolean, reason?: string) {
   if (on && reason) notice(reason, 'warn');
 }
 
-btn('nb-download').onclick = () => download(exportNotebook(), `${packId}-my-notebook.ipynb`);
+btn('nb-download').onclick = () => (track('notebook_download', { pack_id: packId, where: 'notebook' }), download(exportNotebook(), `${packId}-my-notebook.ipynb`));
 btn('nb-run-all').onclick = () => { if (!locked) void runAll(); };
 btn('nb-interrupt').onclick = () => kernel.interrupt();
 btn('nb-restart').onclick = async () => {

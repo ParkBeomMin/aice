@@ -3,7 +3,7 @@ import '../styles/global.css';
 import { withBase } from '../lib/paths';
 import { isProduction } from '../lib/content';
 import { cardsEnabled } from '../lib/cards';
-import { adsAllowed, ADSENSE_CLIENT, type PageKind } from '../lib/site';
+import { adsAllowed, ADSENSE_CLIENT, GA_ID, type PageKind } from '../lib/site';
 
 interface Props { title: string; description: string; crumbs?: { label: string; href?: string }[]; wide?: boolean; kind?: PageKind; noindex?: boolean }
 const { title, description, crumbs = [], wide = false, kind = 'policy', noindex = false } = Astro.props;
@@ -29,6 +29,8 @@ const navItems = [
     <link rel="canonical" href={canonical} />
     {(!isProduction || noindex) && <meta name="robots" content="noindex, nofollow" />}
     {ads && <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`} crossorigin="anonymous"></script>}
+    {GA_ID && <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>}
+    {GA_ID && <script is:inline define:vars={{ gaId: GA_ID, kind }}>window.dataLayer = window.dataLayer || []; function gtag(){ dataLayer.push(arguments); } window.gtag = gtag; gtag('js', new Date()); gtag('config', gaId, { page_kind: kind, allow_google_signals: false, allow_ad_personalization_signals: false });</script>}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />

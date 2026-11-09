@@ -1,6 +1,7 @@
 // 개념 카드 학습 화면 (T-07D). 뒤집기 → 평가(알아요/다시 볼게요) → 다음 카드. 기록은 aice-cards IndexedDB.
 import { applyRating, cardStatus, deckStats, filterCards, shuffled, type Filter, type ProgressRecord, type Rating, type StudyCard } from '../lib/cards-progress';
 import { clearReco, loadReco, openCardStore, type CardStore } from './cards-store';
+import { track } from '../lib/analytics';
 
 interface DeckPayload { deck_id: string; title: string; cards: StudyCard[] }
 interface Config { mode: 'deck' | 'review'; deckId: string | null; decks: DeckPayload[]; urls: { list: string; review: string; deck: string } }
@@ -134,6 +135,7 @@ export async function startCardStudy(): Promise<void> {
     $('cs-done-text').textContent = `이번에 알아요 ${session.known}장, 다시 볼게요 ${session.review}장을 표시했어요. 지금까지 ${st.total}장 중 ${st.studied}장을 학습했고, 다시 볼 카드는 ${st.review + st.changed}장이에요.`;
     $('cs-done').focus();
     live('학습을 마쳤어요');
+    track('card_session_done', { deck: cfg.deckId ?? 'review', known: session.known, review: session.review });
   }
   async function rate(r: Rating) {
     if (!flipped || !queue.length) return;

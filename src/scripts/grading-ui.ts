@@ -1,4 +1,5 @@
 // T-06 공용: 페이지 설정 읽기, 채점 실행(별도 Worker), 진행 표시, 연습 채점
+import { track } from '../lib/analytics.ts';
 import { workerBackendFactory } from '../lib/grading/worker-backend.ts';
 import { gradeSubmission, commitSubmission, type GradingConfig } from '../lib/grading/grading-runner.ts';
 import { packagesFor } from '../lib/runtime/worker-protocol.ts';
@@ -61,6 +62,7 @@ export function setupPracticeGrading(ctrl: NotebookController) {
       await commitSubmission(store, att, snap, 'practice', cfg);
       const r = await runGrading(store, cfg, att.attempt_id);
       const t = r.totals;
+      track('practice_graded', { pack_id: cfg.packId, score_percent: t.percent ?? -1, correct: t.correct_count, gradable: t.gradable_count });
       ctrl.notice(`연습 채점 완료: 자동 채점 ${t.gradable_count}문항 중 정답 ${t.correct_count}, ${t.awarded_points}/${t.available_points}점${t.percent !== null ? ` (${t.percent}%)` : ''}, 미채점 ${t.ungraded_count + t.self_check_count}문항. 공식 점수 아님.`, 'info',
         [['결과와 해설 보기', () => { location.href = cfg.urls.result; }]]);
     } catch (e) {
