@@ -33,7 +33,9 @@ const NOINDEX_RE = /^(exams\/[^/]+\/(exam|result|practice)|cards\/(review|[^/]+\
 for (const f of must) if (!existsSync(join(dist, f))) errors.push(`dist/${f} 없음`);
 
 const htmls = [];
-(function walk(d) { for (const n of readdirSync(d)) { const p = join(d, n); statSync(p).isDirectory() ? walk(p) : n.endsWith('.html') && htmls.push(p); } })(dist);
+// Search Console 소유권 확인 파일(google<hex>.html, 루트)은 사이트 페이지가 아니라 검사 제외
+const isVerifyFile = (p) => /^google[0-9a-f]{16}\.html$/.test(p.slice(dist.length + 1));
+(function walk(d) { for (const n of readdirSync(d)) { const p = join(d, n); statSync(p).isDirectory() ? walk(p) : n.endsWith('.html') && !isVerifyFile(p) && htmls.push(p); } })(dist);
 let links = 0;
 for (const h of htmls) {
   const html = readFileSync(h, 'utf8');
