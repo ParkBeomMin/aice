@@ -53,7 +53,8 @@
     "tskey-[A-Za-z0-9-]{10,}"
   ],
   "public_dir_allowlist": [
-    "favicon.svg"
+    "favicon.svg",
+    "google6b36f453637478f8.html"
   ],
   "generated_dir": "src/data/generated",
   "public_content_dir": "public/content",
