@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-007",
+  "question_id": "q07",
+  "public_id": "associate-007-q07",
+  "revision": 1,
+  "title": "온도 이상값 표시",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "IQR 규칙으로 온도 이상값을 표시하시오.\n\n1. `batch_df['temperature_c']`의 1사분위수(Q1)와 3사분위수(Q3)로 `Q3 + 1.5 * (Q3 - Q1)`을 구해 실수 `temperature_upper`에 저장하시오.\n2. `temperature_c`가 이 상한보다 큰 행은 1, 나머지는 0인 정수 Series `heat_alert`를 만드시오. 원래 인덱스를 유지하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "production_batches",
+      "url_path": "content/associate-007/datasets/production_batches.csv",
+      "sha256": "3a1486511c970411a450b5b11f40a333be71c2f6fe275cc6f59151ec9ba42ee7",
+      "size_bytes": 119702,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261207, SHA-256 3a1486511c97"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** IQR 규칙으로 이상값을 표시한다.\n\n**핵심 개념:** 상한 `Q3 + 1.5 * (Q3 - Q1)`보다 **큰** 값만 1로 표시한다. 행을 지우지 않는다.\n\n```python\nq1, q3 = batch_df['temperature_c'].quantile(0.25), batch_df['temperature_c'].quantile(0.75)\ntemperature_upper = q3 + 1.5 * (q3 - q1)\nheat_alert = (batch_df['temperature_c'] > temperature_upper).astype(int)\nprint(temperature_upper, heat_alert.sum())\n```\n\n**기준 결과:** 상한 약 76.01도, 초과 51행 (85도 이상 주입 42행 포함).\n\n**다른 풀이 (np.where):**\n\n```python\nimport numpy as np\nq1, q3 = batch_df['temperature_c'].quantile([0.25, 0.75])\ntemperature_upper = q3 + 1.5 * (q3 - q1)\nheat_alert = pd.Series(np.where(batch_df['temperature_c'] > temperature_upper, 1, 0), index=batch_df.index)\n```\n\n**자주 틀리는 부분:** 평균 + 3 표준편차 규칙, 하한식, 행 삭제.\n\n**채점 항목:**\n\n1. IQR 상한\n2. 상한 초과 표시\n3. 원래 인덱스\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "q1, q3 = batch_df['temperature_c'].quantile(0.25), batch_df['temperature_c'].quantile(0.75)\ntemperature_upper = q3 + 1.5 * (q3 - q1)\nheat_alert = (batch_df['temperature_c'] > temperature_upper).astype(int)\nprint(temperature_upper, heat_alert.sum())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-004",
+  "question_id": "q12",
+  "public_id": "associate-004-q12",
+  "revision": 2,
+  "title": "선형회귀 오차 측정",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "선형회귀 예측의 오차를 구하시오.\n\n1. `y_test`와 `energy_lr_pred`(`energy_lr`로 `X_test`를 예측한 값)로 평균절대오차(MAE)를 구해 `mae_lr`에 저장하시오.\n2. 평균제곱오차(MSE)의 제곱근인 RMSE를 구해 `rmse_lr`에 저장하시오.\n\n> RMSE는 타깃과 같은 단위(kWh)입니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "building_energy",
+      "url_path": "content/associate-004/datasets/building_energy.csv",
+      "sha256": "1c3c7b0811527ca4fbc07c17ae33b7da35c8899d93156bcfa4573b0c3914d898",
+      "size_bytes": 108748,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261204, SHA-256 1c3c7b081152"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 잔차 절댓값 평균과 잔차 제곱 평균의 제곱근을 구한다.\n\n**핵심 개념:** MAE는 오차 절댓값의 평균, RMSE는 평균제곱오차의 제곱근으로 둘 다 kWh 단위다. RMSE는 큰 오차에 더 민감하다.\n\n```python\nfrom sklearn.metrics import mean_absolute_error, mean_squared_error\nimport numpy as np\nmae_lr = mean_absolute_error(y_test, energy_lr_pred)\nrmse_lr = np.sqrt(mean_squared_error(y_test, energy_lr_pred))\nprint(mae_lr, rmse_lr)\n```\n\n**기준 결과:** MAE 약 13.9783, RMSE 약 17.7429 (훈련 평균 기준선 RMSE 약 36.80).\n\n**다른 풀이 (직접 계산):**\n\n```python\nimport numpy as np\nerr = y_test.to_numpy() - energy_lr_pred\nmae_lr = np.abs(err).mean()\nrmse_lr = np.sqrt((err ** 2).mean())\n```\n\n**자주 틀리는 부분:** RMSE 대신 MSE, MAE/RMSE 뒤바꿈.\n\n**채점 항목:**\n\n1. MAE\n2. RMSE\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import mean_absolute_error, mean_squared_error\nimport numpy as np\nmae_lr = mean_absolute_error(y_test, energy_lr_pred)\nrmse_lr = np.sqrt(mean_squared_error(y_test, energy_lr_pred))\nprint(mae_lr, rmse_lr)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

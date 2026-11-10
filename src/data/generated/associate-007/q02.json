@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-007",
+  "question_id": "q02",
+  "public_id": "associate-007-q02",
+  "revision": 1,
+  "title": "불량률 계산",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "`batch_df`에서 불량 판정(`defect_24h`가 1) 비율을 구하시오.\n\n1. 비율을 실수로 계산해 `defect_rate`에 저장하시오.\n2. 숫자를 직접 입력하지 말고 데이터에서 계산하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "production_batches",
+      "url_path": "content/associate-007/datasets/production_batches.csv",
+      "sha256": "3a1486511c970411a450b5b11f40a333be71c2f6fe275cc6f59151ec9ba42ee7",
+      "size_bytes": 119702,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261207, SHA-256 3a1486511c97"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 불량 비율을 구한다.\n\n**핵심 개념:** 0/1 컬럼의 평균이 불량 비율이다.\n\n```python\ndefect_rate = float(batch_df['defect_24h'].mean())\nprint(round(defect_rate, 4))\n```\n\n**기준 결과:** 약 0.2171 (불량 456건).\n\n**다른 풀이 (합계 나누기 행 수):**\n\n```python\ndefect_rate = batch_df['defect_24h'].sum() / len(batch_df)\n```\n\n**자주 틀리는 부분:** 1에서 빼거나 건수를 저장하는 것.\n\n**채점 항목:**\n\n1. 불량 비율\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "defect_rate = float(batch_df['defect_24h'].mean())\nprint(round(defect_rate, 4))\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-002",
+  "question_id": "q14",
+  "public_id": "associate-002-q14",
+  "revision": 1,
+  "title": "근무조별 예측 오차 분석",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "`best_model_name`에 해당하는 모델로 근무조별 예측 오차를 분석하시오.\n\n1. 선택한 모델의 평가 데이터 예측값을 `chosen_pred`에 저장하시오. `linear`이면 `linear_model`과 `X_test_scaled`, `forest`이면 `forest_model`과 `X_test_encoded`를 사용합니다.\n2. `X_test_raw`의 `shift`별로 `y_test`와 `chosen_pred` 사이의 평균절대오차(MAE)를 계산하여, 근무조 이름 오름차순 Series `shift_mae`에 저장하시오.\n3. MAE가 가장 큰 근무조 이름을 문자열 `worst_shift`에 저장하시오. 동률이면 이름 순으로 앞선 근무조를 선택하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "warehouse_orders",
+      "url_path": "content/associate-002/datasets/warehouse_orders.csv",
+      "sha256": "3376dfe0980179ca23c830b98079fb02ec38356cb4a59e1d7e82e5260793ad0c",
+      "size_bytes": 97585,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261202, SHA-256 3376dfe09801"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 선택한 모델의 오차를 그룹별로 분석한다.\n\n**핵심 개념:** q13에서 고른 모델의 예측을 `chosen_pred`로 두고, `y_test`의 인덱스와 `X_test_raw['shift']`를 맞춰 근무조별 절대오차의 **평균**을 구한다. 정렬하거나 `reset_index`를 따로 하면 오차가 다른 주문의 근무조에 붙는다. 최댓값이 같으면 근무조 이름 오름차순의 첫 값을 고른다.\n\n```python\nchosen_pred = linear_pred if best_model_name == 'linear' else forest_pred\nerr = pd.DataFrame({'shift': X_test_raw['shift'], 'abs_err': (y_test - chosen_pred).abs()})\nshift_mae = err.groupby('shift')['abs_err'].mean().sort_index()\nworst_shift = shift_mae[shift_mae == shift_mae.max()].index.min()\nprint(shift_mae, worst_shift)\n```\n\n**기준 결과:** Afternoon 약 2.7875, Morning 약 2.8592, Night 약 3.0058 (분). worst_shift 는 'Night'. 야간 근무조는 예측 오차가 가장 커서 인력 계획 시 여유를 더 두는 근거가 된다.\n\n**다른 풀이 (반복문으로 계산):**\n\n```python\nimport numpy as np\nchosen_pred = (linear_model.predict(X_test_scaled) if best_model_name == 'linear' else forest_model.predict(X_test_encoded))\nshifts = X_test_raw['shift'].to_numpy()\nerr = np.abs(y_test.to_numpy() - chosen_pred)\nshift_mae = pd.Series({s: err[shifts == s].mean() for s in sorted(set(shifts))})\nworst_shift = shift_mae.idxmax()\n```\n\n**자주 틀리는 부분:** 선택하지 않은 모델 사용, 인덱스가 어긋난 채 계산, 평균 대신 합 사용, 절댓값 없이 평균해 양수와 음수가 상쇄되는 것, `idxmin()`으로 가장 작은 근무조를 고르는 것.\n\n**채점 항목:**\n\n1. 선택한 모델의 예측\n2. 근무조별 MAE\n3. MAE 가 가장 큰 근무조\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "chosen_pred = linear_pred if best_model_name == 'linear' else forest_pred\nerr = pd.DataFrame({'shift': X_test_raw['shift'], 'abs_err': (y_test - chosen_pred).abs()})\nshift_mae = err.groupby('shift')['abs_err'].mean().sort_index()\nworst_shift = shift_mae[shift_mae == shift_mae.max()].index.min()\nprint(shift_mae, worst_shift)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

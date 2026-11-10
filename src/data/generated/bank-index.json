@@ -9,7 +9,61 @@
       "question_count": 14,
       "mock": false,
       "manifest_file": "associate-001/manifest.json",
-      "manifest_sha256": "3e6dcfdb42f5e0067459c1b69e57373e23659c285d9f0c6f4c440b404c168fbc"
+      "manifest_sha256": "a0a1cc258636b72580c1d935ae32452d16222c100d80971035aee1a9cae1c11b"
+    },
+    {
+      "pack_id": "associate-002",
+      "title": "AICE Associate 실전 연습 모의고사 2회차: 물류센터 상품 피킹 소요시간 예측",
+      "summary": "가상의 물류기업 FulfillLab 주문 1,500건의 작업 기록으로 데이터 탐색, 결측과 이상값 확인, 훈련 데이터 기준 전처리, 회귀 모델 학습과 평가까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+      "question_count": 14,
+      "mock": false,
+      "manifest_file": "associate-002/manifest.json",
+      "manifest_sha256": "3779fb6c69a4f7e8ec5d21d739d83aaf8823e78c4dbf439ca80dd18006fa35fb"
+    },
+    {
+      "pack_id": "associate-003",
+      "title": "AICE Associate 실전 연습 모의고사 3회차: 로그인 보안 위험 탐지",
+      "summary": "가상의 로그인 보안 서비스 SecurePortal 인증 이벤트 1,800건으로 데이터 탐색, 결측 처리, 원-핫 인코딩, 계층 분할과 누설 없는 전처리, 불균형 분류 모델 평가까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+      "question_count": 14,
+      "mock": false,
+      "manifest_file": "associate-003/manifest.json",
+      "manifest_sha256": "f4737c00b6f8c2c8625eb7e42477d10260a3956891c404451c39b95e8bcc6d0b"
+    },
+    {
+      "pack_id": "associate-004",
+      "title": "AICE Associate 실전 연습 모의고사 4회차: 스마트 빌딩 전력 사용량 예측",
+      "summary": "가상의 스마트 빌딩 운영사 GridLab 시간별 관측 1,650건으로 데이터 탐색, 시각화, 결측 대체, 파생 특징, 훈련 데이터 기준 전처리, 회귀 모델 학습과 잔차, 과적합 분석까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+      "question_count": 14,
+      "mock": false,
+      "manifest_file": "associate-004/manifest.json",
+      "manifest_sha256": "9178aab6c1a8351b44428fc3c7e15d245cc80cc0c923ac04160f7d58e8f74a6a"
+    },
+    {
+      "pack_id": "associate-005",
+      "title": "AICE Associate 실전 연습 모의고사 5회차: 유통 멤버십 프로모션 반응 예측",
+      "summary": "가상의 리테일 브랜드 프로모션 제안 1,600건으로 데이터 탐색, 구간 시각화, 결측 처리, 파생 특징, 층화 분할과 누설 없는 전처리, 분류 모델 평가, 오류 비용 기반 모델 선택까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+      "question_count": 14,
+      "mock": false,
+      "manifest_file": "associate-005/manifest.json",
+      "manifest_sha256": "46fa342d10ab01b80dc587f27ac089481d8a68dacd8a8a1b2da48f22f07fb274"
+    },
+    {
+      "pack_id": "associate-006",
+      "title": "AICE Associate 실전 연습 모의고사 6회차: 공유 자전거 수요 예측",
+      "summary": "가상의 공유 자전거 운영사 일별, 지구별 관측 1,920건으로 날짜 처리, 월별 추이 시각화, 결측 처리, 파생 특징, 시간순 분할과 누설 없는 전처리, 회귀 모델 평가, 비 오는 날 오차 분석까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+      "question_count": 14,
+      "mock": false,
+      "manifest_file": "associate-006/manifest.json",
+      "manifest_sha256": "52408ef498729f78c4ce0f569d4aaaabd81d9c9cffe114acd50a6b81e79a18c9"
+    },
+    {
+      "pack_id": "associate-007",
+      "title": "AICE Associate 실전 연습 모의고사 7회차: 제조 공정 품질 불량 예측",
+      "summary": "가상의 제조 공장 생산 배치 2,100건으로 데이터 탐색, 그룹 비교 시각화, 결측과 이상값 처리, ColumnTransformer 전처리, 분류 모델 평가, 폴드별 전처리를 지키는 교차 검증, 임계값과 놓친 불량 수 비교까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+      "question_count": 14,
+      "mock": false,
+      "manifest_file": "associate-007/manifest.json",
+      "manifest_sha256": "4052194be1d00cdc1c108557684199822cac41d9c417d514e030735cf04aee87"
     }
   ]
 }

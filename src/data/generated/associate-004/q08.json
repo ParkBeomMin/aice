@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-004",
+  "question_id": "q08",
+  "public_id": "associate-004-q08",
+  "revision": 1,
+  "title": "탐색용 범주형 인코딩",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "탐색용 데이터의 범주형 컬럼을 원-핫 인코딩하시오.\n\n1. `energy_df`를 복사하고 `temp_deviation`을 새 컬럼 `temp_deviation`으로 추가하시오.\n2. `building_type`, `usage_zone`, `insulation_grade`를 `pd.get_dummies(..., dtype=int)`로 인코딩해 `energy_encoded`에 저장하시오.\n3. `reading_id`, `energy_kwh`와 나머지 값은 그대로 두시오.\n\n> 이 결과는 탐색용이며 모델 학습에 직접 쓰지 않습니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "building_energy",
+      "url_path": "content/associate-004/datasets/building_energy.csv",
+      "sha256": "1c3c7b0811527ca4fbc07c17ae33b7da35c8899d93156bcfa4573b0c3914d898",
+      "size_bytes": 108748,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261204, SHA-256 1c3c7b081152"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** temp_deviation을 추가하고 범주형 3개만 get_dummies한다.\n\n**핵심 개념:** 복사본에 새 컬럼을 추가한 뒤 세 범주 컬럼만 원-핫 인코딩한다. 탐색용이라 모델 학습에 쓰지 않는다.\n\n```python\nenergy_tmp = energy_df.copy()\nenergy_tmp['temp_deviation'] = temp_deviation\nenergy_encoded = pd.get_dummies(energy_tmp, columns=['building_type', 'usage_zone', 'insulation_grade'], dtype=int)\nenergy_encoded.shape\n```\n\n**기준 결과:** 1,650행, 22열.\n\n**다른 풀이 (assign 사용):**\n\n```python\nenergy_encoded = pd.get_dummies(energy_df.assign(temp_deviation=temp_deviation), columns=['building_type', 'usage_zone', 'insulation_grade'], dtype=int)\n```\n\n**자주 틀리는 부분:** 목표 삭제, 다른 컬럼 변경, dummy 값 변조, 원본 energy_df 에 컬럼을 추가하는 것.\n\n**채점 항목:**\n\n1. 세 컬럼 원-핫 값\n2. ID, 타깃, temp_deviation 유지\n3. energy_df 는 그대로\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "energy_tmp = energy_df.copy()\nenergy_tmp['temp_deviation'] = temp_deviation\nenergy_encoded = pd.get_dummies(energy_tmp, columns=['building_type', 'usage_zone', 'insulation_grade'], dtype=int)\nenergy_encoded.shape\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

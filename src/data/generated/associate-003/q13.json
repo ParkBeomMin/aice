@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-003",
+  "question_id": "q13",
+  "public_id": "associate-003-q13",
+  "revision": 1,
+  "title": "분류 임계값 변경",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "양성 확률의 기준을 0.35로 낮춰 다시 판정하시오.\n\n1. `auth_lr`로 `X_test_scaled`의 양성(1) 확률을 구해 `auth_lr_prob`에 저장하시오.\n2. 확률이 0.35 이상이면 1, 미만이면 0인 정수 예측을 `auth_pred_035`에 저장하시오.\n3. `y_test` 기준 재현율을 `recall_035`, 정밀도를 `precision_035`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "auth_events",
+      "url_path": "content/associate-003/datasets/auth_events.csv",
+      "sha256": "7fc3948a9128d78de881a28a390575df52f59a4b3ce2413db5d073952f2f0d0b",
+      "size_bytes": 101231,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261203, SHA-256 7fc3948a9128"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 양성 확률 0.35 이상을 1로 만들고 정밀도와 재현율을 산출한다.\n\n**핵심 개념:** `predict_proba(X)[:, 1]`은 양성(1) 확률이다. 임계값을 0.35로 낮추면 양성으로 판정하는 경우가 늘어 재현율은 오르고 정밀도는 대체로 내려간다.\n\n```python\nfrom sklearn.metrics import precision_score, recall_score\nauth_lr_prob = auth_lr.predict_proba(X_test_scaled)[:, 1]\nauth_pred_035 = (auth_lr_prob >= 0.35).astype(int)\nrecall_035 = recall_score(y_test, auth_pred_035)\nprecision_035 = precision_score(y_test, auth_pred_035)\nprint(recall_035, precision_035)\n```\n\n**기준 결과:** 재현율 0.5185, 정밀도 0.6364 (임계값 0.5 의 0.3333, 0.75 와 비교).\n\n**다른 풀이 (np.where 와 precision_recall_fscore_support):**\n\n```python\nimport numpy as np\nfrom sklearn.metrics import precision_recall_fscore_support\nauth_lr_prob = auth_lr.predict_proba(X_test_scaled)[:, 1]\nauth_pred_035 = np.where(auth_lr_prob >= 0.35, 1, 0)\np, r, f, _ = precision_recall_fscore_support(y_test, auth_pred_035, average='binary')\nrecall_035, precision_035 = r, p\n```\n\n**자주 틀리는 부분:** 0.5를 그대로 사용, > 0.35, precision과 recall 교환, 0번 열(음성 확률)을 쓰는 것.\n\n**채점 항목:**\n\n1. 양성 확률\n2. 임계값 0.35 예측\n3. 재현율\n4. 정밀도\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import precision_score, recall_score\nauth_lr_prob = auth_lr.predict_proba(X_test_scaled)[:, 1]\nauth_pred_035 = (auth_lr_prob >= 0.35).astype(int)\nrecall_035 = recall_score(y_test, auth_pred_035)\nprecision_035 = precision_score(y_test, auth_pred_035)\nprint(recall_035, precision_035)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

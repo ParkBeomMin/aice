@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-004",
+  "question_id": "q10",
+  "public_id": "associate-004-q10",
+  "revision": 1,
+  "title": "선형회귀 학습",
+  "topic": "machine_learning",
+  "difficulty": "easy",
+  "prompt": "선형회귀 모델을 학습하고 평가 데이터를 예측하시오.\n\n1. `LinearRegression()`을 `X_train`, `y_train`으로 학습해 `energy_lr`에 저장하시오.\n2. `X_test`의 예측 결과를 `energy_lr_pred`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "building_energy",
+      "url_path": "content/associate-004/datasets/building_energy.csv",
+      "sha256": "1c3c7b0811527ca4fbc07c17ae33b7da35c8899d93156bcfa4573b0c3914d898",
+      "size_bytes": 108748,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261204, SHA-256 1c3c7b081152"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** LinearRegression() 훈련과 테스트 예측\n\n**핵심 개념:** 선형회귀는 특징의 선형 결합으로 사용량을 예측한다. 스케일을 맞추지 않아도 예측값은 같다.\n\n```python\nfrom sklearn.linear_model import LinearRegression\nenergy_lr = LinearRegression().fit(X_train, y_train)\nenergy_lr_pred = energy_lr.predict(X_test)\n```\n\n**기준 결과:** 평가 MAE 약 13.98, RMSE 약 17.74, R2 약 0.767.\n\n**다른 풀이 (생성 후 fit):**\n\n```python\nfrom sklearn.linear_model import LinearRegression\nenergy_lr = LinearRegression()\nenergy_lr.fit(X_train, y_train)\nenergy_lr_pred = energy_lr.predict(X_test)\n```\n\n**자주 틀리는 부분:** fit 없이 객체만 생성, 모델 혼용, 다른 모델(Ridge) 사용.\n\n**채점 항목:**\n\n1. LinearRegression\n2. 훈련 데이터로 학습\n3. 평가 데이터 예측\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.linear_model import LinearRegression\nenergy_lr = LinearRegression().fit(X_train, y_train)\nenergy_lr_pred = energy_lr.predict(X_test)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

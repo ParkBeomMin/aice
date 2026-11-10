@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-005",
+  "question_id": "q10",
+  "public_id": "associate-005-q10",
+  "revision": 1,
+  "title": "로지스틱 회귀 분류",
+  "topic": "machine_learning",
+  "difficulty": "easy",
+  "prompt": "로지스틱 회귀 모델을 학습하고 평가 데이터를 예측하시오.\n\n1. `LogisticRegression(max_iter=1000, random_state=42)`를 `X_train`, `y_train`으로 학습해 `promo_lr`에 저장하시오.\n2. `X_test`의 예측 결과를 `promo_lr_pred`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "promotion_offers",
+      "url_path": "content/associate-005/datasets/promotion_offers.csv",
+      "sha256": "5e683fcf9ede1ea713edd498976b3751b560d17be2bda1007bc534ad488238b3",
+      "size_bytes": 115132,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261205, SHA-256 5e683fcf9ede"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 로지스틱 회귀를 학습하고 예측한다.\n\n**핵심 개념:** 로지스틱 회귀는 양성 확률을 예측해 0.5 기준으로 판정한다.\n\n```python\nfrom sklearn.linear_model import LogisticRegression\npromo_lr = LogisticRegression(max_iter=1000, random_state=42).fit(X_train, y_train)\npromo_lr_pred = promo_lr.predict(X_test)\n```\n\n**기준 결과:** 임계값 0.5: 정밀도 0.600, 재현율 0.429, F1 0.500, AUC 0.705.\n\n**다른 풀이 (생성 후 fit):**\n\n```python\nfrom sklearn.linear_model import LogisticRegression\npromo_lr = LogisticRegression(max_iter=1000, random_state=42)\npromo_lr.fit(X_train, y_train)\npromo_lr_pred = promo_lr.predict(X_test)\n```\n\n**자주 틀리는 부분:** C 를 바꾸는 것, 평가 데이터로 학습하는 것.\n\n**채점 항목:**\n\n1. LogisticRegression\n2. 지정 하이퍼파라미터\n3. 훈련 데이터로 학습\n4. 평가 데이터 예측\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.linear_model import LogisticRegression\npromo_lr = LogisticRegression(max_iter=1000, random_state=42).fit(X_train, y_train)\npromo_lr_pred = promo_lr.predict(X_test)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

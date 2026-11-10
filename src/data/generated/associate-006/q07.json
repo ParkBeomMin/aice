@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-006",
+  "question_id": "q07",
+  "public_id": "associate-006-q07",
+  "revision": 1,
+  "title": "정류장당 자전거 수",
+  "topic": "preprocessing",
+  "difficulty": "easy",
+  "prompt": "정류장 한 곳당 배치된 자전거 수를 구하시오.\n\n1. `bike_df`의 `available_bikes / bike_stations`를 계산하시오. `bike_stations`는 0이 아니므로 분모를 바꾸지 마시오.\n2. 결과를 `bike_df`와 인덱스가 같은 수치형 Series `bikes_per_station`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "bike_demand",
+      "url_path": "content/associate-006/datasets/bike_demand.csv",
+      "sha256": "8b6b2150909767f79155d692412f850f6d06f59110de572e8af097370836c537",
+      "size_bytes": 112825,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261206, SHA-256 8b6b21509097"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 두 컬럼의 비율 특징을 만든다.\n\n**핵심 개념:** `available_bikes / bike_stations`. 정류장 수는 0이 아니므로 분모를 바꾸지 않는다.\n\n```python\nbikes_per_station = bike_df['available_bikes'] / bike_df['bike_stations']\nprint(bikes_per_station.describe())\n```\n\n**기준 결과:** 평균 약 12.07대.\n\n**다른 풀이 (div):**\n\n```python\nbikes_per_station = bike_df['available_bikes'].div(bike_df['bike_stations'])\n```\n\n**자주 틀리는 부분:** 분자와 분모를 바꾸는 것.\n\n**채점 항목:**\n\n1. 정류장당 자전거 수\n2. 같은 인덱스\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "bikes_per_station = bike_df['available_bikes'] / bike_df['bike_stations']\nprint(bikes_per_station.describe())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

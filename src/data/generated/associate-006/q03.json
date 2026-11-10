@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-006",
+  "question_id": "q03",
+  "public_id": "associate-006-q03",
+  "revision": 1,
+  "title": "비 오는 날 추출",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "강우량이 많은 관측만 골라내시오.\n\n1. `bike_df`에서 `rain_mm`가 10 이상인 행만 `rainy_days`에 저장하시오.\n2. 원래 인덱스와 모든 컬럼을 그대로 유지하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "bike_demand",
+      "url_path": "content/associate-006/datasets/bike_demand.csv",
+      "sha256": "8b6b2150909767f79155d692412f850f6d06f59110de572e8af097370836c537",
+      "size_bytes": 112825,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261206, SHA-256 8b6b21509097"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 조건으로 행을 고른다.\n\n**핵심 개념:** `>= 10`으로 10mm 이상을 고른다. 원래 인덱스를 유지한다.\n\n```python\nrainy_days = bike_df[bike_df['rain_mm'] >= 10]\nrainy_days.shape\n```\n\n**기준 결과:** 504행.\n\n**다른 풀이 (query):**\n\n```python\nrainy_days = bike_df.query('rain_mm >= 10')\n```\n\n**자주 틀리는 부분:** 다른 기준값, reset_index.\n\n**채점 항목:**\n\n1. 행과 열 수\n2. 선택 행과 인덱스\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "rainy_days = bike_df[bike_df['rain_mm'] >= 10]\nrainy_days.shape\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

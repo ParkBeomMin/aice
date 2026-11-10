@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-004",
+  "question_id": "q06",
+  "public_id": "associate-004-q06",
+  "revision": 1,
+  "title": "습도 결측 대체 실습",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "탐색용 복사본에서 `humidity_pct` 결측을 채우시오.\n\n1. `energy_df`를 복사해 `energy_clean`을 만드시오.\n2. `energy_clean`의 `humidity_pct` 결측을 원본 `energy_df`의 `humidity_pct` 전체 중앙값으로 채우시오.\n3. 다른 값과 원본 `energy_df`는 바꾸지 마시오.\n\n> 탐색용 실습입니다. 이 결과로 모델을 학습하지 마시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "building_energy",
+      "url_path": "content/associate-004/datasets/building_energy.csv",
+      "sha256": "1c3c7b0811527ca4fbc07c17ae33b7da35c8899d93156bcfa4573b0c3914d898",
+      "size_bytes": 108748,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261204, SHA-256 1c3c7b081152"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 원본 전체 humidity 중앙값으로 energy_clean 결측만 채운다.\n\n**핵심 개념:** 탐색용 복사본에서만 결측을 채운다. `previous_hour_kwh` 결측은 그대로 둔다. 전체 데이터 중앙값은 모델 평가용 전처리에 쓰지 않는다.\n\n```python\nenergy_clean = energy_df.copy()\nenergy_clean['humidity_pct'] = energy_clean['humidity_pct'].fillna(energy_df['humidity_pct'].median())\n```\n\n**기준 결과:** 전체 중앙값 55.2, 결측 84건을 채움.\n\n**다른 풀이 (fillna(dict)):**\n\n```python\nenergy_clean = energy_df.copy().fillna({'humidity_pct': energy_df['humidity_pct'].median()})\n```\n\n**자주 틀리는 부분:** 평균, 원본 변경, 타 열 오염, 모든 결측 컬럼을 한꺼번에 채우는 것.\n\n**채점 항목:**\n\n1. energy_df 원본 그대로\n2. 결측 위치에 전체 중앙값\n3. 다른 컬럼과 행 보존\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "energy_clean = energy_df.copy()\nenergy_clean['humidity_pct'] = energy_clean['humidity_pct'].fillna(energy_df['humidity_pct'].median())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.3.0",
+  "pack_id": "associate-004",
+  "title": "AICE Associate 실전 연습 모의고사 4회차: 스마트 빌딩 전력 사용량 예측",
+  "summary": "가상의 스마트 빌딩 운영사 GridLab 시간별 관측 1,650건으로 데이터 탐색, 시각화, 결측 대체, 파생 특징, 훈련 데이터 기준 전처리, 회귀 모델 학습과 잔차, 과적합 분석까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+  "mode": "production",
+  "mock": false,
+  "time_limit_minutes": 90,
+  "question_count": 14,
+  "questions": [
+    {
+      "question_id": "q01",
+      "public_id": "associate-004-q01",
+      "revision": 1,
+      "title": "전력 데이터 읽기",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q01.json",
+      "sha256": "6ef710f6e29227de9cad681a35a4eef10450ec737680d8fcb90ff6f2f4103857"
+    },
+    {
+      "question_id": "q02",
+      "public_id": "associate-004-q02",
+      "revision": 1,
+      "title": "관리 구역별 관측 수",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q02.json",
+      "sha256": "45d1156b0159999bbe2c7e3f2281f462dc72f44425ee74c5da66dfc8a24f66b6"
+    },
+    {
+      "question_id": "q03",
+      "public_id": "associate-004-q03",
+      "revision": 1,
+      "title": "상위 10% 전력 사용 기록",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q03.json",
+      "sha256": "8a564b3a26fffdab2ea1a3d94a38a68be62c2fd7fd9d4640e7b546f5d14fef01"
+    },
+    {
+      "question_id": "q04",
+      "public_id": "associate-004-q04",
+      "revision": 1,
+      "title": "건물 유형별 평균 사용량",
+      "topic": "pandas",
+      "difficulty": "medium",
+      "file": "q04.json",
+      "sha256": "657df71d6bff7d4442f266696c46ce4993e1698df351c343a21e5b42b414a5fa"
+    },
+    {
+      "question_id": "q05",
+      "public_id": "associate-004-q05",
+      "revision": 2,
+      "title": "온도와 사용량 산점도",
+      "topic": "visualization",
+      "difficulty": "easy",
+      "file": "q05.json",
+      "sha256": "b67b7ff6e6830ddd39ea018baed1857336b4a108ba610191fea4663f7707e7ed"
+    },
+    {
+      "question_id": "q06",
+      "public_id": "associate-004-q06",
+      "revision": 1,
+      "title": "습도 결측 대체 실습",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q06.json",
+      "sha256": "bf4ec04269463ebe5439abec959d6acc1fa87764521deb899fed9f6a1a075583"
+    },
+    {
+      "question_id": "q07",
+      "public_id": "associate-004-q07",
+      "revision": 1,
+      "title": "설정 온도와의 편차",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q07.json",
+      "sha256": "7b124ca6a149a0d0098ab2459245bbae47294b1de550155de7b30275708056ca"
+    },
+    {
+      "question_id": "q08",
+      "public_id": "associate-004-q08",
+      "revision": 1,
+      "title": "탐색용 범주형 인코딩",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q08.json",
+      "sha256": "20492ca39400660f19bc239480e74f867c72fedf489871475ec6fdddd11e7ea5"
+    },
+    {
+      "question_id": "q09",
+      "public_id": "associate-004-q09",
+      "revision": 1,
+      "title": "분할과 훈련 데이터 기준 전처리",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q09.json",
+      "sha256": "6772da5e706e0fcb8aa110e63018ca550f7f0da0f1774914a7003af0a21f0fa9"
+    },
+    {
+      "question_id": "q10",
+      "public_id": "associate-004-q10",
+      "revision": 1,
+      "title": "선형회귀 학습",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q10.json",
+      "sha256": "f0bde2748d45bd89c8c1a837c310a4b054c38eb7c52d5eb29a295fdca0f5726a"
+    },
+    {
+      "question_id": "q11",
+      "public_id": "associate-004-q11",
+      "revision": 1,
+      "title": "랜덤포레스트 회귀 학습",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q11.json",
+      "sha256": "60997715bb606f36c8214382429957528fab83c0a9c5fb28e0952f67b6b3976a"
+    },
+    {
+      "question_id": "q12",
+      "public_id": "associate-004-q12",
+      "revision": 2,
+      "title": "선형회귀 오차 측정",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q12.json",
+      "sha256": "425bc0755085a0958428f1e7b3b3e0ac9287c39f7dd94b71f411061f69e78aa9"
+    },
+    {
+      "question_id": "q13",
+      "public_id": "associate-004-q13",
+      "revision": 2,
+      "title": "평가 데이터 잔차 표",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q13.json",
+      "sha256": "ecc34369d7d5f87079e6e4da35dbffac4e4e9887365e135d723ae4e3387beee7"
+    },
+    {
+      "question_id": "q14",
+      "public_id": "associate-004-q14",
+      "revision": 2,
+      "title": "회귀 모델 비교와 과적합 관찰",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q14.json",
+      "sha256": "7e0f00cd9231fa70019ca2b5ce36f89879e44a8a6f2765cde07c64aae72567c9"
+    }
+  ],
+  "scenario_md": "가상의 스마트 빌딩 운영사 GridLab은 건물의 시간당 전력 사용량을 미리 예측해 에너지 운영 계획을 세우려고 합니다.\n\n여러분은 에너지 데이터 분석가로서 건물 유형, 면적, 실내 인원, 실외 온도, 냉난방 운영 정보를 탐색하고 전력 사용량을 예측하는 회귀 모델을 만들고 평가해야 합니다.\n\n- 분석 목표: 시간당 전력 사용량(`energy_kwh`, kWh) 예측\n- 데이터: `building_energy.csv` (시간별 관측 1,650건, 14개 컬럼)\n- 진행 순서: 데이터 탐색(1~5번) → 탐색용 전처리(6~8번) → 모델용 분할과 전처리(9번) → 모델 학습과 평가(10~14번)\n\n> 한 행은 가상 건물의 1시간 관측입니다. `previous_hour_kwh`는 관측 직전 한 시간의 사용량으로 예측 시점에 알 수 있는 값입니다. 행들은 서로 독립적으로 만든 기록이라 무작위 분할을 씁니다. 실제 연속 시계열이라면 시간 순서를 지키는 검증이 필요합니다. 6~8번은 전체 데이터 탐색 연습이며, 9번은 원본 `energy_df`에서 다시 시작합니다.",
+  "datasets": [
+    {
+      "dataset_id": "building_energy",
+      "url_path": "content/associate-004/datasets/building_energy.csv",
+      "sha256": "1c3c7b0811527ca4fbc07c17ae33b7da35c8899d93156bcfa4573b0c3914d898",
+      "size_bytes": 108748,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261204, SHA-256 1c3c7b081152",
+      "columns": [
+        {
+          "name": "reading_id",
+          "type": "문자열",
+          "description": "관측 고유 번호 (EN00001~EN01650). 식별용이라 모델 입력에는 쓰지 않습니다."
+        },
+        {
+          "name": "building_type",
+          "type": "문자열",
+          "description": "건물 유형: Office(사무), Retail(상가), Library(도서관), Factory(공장)"
+        },
+        {
+          "name": "usage_zone",
+          "type": "문자열",
+          "description": "건물이 속한 관리 구역: North, South, Central"
+        },
+        {
+          "name": "day_of_week",
+          "type": "정수",
+          "description": "요일 (0: 월요일 ~ 6: 일요일)"
+        },
+        {
+          "name": "hour",
+          "type": "정수",
+          "description": "관측 시각 (0~23시)"
+        },
+        {
+          "name": "outdoor_temp_c",
+          "type": "실수",
+          "description": "실외 온도 (도씨)"
+        },
+        {
+          "name": "humidity_pct",
+          "type": "실수",
+          "description": "실외 습도 (%). 일부 결측"
+        },
+        {
+          "name": "occupied_people",
+          "type": "정수",
+          "description": "실내 인원 (명)"
+        },
+        {
+          "name": "floor_area_sqm",
+          "type": "실수",
+          "description": "건물 연면적 (제곱미터)"
+        },
+        {
+          "name": "hvac_runtime_minutes",
+          "type": "정수",
+          "description": "해당 시간 냉난방 가동 시간 (0~60분)"
+        },
+        {
+          "name": "insulation_grade",
+          "type": "문자열",
+          "description": "단열 등급: A(우수), B(보통), C(미흡)"
+        },
+        {
+          "name": "solar_generation_kwh",
+          "type": "실수",
+          "description": "태양광 발전량 (kWh). 야간에는 0"
+        },
+        {
+          "name": "previous_hour_kwh",
+          "type": "실수",
+          "description": "직전 한 시간의 전력 사용량 (kWh). 예측 시점에 알 수 있는 값. 일부 결측"
+        },
+        {
+          "name": "energy_kwh",
+          "type": "실수",
+          "description": "해당 시간 전력 사용량 (kWh). 예측 대상"
+        }
+      ]
+    }
+  ],
+  "generator": {
+    "name": "acf content build",
+    "version": "0.1.0",
+    "content_contract": "1.3.0"
+  },
+  "source_fingerprint": "0e2d2fb1f4067e52631d4f0aa71c0b591097e6049230c49240bd6eb69d95fab8",
+  "notebook": {
+    "kind": "question_notebook",
+    "format": "nbformat4.5",
+    "url_path": "content/associate-004/notebooks/associate-004-questions-f9b02abd2a91.ipynb",
+    "sha256": "f9b02abd2a9142ef4c63162dd01cd8d9fad7d382fef2012a2896bdd9487b939e",
+    "size_bytes": 14826,
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  },
+  "grading": {
+    "kind": "grading_bundle",
+    "url_path": "content/associate-004/grading/associate-004-grading-40b70979ac00.json",
+    "sha256": "40b70979ac007307747ae3154de30fd44a7e1487ca4c8b9e276afd6126f1fd3a",
+    "size_bytes": 128411,
+    "engine_version": "1.7.0",
+    "grading_version": "associate-004-g3b7c5919086c",
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  }
+}

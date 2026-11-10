@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://aice-content-factory.local/content/public-grading-profile.schema.json",
   "title": "Public grading bundle",
-  "description": "공개 채점 규칙 묶음 (팩당 1개, public/content/<pack>/grading/<pack>-grading-<sha12>.json). 브라우저 사용자가 볼 수 있음을 전제로 함 (정답 코드는 없음, 기대 결과값은 포함). 사람이 검토·테스트한 프로필만 포함 · 1.1.0: 검사 label 필수 · 1.2.0(엔진 1.1.0): 학생 상태 기반 독립 재계산 probe (이전 계약 파일 보존) · 1.3.0(엔진 1.2.0): frame_unchanged",
+  "description": "공개 채점 규칙 묶음 (팩당 1개, public/content/<pack>/grading/<pack>-grading-<sha12>.json). 브라우저 사용자가 볼 수 있음을 전제로 함 (정답 코드는 없음, 기대 결과값은 포함). 사람이 검토·테스트한 프로필만 포함 · 1.1.0: 검사 label 필수 · 1.2.0(엔진 1.1.0): 학생 상태 기반 독립 재계산 probe (이전 계약 파일 보존) · 1.3.0(엔진 1.2.0): frame_unchanged | 1.4.0(엔진 1.3.0): 회귀 모델, rmse, selected_predictions, group_metric, imputed_against | 1.5.0(엔진 1.4.0): split_reproduced (분할 독립 재계산 비교), constrained_selection (제약 조건 분류 후보 선택), 후보별 threshold, alpha 와 min_samples_leaf 파라미터 | 1.6.0(엔진 1.5.0): figure_info, column_values, onehot_reproduced, confusion_matrix, metric_gap | 1.7.0(엔진 1.6.0): figure_data_match (히스토그램 구간 경계와 빈도, 산점도 x-y 쌍 전체), scaled_with (스케일러 transform 결과 비교) | 1.8.0(엔진 1.7.0): cost_selection, figure_data_match bar, time_split_reproduced, subset_metric, transformer_check, transformed_with, stratified_cv_scores, confusion_matrix cell",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -14,7 +14,7 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "1.3.0"
+      "const": "1.8.0"
     },
     "pack_id": {
       "type": "string",
@@ -75,7 +75,25 @@
             "best_model",
             "series_index",
             "imputation_from_source",
-            "frame_unchanged"
+            "frame_unchanged",
+            "selected_predictions",
+            "group_metric",
+            "imputed_against",
+            "split_reproduced",
+            "constrained_selection",
+            "figure_info",
+            "column_values",
+            "onehot_reproduced",
+            "confusion_matrix",
+            "metric_gap",
+            "figure_data_match",
+            "scaled_with",
+            "cost_selection",
+            "time_split_reproduced",
+            "subset_metric",
+            "transformer_check",
+            "transformed_with",
+            "stratified_cv_scores"
           ]
         },
         "var": {
@@ -129,7 +147,8 @@
             "mse",
             "precision",
             "r2",
-            "recall"
+            "recall",
+            "rmse"
           ]
         },
         "attr": {
@@ -161,7 +180,11 @@
           "type": "string",
           "enum": [
             "LogisticRegression",
-            "RandomForestClassifier"
+            "RandomForestClassifier",
+            "LinearRegression",
+            "Ridge",
+            "RandomForestRegressor",
+            "DecisionTreeRegressor"
           ]
         },
         "params": {
@@ -185,6 +208,12 @@
             },
             "max_depth": {
               "type": "number"
+            },
+            "alpha": {
+              "type": "number"
+            },
+            "min_samples_leaf": {
+              "type": "number"
             }
           }
         },
@@ -197,11 +226,13 @@
               "n_estimators",
               "n_jobs",
               "C",
-              "max_depth"
+              "max_depth",
+              "alpha",
+              "min_samples_leaf"
             ]
           },
           "uniqueItems": true,
-          "maxItems": 6
+          "maxItems": 8
         },
         "threshold": {
           "type": "number",
@@ -232,6 +263,11 @@
               "X": {
                 "type": "string",
                 "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+              },
+              "threshold": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "exclusiveMaximum": 1
               }
             }
           }
@@ -249,6 +285,378 @@
           },
           "uniqueItems": true,
           "maxItems": 50
+        },
+        "frame": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "raw": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "stat_var": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "reduce": {
+          "enum": [
+            "argmax",
+            "argmin"
+          ]
+        },
+        "goal": {
+          "enum": [
+            "min",
+            "max"
+          ]
+        },
+        "select_metric": {
+          "enum": [
+            "accuracy",
+            "f1",
+            "mae",
+            "mse",
+            "precision",
+            "r2",
+            "recall",
+            "rmse"
+          ]
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "drop": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 20
+        },
+        "test_size": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1
+        },
+        "random_state": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "stratify": {
+          "type": "boolean"
+        },
+        "outputs": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "X_train": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+            },
+            "X_test": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+            },
+            "y_train": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+            },
+            "y_test": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+            }
+          }
+        },
+        "constraint": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "metric",
+            "op",
+            "value"
+          ],
+          "properties": {
+            "metric": {
+              "type": "string",
+              "enum": [
+                "accuracy",
+                "f1",
+                "precision",
+                "recall"
+              ]
+            },
+            "op": {
+              "enum": [
+                "ge"
+              ]
+            },
+            "value": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "objective": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "metric",
+            "goal"
+          ],
+          "properties": {
+            "metric": {
+              "type": "string",
+              "enum": [
+                "accuracy",
+                "f1",
+                "precision",
+                "recall"
+              ]
+            },
+            "goal": {
+              "enum": [
+                "max",
+                "min"
+              ]
+            }
+          }
+        },
+        "fallback": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "metric",
+            "goal"
+          ],
+          "properties": {
+            "metric": {
+              "type": "string",
+              "enum": [
+                "accuracy",
+                "f1",
+                "precision",
+                "recall"
+              ]
+            },
+            "goal": {
+              "enum": [
+                "max",
+                "min"
+              ]
+            }
+          }
+        },
+        "output": {
+          "enum": [
+            "selected",
+            "scores",
+            "match",
+            "train_period",
+            "test_period"
+          ]
+        },
+        "field": {
+          "enum": [
+            "axes",
+            "xlabel",
+            "ylabel",
+            "bars",
+            "points",
+            "bar_total",
+            "x_mean",
+            "y_mean"
+          ]
+        },
+        "minus_column": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "as_list": {
+          "type": "boolean"
+        },
+        "onehot_columns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 10
+        },
+        "assign": {
+          "type": "object",
+          "maxProperties": 3,
+          "propertyNames": {
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          }
+        },
+        "pred": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "X_a": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "y_a": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "X_b": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "y_b": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "plot": {
+          "enum": [
+            "histogram",
+            "scatter",
+            "bar"
+          ]
+        },
+        "bins": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 40
+        },
+        "x_column": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "y_column": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "scaler": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "scale_columns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 50
+        },
+        "costs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fp",
+            "fn"
+          ],
+          "properties": {
+            "fp": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "fn": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "series": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "check_labels": {
+          "type": "boolean"
+        },
+        "date_column": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "cutoff": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "where": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "column",
+            "op",
+            "value"
+          ],
+          "properties": {
+            "column": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "op": {
+              "enum": [
+                "ge"
+              ]
+            },
+            "value": {
+              "type": "number"
+            }
+          }
+        },
+        "transformer": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "n_splits": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 5
+        },
+        "shuffle": {
+          "type": "boolean"
+        },
+        "scoring": {
+          "enum": [
+            "f1"
+          ]
+        },
+        "cell": {
+          "enum": [
+            "tn",
+            "fp",
+            "fn",
+            "tp"
+          ]
         }
       }
     },

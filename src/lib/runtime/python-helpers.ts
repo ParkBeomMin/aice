@@ -2,6 +2,8 @@
 export const PY_HELPERS = String.raw`
 import os, sys, io, json, base64, traceback, warnings
 os.environ.setdefault("MPLBACKEND", "Agg")
+# plt.show() 는 그림을 셀 출력으로 보여 주므로 Agg 백엔드의 "non-interactive" 경고는 숨긴다 (학습자 혼란 방지)
+warnings.filterwarnings("ignore", message=".*non-interactive, and thus cannot be shown.*")
 from pyodide.code import eval_code_async, find_imports
 
 _acf_ns = {"__name__": "__main__"}

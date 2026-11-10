@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-007",
+  "question_id": "q14",
+  "public_id": "associate-007-q14",
+  "revision": 1,
+  "title": "임계값과 놓친 불량 수",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "기준을 낮추면 놓치는 불량이 얼마나 줄어드는지 확인하시오.\n\n1. `defect_lr`로 `X_test`의 양성(1) 확률을 구하고, 0.35 이상이면 1인 정수 예측을 `pred_low_threshold`에 저장하시오.\n2. `y_test` 기준으로 `defect_lr_pred`(임계값 0.5)의 거짓 음성 수를 정수 `baseline_fn_count`, `pred_low_threshold`의 거짓 음성 수를 정수 `fn_count`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "production_batches",
+      "url_path": "content/associate-007/datasets/production_batches.csv",
+      "sha256": "3a1486511c970411a450b5b11f40a333be71c2f6fe275cc6f59151ec9ba42ee7",
+      "size_bytes": 119702,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261207, SHA-256 3a1486511c97"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 임계값을 낮추면 놓친 불량이 얼마나 줄어드는지 비교한다.\n\n**핵심 개념:** 임계값을 낮추면 불량으로 판정하는 배치가 늘어 놓치는 불량(FN) 이 줄고 대신 잘못된 경보(FP) 가 늘 수 있다.\n\n```python\nimport numpy as np\ndefect_prob = defect_lr.predict_proba(X_test)[:, 1]\npred_low_threshold = (defect_prob >= 0.35).astype(int)\nyt = y_test.to_numpy()\nbaseline_fn_count = int(((yt == 1) & (defect_lr_pred == 0)).sum())\nfn_count = int(((yt == 1) & (pred_low_threshold == 0)).sum())\nprint(baseline_fn_count, fn_count)\n```\n\n**기준 결과:** FN 0.5 기준 43건, 0.35 기준 29건 (재현율 0.528 → 0.681).\n\n**다른 풀이 (confusion_matrix ravel):**\n\n```python\nfrom sklearn.metrics import confusion_matrix\npred_low_threshold = (defect_lr.predict_proba(X_test)[:, 1] >= 0.35).astype(int)\nbaseline_fn_count = int(confusion_matrix(y_test, defect_lr_pred, labels=[0, 1]).ravel()[2])\nfn_count = int(confusion_matrix(y_test, pred_low_threshold, labels=[0, 1]).ravel()[2])\n```\n\n**자주 틀리는 부분:** FP 를 세는 것, 두 값을 바꾸는 것.\n\n**채점 항목:**\n\n1. 임계값 0.35 예측\n2. 임계값 0.5 의 FN\n3. 임계값 0.35 의 FN\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "import numpy as np\ndefect_prob = defect_lr.predict_proba(X_test)[:, 1]\npred_low_threshold = (defect_prob >= 0.35).astype(int)\nyt = y_test.to_numpy()\nbaseline_fn_count = int(((yt == 1) & (defect_lr_pred == 0)).sum())\nfn_count = int(((yt == 1) & (pred_low_threshold == 0)).sum())\nprint(baseline_fn_count, fn_count)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

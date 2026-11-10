@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-002",
+  "question_id": "q01",
+  "public_id": "associate-002-q01",
+  "revision": 1,
+  "title": "파일 로딩",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "`pandas`를 이용하여 `warehouse_orders.csv`를 읽고 `df_raw`라는 DataFrame에 저장하시오.\n\n- `order_id`는 인덱스가 아닌 일반 컬럼으로 보존하시오.",
+  "starter_code": "import pandas as pd\n\n# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "warehouse_orders",
+      "url_path": "content/associate-002/datasets/warehouse_orders.csv",
+      "sha256": "3376dfe0980179ca23c830b98079fb02ec38356cb4a59e1d7e82e5260793ad0c",
+      "size_bytes": 97585,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261202, SHA-256 3376dfe09801"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** CSV 파일을 DataFrame으로 불러오고 원본 구조를 확인한다.\n\n**핵심 개념:** `pd.read_csv()`로 `warehouse_orders.csv`를 읽어 `df_raw`에 저장한다. `order_id`는 인덱스로 바꾸지 않고 일반 컬럼으로 둔다. 이후 모든 문항이 `df_raw`에서 출발하므로 원본은 이 단계 그대로 보존한다.\n\n```python\ndf_raw = pd.read_csv('warehouse_orders.csv')\ndf_raw.head()\n```\n\n**기준 결과:** 1,500행, 14열. `order_id` 고유값 1,500개.\n\n**다른 풀이 (os.path 로 같은 파일 로딩):**\n\n```python\nimport pandas as pd\nimport os\ndf_raw = pd.read_csv(os.path.join('.', 'warehouse_orders.csv'))\n```\n\n**자주 틀리는 부분:** `index_col='order_id'`로 읽어 주문 ID가 일반 컬럼에서 사라지는 것, 파일 이름 오타, 일부 행만 남기는 것.\n\n**채점 항목:**\n\n1. df_raw 에 DataFrame 저장\n2. CSV 전체 행과 열 불러오기\n3. order_id 일반 컬럼 보존\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "df_raw = pd.read_csv('warehouse_orders.csv')\ndf_raw.head()\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

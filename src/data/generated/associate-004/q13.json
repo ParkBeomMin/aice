@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-004",
+  "question_id": "q13",
+  "public_id": "associate-004-q13",
+  "revision": 2,
+  "title": "평가 데이터 잔차 표",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "선형회귀의 실제값, 예측값, 잔차를 한 표로 정리하시오.\n\n1. 컬럼 `actual`(실제 `y_test`), `predicted`(`energy_lr`로 `X_test`를 예측한 `energy_lr_pred`), `residual`(실제값에서 예측값을 뺀 값)을 가진 DataFrame `residual_df`를 만드시오.\n2. 인덱스는 `y_test`의 인덱스를 그대로 쓰고 행 순서를 바꾸지 마시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "building_energy",
+      "url_path": "content/associate-004/datasets/building_energy.csv",
+      "sha256": "1c3c7b0811527ca4fbc07c17ae33b7da35c8899d93156bcfa4573b0c3914d898",
+      "size_bytes": 108748,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261204, SHA-256 1c3c7b081152"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** y_test 인덱스의 actual, predicted, residual=actual-predicted 열을 생성한다.\n\n**핵심 개념:** `y_test`(Series)를 그대로 쓰면 인덱스가 유지된다. 예측 배열은 `y_test`와 같은 순서이므로 행 순서를 바꾸지 않는다. 잔차는 실제값에서 예측값을 뺀다.\n\n```python\nresidual_df = pd.DataFrame({'actual': y_test, 'predicted': energy_lr_pred, 'residual': y_test - energy_lr_pred}, index=y_test.index)\nresidual_df.head()\n```\n\n**기준 결과:** 330행, 잔차 합계 약 -94.10 (평균 약 -0.29 로 0 근처).\n\n**다른 풀이 (to_frame 과 assign):**\n\n```python\nresidual_df = y_test.to_frame('actual').assign(predicted=energy_lr_pred)\nresidual_df['residual'] = residual_df['actual'] - residual_df['predicted']\n```\n\n**자주 틀리는 부분:** 잔차 부호 반대, 인덱스 재설정, 예측만 정렬, 실제값과 예측값을 바꾸는 것, y_test 만 정렬하는 것.\n\n**채점 항목:**\n\n1. 컬럼 actual, predicted, residual\n2. y_test 인덱스와 행 순서\n3. 실제값\n4. 예측값\n5. 잔차 = 실제 - 예측\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "residual_df = pd.DataFrame({'actual': y_test, 'predicted': energy_lr_pred, 'residual': y_test - energy_lr_pred}, index=y_test.index)\nresidual_df.head()\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

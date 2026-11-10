@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-003",
+  "question_id": "q04",
+  "public_id": "associate-003-q04",
+  "revision": 1,
+  "title": "MFA 사용 여부별 위험 비율",
+  "topic": "pandas",
+  "difficulty": "medium",
+  "prompt": "다중 인증(MFA) 사용 여부에 따라 이상 로그인 비율이 어떻게 다른지 구하시오.\n\n1. `mfa_used`(0 또는 1)별 `suspicious_login` 평균을 Series `mfa_risk_rates`에 저장하시오.\n2. 인덱스를 오름차순(0, 1)으로 정렬하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "auth_events",
+      "url_path": "content/associate-003/datasets/auth_events.csv",
+      "sha256": "7fc3948a9128d78de881a28a390575df52f59a4b3ce2413db5d073952f2f0d0b",
+      "size_bytes": 101231,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261203, SHA-256 7fc3948a9128"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** groupby(mfa_used)의 suspicious_login 평균을 Series로 반환한다.\n\n**핵심 개념:** `groupby('mfa_used')['suspicious_login'].mean()`은 MFA 사용 여부별 이상 로그인 비율이다.\n\n```python\nmfa_risk_rates = auth_df.groupby('mfa_used')['suspicious_login'].mean().sort_index()\nprint(mfa_risk_rates)\n```\n\n**기준 결과:** MFA 미사용(0) 약 0.2361, 사용(1) 약 0.1018. MFA를 쓰는 로그인의 위험 비율이 절반 이하다.\n\n**다른 풀이 (pivot_table):**\n\n```python\nmfa_risk_rates = auth_df.pivot_table(index='mfa_used', values='suspicious_login', aggfunc='mean')['suspicious_login'].sort_index()\n```\n\n**자주 틀리는 부분:** 0/1 레이블 순서 변경, 합계 사용, 다른 컬럼을 집계하는 것.\n\n**채점 항목:**\n\n1. MFA 여부별 평균\n2. 인덱스 0, 1 순서\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "mfa_risk_rates = auth_df.groupby('mfa_used')['suspicious_login'].mean().sort_index()\nprint(mfa_risk_rates)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,288 @@
+{
+  "schema_version": "1.3.0",
+  "pack_id": "associate-002",
+  "title": "AICE Associate 실전 연습 모의고사 2회차: 물류센터 상품 피킹 소요시간 예측",
+  "summary": "가상의 물류기업 FulfillLab 주문 1,500건의 작업 기록으로 데이터 탐색, 결측과 이상값 확인, 훈련 데이터 기준 전처리, 회귀 모델 학습과 평가까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+  "mode": "production",
+  "mock": false,
+  "time_limit_minutes": 90,
+  "question_count": 14,
+  "questions": [
+    {
+      "question_id": "q01",
+      "public_id": "associate-002-q01",
+      "revision": 1,
+      "title": "파일 로딩",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q01.json",
+      "sha256": "8b2533f046f5ac250babedaf05bc5ea231b95d1c9ed6d52458767b0e914744fc"
+    },
+    {
+      "question_id": "q02",
+      "public_id": "associate-002-q02",
+      "revision": 1,
+      "title": "데이터 규모와 결측 확인",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q02.json",
+      "sha256": "28fff23c34e882e006ff4f78372c0a88f534dfb16602fdfe0c135b6d49813040"
+    },
+    {
+      "question_id": "q03",
+      "public_id": "associate-002-q03",
+      "revision": 1,
+      "title": "긴급 대량 주문 선별",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q03.json",
+      "sha256": "3228be09f4cba629ebdcfa3dbaabb77da83f95c22acbc19927b3f1330df91b6b"
+    },
+    {
+      "question_id": "q04",
+      "public_id": "associate-002-q04",
+      "revision": 1,
+      "title": "구역별 피킹 시간 중앙값",
+      "topic": "pandas",
+      "difficulty": "medium",
+      "file": "q04.json",
+      "sha256": "85a9a9c7c7adadd8b853f5d0f96fd37e100b0252115edc327c5b4a3a6f5dd6b2"
+    },
+    {
+      "question_id": "q05",
+      "public_id": "associate-002-q05",
+      "revision": 1,
+      "title": "작업량과 소요시간의 상관",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q05.json",
+      "sha256": "b0c409f210d2ac0093c8a8aa674ec8ee04ea69d47fece4cb8bb6bcbca34e3395"
+    },
+    {
+      "question_id": "q06",
+      "public_id": "associate-002-q06",
+      "revision": 1,
+      "title": "작업량 기반 특징 생성",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q06.json",
+      "sha256": "73eedddbdd273976000021831427446e1c0bb764a1238de5dfcd096884345270"
+    },
+    {
+      "question_id": "q07",
+      "public_id": "associate-002-q07",
+      "revision": 1,
+      "title": "이동거리 이상값 탐색",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q07.json",
+      "sha256": "9155c70896eeb19d89c15483a0e9485f5f6e5a34bf435d4925b0ba50b5017f5f"
+    },
+    {
+      "question_id": "q08",
+      "public_id": "associate-002-q08",
+      "revision": 1,
+      "title": "데이터 분리, 결측 대체, 원-핫 인코딩",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q08.json",
+      "sha256": "bb8c8735ff9cb7d83babc30718d8f6bd3f678a3f6e88cd72ec017b2c947d0a3c"
+    },
+    {
+      "question_id": "q09",
+      "public_id": "associate-002-q09",
+      "revision": 1,
+      "title": "훈련 데이터 기준 표준화",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q09.json",
+      "sha256": "26e7d67ec35966af25b1c1d8713548a3767a2f656c2e365bc1f51bef3b03d09b"
+    },
+    {
+      "question_id": "q10",
+      "public_id": "associate-002-q10",
+      "revision": 1,
+      "title": "선형회귀 모델 학습",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q10.json",
+      "sha256": "16ad93553a25c9cdd7882c6c9403dced768f233f1dd679aca6c65a151d6137fb"
+    },
+    {
+      "question_id": "q11",
+      "public_id": "associate-002-q11",
+      "revision": 1,
+      "title": "랜덤포레스트 회귀 학습",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q11.json",
+      "sha256": "69bc5e17eaba99ee5f51c45bd1771039c5f479ea41879cf4753731d0333b606e"
+    },
+    {
+      "question_id": "q12",
+      "public_id": "associate-002-q12",
+      "revision": 1,
+      "title": "선형회귀 성능 평가",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q12.json",
+      "sha256": "768cfc161552573564953f4c7d929c54fcc24274468ef88b0b3ed4dcbbd375fb"
+    },
+    {
+      "question_id": "q13",
+      "public_id": "associate-002-q13",
+      "revision": 1,
+      "title": "두 회귀 모델의 RMSE 비교",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q13.json",
+      "sha256": "e462b5657db2b6b30a64618379ac2c1e459a0fabc99e1a5c1b255f3292a28ac8"
+    },
+    {
+      "question_id": "q14",
+      "public_id": "associate-002-q14",
+      "revision": 1,
+      "title": "근무조별 예측 오차 분석",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q14.json",
+      "sha256": "20a69deb5e76380017cbe3f8cee4300a6ece883aed1cdc9c6acfd8a73f7e5fbc"
+    }
+  ],
+  "scenario_md": "가상의 물류기업 FulfillLab은 주문마다 작업자가 보관 구역에서 상품을 찾아 포장 구역으로 옮기기까지 걸리는 시간을 미리 예측하려고 합니다. 예측한 소요시간으로 근무조별 인력 배치와 출고 마감 시간을 계획할 예정입니다.\n\n여러분은 운영 데이터 분석가로서 주문별 작업 기록을 탐색하고, 누락된 이동거리와 범주형 정보를 처리한 뒤, 소요시간을 예측하는 회귀 모델을 만들고 평가해야 합니다.\n\n- 분석 목표: 주문별 피킹 소요시간(`pick_minutes`, 분) 예측\n- 데이터: `warehouse_orders.csv` (주문 1,500건, 14개 컬럼)\n- 진행 순서: 데이터 탐색(1~5번) → 특징 생성과 전처리(6~9번) → 모델 학습과 평가(10~14번)\n\n> 모델 입력에는 작업을 시작하기 전에 알 수 있는 정보만 사용합니다. 예를 들어 `scanner_errors`는 주문 접수 단계의 사전 바코드 검증 오류, `congestion_index`는 피킹 시작 시점의 혼잡도입니다. 모든 데이터는 실제 기업, 개인과 관계없는 합성 데이터입니다.",
+  "datasets": [
+    {
+      "dataset_id": "warehouse_orders",
+      "url_path": "content/associate-002/datasets/warehouse_orders.csv",
+      "sha256": "3376dfe0980179ca23c830b98079fb02ec38356cb4a59e1d7e82e5260793ad0c",
+      "size_bytes": 97585,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261202, SHA-256 3376dfe09801",
+      "columns": [
+        {
+          "name": "order_id",
+          "type": "문자열",
+          "description": "주문 고유 번호 (WO00001~WO01500). 식별용이라 모델 입력에는 쓰지 않습니다."
+        },
+        {
+          "name": "warehouse_zone",
+          "type": "문자열",
+          "description": "상품이 보관된 창고 구역: A, B, C, D"
+        },
+        {
+          "name": "shift",
+          "type": "문자열",
+          "description": "작업 근무조: Morning(오전), Afternoon(오후), Night(야간)"
+        },
+        {
+          "name": "item_category",
+          "type": "문자열",
+          "description": "주문 상품 분류: Grocery(식품), Beauty(뷰티), Electronics(전자), Home(생활)"
+        },
+        {
+          "name": "priority",
+          "type": "문자열",
+          "description": "주문 우선순위: Standard(일반), Express(긴급)"
+        },
+        {
+          "name": "items_count",
+          "type": "정수",
+          "description": "주문에 담긴 상품 수 (개)"
+        },
+        {
+          "name": "sku_diversity",
+          "type": "정수",
+          "description": "주문에 포함된 서로 다른 상품 종류 수 (개, 상품 수 이하)"
+        },
+        {
+          "name": "walking_distance_m",
+          "type": "실수",
+          "description": "피킹 동선의 이동거리 (m)"
+        },
+        {
+          "name": "shelf_levels",
+          "type": "정수",
+          "description": "상품을 꺼내야 하는 선반 높이 단계 수 (1~5)"
+        },
+        {
+          "name": "picker_experience_months",
+          "type": "정수",
+          "description": "작업자 경력 (개월)"
+        },
+        {
+          "name": "congestion_index",
+          "type": "실수",
+          "description": "피킹 시작 시점에 측정한 창고 혼잡도 (0~1, 1에 가까울수록 혼잡)"
+        },
+        {
+          "name": "packing_items",
+          "type": "정수",
+          "description": "별도 포장이 필요한 상품 수 (개)"
+        },
+        {
+          "name": "scanner_errors",
+          "type": "정수",
+          "description": "주문 접수 및 사전 바코드 검증 과정에서 확인된 오류 횟수 (회). 피킹 작업 시작 전에 확인할 수 있는 정보"
+        },
+        {
+          "name": "pick_minutes",
+          "type": "실수",
+          "description": "예측 대상. 상품을 모두 찾아 포장 구역으로 옮기기까지 걸린 시간 (분)",
+          "target": true
+        }
+      ]
+    }
+  ],
+  "generator": {
+    "name": "acf content build",
+    "version": "0.1.0",
+    "content_contract": "1.3.0"
+  },
+  "source_fingerprint": "abab0645739dc39a1f61130ac2928c4c43e2d1df14212a1060cc02dbfc2d5eca",
+  "notebook": {
+    "kind": "question_notebook",
+    "format": "nbformat4.5",
+    "url_path": "content/associate-002/notebooks/associate-002-questions-c107d338922c.ipynb",
+    "sha256": "c107d338922ca257e0cd5abbf78df92487bb44128e433d6a352f74731a8e7e81",
+    "size_bytes": 15391,
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  },
+  "grading": {
+    "kind": "grading_bundle",
+    "url_path": "content/associate-002/grading/associate-002-grading-5307c4959410.json",
+    "sha256": "5307c4959410b52ff3241630b98d73bbdf48406641df5a17fac5eb6268abd2a6",
+    "size_bytes": 33335,
+    "engine_version": "1.7.0",
+    "grading_version": "associate-002-gb4a9eaa273aa",
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  }
+}

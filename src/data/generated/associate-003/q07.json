@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-003",
+  "question_id": "q07",
+  "public_id": "associate-003-q07",
+  "revision": 1,
+  "title": "원거리 로그인 표시",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "평소 위치에서 멀리 떨어진 접속을 표시하시오.\n\n1. `auth_clean`의 `distance_from_usual_km`이 1000 이상이면 1, 그렇지 않거나 결측이면 0인 정수 Series를 만드시오.\n2. 결과를 `far_login_flag`에 저장하고 원래 인덱스를 유지하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "auth_events",
+      "url_path": "content/associate-003/datasets/auth_events.csv",
+      "sha256": "7fc3948a9128d78de881a28a390575df52f59a4b3ce2413db5d073952f2f0d0b",
+      "size_bytes": 101231,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261203, SHA-256 7fc3948a9128"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 1,000km 이상만 1, 나머지와 결측은 0이다.\n\n**핵심 개념:** `>= 1000` 비교 결과를 `astype(int)`로 0/1 정수로 바꾼다. 결측(NaN)과의 비교는 False 라서 결측은 자동으로 0이 된다.\n\n```python\nfar_login_flag = (auth_clean['distance_from_usual_km'] >= 1000).astype(int)\nprint(far_login_flag.sum())\n```\n\n**기준 결과:** 1,000km 이상 153건.\n\n**다른 풀이 (np.where 로 Series):**\n\n```python\nimport numpy as np\nfar_login_flag = pd.Series(np.where(auth_clean['distance_from_usual_km'] >= 1000, 1, 0), index=auth_clean.index)\n```\n\n**자주 틀리는 부분:** 1000 초과 조건, NaN을 1로 만들기, 결측을 큰 값으로 채워 1로 만드는 것, 인덱스를 섞는 것.\n\n**채점 항목:**\n\n1. 1000km 이상이면 1\n2. 원래 인덱스\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "far_login_flag = (auth_clean['distance_from_usual_km'] >= 1000).astype(int)\nprint(far_login_flag.sum())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

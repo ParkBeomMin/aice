@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-005",
+  "question_id": "q05",
+  "public_id": "associate-005-q05",
+  "revision": 1,
+  "title": "할인율 구간별 수락률 시각화",
+  "topic": "visualization",
+  "difficulty": "medium",
+  "prompt": "할인율 구간에 따라 수락률이 어떻게 달라지는지 확인하시오.\n\n1. `offer_df`의 `discount_pct`를 `pd.cut(..., bins=[0, 5, 10, 15, 20, 25, 30], include_lowest=True, right=True)`로 6개 구간으로 나누시오.\n2. 구간별 `responded` 평균을 구간 순서대로 Series `discount_group_rates`에 저장하시오.\n3. 6개 막대그래프를 그려 그림(Figure)을 `discount_fig`에 저장하시오. 가로축 이름은 `discount_band`, 세로축 이름은 `response_rate`로 표시하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "promotion_offers",
+      "url_path": "content/associate-005/datasets/promotion_offers.csv",
+      "sha256": "5e683fcf9ede1ea713edd498976b3751b560d17be2bda1007bc534ad488238b3",
+      "size_bytes": 115132,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261205, SHA-256 5e683fcf9ede"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 연속형 변수를 구간으로 나누고 구간별 비율을 시각화한다.\n\n**핵심 개념:** `pd.cut(..., bins=[0, 5, ..., 30], include_lowest=True, right=True)`는 (0, 5], (5, 10] 처럼 오른쪽 경계를 포함하는 6개 구간을 만든다 (첫 구간은 0도 포함). 구간별 평균을 막대그래프로 그린다.\n\n```python\nimport matplotlib.pyplot as plt\ndiscount_band = pd.cut(offer_df['discount_pct'], bins=[0, 5, 10, 15, 20, 25, 30], include_lowest=True, right=True)\ndiscount_group_rates = offer_df.groupby(discount_band, observed=False)['responded'].mean()\ndiscount_fig, ax = plt.subplots(figsize=(7, 4))\nax.bar(discount_group_rates.index.astype(str), discount_group_rates.to_numpy())\nax.set_xlabel('discount_band')\nax.set_ylabel('response_rate')\nplt.show()\n```\n\n**기준 결과:** 구간별 건수 158, 337, 403, 390, 230, 82. 수락률 0.266, 0.318, 0.380, 0.405, 0.522, 0.585 로 할인율이 클수록 높아진다.\n\n**다른 풀이 (Series.plot.bar):**\n\n```python\nimport matplotlib.pyplot as plt\ndiscount_band = pd.cut(offer_df['discount_pct'], bins=[0, 5, 10, 15, 20, 25, 30], include_lowest=True, right=True)\ndiscount_group_rates = offer_df.groupby(discount_band, observed=True)['responded'].mean()\ndiscount_fig, ax = plt.subplots()\ndiscount_group_rates.plot.bar(ax=ax)\nax.set_xlabel('discount_band')\nax.set_ylabel('response_rate')\n```\n\n**자주 틀리는 부분:** 왼쪽 경계를 포함하도록 나누는 것, 수락 건수(sum)를 그리는 것, 막대 순서를 바꾸는 것.\n\n**채점 항목:**\n\n1. 구간별 수락률\n2. 구간 순서\n3. 막대 높이가 구간별 수락률\n4. 가로축 이름\n5. 세로축 이름\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "import matplotlib.pyplot as plt\ndiscount_band = pd.cut(offer_df['discount_pct'], bins=[0, 5, 10, 15, 20, 25, 30], include_lowest=True, right=True)\ndiscount_group_rates = offer_df.groupby(discount_band, observed=False)['responded'].mean()\ndiscount_fig, ax = plt.subplots(figsize=(7, 4))\nax.bar(discount_group_rates.index.astype(str), discount_group_rates.to_numpy())\nax.set_xlabel('discount_band')\nax.set_ylabel('response_rate')\nplt.show()\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

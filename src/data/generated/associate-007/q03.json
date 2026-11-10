@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-007",
+  "question_id": "q03",
+  "public_id": "associate-007-q03",
+  "revision": 1,
+  "title": "압력 결측률 계산",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "압력 측정값이 빠진 비율을 구하시오.\n\n1. `batch_df['pressure_bar']`의 결측 행 수를 전체 행 수로 나눈 값을 실수 `missing_pressure`에 저장하시오.\n2. 백분율이 아닌 0~1 사이 값으로 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "production_batches",
+      "url_path": "content/associate-007/datasets/production_batches.csv",
+      "sha256": "3a1486511c970411a450b5b11f40a333be71c2f6fe275cc6f59151ec9ba42ee7",
+      "size_bytes": 119702,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261207, SHA-256 3a1486511c97"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 결측 비율을 0~1 값으로 구한다.\n\n**핵심 개념:** `isna().sum() / len(df)` 또는 `isna().mean()`.\n\n```python\nmissing_pressure = float(batch_df['pressure_bar'].isna().sum() / len(batch_df))\nprint(missing_pressure)\n```\n\n**기준 결과:** 약 0.0357 (75행).\n\n**다른 풀이 (isna().mean()):**\n\n```python\nmissing_pressure = float(batch_df['pressure_bar'].isna().mean())\n```\n\n**자주 틀리는 부분:** 백분율(100 곱)로 저장하는 것.\n\n**채점 항목:**\n\n1. 압력 결측 비율 (0~1)\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "missing_pressure = float(batch_df['pressure_bar'].isna().sum() / len(batch_df))\nprint(missing_pressure)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

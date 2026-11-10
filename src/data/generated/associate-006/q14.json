@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-006",
+  "question_id": "q14",
+  "public_id": "associate-006-q14",
+  "revision": 1,
+  "title": "비 오는 날 예측 오차",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "비가 많이 오는 날 선형회귀 오차가 어떤지 구하시오.\n\n1. `bike_lr`가 `X_test`로 예측한 `bike_lr_pred`와 `y_test`를 쓰시오.\n2. 평가 원본 `X_test_raw`의 `rain_mm`가 10 이상인 행만 골라 절대오차의 평균을 실수 `wet_day_mae`에 저장하시오.\n3. 예측, 실제값, 강우량의 행 순서(인덱스)를 정확히 맞추시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "bike_demand",
+      "url_path": "content/associate-006/datasets/bike_demand.csv",
+      "sha256": "8b6b2150909767f79155d692412f850f6d06f59110de572e8af097370836c537",
+      "size_bytes": 112825,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261206, SHA-256 8b6b21509097"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 조건에 맞는 행만의 예측 오차를 계산한다.\n\n**핵심 개념:** 예측 배열은 X_test 행 순서와 같으므로 y_test, X_test_raw 와 같은 순서(인덱스)로 맞춰 강수일만 고른다.\n\n```python\nwet = (X_test_raw['rain_mm'] >= 10).to_numpy()\nwet_day_mae = float(np.abs(y_test.to_numpy()[wet] - bike_lr_pred[wet]).mean())\nprint(wet.sum(), wet_day_mae)\n```\n\n**기준 결과:** 평가 강수일(10mm 이상) 66행 (11일), wet_day_mae 약 51.06.\n\n**다른 풀이 (Series 로 정렬):**\n\n```python\nimport numpy as np\nerr = (y_test - pd.Series(bike_lr_pred, index=y_test.index)).abs()\nwet_day_mae = float(err[X_test_raw['rain_mm'] >= 10].mean())\n```\n\n**자주 틀리는 부분:** 전체 MAE 를 쓰는 것, 다른 기준값, 정렬로 순서를 어긋나게 하는 것.\n\n**채점 항목:**\n\n1. 강수 10mm 이상 MAE\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "wet = (X_test_raw['rain_mm'] >= 10).to_numpy()\nwet_day_mae = float(np.abs(y_test.to_numpy()[wet] - bike_lr_pred[wet]).mean())\nprint(wet.sum(), wet_day_mae)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-005",
+  "question_id": "q13",
+  "public_id": "associate-005-q13",
+  "revision": 1,
+  "title": "임계값 변경과 정밀도, 재현율",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "양성 확률의 기준을 0.35로 낮춰 다시 판정하시오.\n\n1. `promo_lr`로 `X_test`의 양성(1) 확률을 구하고, 0.35 이상이면 1, 미만이면 0인 정수 예측을 `promo_pred_035`에 저장하시오.\n2. `y_test` 기준 정밀도를 `promo_precision`, 재현율을 `promo_recall`에 저장하시오 (`zero_division=0`).",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "promotion_offers",
+      "url_path": "content/associate-005/datasets/promotion_offers.csv",
+      "sha256": "5e683fcf9ede1ea713edd498976b3751b560d17be2bda1007bc534ad488238b3",
+      "size_bytes": 115132,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261205, SHA-256 5e683fcf9ede"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 임계값을 바꿔 정밀도와 재현율의 변화를 본다.\n\n**핵심 개념:** 임계값을 0.35로 낮추면 더 많은 제안을 수락으로 판정해 재현율이 오르고 정밀도는 대체로 내려간다.\n\n```python\nfrom sklearn.metrics import precision_score, recall_score\npromo_prob = promo_lr.predict_proba(X_test)[:, 1]\npromo_pred_035 = (promo_prob >= 0.35).astype(int)\npromo_precision = precision_score(y_test, promo_pred_035, zero_division=0)\npromo_recall = recall_score(y_test, promo_pred_035, zero_division=0)\nprint(promo_precision, promo_recall)\n```\n\n**기준 결과:** 정밀도 0.508, 재현율 0.778 (0.5 기준 0.600, 0.429).\n\n**다른 풀이 (np.where):**\n\n```python\nimport numpy as np\nfrom sklearn.metrics import precision_score, recall_score\npromo_pred_035 = np.where(promo_lr.predict_proba(X_test)[:, 1] >= 0.35, 1, 0)\npromo_precision = precision_score(y_test, promo_pred_035)\npromo_recall = recall_score(y_test, promo_pred_035)\n```\n\n**자주 틀리는 부분:** 0.5 그대로 쓰는 것, 두 지표를 바꿔 저장하는 것.\n\n**채점 항목:**\n\n1. 임계값 0.35 예측\n2. 정밀도\n3. 재현율\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import precision_score, recall_score\npromo_prob = promo_lr.predict_proba(X_test)[:, 1]\npromo_pred_035 = (promo_prob >= 0.35).astype(int)\npromo_precision = precision_score(y_test, promo_pred_035, zero_division=0)\npromo_recall = recall_score(y_test, promo_pred_035, zero_division=0)\nprint(promo_precision, promo_recall)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

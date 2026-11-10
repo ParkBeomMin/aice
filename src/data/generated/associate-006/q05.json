@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-006",
+  "question_id": "q05",
+  "public_id": "associate-006-q05",
+  "revision": 1,
+  "title": "월별 대여 추이 시각화",
+  "topic": "visualization",
+  "difficulty": "medium",
+  "prompt": "월별 평균 대여량의 추이를 막대그래프로 확인하시오.\n\n1. `bike_df`의 `service_date`를 `'YYYY-MM'` 문자열(`dt.strftime('%Y-%m')`)로 묶어 월별 `rides_count` 평균을 월 오름차순 Series `monthly_demand`에 저장하시오.\n2. 11개 월 값을 막대그래프로 그려 그림(Figure)을 `monthly_demand_fig`에 저장하시오. 가로축 이름은 `month`, 세로축 이름은 `avg_rides`로 표시하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "bike_demand",
+      "url_path": "content/associate-006/datasets/bike_demand.csv",
+      "sha256": "8b6b2150909767f79155d692412f850f6d06f59110de572e8af097370836c537",
+      "size_bytes": 112825,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261206, SHA-256 8b6b21509097"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 월별 평균을 막대그래프로 시각화한다.\n\n**핵심 개념:** `dt.strftime('%Y-%m')`으로 월 문자열을 만들어 묶는다. 막대 높이는 월별 평균과 같아야 한다.\n\n```python\nimport matplotlib.pyplot as plt\nmonthly_demand = bike_df.groupby(bike_df['service_date'].dt.strftime('%Y-%m'))['rides_count'].mean().sort_index()\nmonthly_demand_fig, ax = plt.subplots(figsize=(8, 4))\nax.bar(monthly_demand.index, monthly_demand.to_numpy())\nax.set_xlabel('month')\nax.set_ylabel('avg_rides')\nplt.show()\n```\n\n**기준 결과:** 11개 월. 2월 약 252.7 이 가장 낮고 6월 약 776.6, 8월 약 769.2 가 높다.\n\n**다른 풀이 (Series.plot.bar):**\n\n```python\nimport matplotlib.pyplot as plt\nmonthly_demand = bike_df.groupby(bike_df['service_date'].dt.strftime('%Y-%m'))['rides_count'].mean().sort_index()\nmonthly_demand_fig, ax = plt.subplots()\nmonthly_demand.plot.bar(ax=ax)\nax.set_xlabel('month')\nax.set_ylabel('avg_rides')\n```\n\n**자주 틀리는 부분:** 합계를 쓰는 것, 막대 순서를 바꾸는 것.\n\n**채점 항목:**\n\n1. 월별 평균\n2. 월 오름차순\n3. 막대 높이가 월별 평균\n4. 가로축 이름\n5. 세로축 이름\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "import matplotlib.pyplot as plt\nmonthly_demand = bike_df.groupby(bike_df['service_date'].dt.strftime('%Y-%m'))['rides_count'].mean().sort_index()\nmonthly_demand_fig, ax = plt.subplots(figsize=(8, 4))\nax.bar(monthly_demand.index, monthly_demand.to_numpy())\nax.set_xlabel('month')\nax.set_ylabel('avg_rides')\nplt.show()\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

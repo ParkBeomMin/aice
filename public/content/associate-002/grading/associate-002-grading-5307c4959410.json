@@ -1,0 +1,1203 @@
+{
+  "schema_version": "1.8.0",
+  "pack_id": "associate-002",
+  "engine_version": "1.7.0",
+  "grading_version": "associate-002-gb4a9eaa273aa",
+  "questions": {
+    "q01": {
+      "question_id": "q01",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [],
+      "points": 1,
+      "checks": [
+        {
+          "id": "df-type",
+          "label": "df_raw 에 DataFrame 저장",
+          "probe": {
+            "kind": "var_type",
+            "var": "df_raw"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "DataFrame"
+          },
+          "weight": 1,
+          "feedback": "df_raw 에 DataFrame 을 저장하세요."
+        },
+        {
+          "id": "df-shape",
+          "label": "CSV 전체 행과 열 불러오기",
+          "probe": {
+            "kind": "df_shape",
+            "var": "df_raw"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              1500,
+              14
+            ]
+          },
+          "weight": 2,
+          "feedback": "불러온 행과 열 수가 warehouse_orders.csv 와 다릅니다."
+        },
+        {
+          "id": "id-kept",
+          "label": "order_id 일반 컬럼 보존",
+          "probe": {
+            "kind": "columns",
+            "var": "df_raw"
+          },
+          "expect": {
+            "op": "contains_all",
+            "value": [
+              "order_id"
+            ]
+          },
+          "weight": 1,
+          "feedback": "order_id 를 인덱스가 아니라 일반 컬럼으로 두세요."
+        }
+      ]
+    },
+    "q02": {
+      "question_id": "q02",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "row-count",
+          "label": "전체 행 수",
+          "probe": {
+            "kind": "value",
+            "var": "row_count"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 1500
+          },
+          "weight": 1,
+          "feedback": "row_count 가 전체 행 수와 다릅니다."
+        },
+        {
+          "id": "missing-distance",
+          "label": "이동거리 결측 개수",
+          "probe": {
+            "kind": "value",
+            "var": "missing_distance_count"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 100
+          },
+          "weight": 1,
+          "feedback": "missing_distance_count 가 walking_distance_m 결측 개수와 다릅니다 (count() 는 결측이 아닌 값의 개수)."
+        },
+        {
+          "id": "printed",
+          "label": "두 값 출력",
+          "probe": {
+            "kind": "output_numbers"
+          },
+          "expect": {
+            "op": "approx_contains",
+            "abs_tol": 0,
+            "rel_tol": 0,
+            "value": 100
+          },
+          "weight": 1,
+          "feedback": "row_count 와 missing_distance_count 를 출력하세요."
+        }
+      ]
+    },
+    "q03": {
+      "question_id": "q03",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "subset-shape",
+          "label": "조건에 맞는 행과 열 수",
+          "probe": {
+            "kind": "df_shape",
+            "var": "express_orders"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              48,
+              14
+            ]
+          },
+          "weight": 1,
+          "feedback": "express_orders 의 행과 열 수가 기대와 다릅니다 (두 조건 모두, 10 이상)."
+        },
+        {
+          "id": "subset-index",
+          "label": "선택된 주문 일치",
+          "probe": {
+            "kind": "series_index",
+            "var": "express_orders"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              "4",
+              "45",
+              "92",
+              "122",
+              "124",
+              "266",
+              "279",
+              "344",
+              "348",
+              "363",
+              "381",
+              "386",
+              "468",
+              "534",
+              "559",
+              "566",
+              "584",
+              "599",
+              "661",
+              "676",
+              "685",
+              "728",
+              "780",
+              "787",
+              "794",
+              "818",
+              "839",
+              "896",
+              "898",
+              "918",
+              "929",
+              "981",
+              "1102",
+              "1111",
+              "1125",
+              "1135",
+              "1144",
+              "1171",
+              "1176",
+              "1269",
+              "1274",
+              "1338",
+              "1340",
+              "1374",
+              "1390",
+              "1396",
+              "1401",
+              "1441"
+            ]
+          },
+          "weight": 2,
+          "feedback": "선택된 주문(인덱스)이 기대와 다릅니다. 기존 인덱스를 유지하세요."
+        }
+      ]
+    },
+    "q04": {
+      "question_id": "q04",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "medians",
+          "label": "구역별 중앙값",
+          "probe": {
+            "kind": "value",
+            "var": "zone_pick_median"
+          },
+          "expect": {
+            "op": "approx",
+            "abs_tol": 1e-09,
+            "rel_tol": 1e-09,
+            "value": {
+              "__series__": {
+                "index": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "values": [
+                  25.1,
+                  24.8,
+                  24.6,
+                  25.3
+                ]
+              }
+            }
+          },
+          "weight": 2,
+          "feedback": "zone_pick_median 의 구역별 중앙값이 기대와 다릅니다."
+        },
+        {
+          "id": "sorted",
+          "label": "구역 이름 오름차순",
+          "probe": {
+            "kind": "series_index",
+            "var": "zone_pick_median"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ]
+          },
+          "weight": 1,
+          "feedback": "인덱스를 구역 이름 오름차순으로 정렬하세요."
+        }
+      ]
+    },
+    "q05": {
+      "question_id": "q05",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "corr",
+          "label": "Pearson 상관계수",
+          "probe": {
+            "kind": "value",
+            "var": "items_time_corr"
+          },
+          "expect": {
+            "op": "approx",
+            "abs_tol": 5e-05,
+            "rel_tol": 0,
+            "value": 0.5583451069596839
+          },
+          "weight": 1,
+          "feedback": "items_time_corr 가 items_count 와 pick_minutes 의 상관계수와 다릅니다."
+        }
+      ]
+    },
+    "q06": {
+      "question_id": "q06",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "ratio",
+          "label": "items_per_sku 값",
+          "probe": {
+            "kind": "column_stat",
+            "var": "df_feat",
+            "column": "items_per_sku",
+            "stat": "sum"
+          },
+          "expect": {
+            "op": "approx",
+            "value": 3241.6190476190477
+          },
+          "weight": 2,
+          "feedback": "items_per_sku 는 items_count / sku_diversity 입니다."
+        },
+        {
+          "id": "missing-flag",
+          "label": "distance_missing 0/1 값",
+          "probe": {
+            "kind": "column_stat",
+            "var": "df_feat",
+            "column": "distance_missing",
+            "stat": "sum"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 100
+          },
+          "weight": 2,
+          "feedback": "distance_missing 은 walking_distance_m 이 결측이면 1, 아니면 0 입니다."
+        },
+        {
+          "id": "raw-kept",
+          "label": "원본 df_raw 그대로",
+          "probe": {
+            "kind": "frame_unchanged",
+            "var": "df_raw",
+            "source": "df_raw"
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "same_rows": true,
+              "same_columns": true,
+              "changed_columns": []
+            }
+          },
+          "weight": 1,
+          "feedback": "원본 df_raw 가 바뀌었습니다. copy() 한 df_feat 에서만 처리하세요."
+        },
+        {
+          "id": "others-kept",
+          "label": "기존 컬럼과 행 보존",
+          "probe": {
+            "kind": "frame_unchanged",
+            "var": "df_feat",
+            "source": "df_raw"
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "same_rows": true,
+              "same_columns": false,
+              "changed_columns": []
+            }
+          },
+          "weight": 1,
+          "feedback": "df_feat 의 기존 컬럼 값이나 행이 바뀌었습니다. 새 컬럼만 추가하세요."
+        }
+      ]
+    },
+    "q07": {
+      "question_id": "q07",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q06"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "upper",
+          "label": "IQR 상한",
+          "probe": {
+            "kind": "value",
+            "var": "distance_upper_bound"
+          },
+          "expect": {
+            "op": "approx",
+            "value": 1430.4499999999998
+          },
+          "weight": 2,
+          "feedback": "distance_upper_bound 가 Q3 + 1.5 * (Q3 - Q1) 과 다릅니다."
+        },
+        {
+          "id": "count",
+          "label": "상한 초과 행 수",
+          "probe": {
+            "kind": "value",
+            "var": "distance_outlier_count"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 28
+          },
+          "weight": 1,
+          "feedback": "distance_outlier_count 가 상한을 초과하는 행 수와 다릅니다."
+        },
+        {
+          "id": "unchanged",
+          "label": "데이터를 바꾸지 않음",
+          "probe": {
+            "kind": "frame_unchanged",
+            "var": "df_feat",
+            "source": "df_feat"
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "same_rows": true,
+              "same_columns": true,
+              "changed_columns": []
+            }
+          },
+          "weight": 1,
+          "feedback": "이 문항에서는 df_feat 을 삭제하거나 값을 바꾸지 마세요."
+        }
+      ]
+    },
+    "q08": {
+      "question_id": "q08",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q07"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "split",
+          "label": "지정한 분할 그대로",
+          "probe": {
+            "kind": "split_reproduced",
+            "frame": "df_feat",
+            "drop": [
+              "order_id",
+              "pick_minutes"
+            ],
+            "target": "pick_minutes",
+            "test_size": 0.2,
+            "random_state": 42,
+            "outputs": {
+              "X_train": "X_train_raw",
+              "X_test": "X_test_raw",
+              "y_train": "y_train",
+              "y_test": "y_test"
+            }
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "X_train": true,
+              "X_test": true,
+              "y_train": true,
+              "y_test": true
+            }
+          },
+          "weight": 2,
+          "feedback": "X_train_raw, X_test_raw, y_train, y_test 가 df_feat 를 지정한 설정(test_size=0.2, random_state=42)으로 나눈 결과와 다릅니다. order_id, pick_minutes 를 뺀 X 를 쓰고, 분할 결과는 바꾸지 말고 복사본에서 처리하세요."
+        },
+        {
+          "id": "feat-kept",
+          "label": "df_feat 는 그대로",
+          "probe": {
+            "kind": "frame_unchanged",
+            "var": "df_feat",
+            "source": "df_feat"
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "same_rows": true,
+              "same_columns": true,
+              "changed_columns": []
+            }
+          },
+          "weight": 1,
+          "feedback": "이 문항에서는 df_feat 을 바꾸지 마세요."
+        },
+        {
+          "id": "train-median",
+          "label": "훈련 데이터 중앙값",
+          "probe": {
+            "kind": "value",
+            "var": "distance_median_train"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "column_stat",
+              "var": "X_train_raw",
+              "column": "walking_distance_m",
+              "stat": "median"
+            }
+          },
+          "weight": 1,
+          "feedback": "distance_median_train 은 X_train_raw 의 walking_distance_m 중앙값입니다."
+        },
+        {
+          "id": "fill-train",
+          "label": "훈련 데이터 결측 대체",
+          "probe": {
+            "kind": "imputed_against",
+            "var": "X_train_encoded",
+            "raw": "X_train_raw",
+            "stat_var": "X_train_raw",
+            "column": "walking_distance_m",
+            "stat": "median"
+          },
+          "expect": {
+            "op": "approx",
+            "value": {
+              "filled_dev": 0,
+              "kept_dev": 0,
+              "same_rows": true
+            },
+            "abs_tol": 1e-09,
+            "rel_tol": 0
+          },
+          "weight": 1,
+          "feedback": "X_train_encoded 의 이동거리 결측을 훈련 중앙값으로 채우고 나머지 값은 그대로 두세요."
+        },
+        {
+          "id": "fill-test",
+          "label": "평가 데이터도 훈련 중앙값으로",
+          "probe": {
+            "kind": "imputed_against",
+            "var": "X_test_encoded",
+            "raw": "X_test_raw",
+            "stat_var": "X_train_raw",
+            "column": "walking_distance_m",
+            "stat": "median"
+          },
+          "expect": {
+            "op": "approx",
+            "value": {
+              "filled_dev": 0,
+              "kept_dev": 0,
+              "same_rows": true
+            },
+            "abs_tol": 1e-09,
+            "rel_tol": 0
+          },
+          "weight": 2,
+          "feedback": "평가 데이터의 결측도 훈련 데이터 중앙값으로 채우세요 (평가 데이터나 전체 데이터의 중앙값은 누설)."
+        },
+        {
+          "id": "columns",
+          "label": "원-핫 컬럼 구성",
+          "probe": {
+            "kind": "columns",
+            "var": "X_train_encoded"
+          },
+          "expect": {
+            "op": "set_eq",
+            "value": [
+              "items_count",
+              "sku_diversity",
+              "walking_distance_m",
+              "shelf_levels",
+              "picker_experience_months",
+              "congestion_index",
+              "packing_items",
+              "scanner_errors",
+              "items_per_sku",
+              "distance_missing",
+              "warehouse_zone_A",
+              "warehouse_zone_B",
+              "warehouse_zone_C",
+              "warehouse_zone_D",
+              "shift_Afternoon",
+              "shift_Morning",
+              "shift_Night",
+              "item_category_Beauty",
+              "item_category_Electronics",
+              "item_category_Grocery",
+              "item_category_Home",
+              "priority_Express",
+              "priority_Standard"
+            ]
+          },
+          "weight": 1,
+          "feedback": "X_train_encoded 의 컬럼 구성이 기대와 다릅니다 (범주형 4개 원-핫)."
+        },
+        {
+          "id": "aligned",
+          "label": "평가 컬럼을 훈련과 같은 순서로",
+          "probe": {
+            "kind": "columns",
+            "var": "X_test_encoded"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "columns",
+              "var": "X_train_encoded"
+            }
+          },
+          "weight": 1,
+          "feedback": "X_test_encoded 의 컬럼 구성과 순서를 X_train_encoded 와 같게 맞추세요."
+        },
+        {
+          "id": "numeric",
+          "label": "모든 컬럼 수치형",
+          "probe": {
+            "kind": "non_numeric_columns",
+            "var": "X_train_encoded"
+          },
+          "expect": {
+            "op": "eq",
+            "value": []
+          },
+          "weight": 1,
+          "feedback": "숫자가 아닌 컬럼이 남아 있습니다."
+        }
+      ]
+    },
+    "q09": {
+      "question_id": "q09",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q08"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "fit-train",
+          "label": "훈련 데이터로만 fit",
+          "probe": {
+            "kind": "attr_number",
+            "var": "scaler",
+            "attr": "n_samples_seen_"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "length",
+              "var": "X_train_encoded"
+            }
+          },
+          "weight": 2,
+          "feedback": "scaler 를 훈련 데이터(X_train_encoded)로만 fit 하세요."
+        },
+        {
+          "id": "num-only",
+          "label": "수치형 9개만 표준화",
+          "probe": {
+            "kind": "attr_number",
+            "var": "scaler",
+            "attr": "n_features_in_"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 9
+          },
+          "weight": 1,
+          "feedback": "지정한 수치형 9개 컬럼만 표준화하세요."
+        },
+        {
+          "id": "train-scaled",
+          "label": "훈련 데이터 변환",
+          "probe": {
+            "kind": "column_stat",
+            "var": "X_train_scaled",
+            "column": "items_count",
+            "stat": "std"
+          },
+          "expect": {
+            "op": "approx",
+            "value": 1.0004169272643102
+          },
+          "weight": 1,
+          "feedback": "X_train_scaled 의 수치형 컬럼이 표준화되지 않았습니다."
+        },
+        {
+          "id": "test-transform",
+          "label": "평가 데이터는 transform 만",
+          "probe": {
+            "kind": "column_stat",
+            "var": "X_test_scaled",
+            "column": "items_count",
+            "stat": "mean"
+          },
+          "expect": {
+            "op": "approx",
+            "value": 0.001019521615872733
+          },
+          "weight": 2,
+          "feedback": "X_test_scaled 가 훈련 기준으로 변환되지 않았습니다 (평가 데이터에 fit 금지)."
+        },
+        {
+          "id": "flags-kept",
+          "label": "0/1 컬럼 유지",
+          "probe": {
+            "kind": "column_stat",
+            "var": "X_train_scaled",
+            "column": "distance_missing",
+            "stat": "sum"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "column_stat",
+              "var": "X_train_encoded",
+              "column": "distance_missing",
+              "stat": "sum"
+            }
+          },
+          "weight": 1,
+          "feedback": "distance_missing 과 원-핫 컬럼은 0/1 그대로 두세요."
+        },
+        {
+          "id": "onehot-kept",
+          "label": "원-핫 유지",
+          "probe": {
+            "kind": "column_stat",
+            "var": "X_test_scaled",
+            "column": "shift_Night",
+            "stat": "sum"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "column_stat",
+              "var": "X_test_encoded",
+              "column": "shift_Night",
+              "stat": "sum"
+            }
+          },
+          "weight": 1,
+          "feedback": "원-핫 컬럼은 표준화하지 마세요."
+        }
+      ]
+    },
+    "q10": {
+      "question_id": "q10",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q09"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "class",
+          "label": "LinearRegression",
+          "probe": {
+            "kind": "class_name",
+            "var": "linear_model"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "LinearRegression"
+          },
+          "weight": 1,
+          "feedback": "linear_model 은 LinearRegression 이어야 합니다."
+        },
+        {
+          "id": "fitted",
+          "label": "학습됨",
+          "probe": {
+            "kind": "is_fitted",
+            "var": "linear_model"
+          },
+          "expect": {
+            "op": "eq",
+            "value": true
+          },
+          "weight": 1,
+          "feedback": "linear_model 을 fit 하세요."
+        },
+        {
+          "id": "trained-on",
+          "label": "표준화 훈련 데이터로 학습",
+          "probe": {
+            "kind": "predictions",
+            "model": "linear_model",
+            "X": "X_test_scaled"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "refit_predictions",
+              "model_class": "LinearRegression",
+              "params": {},
+              "X_train": "X_train_scaled",
+              "y_train": "y_train",
+              "X_eval": "X_test_scaled"
+            }
+          },
+          "weight": 2,
+          "feedback": "X_train_scaled, y_train 으로 학습한 모델의 예측과 다릅니다."
+        }
+      ]
+    },
+    "q11": {
+      "question_id": "q11",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q09"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "class",
+          "label": "RandomForestRegressor",
+          "probe": {
+            "kind": "class_name",
+            "var": "forest_model"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "RandomForestRegressor"
+          },
+          "weight": 1,
+          "feedback": "forest_model 은 RandomForestRegressor 여야 합니다."
+        },
+        {
+          "id": "params",
+          "label": "지정 하이퍼파라미터",
+          "probe": {
+            "kind": "model_params",
+            "var": "forest_model",
+            "keys": [
+              "n_estimators",
+              "max_depth",
+              "random_state"
+            ]
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "n_estimators": 80,
+              "max_depth": 9,
+              "random_state": 42
+            }
+          },
+          "weight": 1,
+          "feedback": "RandomForestRegressor(n_estimators=80, max_depth=9, random_state=42, n_jobs=1) 로 만드세요."
+        },
+        {
+          "id": "trained-on",
+          "label": "훈련 데이터로 학습",
+          "probe": {
+            "kind": "predictions",
+            "model": "forest_model",
+            "X": "X_test_encoded"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "refit_predictions",
+              "model_class": "RandomForestRegressor",
+              "params": {
+                "n_estimators": 80,
+                "max_depth": 9,
+                "random_state": 42,
+                "n_jobs": 1
+              },
+              "X_train": "X_train_encoded",
+              "y_train": "y_train",
+              "X_eval": "X_test_encoded"
+            }
+          },
+          "weight": 2,
+          "feedback": "X_train_encoded, y_train 과 지정한 설정으로 학습한 모델의 예측과 다릅니다."
+        }
+      ]
+    },
+    "q12": {
+      "question_id": "q12",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q10"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "pred",
+          "label": "평가 데이터 예측",
+          "probe": {
+            "kind": "value",
+            "var": "linear_pred"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "predictions",
+              "model": "linear_model",
+              "X": "X_test_scaled"
+            }
+          },
+          "weight": 1,
+          "feedback": "linear_pred 가 linear_model 로 X_test_scaled 를 예측한 결과와 다릅니다."
+        },
+        {
+          "id": "mae",
+          "label": "MAE",
+          "probe": {
+            "kind": "value",
+            "var": "linear_mae"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "mae",
+              "model": "linear_model",
+              "X": "X_test_scaled",
+              "y": "y_test"
+            }
+          },
+          "weight": 1,
+          "feedback": "linear_mae 가 실제 평균절대오차와 다릅니다."
+        },
+        {
+          "id": "rmse",
+          "label": "RMSE",
+          "probe": {
+            "kind": "value",
+            "var": "linear_rmse"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "rmse",
+              "model": "linear_model",
+              "X": "X_test_scaled",
+              "y": "y_test"
+            }
+          },
+          "weight": 1,
+          "feedback": "linear_rmse 는 평균제곱오차(MSE)의 제곱근입니다."
+        },
+        {
+          "id": "r2",
+          "label": "R2",
+          "probe": {
+            "kind": "value",
+            "var": "linear_r2"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "r2",
+              "model": "linear_model",
+              "X": "X_test_scaled",
+              "y": "y_test"
+            }
+          },
+          "weight": 1,
+          "feedback": "linear_r2 가 실제 결정계수와 다릅니다 (r2_score(y_test, 예측) 순서 확인)."
+        }
+      ]
+    },
+    "q13": {
+      "question_id": "q13",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q11",
+        "q12"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "pred",
+          "label": "랜덤포레스트 예측",
+          "probe": {
+            "kind": "value",
+            "var": "forest_pred"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "predictions",
+              "model": "forest_model",
+              "X": "X_test_encoded"
+            }
+          },
+          "weight": 1,
+          "feedback": "forest_pred 가 forest_model 로 X_test_encoded 를 예측한 결과와 다릅니다."
+        },
+        {
+          "id": "mae",
+          "label": "랜덤포레스트 MAE",
+          "probe": {
+            "kind": "value",
+            "var": "forest_mae"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "mae",
+              "model": "forest_model",
+              "X": "X_test_encoded",
+              "y": "y_test"
+            }
+          },
+          "weight": 1,
+          "feedback": "forest_mae 가 실제 평균절대오차와 다릅니다."
+        },
+        {
+          "id": "rmse",
+          "label": "랜덤포레스트 RMSE",
+          "probe": {
+            "kind": "value",
+            "var": "forest_rmse"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "rmse",
+              "model": "forest_model",
+              "X": "X_test_encoded",
+              "y": "y_test"
+            }
+          },
+          "weight": 1,
+          "feedback": "forest_rmse 가 실제 RMSE 와 다릅니다."
+        },
+        {
+          "id": "best",
+          "label": "RMSE 가 작은 모델 선택",
+          "probe": {
+            "kind": "value",
+            "var": "best_model_name"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "best_model",
+              "metric": "rmse",
+              "y": "y_test",
+              "tie": "linear",
+              "candidates": [
+                {
+                  "name": "linear",
+                  "model": "linear_model",
+                  "X": "X_test_scaled"
+                },
+                {
+                  "name": "forest",
+                  "model": "forest_model",
+                  "X": "X_test_encoded"
+                }
+              ]
+            }
+          },
+          "weight": 1,
+          "feedback": "best_model_name 은 두 모델 중 RMSE 가 더 작은 쪽(같으면 linear)입니다."
+        }
+      ]
+    },
+    "q14": {
+      "question_id": "q14",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q13"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "chosen",
+          "label": "선택한 모델의 예측",
+          "probe": {
+            "kind": "value",
+            "var": "chosen_pred"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "selected_predictions",
+              "metric": "rmse",
+              "y": "y_test",
+              "tie": "linear",
+              "candidates": [
+                {
+                  "name": "linear",
+                  "model": "linear_model",
+                  "X": "X_test_scaled"
+                },
+                {
+                  "name": "forest",
+                  "model": "forest_model",
+                  "X": "X_test_encoded"
+                }
+              ]
+            }
+          },
+          "weight": 1,
+          "feedback": "chosen_pred 는 best_model_name 에 해당하는 모델과 그 평가 데이터로 예측한 값입니다."
+        },
+        {
+          "id": "shift-mae",
+          "label": "근무조별 MAE",
+          "probe": {
+            "kind": "value",
+            "var": "shift_mae"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "group_metric",
+              "candidates": [
+                {
+                  "name": "linear",
+                  "model": "linear_model",
+                  "X": "X_test_scaled"
+                },
+                {
+                  "name": "forest",
+                  "model": "forest_model",
+                  "X": "X_test_encoded"
+                }
+              ],
+              "select_metric": "rmse",
+              "tie": "linear",
+              "y": "y_test",
+              "frame": "X_test_raw",
+              "column": "shift",
+              "metric": "mae"
+            }
+          },
+          "weight": 2,
+          "feedback": "shift_mae 가 근무조별 평균절대오차(이름 오름차순)와 다릅니다. y_test 와 예측의 순서(인덱스)를 맞추세요."
+        },
+        {
+          "id": "worst",
+          "label": "MAE 가 가장 큰 근무조",
+          "probe": {
+            "kind": "value",
+            "var": "worst_shift"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "group_metric",
+              "candidates": [
+                {
+                  "name": "linear",
+                  "model": "linear_model",
+                  "X": "X_test_scaled"
+                },
+                {
+                  "name": "forest",
+                  "model": "forest_model",
+                  "X": "X_test_encoded"
+                }
+              ],
+              "select_metric": "rmse",
+              "tie": "linear",
+              "y": "y_test",
+              "frame": "X_test_raw",
+              "column": "shift",
+              "metric": "mae",
+              "reduce": "argmax"
+            }
+          },
+          "weight": 1,
+          "feedback": "worst_shift 는 shift_mae 가 가장 큰 근무조 이름입니다."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-004",
+  "question_id": "q05",
+  "public_id": "associate-004-q05",
+  "revision": 2,
+  "title": "온도와 사용량 산점도",
+  "topic": "visualization",
+  "difficulty": "easy",
+  "prompt": "실외 온도와 전력 사용량의 관계를 산점도로 확인하시오.\n\n1. `energy_df`의 전체 관측으로 가로축 `outdoor_temp_c`, 세로축 `energy_kwh`인 산점도를 그리시오.\n2. 그림(Figure)을 `temp_scatter_fig`에 저장하시오. 예: `temp_scatter_fig, ax = plt.subplots()`\n3. 가로축 이름은 `outdoor_temp_c (°C)`, 세로축 이름은 `energy_kwh (kWh)`로 표시하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "building_energy",
+      "url_path": "content/associate-004/datasets/building_energy.csv",
+      "sha256": "1c3c7b0811527ca4fbc07c17ae33b7da35c8899d93156bcfa4573b0c3914d898",
+      "size_bytes": 108748,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261204, SHA-256 1c3c7b081152"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 온도와 kWh의 1,650개 점을 산점도로 나타낸다.\n\n**핵심 개념:** `ax.scatter(x, y)`에서 첫 인자가 가로축이다. Figure를 변수에 저장하고 축 이름을 지정한다.\n\n```python\nimport matplotlib.pyplot as plt\ntemp_scatter_fig, ax = plt.subplots(figsize=(6, 4))\nax.scatter(energy_df['outdoor_temp_c'], energy_df['energy_kwh'], s=8, alpha=0.5)\nax.set_xlabel('outdoor_temp_c (°C)')\nax.set_ylabel('energy_kwh (kWh)')\nplt.show()\n```\n\n**기준 결과:** 점 1,650개. 21도 근처에서 사용량이 낮고 멀어질수록 높아지는 V자 경향이 약하게 보인다.\n\n**다른 풀이 (plt.scatter 와 gcf):**\n\n```python\nimport matplotlib.pyplot as plt\nplt.figure()\nplt.scatter(energy_df['outdoor_temp_c'], energy_df['energy_kwh'])\nplt.xlabel('outdoor_temp_c (°C)')\nplt.ylabel('energy_kwh (kWh)')\ntemp_scatter_fig = plt.gcf()\n```\n\n**자주 틀리는 부분:** 축 뒤바꾸기, 빈 Figure, 누락 관측, 일부 관측만 그리는 것, 축 이름 누락.\n\n**채점 항목:**\n\n1. 전체 관측 산점도\n2. 가로축은 실외 온도\n3. 세로축은 전력 사용량\n4. 점마다 같은 관측의 (온도, 사용량)\n5. 가로축 이름\n6. 세로축 이름\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "import matplotlib.pyplot as plt\ntemp_scatter_fig, ax = plt.subplots(figsize=(6, 4))\nax.scatter(energy_df['outdoor_temp_c'], energy_df['energy_kwh'], s=8, alpha=0.5)\nax.set_xlabel('outdoor_temp_c (°C)')\nax.set_ylabel('energy_kwh (kWh)')\nplt.show()\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

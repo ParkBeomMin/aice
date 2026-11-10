@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.3.0",
+  "pack_id": "associate-007",
+  "title": "AICE Associate 실전 연습 모의고사 7회차: 제조 공정 품질 불량 예측",
+  "summary": "가상의 제조 공장 생산 배치 2,100건으로 데이터 탐색, 그룹 비교 시각화, 결측과 이상값 처리, ColumnTransformer 전처리, 분류 모델 평가, 폴드별 전처리를 지키는 교차 검증, 임계값과 놓친 불량 수 비교까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+  "mode": "production",
+  "mock": false,
+  "time_limit_minutes": 90,
+  "question_count": 14,
+  "questions": [
+    {
+      "question_id": "q01",
+      "public_id": "associate-007-q01",
+      "revision": 1,
+      "title": "제조 배치 파일 읽기",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q01.json",
+      "sha256": "bb1bec351d1e54a313441b394fef082592bfc957b669188334e23f4e4785efb3"
+    },
+    {
+      "question_id": "q02",
+      "public_id": "associate-007-q02",
+      "revision": 1,
+      "title": "불량률 계산",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q02.json",
+      "sha256": "9efd8b854447647463fe42013c53b0b7679733b436938cffe56d83839041cb38"
+    },
+    {
+      "question_id": "q03",
+      "public_id": "associate-007-q03",
+      "revision": 1,
+      "title": "압력 결측률 계산",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q03.json",
+      "sha256": "afe0e0390ed9dca8eebcea40a6117a8f2b78d40bd00d028bb14741f4c7fd31c8"
+    },
+    {
+      "question_id": "q04",
+      "public_id": "associate-007-q04",
+      "revision": 1,
+      "title": "라인별 불량률",
+      "topic": "pandas",
+      "difficulty": "medium",
+      "file": "q04.json",
+      "sha256": "b25dcf0e0d8f75abdc0dd61c368d5f56d72e4de3aba61ba3a93d4464aea28d90"
+    },
+    {
+      "question_id": "q05",
+      "public_id": "associate-007-q05",
+      "revision": 1,
+      "title": "불량 여부별 진동 비교",
+      "topic": "visualization",
+      "difficulty": "medium",
+      "file": "q05.json",
+      "sha256": "e696f39f8418e07be27f9ab870bf5a2589ef7daba49dbd41890abf5acb226bef"
+    },
+    {
+      "question_id": "q06",
+      "public_id": "associate-007-q06",
+      "revision": 1,
+      "title": "탐색용 결측 대체",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q06.json",
+      "sha256": "17acaaf92104c183cd65afd2f9199aa2e5e4a7b81842c89619ac459bcc73ac63"
+    },
+    {
+      "question_id": "q07",
+      "public_id": "associate-007-q07",
+      "revision": 1,
+      "title": "온도 이상값 표시",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q07.json",
+      "sha256": "e7a9f0f082f16a3cb9fdcd7e78b04251c46abc784cfc096c3862929e8d9dea3d"
+    },
+    {
+      "question_id": "q08",
+      "public_id": "associate-007-q08",
+      "revision": 1,
+      "title": "탐색용 범주형 인코딩",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q08.json",
+      "sha256": "b9ab761867693df380f042fe82c45eba3dab337083070a63e41b615f7fd493fd"
+    },
+    {
+      "question_id": "q09",
+      "public_id": "associate-007-q09",
+      "revision": 1,
+      "title": "층화 분할과 ColumnTransformer 전처리",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q09.json",
+      "sha256": "3ab8a8e27ac386c8440a806029e4cc70874fb3facf2b808e13cd2d6ea9a045f9"
+    },
+    {
+      "question_id": "q10",
+      "public_id": "associate-007-q10",
+      "revision": 1,
+      "title": "로지스틱 회귀 분류",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q10.json",
+      "sha256": "d6ecd5d3a6e5fc87834c845e522a82927f0842b38c3c9b38e0cfd993aff10eeb"
+    },
+    {
+      "question_id": "q11",
+      "public_id": "associate-007-q11",
+      "revision": 1,
+      "title": "랜덤포레스트 분류",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q11.json",
+      "sha256": "a2f6a1cbc497266fe49ced8d383d1e82e884ff0f6e394d37e16ed0147713adc1"
+    },
+    {
+      "question_id": "q12",
+      "public_id": "associate-007-q12",
+      "revision": 1,
+      "title": "재현율과 F1",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q12.json",
+      "sha256": "5e24d8bb41784fcaaa662b073795f3b43c63c970fe47053042066a112669910c"
+    },
+    {
+      "question_id": "q13",
+      "public_id": "associate-007-q13",
+      "revision": 1,
+      "title": "5폴드 층화 교차 검증",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q13.json",
+      "sha256": "8cbddb0be2d36ab9a1d803a3aaf85e4f79c8c07880c2af42992df57ea6e37990"
+    },
+    {
+      "question_id": "q14",
+      "public_id": "associate-007-q14",
+      "revision": 1,
+      "title": "임계값과 놓친 불량 수",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q14.json",
+      "sha256": "62d95823c554fcbdcb0386e92b507ef5e2ed4d4eaeece16d7b3c4bd2bb087829"
+    }
+  ],
+  "scenario_md": "가상의 제조 공장 MakeWorks는 생산 배치가 24시간 안에 품질 불량 판정을 받을지 미리 예측해 추가 검사를 배정하려고 합니다. 불량을 놓치는 일을 줄이는 것이 중요합니다.\n\n여러분은 품질 데이터 분석가로서 생산 시작 전에 측정한 배치 정보를 탐색하고, 누설 없는 전처리로 불량 분류 모델을 만들고 교차 검증과 임계값 변경으로 평가해야 합니다.\n\n- 분석 목표: 배치별 24시간 내 불량 여부(`defect_24h`) 분류\n- 데이터: `production_batches.csv` (생산 배치 2,100건, 14개 컬럼)\n- 진행 순서: 데이터 탐색(1~5번) → 탐색용 전처리(6~8번) → 모델용 분할과 전처리(9번) → 모델 학습과 평가(10~14번)\n\n> 입력 컬럼은 모두 생산 시작 전에 알 수 있는 값입니다. `reject_count_prev_hour`는 직전 한 시간의 불량 건수, `precheck_score`는 생산 전 점검 점수입니다. 6~8번은 전체 데이터 탐색 연습이며, 9번과 13번은 원본에서 훈련 데이터(또는 각 폴드의 훈련 부분) 기준으로만 전처리합니다.",
+  "datasets": [
+    {
+      "dataset_id": "production_batches",
+      "url_path": "content/associate-007/datasets/production_batches.csv",
+      "sha256": "3a1486511c970411a450b5b11f40a333be71c2f6fe275cc6f59151ec9ba42ee7",
+      "size_bytes": 119702,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261207, SHA-256 3a1486511c97",
+      "columns": [
+        {
+          "name": "batch_id",
+          "type": "문자열",
+          "description": "배치 고유 번호 (PB00001~PB02100). 식별용이라 모델 입력에는 쓰지 않습니다."
+        },
+        {
+          "name": "plant",
+          "type": "문자열",
+          "description": "공장: P1, P2, P3"
+        },
+        {
+          "name": "line_id",
+          "type": "문자열",
+          "description": "생산 라인: L1, L2, L3, L4"
+        },
+        {
+          "name": "material_grade",
+          "type": "문자열",
+          "description": "원자재 등급: A, B, C"
+        },
+        {
+          "name": "operator_shift",
+          "type": "문자열",
+          "description": "작업 근무조: Day(주간), Evening(저녁), Night(야간)"
+        },
+        {
+          "name": "machine_age_months",
+          "type": "정수",
+          "description": "설비 사용 기간 (개월)"
+        },
+        {
+          "name": "temperature_c",
+          "type": "실수",
+          "description": "생산 시작 전 설비 온도 (도씨). 일부 매우 높은 값"
+        },
+        {
+          "name": "vibration_mm_s",
+          "type": "실수",
+          "description": "생산 시작 전 진동 (mm/s). 일부 결측"
+        },
+        {
+          "name": "pressure_bar",
+          "type": "실수",
+          "description": "생산 시작 전 압력 (bar). 일부 결측"
+        },
+        {
+          "name": "cycle_seconds",
+          "type": "실수",
+          "description": "설정 사이클 시간 (초)"
+        },
+        {
+          "name": "reject_count_prev_hour",
+          "type": "정수",
+          "description": "직전 한 시간의 불량 건수 (건)"
+        },
+        {
+          "name": "calibration_days_ago",
+          "type": "정수",
+          "description": "마지막 보정 이후 지난 일수 (일)"
+        },
+        {
+          "name": "precheck_score",
+          "type": "실수",
+          "description": "생산 전 점검 점수 (0~100)"
+        },
+        {
+          "name": "defect_24h",
+          "type": "정수",
+          "description": "생산 후 24시간 내 불량 판정 (1: 불량, 0: 정상). 예측 대상"
+        }
+      ]
+    }
+  ],
+  "generator": {
+    "name": "acf content build",
+    "version": "0.1.0",
+    "content_contract": "1.3.0"
+  },
+  "source_fingerprint": "533a14ec7e95c5491c2c4f4694f2929089578d831a4b4bbc5327c6a77c214c1b",
+  "notebook": {
+    "kind": "question_notebook",
+    "format": "nbformat4.5",
+    "url_path": "content/associate-007/notebooks/associate-007-questions-52b922c34a2b.ipynb",
+    "sha256": "52b922c34a2b819c128f885e9d04658758263bad0d90af319fff77be80711238",
+    "size_bytes": 14410,
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  },
+  "grading": {
+    "kind": "grading_bundle",
+    "url_path": "content/associate-007/grading/associate-007-grading-22c9090305d8.json",
+    "sha256": "22c9090305d84c55eef53602952a619a08e8deaf59e6d4be534b293d729dff74",
+    "size_bytes": 125595,
+    "engine_version": "1.7.0",
+    "grading_version": "associate-007-gcb6d2088b3f0",
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  }
+}

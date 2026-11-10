@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-007",
+  "question_id": "q08",
+  "public_id": "associate-007-q08",
+  "revision": 1,
+  "title": "탐색용 범주형 인코딩",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "탐색용 데이터의 범주형 컬럼을 원-핫 인코딩하시오.\n\n1. `batch_clean`을 복사한 뒤 `plant`, `line_id`, `material_grade`, `operator_shift`를 `pd.get_dummies(..., dtype=int)`로 인코딩해 `batch_encoded`에 저장하시오.\n2. `batch_id`, `defect_24h`와 다른 수치 컬럼은 그대로 두시오.\n\n> 이 결과는 탐색용이며 모델 학습에 쓰지 않습니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "production_batches",
+      "url_path": "content/associate-007/datasets/production_batches.csv",
+      "sha256": "3a1486511c970411a450b5b11f40a333be71c2f6fe275cc6f59151ec9ba42ee7",
+      "size_bytes": 119702,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261207, SHA-256 3a1486511c97"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 범주형 컬럼을 원-핫 인코딩한다.\n\n**핵심 개념:** 탐색용이라 batch_clean 의 복사본을 인코딩한다.\n\n```python\nbatch_encoded = pd.get_dummies(batch_clean.copy(), columns=['plant', 'line_id', 'material_grade', 'operator_shift'], dtype=int)\nbatch_encoded.shape\n```\n\n**기준 결과:** 2,100행, 23열.\n\n**다른 풀이 (copy 후 인코딩):**\n\n```python\ntmp = batch_clean.copy()\nbatch_encoded = pd.get_dummies(tmp, columns=['plant', 'line_id', 'material_grade', 'operator_shift'], dtype=int)\n```\n\n**자주 틀리는 부분:** 범주 일부만 인코딩, batch_clean 변경.\n\n**채점 항목:**\n\n1. 네 컬럼 원-핫 값\n2. ID 와 타깃 유지\n3. batch_clean 은 그대로\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "batch_encoded = pd.get_dummies(batch_clean.copy(), columns=['plant', 'line_id', 'material_grade', 'operator_shift'], dtype=int)\nbatch_encoded.shape\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-003",
+  "question_id": "q09",
+  "public_id": "associate-003-q09",
+  "revision": 1,
+  "title": "계층 분할과 누설 없는 전처리",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "원본 `auth_df`에서 다시 시작해 훈련 데이터 기준으로 모델 입력을 만드시오.\n\n1. `auth_id`, `suspicious_login`을 뺀 컬럼을 `X`, `suspicious_login`을 `y`로 정하시오.\n2. `train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)`로 `X_train_raw`, `X_test_raw`, `y_train`, `y_test`를 만드시오.\n3. 훈련 데이터(`X_train_raw`)의 `ip_risk_score`, `distance_from_usual_km` 중앙값으로 훈련 데이터와 평가 데이터의 결측을 각각 채우시오. `X_train_raw`, `X_test_raw`는 바꾸지 말고 복사본에서 처리하시오.\n4. `device_family`, `region_group`을 `pd.get_dummies(..., dtype=int)`로 인코딩해 `X_train_encoded`, `X_test_encoded`에 저장하고, 평가 데이터의 컬럼 구성과 순서를 훈련 데이터와 같게 맞추시오 (빠진 컬럼은 0).\n5. 수치형 7개(`login_hour`, `failed_attempts_24h`, `ip_risk_score`, `distance_from_usual_km`, `account_age_days`, `past_lockouts`, `days_since_last_login`)만 `StandardScaler`로 표준화하시오. 스케일러는 `scaler`에 저장하고 훈련 데이터로만 fit 하시오.\n6. 표준화 결과를 `X_train_scaled`, `X_test_scaled`에 저장하시오. 0/1 컬럼(`new_device_flag`, `mfa_used`, `is_weekend`, 원-핫 컬럼)은 그대로 두시오.\n\n> 6번에서 만든 `auth_clean`은 전체 데이터 중앙값을 써서 모델 평가에 쓰면 누설이 됩니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "auth_events",
+      "url_path": "content/associate-003/datasets/auth_events.csv",
+      "sha256": "7fc3948a9128d78de881a28a390575df52f59a4b3ce2413db5d073952f2f0d0b",
+      "size_bytes": 101231,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261203, SHA-256 7fc3948a9128"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** stratify=y로 나눈 뒤 훈련 중앙값과 scaler.fit을 훈련 데이터에만 적용한다.\n\n**핵심 개념:** 양성이 적을 때는 `stratify=y`로 훈련과 평가의 양성 비율을 맞춘다. 결측 대체 기준(중앙값)과 표준화 기준(평균, 표준편차)은 모두 **훈련 데이터에서만** 계산해 평가 데이터에 적용한다. 0/1 컬럼은 표준화하지 않는다.\n\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nX = auth_df.drop(columns=['auth_id', 'suspicious_login'])\ny = auth_df['suspicious_login']\nX_train_raw, X_test_raw, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\ntrain_medians = X_train_raw[['ip_risk_score', 'distance_from_usual_km']].median()\nX_train_filled = X_train_raw.fillna(train_medians)\nX_test_filled = X_test_raw.fillna(train_medians)\ncat_cols = ['device_family', 'region_group']\nX_train_encoded = pd.get_dummies(X_train_filled, columns=cat_cols, dtype=int)\nX_test_encoded = pd.get_dummies(X_test_filled, columns=cat_cols, dtype=int).reindex(columns=X_train_encoded.columns, fill_value=0)\nnum_cols = ['login_hour', 'failed_attempts_24h', 'ip_risk_score', 'distance_from_usual_km',\n            'account_age_days', 'past_lockouts', 'days_since_last_login']\nscaler = StandardScaler().fit(X_train_encoded[num_cols])\nX_train_scaled = X_train_encoded.copy()\nX_test_scaled = X_test_encoded.copy()\nX_train_scaled[num_cols] = scaler.transform(X_train_encoded[num_cols])\nX_test_scaled[num_cols] = scaler.transform(X_test_encoded[num_cols])\n```\n\n**기준 결과:** 훈련 1,440행, 평가 360행, 양성 비율 훈련 0.1486, 평가 0.1500. 훈련 중앙값 ip_risk_score 43.2, distance_from_usual_km 372.95 (전체 중앙값 42.55, 370.4 와 다름). 인코딩 후 특징 16개.\n\n**다른 풀이 (fillna(dict) 와 align):**\n\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nX = auth_df.drop(columns=['auth_id', 'suspicious_login'])\ny = auth_df['suspicious_login']\nX_train_raw, X_test_raw, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\nmed = {c: X_train_raw[c].median() for c in ['ip_risk_score', 'distance_from_usual_km']}\ntrf = X_train_raw.fillna(med); tef = X_test_raw.fillna(med)\nX_train_encoded = pd.get_dummies(trf, columns=['device_family', 'region_group'], dtype=int)\nX_test_encoded = pd.get_dummies(tef, columns=['device_family', 'region_group'], dtype=int)\nX_train_encoded, X_test_encoded = X_train_encoded.align(X_test_encoded, join='left', axis=1, fill_value=0)\nnum_cols = ['login_hour', 'failed_attempts_24h', 'ip_risk_score', 'distance_from_usual_km', 'account_age_days', 'past_lockouts', 'days_since_last_login']\nscaler = StandardScaler()\nscaler.fit(X_train_encoded[num_cols])\nX_train_scaled = X_train_encoded.copy(); X_test_scaled = X_test_encoded.copy()\nX_train_scaled[num_cols] = scaler.transform(X_train_encoded[num_cols])\nX_test_scaled[num_cols] = scaler.transform(X_test_encoded[num_cols])\n```\n\n**자주 틀리는 부분:** 전체 중앙값 사용, 평가 데이터 fit, 더미 컬럼 불일치, 탐색용 `auth_clean` 을 쓰는 것(전체 중앙값 누설), 0/1 컬럼까지 표준화하는 것.\n\n**채점 항목:**\n\n1. 층화 분할 그대로\n2. auth_df 는 그대로\n3. 훈련 ip_risk_score 결측 대체\n4. 훈련 거리 결측 대체\n5. 평가 ip_risk_score 도 훈련 중앙값\n6. 평가 거리도 훈련 중앙값\n7. 원-핫 컬럼 구성과 정렬\n8. 범주 2개 인코딩\n9. 스케일러는 훈련으로만 fit\n10. 수치형 7개만 표준화\n11. 훈련 데이터 변환\n12. 평가 데이터는 같은 scaler 로 transform 만\n13. 0/1 컬럼 유지\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nX = auth_df.drop(columns=['auth_id', 'suspicious_login'])\ny = auth_df['suspicious_login']\nX_train_raw, X_test_raw, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\ntrain_medians = X_train_raw[['ip_risk_score', 'distance_from_usual_km']].median()\nX_train_filled = X_train_raw.fillna(train_medians)\nX_test_filled = X_test_raw.fillna(train_medians)\ncat_cols = ['device_family', 'region_group']\nX_train_encoded = pd.get_dummies(X_train_filled, columns=cat_cols, dtype=int)\nX_test_encoded = pd.get_dummies(X_test_filled, columns=cat_cols, dtype=int).reindex(columns=X_train_encoded.columns, fill_value=0)\nnum_cols = ['login_hour', 'failed_attempts_24h', 'ip_risk_score', 'distance_from_usual_km',\n            'account_age_days', 'past_lockouts', 'days_since_last_login']\nscaler = StandardScaler().fit(X_train_encoded[num_cols])\nX_train_scaled = X_train_encoded.copy()\nX_test_scaled = X_test_encoded.copy()\nX_train_scaled[num_cols] = scaler.transform(X_train_encoded[num_cols])\nX_test_scaled[num_cols] = scaler.transform(X_test_encoded[num_cols])\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

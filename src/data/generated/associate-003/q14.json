@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-003",
+  "question_id": "q14",
+  "public_id": "associate-003-q14",
+  "revision": 2,
+  "title": "업무 조건을 반영한 탐지 모델 선택",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "두 후보의 정밀도와 재현율을 비교해 업무 조건에 맞는 모델을 고르시오.\n\n1. 후보 `logistic_035`는 `auth_lr`로 `X_test_scaled`를 임계값 0.35로 판정한 `auth_pred_035`, 후보 `forest_05`는 `auth_rf`로 `X_test_scaled`를 예측한 `auth_rf_pred`를 씁니다.\n2. 각 후보의 정밀도와 재현율을 `y_test` 기준으로 계산해 딕셔너리 `candidate_scores`에 저장하시오. 형식: `{'logistic_035': {'precision': 값, 'recall': 값}, 'forest_05': {'precision': 값, 'recall': 값}}`\n3. 정밀도가 0.45 이상인 후보 가운데 재현율이 가장 높은 후보 이름을 `selected_classifier`에 저장하시오.\n4. 두 후보 모두 정밀도가 0.45 미만이면 정밀도가 더 높은 후보를 고르시오. 값이 같으면 이름 오름차순으로 앞선 후보를 고르시오.\n\n> 추가 인증 요청이 너무 잦으면 사용자가 불편하므로 정밀도 하한을 둡니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "auth_events",
+      "url_path": "content/associate-003/datasets/auth_events.csv",
+      "sha256": "7fc3948a9128d78de881a28a390575df52f59a4b3ce2413db5d073952f2f0d0b",
+      "size_bytes": 101231,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261203, SHA-256 7fc3948a9128"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 정밀도 0.45 이상 후보 중 재현율 최댓값, 없으면 정밀도 최댓값, 동률 이름순.\n\n**핵심 개념:** 업무 조건(정밀도 하한)을 먼저 적용해 후보를 거르고, 남은 후보 중 목표 지표(재현율)가 가장 높은 모델을 고른다. 조건을 만족하는 후보가 없을 때의 대안 규칙과 동률 규칙도 코드에 담는다.\n\n```python\ncandidate_scores = {\n    'logistic_035': {'precision': precision_035, 'recall': recall_035},\n    'forest_05': {'precision': precision_score(y_test, auth_rf_pred), 'recall': recall_score(y_test, auth_rf_pred)},\n}\npassed = [name for name, s in candidate_scores.items() if s['precision'] >= 0.45]\nif passed:\n    selected_classifier = sorted(passed, key=lambda n: (-candidate_scores[n]['recall'], n))[0]\nelse:\n    selected_classifier = sorted(candidate_scores, key=lambda n: (-candidate_scores[n]['precision'], n))[0]\nprint(candidate_scores, selected_classifier)\n```\n\n**기준 결과:** logistic_035 정밀도 0.6364, 재현율 0.5185 / forest_05 정밀도 0.8, 재현율 0.0741. 둘 다 0.45 이상이고 재현율이 높은 logistic_035 를 고른다.\n\n**다른 풀이 (반복문으로 선택):**\n\n```python\nfrom sklearn.metrics import precision_score, recall_score\ncandidate_scores = {'logistic_035': {'precision': precision_035, 'recall': recall_035}, 'forest_05': {'precision': precision_score(y_test, auth_rf_pred), 'recall': recall_score(y_test, auth_rf_pred)}}\nbest = None\nfor name in sorted(candidate_scores):\n    s = candidate_scores[name]\n    if s['precision'] >= 0.45 and (best is None or s['recall'] > candidate_scores[best]['recall']):\n        best = name\nif best is None:\n    best = max(sorted(candidate_scores), key=lambda n: candidate_scores[n]['precision'])\nselected_classifier = best\n```\n\n**자주 틀리는 부분:** 무조건 precision 최대 모델, 결과 문자열 고정, fallback 누락, 정밀도 조건 없이 정밀도만 보는 것, 후보 이름을 다르게 쓰는 것.\n\n**채점 항목:**\n\n1. 후보별 정밀도와 재현율\n2. 업무 조건에 맞는 선택\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "candidate_scores = {\n    'logistic_035': {'precision': precision_035, 'recall': recall_035},\n    'forest_05': {'precision': precision_score(y_test, auth_rf_pred), 'recall': recall_score(y_test, auth_rf_pred)},\n}\npassed = [name for name, s in candidate_scores.items() if s['precision'] >= 0.45]\nif passed:\n    selected_classifier = sorted(passed, key=lambda n: (-candidate_scores[n]['recall'], n))[0]\nelse:\n    selected_classifier = sorted(candidate_scores, key=lambda n: (-candidate_scores[n]['precision'], n))[0]\nprint(candidate_scores, selected_classifier)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

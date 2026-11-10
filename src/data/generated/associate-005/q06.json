@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-005",
+  "question_id": "q06",
+  "public_id": "associate-005-q06",
+  "revision": 1,
+  "title": "탐색용 결측 대체",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "탐색용 복사본에서 두 컬럼의 결측을 채우시오.\n\n1. `offer_df`를 복사해 `offers_clean`을 만드시오.\n2. `basket_value_30d`, `email_open_rate`의 결측을 원본 `offer_df`의 각 컬럼 전체 중앙값으로 채우시오.\n3. 다른 값, 행, 인덱스와 원본 `offer_df`는 바꾸지 마시오.\n\n> 탐색용 실습입니다. 이 결과로 모델을 학습하지 마시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "promotion_offers",
+      "url_path": "content/associate-005/datasets/promotion_offers.csv",
+      "sha256": "5e683fcf9ede1ea713edd498976b3751b560d17be2bda1007bc534ad488238b3",
+      "size_bytes": 115132,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261205, SHA-256 5e683fcf9ede"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 탐색용 복사본에서 두 컬럼의 결측을 채운다.\n\n**핵심 개념:** 탐색용 복사본에서만 결측을 채운다. 각 컬럼의 원본 전체 중앙값을 쓴다.\n\n```python\noffers_clean = offer_df.copy()\nfor col in ['basket_value_30d', 'email_open_rate']:\n    offers_clean[col] = offers_clean[col].fillna(offer_df[col].median())\n```\n\n**기준 결과:** basket 결측 49건, email 결측 104건. 전체 중앙값 basket 65,274원, email 0.489.\n\n**다른 풀이 (fillna(dict)):**\n\n```python\noffers_clean = offer_df.copy().fillna({c: offer_df[c].median() for c in ['basket_value_30d', 'email_open_rate']})\n```\n\n**자주 틀리는 부분:** 평균으로 채우는 것, 한 컬럼만 채우는 것, 원본을 바꾸는 것.\n\n**채점 항목:**\n\n1. offer_df 원본 그대로\n2. 구매 금액 결측에 전체 중앙값\n3. 열람률 결측에 전체 중앙값\n4. 다른 컬럼과 행 보존\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "offers_clean = offer_df.copy()\nfor col in ['basket_value_30d', 'email_open_rate']:\n    offers_clean[col] = offers_clean[col].fillna(offer_df[col].median())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

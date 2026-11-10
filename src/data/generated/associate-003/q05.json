@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-003",
+  "question_id": "q05",
+  "public_id": "associate-003-q05",
+  "revision": 2,
+  "title": "IP 위험 점수 히스토그램",
+  "topic": "visualization",
+  "difficulty": "easy",
+  "prompt": "`ip_risk_score`의 분포를 히스토그램으로 확인하시오.\n\n1. 결측을 제외한 `auth_df`의 `ip_risk_score` 값으로 구간 10개(`bins=10`)의 히스토그램을 그리시오.\n2. 그림(Figure)을 `risk_hist_fig`에 저장하시오. 예: `risk_hist_fig, ax = plt.subplots()`\n3. 가로축 이름은 `ip_risk_score`, 세로축 이름은 `count`로 표시하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "auth_events",
+      "url_path": "content/associate-003/datasets/auth_events.csv",
+      "sha256": "7fc3948a9128d78de881a28a390575df52f59a4b3ce2413db5d073952f2f0d0b",
+      "size_bytes": 101231,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261203, SHA-256 7fc3948a9128"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 결측을 제외한 IP 점수로 10구간 히스토그램을 만든다.\n\n**핵심 개념:** `plt.subplots()`가 돌려주는 Figure를 변수에 저장하고, `dropna()`로 결측을 뺀 값으로 `bins=10` 히스토그램을 그린다. 축 이름은 `set_xlabel`, `set_ylabel`로 지정한다.\n\n```python\nimport matplotlib.pyplot as plt\nrisk_hist_fig, ax = plt.subplots(figsize=(6, 4))\nax.hist(auth_df['ip_risk_score'].dropna(), bins=10)\nax.set_xlabel('ip_risk_score')\nax.set_ylabel('count')\nplt.show()\n```\n\n**기준 결과:** 막대 10개, 막대 높이 합계 1,724 (결측 76건 제외).\n\n**다른 풀이 (plt.hist 와 gcf):**\n\n```python\nimport matplotlib.pyplot as plt\nplt.figure()\nplt.hist(auth_df['ip_risk_score'].dropna(), bins=10)\nplt.xlabel('ip_risk_score')\nplt.ylabel('count')\nrisk_hist_fig = plt.gcf()\n```\n\n**자주 틀리는 부분:** 결측 미제외, 구간 수 오류, 축 이름 누락, 다른 변수로 그리는 것, 빈 Figure를 저장하는 것.\n\n**채점 항목:**\n\n1. Figure 저장, 축 1개\n2. 구간 10개\n3. 결측 제외 ip_risk_score 전체\n4. 구간 경계와 구간별 빈도\n5. 가로축 이름\n6. 세로축 이름\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "import matplotlib.pyplot as plt\nrisk_hist_fig, ax = plt.subplots(figsize=(6, 4))\nax.hist(auth_df['ip_risk_score'].dropna(), bins=10)\nax.set_xlabel('ip_risk_score')\nax.set_ylabel('count')\nplt.show()\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-002",
+  "question_id": "q03",
+  "public_id": "associate-002-q03",
+  "revision": 1,
+  "title": "긴급 대량 주문 선별",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "`df_raw`에서 아래 두 조건을 모두 만족하는 주문만 선택하여 `express_orders` DataFrame에 저장하시오.\n\n- `priority`가 `Express`\n- `items_count >= 10`\n\n원본의 인덱스와 모든 컬럼을 그대로 유지하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "warehouse_orders",
+      "url_path": "content/associate-002/datasets/warehouse_orders.csv",
+      "sha256": "3376dfe0980179ca23c830b98079fb02ec38356cb4a59e1d7e82e5260793ad0c",
+      "size_bytes": 97585,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261202, SHA-256 3376dfe09801"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 두 조건을 동시에 만족하는 행을 선택한다.\n\n**핵심 개념:** pandas에서는 조건마다 괄호를 두고 `&`로 AND 조건을 결합한다. 문항 수가 **10개 이상**이므로 `>=`를 쓴다. 원본 인덱스와 모든 컬럼을 유지한다.\n\n```python\nexpress_orders = df_raw[(df_raw['priority'] == 'Express') & (df_raw['items_count'] >= 10)]\nexpress_orders.shape\n```\n\n**기준 결과:** 48행, 14열. 모든 행이 priority Express, items_count 10 이상.\n\n**다른 풀이 (query() 사용):**\n\n```python\nexpress_orders = df_raw.query(\"priority == 'Express' and items_count >= 10\")\n```\n\n**자주 틀리는 부분:** `|`(OR) 사용, `> 10`이나 `>= 9`로 경계값을 바꾸는 것, `reset_index()`로 인덱스를 바꾸는 것.\n\n**채점 항목:**\n\n1. 조건에 맞는 행과 열 수\n2. 선택된 주문 일치\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "express_orders = df_raw[(df_raw['priority'] == 'Express') & (df_raw['items_count'] >= 10)]\nexpress_orders.shape\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

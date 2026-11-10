@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-002",
+  "question_id": "q05",
+  "public_id": "associate-002-q05",
+  "revision": 1,
+  "title": "작업량과 소요시간의 상관",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "`df_raw`의 `items_count`와 `pick_minutes` 사이의 Pearson 상관계수를 계산하여 실수 `items_time_corr`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "warehouse_orders",
+      "url_path": "content/associate-002/datasets/warehouse_orders.csv",
+      "sha256": "3376dfe0980179ca23c830b98079fb02ec38356cb4a59e1d7e82e5260793ad0c",
+      "size_bytes": 97585,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261202, SHA-256 3376dfe09801"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 두 수치형 변수의 선형 관계를 상관계수로 확인한다.\n\n**핵심 개념:** `Series.corr()`의 기본값은 Pearson 상관계수다. 상품 수가 많을수록 피킹 시간이 늘어나는 양의 관계를 확인한다.\n\n```python\nitems_time_corr = df_raw['items_count'].corr(df_raw['pick_minutes'])\nprint(round(items_time_corr, 4))\n```\n\n**기준 결과:** 약 0.5583. 의미 있는 양의 상관이지만 단독으로 피킹 시간을 설명하기에는 부족하므로 여러 특징을 함께 쓰는 회귀 모델이 필요하다.\n\n**다른 풀이 (numpy.corrcoef):**\n\n```python\nimport numpy as np\nitems_time_corr = np.corrcoef(df_raw['items_count'], df_raw['pick_minutes'])[0, 1]\n```\n\n**자주 틀리는 부분:** `method='spearman'` 사용, 다른 컬럼과의 상관 계산. 상관관계를 인과관계로 단정하지 않는다.\n\n**채점 항목:**\n\n1. Pearson 상관계수\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "items_time_corr = df_raw['items_count'].corr(df_raw['pick_minutes'])\nprint(round(items_time_corr, 4))\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

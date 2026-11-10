@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-003",
+  "question_id": "q12",
+  "public_id": "associate-003-q12",
+  "revision": 1,
+  "title": "혼동행렬 구하기",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "로지스틱 회귀 예측의 혼동행렬을 구하시오.\n\n1. `y_test`와 `auth_lr_pred`로 2x2 혼동행렬을 만들어 `auth_cm`에 저장하시오.\n2. 레이블 순서는 0, 1로 고정하시오 (`labels=[0, 1]`). 행은 실제값, 열은 예측값입니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "auth_events",
+      "url_path": "content/associate-003/datasets/auth_events.csv",
+      "sha256": "7fc3948a9128d78de881a28a390575df52f59a4b3ce2413db5d073952f2f0d0b",
+      "size_bytes": 101231,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261203, SHA-256 7fc3948a9128"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 실제값이 행, 예측이 열이며 labels=[0,1]을 고정한다.\n\n**핵심 개념:** `confusion_matrix(y_true, y_pred, labels=[0, 1])`는 행이 실제, 열이 예측인 [[TN, FP], [FN, TP]] 배열이다. 인자 순서와 labels 순서를 지켜야 한다.\n\n```python\nfrom sklearn.metrics import confusion_matrix\nauth_cm = confusion_matrix(y_test, auth_lr_pred, labels=[0, 1])\nprint(auth_cm)\n```\n\n**기준 결과:** [[300, 6], [36, 18]]. 실제 이상 로그인 54건 중 18건만 탐지했다.\n\n**다른 풀이 (crosstab):**\n\n```python\nauth_cm = pd.crosstab(y_test, auth_lr_pred).reindex(index=[0, 1], columns=[0, 1], fill_value=0).to_numpy()\n```\n\n**자주 틀리는 부분:** TN FP FN TP 위치 혼동, 예측과 실제 뒤바꾸기, y_true 와 y_pred 순서를 바꾸는 것, 다른 모델 예측을 쓰는 것.\n\n**채점 항목:**\n\n1. 혼동행렬 [[TN, FP], [FN, TP]]\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import confusion_matrix\nauth_cm = confusion_matrix(y_test, auth_lr_pred, labels=[0, 1])\nprint(auth_cm)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

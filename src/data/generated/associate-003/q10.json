@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-003",
+  "question_id": "q10",
+  "public_id": "associate-003-q10",
+  "revision": 1,
+  "title": "로지스틱 회귀 분류",
+  "topic": "machine_learning",
+  "difficulty": "easy",
+  "prompt": "로지스틱 회귀 모델을 학습하고 평가 데이터를 예측하시오.\n\n1. `LogisticRegression(max_iter=1000, random_state=42)`를 `X_train_scaled`, `y_train`으로 학습해 `auth_lr`에 저장하시오.\n2. `X_test_scaled`의 예측 결과를 `auth_lr_pred`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "auth_events",
+      "url_path": "content/associate-003/datasets/auth_events.csv",
+      "sha256": "7fc3948a9128d78de881a28a390575df52f59a4b3ce2413db5d073952f2f0d0b",
+      "size_bytes": 101231,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261203, SHA-256 7fc3948a9128"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 지정된 파라미터로 학습하고 평가 데이터를 예측한다.\n\n**핵심 개념:** 로지스틱 회귀는 양성 확률을 예측하고 기본 임계값 0.5로 0/1을 정한다. `max_iter=1000`으로 수렴을 보장하고 `random_state=42`로 고정한다.\n\n```python\nfrom sklearn.linear_model import LogisticRegression\nauth_lr = LogisticRegression(max_iter=1000, random_state=42).fit(X_train_scaled, y_train)\nauth_lr_pred = auth_lr.predict(X_test_scaled)\n```\n\n**기준 결과:** 임계값 0.5: 정확도 0.8833, 정밀도 0.75, 재현율 0.3333. 모두 0으로 예측하는 기준선 정확도도 0.85 라서 정확도만으로는 성능을 판단하기 어렵다.\n\n**다른 풀이 (생성 후 fit):**\n\n```python\nfrom sklearn.linear_model import LogisticRegression\nauth_lr = LogisticRegression(max_iter=1000, random_state=42)\nauth_lr.fit(X_train_scaled, y_train)\nauth_lr_pred = auth_lr.predict(X_test_scaled)\n```\n\n**자주 틀리는 부분:** 미학습 인스턴스, 하이퍼파라미터 변경, 학습 없이 예측 배열만 만드는 것.\n\n**채점 항목:**\n\n1. LogisticRegression\n2. 지정 하이퍼파라미터\n3. 표준화 훈련 데이터로 학습\n4. 평가 데이터 예측\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.linear_model import LogisticRegression\nauth_lr = LogisticRegression(max_iter=1000, random_state=42).fit(X_train_scaled, y_train)\nauth_lr_pred = auth_lr.predict(X_test_scaled)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

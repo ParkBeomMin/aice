@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-002",
+  "question_id": "q02",
+  "public_id": "associate-002-q02",
+  "revision": 1,
+  "title": "데이터 규모와 결측 확인",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "`df_raw`의 데이터 규모와 결측 현황을 확인하시오.\n\n1. 전체 행 개수를 정수 `row_count`에 저장하시오.\n2. `walking_distance_m` 컬럼의 결측 개수를 정수 `missing_distance_count`에 저장하시오.\n3. 두 값을 출력하시오.\n\n숫자를 직접 입력하지 말고 DataFrame에서 계산하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "warehouse_orders",
+      "url_path": "content/associate-002/datasets/warehouse_orders.csv",
+      "sha256": "3376dfe0980179ca23c830b98079fb02ec38356cb4a59e1d7e82e5260793ad0c",
+      "size_bytes": 97585,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261202, SHA-256 3376dfe09801"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 데이터 규모와 특정 컬럼의 결측 개수를 코드로 계산한다.\n\n**핵심 개념:** 행 수는 `len(df_raw)` 또는 `df_raw.shape[0]`, 결측 개수는 특정 컬럼에 `isna().sum()`을 적용해 센다. `count()`는 결측이 **아닌** 값의 개수라 결측 수가 아니다.\n\n```python\nrow_count = len(df_raw)\nmissing_distance_count = int(df_raw['walking_distance_m'].isna().sum())\nprint(row_count, missing_distance_count)\n```\n\n**기준 결과:** row_count 1,500, missing_distance_count 100 (약 6.7%).\n\n**다른 풀이 (shape[0], isnull()):**\n\n```python\nrow_count = df_raw.shape[0]\nmissing_distance_count = int(df_raw.walking_distance_m.isnull().sum())\nprint(row_count, missing_distance_count)\n```\n\n**자주 틀리는 부분:** `count()`를 결측 개수로 착각하는 것, 다른 컬럼의 결측을 세는 것. 1500과 100을 숫자로 직접 입력하면 현재 데이터 기준 검사는 통과할 수 있지만 다른 데이터에 재사용할 수 없으므로 반드시 계산식으로 작성한다.\n\n**채점 항목:**\n\n1. 전체 행 수\n2. 이동거리 결측 개수\n3. 두 값 출력\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "row_count = len(df_raw)\nmissing_distance_count = int(df_raw['walking_distance_m'].isna().sum())\nprint(row_count, missing_distance_count)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

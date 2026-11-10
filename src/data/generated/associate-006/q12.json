@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-006",
+  "question_id": "q12",
+  "public_id": "associate-006-q12",
+  "revision": 1,
+  "title": "선형회귀 MAE와 RMSE",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "선형회귀 예측의 오차를 구하시오.\n\n1. `y_test`와 `bike_lr_pred`(`bike_lr`로 `X_test`를 예측한 값)로 평균절대오차를 `bike_mae`에 저장하시오.\n2. 평균제곱오차의 제곱근인 RMSE를 `bike_rmse`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "bike_demand",
+      "url_path": "content/associate-006/datasets/bike_demand.csv",
+      "sha256": "8b6b2150909767f79155d692412f850f6d06f59110de572e8af097370836c537",
+      "size_bytes": 112825,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261206, SHA-256 8b6b21509097"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 회귀 오차 지표를 계산한다.\n\n**핵심 개념:** MAE 와 RMSE 는 대여 건수 단위다.\n\n```python\nfrom sklearn.metrics import mean_absolute_error, mean_squared_error\nimport numpy as np\nbike_mae = mean_absolute_error(y_test, bike_lr_pred)\nbike_rmse = np.sqrt(mean_squared_error(y_test, bike_lr_pred))\nprint(bike_mae, bike_rmse)\n```\n\n**기준 결과:** MAE 약 54.89, RMSE 약 70.28 (훈련 평균 기준선 RMSE 약 119.16).\n\n**다른 풀이 (직접 계산):**\n\n```python\nimport numpy as np\ne = y_test.to_numpy() - bike_lr_pred\nbike_mae = np.abs(e).mean()\nbike_rmse = np.sqrt((e ** 2).mean())\n```\n\n**자주 틀리는 부분:** MSE 를 RMSE 로 저장하는 것, 다른 모델 예측을 쓰는 것.\n\n**채점 항목:**\n\n1. MAE\n2. RMSE\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import mean_absolute_error, mean_squared_error\nimport numpy as np\nbike_mae = mean_absolute_error(y_test, bike_lr_pred)\nbike_rmse = np.sqrt(mean_squared_error(y_test, bike_lr_pred))\nprint(bike_mae, bike_rmse)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

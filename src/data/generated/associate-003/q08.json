@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-003",
+  "question_id": "q08",
+  "public_id": "associate-003-q08",
+  "revision": 1,
+  "title": "탐색용 범주형 인코딩",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "탐색용 데이터의 범주형 컬럼을 원-핫 인코딩하시오.\n\n1. `auth_clean`을 복사한 뒤 `device_family`, `region_group` 두 컬럼만 `pd.get_dummies(..., dtype=int)`로 인코딩하시오.\n2. 결과를 `auth_model_df`에 저장하시오. `auth_id`, `suspicious_login`과 나머지 수치 컬럼은 그대로 두시오.\n\n> 이 결과는 탐색용이며 모델 학습에 직접 쓰지 않습니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "auth_events",
+      "url_path": "content/associate-003/datasets/auth_events.csv",
+      "sha256": "7fc3948a9128d78de881a28a390575df52f59a4b3ce2413db5d073952f2f0d0b",
+      "size_bytes": 101231,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261203, SHA-256 7fc3948a9128"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** device_family와 region_group의 원-핫 결과를 결측 대치용 사본에서 만든다.\n\n**핵심 개념:** `pd.get_dummies(..., columns=[...], dtype=int)`는 지정한 범주 컬럼만 0/1 컬럼으로 바꾸고 나머지 컬럼은 그대로 둔다. 탐색용이라 복사본에서 처리한다.\n\n```python\nauth_model_df = pd.get_dummies(auth_clean.copy(), columns=['device_family', 'region_group'], dtype=int)\nauth_model_df.shape\n```\n\n**기준 결과:** 1,800행, 18열 (원래 12개 컬럼 + 원-핫 6개).\n\n**다른 풀이 (copy 후 대입):**\n\n```python\ntmp = auth_clean.copy()\nauth_model_df = pd.get_dummies(tmp, columns=['device_family', 'region_group'], dtype=int)\n```\n\n**자주 틀리는 부분:** ID나 타깃 제거, 다른 값 변경, 더미 0/1 오염, auth_clean 을 직접 바꾸는 것, auth_id 를 지우는 것.\n\n**채점 항목:**\n\n1. 두 컬럼 원-핫 값\n2. auth_id 와 타깃 유지\n3. auth_clean 은 그대로\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "auth_model_df = pd.get_dummies(auth_clean.copy(), columns=['device_family', 'region_group'], dtype=int)\nauth_model_df.shape\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

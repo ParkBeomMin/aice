@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-005",
+  "question_id": "q03",
+  "public_id": "associate-005-q03",
+  "revision": 1,
+  "title": "장기 미구매 고객 추출",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "오래 구매하지 않은 고객의 제안만 골라내시오.\n\n1. `offer_df`에서 `days_since_last_purchase`가 60 이상인 행만 `dormant_offers`에 저장하시오.\n2. 원래 인덱스와 모든 컬럼을 그대로 유지하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "promotion_offers",
+      "url_path": "content/associate-005/datasets/promotion_offers.csv",
+      "sha256": "5e683fcf9ede1ea713edd498976b3751b560d17be2bda1007bc534ad488238b3",
+      "size_bytes": 115132,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261205, SHA-256 5e683fcf9ede"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 경계값을 포함하는 조건으로 행을 고른다.\n\n**핵심 개념:** `>=`는 경계값 60을 포함한다. 원래 인덱스를 유지한다.\n\n```python\ndormant_offers = offer_df[offer_df['days_since_last_purchase'] >= 60]\ndormant_offers.shape\n```\n\n**기준 결과:** 271행, 14열.\n\n**다른 풀이 (query 사용):**\n\n```python\ndormant_offers = offer_df.query('days_since_last_purchase >= 60')\n```\n\n**자주 틀리는 부분:** `>` 로 60일을 빼는 것, reset_index.\n\n**채점 항목:**\n\n1. 행과 열 수\n2. 선택된 제안과 인덱스\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "dormant_offers = offer_df[offer_df['days_since_last_purchase'] >= 60]\ndormant_offers.shape\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

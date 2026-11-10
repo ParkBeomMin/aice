@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-006",
+  "question_id": "q08",
+  "public_id": "associate-006-q08",
+  "revision": 1,
+  "title": "탐색용 지구와 계절 인코딩",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "탐색용 데이터의 범주형 컬럼을 원-핫 인코딩하시오.\n\n1. `bike_clean`을 복사하고 `bikes_per_station`을 새 컬럼 `bikes_per_station`으로 추가하시오.\n2. `district`, `season`을 `pd.get_dummies(..., dtype=int)`로 인코딩해 `bike_encoded`에 저장하시오. `rides_count`는 그대로 두시오.\n\n> 이 결과는 탐색용이며 모델 학습에 쓰지 않습니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "bike_demand",
+      "url_path": "content/associate-006/datasets/bike_demand.csv",
+      "sha256": "8b6b2150909767f79155d692412f850f6d06f59110de572e8af097370836c537",
+      "size_bytes": 112825,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261206, SHA-256 8b6b21509097"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 범주형 컬럼을 원-핫 인코딩한다.\n\n**핵심 개념:** 복사본에 새 컬럼을 추가하고 district, season 을 원-핫으로 바꾼다.\n\n```python\nbike_tmp = bike_clean.copy()\nbike_tmp['bikes_per_station'] = bikes_per_station\nbike_encoded = pd.get_dummies(bike_tmp, columns=['district', 'season'], dtype=int)\nbike_encoded.shape\n```\n\n**기준 결과:** 1,920행, 23열.\n\n**다른 풀이 (assign):**\n\n```python\nbike_encoded = pd.get_dummies(bike_clean.assign(bikes_per_station=bikes_per_station), columns=['district', 'season'], dtype=int)\n```\n\n**자주 틀리는 부분:** 더미 값을 덮어쓰는 것, 타깃 삭제.\n\n**채점 항목:**\n\n1. 지구와 계절 원-핫 값\n2. 타깃과 파생 컬럼 유지\n3. bike_clean 은 그대로\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "bike_tmp = bike_clean.copy()\nbike_tmp['bikes_per_station'] = bikes_per_station\nbike_encoded = pd.get_dummies(bike_tmp, columns=['district', 'season'], dtype=int)\nbike_encoded.shape\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-002",
+  "question_id": "q07",
+  "public_id": "associate-002-q07",
+  "revision": 1,
+  "title": "이동거리 이상값 탐색",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "`df_feat`의 `walking_distance_m`에서 IQR 기준 이상값을 찾으시오.\n\n1. 결측이 아닌 값으로 1사분위수(Q1)와 3사분위수(Q3)를 구하시오.\n2. 상한 `Q3 + 1.5 * (Q3 - Q1)`을 실수 `distance_upper_bound`에 저장하시오.\n3. 상한을 초과하는 행의 수를 정수 `distance_outlier_count`에 저장하시오.\n\n이 문항에서는 데이터를 삭제하거나 값을 바꾸지 마시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "warehouse_orders",
+      "url_path": "content/associate-002/datasets/warehouse_orders.csv",
+      "sha256": "3376dfe0980179ca23c830b98079fb02ec38356cb4a59e1d7e82e5260793ad0c",
+      "size_bytes": 97585,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261202, SHA-256 3376dfe09801"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** IQR 규칙으로 이상값 후보를 찾는다.\n\n**핵심 개념:** 결측이 아닌 이동거리의 1사분위수(Q1)와 3사분위수(Q3)로 상한 `Q3 + 1.5 * (Q3 - Q1)`을 구하고, 상한보다 **엄격히 큰** 값만 센다. 이 문항은 탐색 단계이므로 값을 바꾸거나 행을 지우지 않는다. `quantile()`은 결측을 자동으로 제외한다.\n\n```python\nd = df_feat['walking_distance_m'].dropna()\nq1, q3 = d.quantile(0.25), d.quantile(0.75)\ndistance_upper_bound = q3 + 1.5 * (q3 - q1)\ndistance_outlier_count = int((df_feat['walking_distance_m'] > distance_upper_bound).sum())\nprint(distance_upper_bound, distance_outlier_count)\n```\n\n**기준 결과:** 상한 약 1,430.45m, 초과 28행 (최댓값 약 2,975.8m).\n\n**다른 풀이 (quantile 리스트):**\n\n```python\nq1, q3 = df_feat['walking_distance_m'].quantile([0.25, 0.75])\ndistance_upper_bound = q3 + 1.5 * (q3 - q1)\ndistance_outlier_count = int((df_feat['walking_distance_m'] > distance_upper_bound).sum())\n```\n\n**자주 틀리는 부분:** `>=`로 세는 것, 하한식 `Q1 - 1.5 * IQR`을 쓰는 것, IQR 대신 표준편차를 쓰는 것, 값을 상한으로 제한(clip)하거나 행을 삭제해 `df_feat`을 바꾸는 것.\n\n**채점 항목:**\n\n1. IQR 상한\n2. 상한 초과 행 수\n3. 데이터를 바꾸지 않음\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "d = df_feat['walking_distance_m'].dropna()\nq1, q3 = d.quantile(0.25), d.quantile(0.75)\ndistance_upper_bound = q3 + 1.5 * (q3 - q1)\ndistance_outlier_count = int((df_feat['walking_distance_m'] > distance_upper_bound).sum())\nprint(distance_upper_bound, distance_outlier_count)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

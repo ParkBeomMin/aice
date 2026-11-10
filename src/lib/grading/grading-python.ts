@@ -2,6 +2,9 @@
 // 채점 프로필은 데이터(JSON)일 뿐이며, 여기 정의된 probe, 비교 연산(allowlist)만 실행한다. 프로필 안의 문자열을 Python 코드로 실행하지 않는다.
 export const GRADING_PY = String.raw`
 import sys, io, json, math, re, random, traceback, warnings, contextlib
+import os
+# (엔진 1.5.0) 채점 Worker 에는 window 가 없으므로 matplotlib 은 항상 Agg (plt.show() 가 오류 없이 지나가도록, 연습 런타임과 동일)
+os.environ.setdefault("MPLBACKEND", "Agg")
 from pyodide.code import eval_code_async, find_imports
 
 _g_ns = {"__name__": "__main__"}
@@ -99,8 +102,14 @@ def _output_text():
 
 # (엔진 1.1.0) 채점기가 학생 상태에서 기대 결과를 독립 계산하는 evaluator — 클래스, 하이퍼파라미터는 allowlist
 _MODEL_CLASSES = {"LogisticRegression": ("sklearn.linear_model", "LogisticRegression"),
-                  "RandomForestClassifier": ("sklearn.ensemble", "RandomForestClassifier")}
-_PARAM_KEYS = {"max_iter", "random_state", "n_estimators", "n_jobs", "C", "max_depth"}
+                  "RandomForestClassifier": ("sklearn.ensemble", "RandomForestClassifier"),
+                  # (엔진 1.3.0) 회귀
+                  "LinearRegression": ("sklearn.linear_model", "LinearRegression"),
+                  "Ridge": ("sklearn.linear_model", "Ridge"),
+                  "RandomForestRegressor": ("sklearn.ensemble", "RandomForestRegressor"),
+                  "DecisionTreeRegressor": ("sklearn.tree", "DecisionTreeRegressor")}
+_PARAM_KEYS = {"max_iter", "random_state", "n_estimators", "n_jobs", "C", "max_depth", "alpha", "min_samples_leaf"}
+_PARAM_LIMITS = {"n_estimators": (1, 300), "max_depth": (1, 50), "n_jobs": (1, 1), "max_iter": (1, 10000), "min_samples_leaf": (1, 200)}
 
 def _model_cls(name):
     import importlib
@@ -113,6 +122,9 @@ def _params(d):
     d = d or {}
     if not isinstance(d, dict) or not set(d) <= _PARAM_KEYS or not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in d.values()):
         raise _ProbeError("허용되지 않는 하이퍼파라미터")
+    for k, (lo, hi) in _PARAM_LIMITS.items():
+        if k in d and not (lo <= d[k] <= hi):
+            raise _ProbeError("하이퍼파라미터 범위 초과")
     return dict(d)
 
 def _predict(model, X, threshold=None):
@@ -125,7 +137,73 @@ def _predict(model, X, threshold=None):
     return (np.asarray(model.predict_proba(X))[:, 1] >= t).astype(int)
 
 _STATS = {"mean", "median", "sum", "min", "max", "std", "nunique", "count"}
-_METRICS = {"accuracy", "f1", "precision", "recall", "r2", "mae", "mse"}
+_METRICS = {"accuracy", "f1", "precision", "recall", "r2", "mae", "mse", "rmse"}
+_LOWER_IS_BETTER = {"mae", "mse", "rmse"}
+
+def _metric_value(m, y, pred):
+    if m not in _METRICS:
+        raise _ProbeError("허용되지 않는 지표")
+    from sklearn import metrics as M
+    import math
+    if m == "rmse":
+        return math.sqrt(float(M.mean_squared_error(y, pred)))
+    fn = {"accuracy": M.accuracy_score, "f1": M.f1_score, "precision": M.precision_score, "recall": M.recall_score,
+          "r2": M.r2_score, "mae": M.mean_absolute_error, "mse": M.mean_squared_error}[m]
+    return float(fn(y, pred))
+
+_CLS_METRICS = {"precision", "recall", "f1", "accuracy"}
+
+def _cls_metric(m, y, pred):
+    """(엔진 1.4.0) 이진 분류 지표, 양성 1, zero_division=0"""
+    from sklearn import metrics as M
+    if m == "accuracy":
+        return float(M.accuracy_score(y, pred))
+    fn = {"precision": M.precision_score, "recall": M.recall_score, "f1": M.f1_score}[m]
+    return float(fn(y, pred, pos_label=1, zero_division=0))
+
+def _same_data(a, b):
+    """(엔진 1.4.0) 학생 값 a 가 기대 DataFrame/Series b 와 인덱스, (DataFrame 이면) 컬럼 순서, 컬럼별 dtype 종류, 값이 같은지. 숫자 abs 1e-9, NaN==NaN"""
+    if a is None or type(a).__name__ != type(b).__name__:
+        return False
+    if [str(i) for i in a.index] != [str(i) for i in b.index]:
+        return False
+    if _is_df(b):
+        if [str(c) for c in a.columns] != [str(c) for c in b.columns]:
+            return False
+        pairs = [(a[c], b[c]) for c in b.columns]
+    else:
+        pairs = [(a, b)]
+    for sa, sb in pairs:
+        if sa.dtype.kind != sb.dtype.kind:
+            return False
+        for x, z in zip(sa.tolist(), sb.tolist()):
+            fx, fz = _num(x), _num(z)
+            if isinstance(x, float) or isinstance(z, float):
+                if fx is None and fz is None:
+                    continue
+                if fx is None or fz is None or abs(fx - fz) > 1e-9:
+                    return False
+            elif x != z:
+                return False
+    return True
+
+def _select_candidate(p):
+    """(엔진 1.3.0) 후보 모델들의 지표를 학생 상태로 다시 계산해 최선 후보 (오차 지표는 작을수록, 나머지는 클수록). 동률이면 tie"""
+    m = p.get("metric", "f1")
+    if m not in _METRICS:
+        raise _ProbeError("허용되지 않는 지표")
+    y = _var(p["y"])
+    scores = []
+    for cnd in (p.get("candidates") or [])[:5]:
+        mdl, X = _var(cnd["model"]), _var(cnd["X"])
+        scores.append((cnd["name"], _metric_value(m, y, mdl.predict(X)), mdl, X))
+    if not scores:
+        raise _ProbeError("후보 없음")
+    lower = (p.get("goal") == "min") if p.get("goal") in ("min", "max") else (m in _LOWER_IS_BETTER)
+    best = (min if lower else max)(s for _, s, _, _ in scores)
+    winners = [c for c in scores if abs(c[1] - best) <= 1e-12]
+    tie = p.get("tie")
+    return next((c for c in winners if c[0] == tie), winners[0])
 
 def _probe(p):
     k = p.get("kind")
@@ -229,11 +307,7 @@ def _probe(p):
         if m not in _METRICS:
             raise _ProbeError("허용되지 않는 지표")
         model, X, y = _var(p["model"]), _var(p["X"]), _var(p["y"])
-        from sklearn import metrics as M
-        pred = _predict(model, X, p.get("threshold"))
-        fn = {"accuracy": M.accuracy_score, "f1": M.f1_score, "precision": M.precision_score, "recall": M.recall_score,
-              "r2": M.r2_score, "mae": M.mean_absolute_error, "mse": M.mean_squared_error}[m]
-        return float(fn(y, pred))
+        return _metric_value(m, y, _predict(model, X, p.get("threshold")))
     if k == "predictions":
         return _norm(_predict(_var(p["model"]), _var(p["X"]), p.get("threshold")))
     if k == "probabilities":
@@ -252,22 +326,434 @@ def _probe(p):
         gp = _var(p["var"]).get_params()
         return {key: _norm(gp.get(key)) for key in keys}
     if k == "best_model":
-        # 후보 모델들의 F1(또는 지정 지표)을 학생 상태로 다시 계산해 가장 높은 이름 (동률이면 tie)
-        m = p.get("metric", "f1")
-        if m not in ("f1", "accuracy"):
-            raise _ProbeError("허용되지 않는 지표")
-        from sklearn import metrics as M
-        fn = M.f1_score if m == "f1" else M.accuracy_score
+        # 후보 모델 지표를 학생 상태로 다시 계산해 최선 이름 (1.1.0: f1, accuracy / 1.3.0: 회귀 오차는 최소)
+        return _select_candidate(p)[0]
+    if k == "selected_predictions":
+        # (엔진 1.3.0) best_model 과 같은 규칙으로 고른 후보의 예측
+        _, _, mdl, X = _select_candidate(p)
+        return _norm(mdl.predict(X))
+    if k == "group_metric":
+        # (엔진 1.3.0) 그룹별 지표: 예측(model, X 또는 candidates 선택)과 y 를 y 의 인덱스로 frame[column] 그룹에 맞춰 계산
+        if p.get("candidates"):
+            _, _, mdl, X = _select_candidate({**p, "metric": p.get("select_metric", "rmse")})
+        else:
+            mdl, X = _var(p["model"]), _var(p["X"])
+        import pandas as pd
         y = _var(p["y"])
-        scores = []
-        for cnd in (p.get("candidates") or [])[:5]:
-            scores.append((cnd["name"], float(fn(y, _var(cnd["model"]).predict(_var(cnd["X"]))))))
-        if not scores:
-            raise _ProbeError("후보 없음")
-        best = max(s for _, s in scores)
-        winners = [n for n, s in scores if abs(s - best) <= 1e-12]
-        tie = p.get("tie")
-        return tie if tie in winners else winners[0]
+        if not _is_series(y):
+            raise _ProbeError(f"{p['y']} 가 Series 가 아닙니다")
+        pred = pd.Series(list(mdl.predict(X)), index=y.index)
+        groups = _df(p["frame"]).loc[y.index, p["column"]]
+        out = {}
+        for g in sorted(set(map(str, groups))):
+            mask = (groups.astype(str) == g).to_numpy()
+            out[g] = _metric_value(p.get("metric", "mae"), y[mask], pred[mask])
+        red = p.get("reduce")
+        if red in ("argmax", "argmin"):
+            target = (max if red == "argmax" else min)(out.values())
+            return next(g for g, v in out.items() if abs(v - target) <= 1e-12)
+        # 학생의 groupby 결과(Series)와 같은 형식으로 비교 (인덱스 = 그룹 이름 오름차순)
+        return {"__series__": {"index": list(out.keys()), "values": list(out.values())}}
+    if k == "figure_data_match":
+        # (엔진 1.6.0) Figure 첫 축의 실제 데이터가 학생 현재 source 와 같은지. histogram: numpy.histogram(결측 제외, bins) 의 구간 경계와 빈도를 막대 x, width, height 와 비교.
+        # scatter: 축의 모든 점 (x, y) 쌍을 source 의 같은 행 (x_column, y_column) 쌍과 순서 무관(multiset) 비교. 최대 20000 점, 숫자 abs 1e-6 + rel 1e-9
+        import numpy as np
+        f = _var(p["var"])
+        if type(f).__name__ != "Figure" or not (type(f).__module__ or "").startswith("matplotlib") or len(f.axes) != 1:
+            return False
+        ax = f.axes[0]
+        df = _df(p["source"])
+        def _closearr(a, b):
+            a = np.asarray(a, dtype=float); b = np.asarray(b, dtype=float)
+            return a.shape == b.shape and bool(np.all(np.isfinite(a))) and bool(np.allclose(a, b, rtol=1e-9, atol=1e-6))
+        if p.get("plot") == "histogram":
+            col = p.get("column"); bins = p.get("bins")
+            if col not in df.columns or not isinstance(bins, int) or isinstance(bins, bool) or not 1 <= bins <= 40:
+                raise _ProbeError("히스토그램 설정 오류")
+            vals = df[col].dropna().to_numpy(dtype=float)
+            if len(vals) == 0 or len(vals) > 200000:
+                raise _ProbeError("데이터 크기 오류")
+            counts, edges = np.histogram(vals, bins=bins)
+            rects = sorted([q for q in ax.patches if type(q).__name__ == "Rectangle"], key=lambda q: q.get_x())
+            if len(rects) != bins:
+                return False
+            xs = [q.get_x() for q in rects]; ws = [q.get_width() for q in rects]; hs = [q.get_height() for q in rects]
+            return _closearr(xs, edges[:-1]) and _closearr(np.add(xs, ws), edges[1:]) and _closearr(hs, counts)
+        if p.get("plot") == "scatter":
+            xc, yc = p.get("x_column"), p.get("y_column")
+            if xc not in df.columns or yc not in df.columns:
+                raise _ProbeError("산점도 컬럼이 없습니다")
+            pts = [np.asarray(c.get_offsets(), dtype=float) for c in ax.collections if hasattr(c, "get_offsets") and len(c.get_offsets())]
+            if not pts:
+                return False
+            got = np.concatenate(pts)
+            if got.ndim != 2 or got.shape[1] != 2 or len(got) > 20000:
+                return False
+            exp = df[[xc, yc]].dropna().to_numpy(dtype=float)
+            if len(got) != len(exp):
+                return False
+            got = got[np.lexsort((got[:, 1], got[:, 0]))]; exp = exp[np.lexsort((exp[:, 1], exp[:, 0]))]
+            return _closearr(got, exp)
+        if p.get("plot") == "bar":
+            # (엔진 1.7.0) 막대 높이(x 위치 순)가 학생 series 값(순서대로)과 같은지, 막대 수 일치. check_labels 면 눈금 글자도 str(index) 와 비교
+            sv = _var(p["series"])
+            if not _is_series(sv) or len(sv) == 0 or len(sv) > 200:
+                raise _ProbeError("series 오류")
+            rects = sorted([q for q in ax.patches if type(q).__name__ == "Rectangle"], key=lambda q: q.get_x())
+            vals = sv.to_numpy(dtype=float)
+            ok = np.isfinite(vals)
+            if len(rects) != int(ok.sum()):
+                return False
+            if not _closearr([q.get_height() for q in rects], vals[ok]):
+                return False
+            if p.get("check_labels") is True:
+                f.canvas.draw()
+                labs = [t.get_text() for t in ax.get_xticklabels()]
+                want = [str(i) for i, k in zip(sv.index, ok) if k]
+                if labs != want:
+                    return False
+            return True
+        raise _ProbeError("plot 은 histogram, scatter, bar")
+    if k == "scaled_with":
+        # (엔진 1.6.0) var[scale_columns] 가 학생 scaler 로 source[scale_columns] 를 transform 한 값과 같고, 나머지 컬럼은 source 와 같은지 (인덱스, 컬럼 순서 포함)
+        import numpy as np
+        import pandas as pd
+        got, src = _df(p["var"]), _df(p["source"])
+        sc = _var(p["scaler"])
+        cols = list(p.get("scale_columns") or [])
+        if not cols or any(c not in src.columns for c in cols) or not hasattr(sc, "transform"):
+            raise _ProbeError("표준화 설정 오류")
+        exp = src.copy()
+        try:
+            exp[cols] = sc.transform(src[cols])
+        except Exception:
+            return False
+        return _same_data(got, exp.astype({c: got[c].dtype for c in cols if c in got.columns}) if set(cols) <= set(got.columns) else exp)
+    if k == "cost_selection":
+        # (엔진 1.7.0) 이진 분류 후보별 비용 fp*FP + fn*FN (labels [0, 1]) 을 학생 상태로 재계산. output scores 면 {이름: 비용}, selected 면 최소 비용 (동률 이름 오름차순)
+        import numpy as np
+        from sklearn.metrics import confusion_matrix as _cm
+        cands = p.get("candidates") or []
+        names = [c.get("name") for c in cands]
+        if not 1 <= len(cands) <= 5 or len(set(names)) != len(names):
+            raise _ProbeError("후보 구성 오류")
+        costs = p.get("costs") or {}
+        cfp, cfn = costs.get("fp"), costs.get("fn")
+        if not all(isinstance(v, int) and not isinstance(v, bool) and 0 <= v <= 100 for v in (cfp, cfn)):
+            raise _ProbeError("비용은 0~100 정수")
+        y = _var(p["y"]); yv = np.asarray(y)
+        if yv.ndim != 1 or not set(np.unique(yv).tolist()) <= {0, 1}:
+            raise _ProbeError("이진(0/1) 레이블만 지원합니다")
+        scores = {}
+        for c in cands:
+            X = _var(c["X"])
+            if hasattr(X, "index") and hasattr(y, "index") and list(map(str, X.index)) != list(map(str, y.index)):
+                raise _ProbeError(f"{c['X']} 와 {p['y']} 의 인덱스가 다릅니다")
+            pred = np.asarray(_predict(_var(c["model"]), X, c.get("threshold")))
+            if pred.shape != yv.shape:
+                raise _ProbeError("예측 길이가 레이블과 다릅니다")
+            tn, fp, fn, tp = _cm(yv, pred, labels=[0, 1]).ravel()
+            scores[c["name"]] = int(cfp * fp + cfn * fn)
+        if p.get("output") == "scores":
+            return scores
+        if p.get("output") != "selected":
+            raise _ProbeError("output 은 selected 또는 scores")
+        return sorted(names, key=lambda n: (scores[n], n))[0]
+    if k == "time_split_reproduced":
+        # (엔진 1.7.0) 학생 현재 frame 에서 date_column < cutoff 를 훈련, 나머지를 평가로 다시 나눠 outputs 와 비교 (output match).
+        # output train_period / test_period 는 학생 outputs X_train / X_test 인덱스의 frame 날짜 (최소, 최대) 를 YYYY-MM-DD 로 반환
+        import pandas as pd
+        df = _df(p["frame"])
+        dc, tgt = p.get("date_column"), p.get("target")
+        drop = list(p.get("drop") or [])
+        if dc not in df.columns or tgt not in drop or dc not in drop or any(c not in df.columns for c in drop):
+            raise _ProbeError("분할 기준 컬럼이 없습니다")
+        if df[dc].dtype.kind != "M":
+            raise _ProbeError(f"{dc} 가 날짜(datetime) 형식이 아닙니다")
+        try:
+            cut = pd.Timestamp(str(p.get("cutoff")))
+        except Exception:
+            raise _ProbeError("cutoff 형식 오류")
+        outs = p.get("outputs") or {}
+        mode = p.get("output", "match")
+        if mode in ("train_period", "test_period"):
+            vn = outs.get("X_train" if mode == "train_period" else "X_test")
+            part = _var(vn)
+            if not hasattr(part, "index") or len(part) == 0 or not set(part.index) <= set(df.index):
+                raise _ProbeError("분할 결과의 인덱스를 원본에서 찾을 수 없습니다")
+            dts = df.loc[part.index, dc]
+            return [dts.min().strftime("%Y-%m-%d"), dts.max().strftime("%Y-%m-%d")]
+        if mode != "match":
+            raise _ProbeError("output 오류")
+        m = df[dc] < cut
+        X = df.drop(columns=drop); y = df[tgt]
+        exp = {"X_train": X[m], "X_test": X[~m], "y_train": y[m], "y_test": y[~m]}
+        return {k2: _same_data(_g_ns.get(vn) if isinstance(vn, str) and _NAME_RE.match(vn) else None, exp[k2]) for k2, vn in outs.items() if k2 in exp}
+    if k == "subset_metric":
+        # (엔진 1.7.0) 모델 예측을 y 인덱스에 맞추고 frame.loc[y.index, column] >= value 인 행만의 지표
+        import numpy as np
+        import pandas as pd
+        y = _var(p["y"])
+        if not _is_series(y):
+            raise _ProbeError(f"{p['y']} 가 Series 가 아닙니다")
+        X = _var(p["X"])
+        if hasattr(X, "index") and list(map(str, X.index)) != list(map(str, y.index)):
+            raise _ProbeError(f"{p['X']} 와 {p['y']} 의 인덱스가 다릅니다")
+        pred = pd.Series(np.asarray(_predict(_var(p["model"]), X, p.get("threshold"))), index=y.index)
+        w = p.get("where") or {}
+        fr = _df(p["frame"])
+        if w.get("op") != "ge" or w.get("column") not in fr.columns or not set(y.index) <= set(fr.index):
+            raise _ProbeError("조건 오류")
+        mask = (fr.loc[y.index, w["column"]] >= float(w["value"])).to_numpy()
+        if not mask.any():
+            raise _ProbeError("조건에 맞는 행이 없습니다")
+        return _metric_value(p.get("metric", "mae"), y[mask], pred[mask])
+    if k == "transformer_check":
+        # (엔진 1.7.0) ColumnTransformer 구조 (순서대로 단계 클래스, 컬럼, OneHotEncoder 옵션. 이름은 비교하지 않음) 와 source 로 fit 했는지 (imputer 중앙값, scaler 평균, 학습 행 수)
+        import numpy as np
+        ct = _var(p["var"])
+        if type(ct).__name__ != "ColumnTransformer" or not hasattr(ct, "transformers_"):
+            raise _ProbeError(f"{p['var']} 가 fit 된 ColumnTransformer 가 아닙니다")
+        allowed = {"Pipeline", "SimpleImputer", "StandardScaler", "OneHotEncoder"}
+        src = _df(p["source"])
+        struct, fit_ok = [], True
+        for name, tr, cols in ct.transformers_:
+            if name == "remainder":
+                if len(cols):
+                    struct.append(["remainder", str(tr), [str(c) for c in cols], {}])
+                continue
+            steps = [s2 for _, s2 in tr.steps] if type(tr).__name__ == "Pipeline" else [tr]
+            cls = [type(s2).__name__ for s2 in steps]
+            if not set(cls) <= allowed:
+                raise _ProbeError("허용되지 않는 변환기")
+            info = {}
+            for s2 in steps:
+                if type(s2).__name__ == "OneHotEncoder":
+                    info = {"handle_unknown": s2.handle_unknown, "sparse_output": bool(s2.sparse_output)}
+            struct.append([cls, [str(c) for c in cols], info])  # 이름은 풀이마다 달라도 됨 (make_column_transformer 등)
+            part = src[list(cols)]
+            for s2 in steps:
+                t = type(s2).__name__
+                if t == "SimpleImputer":
+                    if getattr(s2, "strategy", None) == "median":
+                        fit_ok &= bool(np.allclose(s2.statistics_, part.median().to_numpy(dtype=float), atol=1e-9, equal_nan=True))
+                    part = part.fillna(dict(zip(part.columns, s2.statistics_)))
+                elif t == "StandardScaler":
+                    fit_ok &= int(s2.n_samples_seen_ if np.ndim(s2.n_samples_seen_) == 0 else np.max(s2.n_samples_seen_)) == len(src)
+                    fit_ok &= bool(np.allclose(s2.mean_, part.to_numpy(dtype=float).mean(axis=0), atol=1e-6))
+        return {"structure": struct, "fit_on_source": bool(fit_ok)}
+    if k == "transformed_with":
+        # (엔진 1.7.0) var 가 학생 transformer.transform(source) 결과와 모양, 값이 같은지 (학생 객체는 바꾸지 않음)
+        import numpy as np
+        tr = _var(p["transformer"])
+        if type(tr).__name__ not in ("ColumnTransformer", "Pipeline", "StandardScaler", "OneHotEncoder", "SimpleImputer"):
+            raise _ProbeError("허용되지 않는 변환기")
+        try:
+            exp = np.asarray(tr.transform(_df(p["source"])), dtype=float)
+            got = np.asarray(_var(p["var"]), dtype=float)
+        except Exception:
+            return False
+        return got.shape == exp.shape and bool(np.allclose(got, exp, rtol=1e-9, atol=1e-9))
+    if k == "stratified_cv_scores":
+        # (엔진 1.7.0) Pipeline([clone(transformer), LogisticRegression(params)]) 를 StratifiedKFold 로 교차 검증한 fold 별 f1 (폴드마다 전처리 재학습)
+        import numpy as np
+        from sklearn.base import clone
+        from sklearn.pipeline import Pipeline
+        from sklearn.model_selection import StratifiedKFold, cross_val_score
+        if p.get("model_class") != "LogisticRegression" or p.get("scoring", "f1") != "f1":
+            raise _ProbeError("교차 검증은 LogisticRegression, f1 만")
+        tr = _var(p["transformer"])
+        if type(tr).__name__ not in ("ColumnTransformer", "Pipeline"):
+            raise _ProbeError("허용되지 않는 변환기")
+        X, y = _df(p["X"]), _var(p["y"])
+        ns_ = p.get("n_splits", 5)
+        if len(X) > 5000 or not isinstance(ns_, int) or not 2 <= ns_ <= 5 or len(X) != len(y):
+            raise _ProbeError("교차 검증 범위 초과")
+        rs = p.get("random_state")
+        cv = StratifiedKFold(n_splits=ns_, shuffle=bool(p.get("shuffle")), random_state=(rs if p.get("shuffle") else None))
+        pipe = Pipeline([("preprocessor", clone(tr)), ("model", _model_cls("LogisticRegression")(**_params(p.get("params"))))])
+        return [float(v) for v in cross_val_score(pipe, X, y, cv=cv, scoring="f1", n_jobs=1)]
+    if k == "onehot_reproduced":
+        # (엔진 1.5.0) 학생의 현재 source (assign 으로 Series 컬럼 추가 가능) 에 pd.get_dummies(columns=onehot_columns, dtype=int) 를 다시 적용한 결과와 var 비교 (컬럼 집합, 인덱스, 컬럼별 dtype 종류와 값)
+        import pandas as pd
+        src = _df(p["source"])
+        cols = list(p.get("onehot_columns") or [])
+        if not cols or any(c not in src.columns for c in cols):
+            raise _ProbeError("인코딩할 컬럼이 없습니다")
+        extra = p.get("assign") or {}
+        if len(extra) > 3:
+            raise _ProbeError("assign 은 3개까지")
+        if extra:
+            src = src.copy()
+            for name, vn in extra.items():
+                if not _NAME_RE.match(str(name)):
+                    raise _ProbeError("허용되지 않는 컬럼 이름")
+                sv = _var(vn)
+                if not _is_series(sv) or [str(i) for i in sv.index] != [str(i) for i in src.index]:
+                    raise _ProbeError(f"{vn} 가 같은 인덱스의 Series 가 아닙니다")
+                src[name] = sv
+        exp = pd.get_dummies(src, columns=cols, dtype=int)
+        got = _var(p["var"])
+        if not _is_df(got) or set(map(str, got.columns)) != set(map(str, exp.columns)):
+            return False
+        return _same_data(got[list(exp.columns)], exp)
+    if k == "confusion_matrix":
+        # (엔진 1.5.0) 이진 혼동행렬 [[TN, FP], [FN, TP]] (labels 순서), 예측은 pred 변수 또는 model+X(+threshold) 로 학생 상태에서 계산
+        import numpy as np
+        from sklearn.metrics import confusion_matrix as _cm
+        yv = np.asarray(_var(p["y"]))
+        if p.get("pred"):
+            pv = np.asarray(_var(p["pred"]))
+        else:
+            pv = np.asarray(_predict(_var(p["model"]), _var(p["X"]), p.get("threshold")))
+        if yv.shape != pv.shape or yv.ndim != 1:
+            raise _ProbeError("예측 길이가 레이블과 다릅니다")
+        labels = p.get("labels") or [0, 1]
+        if sorted(labels) != [0, 1]:
+            raise _ProbeError("labels 는 0, 1")
+        cmx = _cm(yv, pv, labels=labels)
+        cell = p.get("cell")
+        if cell is not None:
+            # (엔진 1.7.0) labels [0, 1] 기준 한 칸: tn, fp, fn, tp
+            if cell not in ("tn", "fp", "fn", "tp") or labels != [0, 1]:
+                raise _ProbeError("cell 은 tn, fp, fn, tp (labels [0, 1])")
+            return int(cmx.ravel()[["tn", "fp", "fn", "tp"].index(cell)])
+        return cmx.tolist()
+    if k == "metric_gap":
+        # (엔진 1.5.0) 같은 모델의 두 데이터 지표 차이 metric(X_a, y_a) - metric(X_b, y_b) (예: 훈련 R2 - 평가 R2)
+        m = p.get("metric")
+        if m not in _METRICS:
+            raise _ProbeError("허용되지 않는 지표")
+        model = _var(p["model"])
+        a = _metric_value(m, _var(p["y_a"]), _predict(model, _var(p["X_a"])))
+        b = _metric_value(m, _var(p["y_b"]), _predict(model, _var(p["X_b"])))
+        return a - b
+    if k == "column_values":
+        # (엔진 1.4.0) DataFrame 컬럼 값 (minus_column 이 있으면 column - minus_column). as_list 면 위치 순서 리스트, 아니면 인덱스 포함 Series 형식
+        df = _df(p["var"])
+        c, mc = p.get("column"), p.get("minus_column")
+        if c not in df.columns or (mc is not None and mc not in df.columns):
+            raise _ProbeError("컬럼이 없습니다")
+        s = df[c] - df[mc] if mc is not None else df[c]
+        return [_norm(x) for x in s.tolist()] if p.get("as_list") is True else _norm(s)
+    if k == "figure_info":
+        # (엔진 1.4.0) 학생이 변수에 저장한 matplotlib Figure 의 구조 정보 하나 (axes 수, 첫 축의 xlabel, ylabel, 막대 수, 산점도 점 수)
+        f = _var(p["var"])
+        if type(f).__name__ != "Figure" or not (type(f).__module__ or "").startswith("matplotlib"):
+            raise _ProbeError(f"{p['var']} 가 matplotlib Figure 가 아닙니다")
+        field = p.get("field")
+        axes = list(f.axes)
+        if field == "axes":
+            return len(axes)
+        if not axes:
+            raise _ProbeError("그림에 축이 없습니다")
+        ax = axes[0]
+        if field == "xlabel":
+            return str(ax.get_xlabel())
+        if field == "ylabel":
+            return str(ax.get_ylabel())
+        if field == "bars":
+            return sum(1 for q in ax.patches if type(q).__name__ == "Rectangle")
+        if field == "points":
+            return int(sum(len(c.get_offsets()) for c in ax.collections if hasattr(c, "get_offsets")))
+        if field == "bar_total":
+            return float(sum(q.get_height() for q in ax.patches if type(q).__name__ == "Rectangle"))
+        if field in ("x_mean", "y_mean"):
+            import numpy as np
+            offs = [np.asarray(c.get_offsets()) for c in ax.collections if hasattr(c, "get_offsets") and len(c.get_offsets())]
+            if not offs:
+                raise _ProbeError("산점도 점이 없습니다")
+            allp = np.concatenate(offs)
+            return float(np.nanmean(allp[:, 0 if field == "x_mean" else 1]))
+        raise _ProbeError("허용되지 않는 field")
+    if k == "split_reproduced":
+        # (엔진 1.4.0) 학생의 현재 frame 에서 drop 컬럼을 뺀 X 와 target 을 지정 설정으로 다시 나눠 학생 분할 변수와 인덱스, 컬럼 순서, dtype 종류, 값 비교
+        df = _df(p["frame"])
+        tgt = p.get("target")
+        drop = list(p.get("drop") or [])
+        if tgt not in drop or not all(isinstance(c, str) for c in drop) or any(c not in df.columns for c in drop):
+            raise _ProbeError("분할 기준 컬럼이 없습니다")
+        ts, rs = p.get("test_size"), p.get("random_state")
+        if not isinstance(ts, (int, float)) or isinstance(ts, bool) or not (0.0 < float(ts) < 1.0):
+            raise _ProbeError("test_size 범위 오류")
+        if not isinstance(rs, int) or isinstance(rs, bool) or not (0 <= rs <= 2147483647):
+            raise _ProbeError("random_state 범위 오류")
+        from sklearn.model_selection import train_test_split
+        X = df.drop(columns=drop)
+        y = df[tgt]
+        parts = train_test_split(X, y, test_size=float(ts), random_state=rs, stratify=(y if p.get("stratify") is True else None))
+        outs = p.get("outputs") or {}
+        res = {}
+        for key, exp in zip(("X_train", "X_test", "y_train", "y_test"), parts):
+            vn = outs.get(key)
+            if not vn:
+                continue
+            res[key] = _same_data(_g_ns.get(vn) if isinstance(vn, str) and _NAME_RE.match(vn) else None, exp)
+        return res
+    if k == "constrained_selection":
+        # (엔진 1.4.0) 이진 분류 후보를 학생 상태로 다시 예측해 제약(constraint) 통과 후보 중 objective 최적, 없으면 fallback 최적, 동률은 이름 오름차순
+        import math
+        import numpy as np
+        cands = p.get("candidates") or []
+        names = [c.get("name") for c in cands]
+        if not 1 <= len(cands) <= 5 or len(set(names)) != len(names):
+            raise _ProbeError("후보 구성 오류")
+        cons, obj, fb = p.get("constraint") or {}, p.get("objective") or {}, p.get("fallback") or {}
+        for part in (cons, obj, fb):
+            if part.get("metric") not in _CLS_METRICS:
+                raise _ProbeError("허용되지 않는 지표")
+        cv = cons.get("value")
+        if cons.get("op") != "ge" or not isinstance(cv, (int, float)) or isinstance(cv, bool) or not (0.0 <= float(cv) <= 1.0):
+            raise _ProbeError("제약 조건 오류")
+        if obj.get("goal") not in ("max", "min") or fb.get("goal") not in ("max", "min") or p.get("tie", "name_asc") != "name_asc":
+            raise _ProbeError("선택 규칙 오류")
+        y = _var(p["y"])
+        yv = np.asarray(y)
+        if yv.ndim != 1 or not set(np.unique(yv).tolist()) <= {0, 1}:
+            raise _ProbeError("이진(0/1) 레이블만 지원합니다")
+        need = list(dict.fromkeys([cons["metric"], obj["metric"], fb["metric"]]))
+        scores = {}
+        for c in cands:
+            X = _var(c["X"])
+            if hasattr(X, "index") and hasattr(y, "index") and list(map(str, X.index)) != list(map(str, y.index)):
+                raise _ProbeError(f"{c['X']} 와 {p['y']} 의 인덱스가 다릅니다")
+            pred = np.asarray(_predict(_var(c["model"]), X, c.get("threshold")))
+            if pred.shape != yv.shape:
+                raise _ProbeError("예측 길이가 레이블과 다릅니다")
+            sc = {m: _cls_metric(m, yv, pred) for m in need}
+            if not all(math.isfinite(v) for v in sc.values()):
+                raise _ProbeError("지표 계산 오류")
+            scores[c["name"]] = sc
+        if p.get("output") == "scores":
+            return scores
+        if p.get("output") != "selected":
+            raise _ProbeError("output 은 selected 또는 scores")
+        passed = [n for n in names if scores[n][cons["metric"]] >= float(cv) - 1e-12]
+        pool, rule = (passed, obj) if passed else (names, fb)
+        sign = -1.0 if rule["goal"] == "max" else 1.0
+        return sorted(pool, key=lambda n: (round(sign * scores[n][rule["metric"]], 12), n))[0]
+    if k == "imputed_against":
+        # (엔진 1.3.0) var[column] 이 raw[column] 의 결측 위치에서 stat_var[column] 의 통계값, 나머지는 raw 와 같은지 (인덱스 기준)
+        raw = _col(p["raw"], p["column"])
+        cur = _col(p["var"], p["column"])
+        st = p.get("stat", "median")
+        if st not in ("median", "mean"):
+            raise _ProbeError("허용되지 않는 통계")
+        src = _col(p["stat_var"], p["column"])
+        target = float(getattr(src, st)())
+        if list(map(str, cur.index)) != list(map(str, raw.index)):
+            return {"filled_dev": float("inf"), "kept_dev": float("inf"), "same_rows": False}
+        miss = raw.isna().to_numpy()
+        fd = kd = 0.0
+        for a, b, mm in zip(cur.tolist(), raw.tolist(), miss):
+            va = _num(a)
+            if va is None:
+                return {"filled_dev": float("inf"), "kept_dev": float("inf"), "same_rows": True}
+            if mm:
+                fd = max(fd, abs(va - target))
+            else:
+                kd = max(kd, abs(va - _num(b)))
+        return {"filled_dev": fd, "kept_dev": kd, "same_rows": True}
     if k == "series_index":
         v = _var(p["var"])
         if not hasattr(v, "index"):

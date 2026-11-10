@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-005",
+  "question_id": "q07",
+  "public_id": "associate-005-q07",
+  "revision": 1,
+  "title": "방문 1회당 구매액",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "방문 횟수를 고려한 구매액 특징을 만드시오.\n\n1. `offers_clean`의 `basket_value_30d / (visits_last_30d + 1)`을 계산하시오. 방문이 0회인 행도 있으므로 분모에 1을 더합니다.\n2. 결과를 `offers_clean`과 인덱스가 같은 수치형 Series `spend_per_visit`에 저장하시오. `offers_clean`은 바꾸지 마시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "promotion_offers",
+      "url_path": "content/associate-005/datasets/promotion_offers.csv",
+      "sha256": "5e683fcf9ede1ea713edd498976b3751b560d17be2bda1007bc534ad488238b3",
+      "size_bytes": 115132,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261205, SHA-256 5e683fcf9ede"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 0으로 나누는 문제를 피하는 비율 특징을 만든다.\n\n**핵심 개념:** 방문 0회인 고객도 있으므로 분모에 1을 더한다.\n\n```python\nspend_per_visit = offers_clean['basket_value_30d'] / (offers_clean['visits_last_30d'] + 1)\nprint(spend_per_visit.describe())\n```\n\n**기준 결과:** 평균 약 11,975원.\n\n**다른 풀이 (div 와 add):**\n\n```python\nspend_per_visit = offers_clean['basket_value_30d'].div(offers_clean['visits_last_30d'].add(1))\n```\n\n**자주 틀리는 부분:** 분모에 1을 더하지 않는 것, 결측을 채우기 전 원본으로 계산하는 것 (6번 결과에 따라 값이 달라지므로 6번을 먼저 맞추세요).\n\n**채점 항목:**\n\n1. 방문 1회당 구매액\n2. 같은 인덱스\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "spend_per_visit = offers_clean['basket_value_30d'] / (offers_clean['visits_last_30d'] + 1)\nprint(spend_per_visit.describe())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-003",
+  "question_id": "q01",
+  "public_id": "associate-003-q01",
+  "revision": 1,
+  "title": "인증 이벤트 읽기",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "`auth_events.csv` 파일을 읽어 DataFrame `auth_df`에 저장하시오.\n\n1. 파일은 작업 폴더에 있습니다.\n2. `auth_id`는 인덱스로 바꾸지 말고 일반 컬럼으로 두시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "auth_events",
+      "url_path": "content/associate-003/datasets/auth_events.csv",
+      "sha256": "7fc3948a9128d78de881a28a390575df52f59a4b3ce2413db5d073952f2f0d0b",
+      "size_bytes": 101231,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261203, SHA-256 7fc3948a9128"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** read_csv로 1,800행과 14열을 읽고 ID를 인덱스로 변경하지 않는다.\n\n**핵심 개념:** `pd.read_csv()`로 읽은 원본 `auth_df`는 이후 모든 문항의 출발점이므로 그대로 보존한다.\n\n```python\nimport pandas as pd\nauth_df = pd.read_csv('auth_events.csv')\nauth_df.head()\n```\n\n**기준 결과:** 1,800행, 14열.\n\n**다른 풀이 (os.path 로 같은 파일 로딩):**\n\n```python\nimport pandas as pd\nimport os\nauth_df = pd.read_csv(os.path.join('.', 'auth_events.csv'))\n```\n\n**자주 틀리는 부분:** CSV 경로 오류, auth_id를 인덱스로 바꾸기.\n\n**채점 항목:**\n\n1. auth_df 에 DataFrame 저장\n2. CSV 전체 행과 열\n3. auth_id 일반 컬럼 보존\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "import pandas as pd\nauth_df = pd.read_csv('auth_events.csv')\nauth_df.head()\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

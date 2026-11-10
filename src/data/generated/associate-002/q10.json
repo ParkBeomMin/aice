@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-002",
+  "question_id": "q10",
+  "public_id": "associate-002-q10",
+  "revision": 1,
+  "title": "선형회귀 모델 학습",
+  "topic": "machine_learning",
+  "difficulty": "easy",
+  "prompt": "선형회귀 모델을 학습하시오.\n\n1. `LinearRegression()`을 `X_train_scaled`, `y_train`으로 학습하시오.\n2. 학습한 모델을 `linear_model`에 저장하시오.\n\n학습한 모델은 `X_test_scaled`, `y_test`로 평가됩니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "warehouse_orders",
+      "url_path": "content/associate-002/datasets/warehouse_orders.csv",
+      "sha256": "3376dfe0980179ca23c830b98079fb02ec38356cb4a59e1d7e82e5260793ad0c",
+      "size_bytes": 97585,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261202, SHA-256 3376dfe09801"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 선형회귀 모델을 지정한 입력으로 학습한다.\n\n**핵심 개념:** 선형회귀는 입력 특징의 선형 조합으로 목표값을 예측한다. 학습 데이터는 `X_train_scaled`, `y_train`이고 예측은 `X_test_scaled`에서 한다. 선형회귀 예측값 자체는 표준화 여부와 무관하지만, 이 회차는 계수를 비교하기 쉽도록 표준화 데이터를 쓰도록 지정했다.\n\n```python\nfrom sklearn.linear_model import LinearRegression\nlinear_model = LinearRegression().fit(X_train_scaled, y_train)\n```\n\n**기준 결과:** LinearRegression, 계수 23개.\n\n**다른 풀이 (생성 후 fit):**\n\n```python\nfrom sklearn.linear_model import LinearRegression\nlinear_model = LinearRegression()\nlinear_model.fit(X_train_scaled, y_train)\n```\n\n**자주 틀리는 부분:** 평가 데이터로 학습, 다른 모델 사용, 표준화 전 데이터로 학습, `fit()` 누락.\n\n**채점 항목:**\n\n1. LinearRegression\n2. 학습됨\n3. 표준화 훈련 데이터로 학습\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.linear_model import LinearRegression\nlinear_model = LinearRegression().fit(X_train_scaled, y_train)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

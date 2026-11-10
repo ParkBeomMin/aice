@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-004",
+  "question_id": "q04",
+  "public_id": "associate-004-q04",
+  "revision": 1,
+  "title": "건물 유형별 평균 사용량",
+  "topic": "pandas",
+  "difficulty": "medium",
+  "prompt": "건물 유형별 평균 전력 사용량을 구하시오.\n\n1. `building_type`별 `energy_kwh` 평균을 Series `building_energy_mean`에 저장하시오.\n2. 인덱스를 건물 유형 이름 오름차순으로 정렬하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "building_energy",
+      "url_path": "content/associate-004/datasets/building_energy.csv",
+      "sha256": "1c3c7b0811527ca4fbc07c17ae33b7da35c8899d93156bcfa4573b0c3914d898",
+      "size_bytes": 108748,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261204, SHA-256 1c3c7b081152"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** building_type별 energy_kwh 평균을 정렬된 Series로 만든다.\n\n**핵심 개념:** `groupby('building_type')['energy_kwh'].mean()`은 건물 유형별 평균 사용량이다.\n\n```python\nbuilding_energy_mean = energy_df.groupby('building_type')['energy_kwh'].mean().sort_index()\nprint(building_energy_mean)\n```\n\n**기준 결과:** Factory 약 93.53, Library 약 58.38, Office 약 68.24, Retail 약 55.25 (kWh).\n\n**다른 풀이 (pivot_table):**\n\n```python\nbuilding_energy_mean = energy_df.pivot_table(index='building_type', values='energy_kwh', aggfunc='mean')['energy_kwh'].sort_index()\n```\n\n**자주 틀리는 부분:** 전체 평균 사용, 합계 사용, 중앙값, 내림차순.\n\n**채점 항목:**\n\n1. 건물 유형별 평균\n2. 유형 이름 오름차순\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "building_energy_mean = energy_df.groupby('building_type')['energy_kwh'].mean().sort_index()\nprint(building_energy_mean)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

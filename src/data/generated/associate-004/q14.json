@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-004",
+  "question_id": "q14",
+  "public_id": "associate-004-q14",
+  "revision": 2,
+  "title": "회귀 모델 비교와 과적합 관찰",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "두 모델의 오차를 비교하고 랜덤포레스트의 과적합 정도를 확인하시오.\n\n1. `energy_rf_pred`의 RMSE를 `rmse_rf`에 저장하시오.\n2. `rmse_lr`(`energy_lr`의 `X_test` 예측 RMSE)와 비교해 RMSE가 더 작은 모델 이름을 `best_energy_model`에 `'linear'` 또는 `'forest'`로 저장하시오. 같으면 `'linear'`를 고르시오.\n3. `energy_rf`의 훈련 데이터(`X_train`, `y_train`) R2를 `rf_train_r2`, 평가 데이터(`X_test`, `y_test`) R2를 `rf_test_r2`에 저장하시오.\n4. `rf_train_r2 - rf_test_r2`를 `rf_overfit_gap`에 저장하시오.\n\n> 훈련 R2가 평가 R2보다 크게 높으면 과적합을 의심할 수 있지만, 그 차이만으로 단정하지는 않습니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "building_energy",
+      "url_path": "content/associate-004/datasets/building_energy.csv",
+      "sha256": "1c3c7b0811527ca4fbc07c17ae33b7da35c8899d93156bcfa4573b0c3914d898",
+      "size_bytes": 108748,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261204, SHA-256 1c3c7b081152"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** RMSE가 작은 모델을 선택하고 RF 훈련 R2와 테스트 R2 차이를 측정한다.\n\n**핵심 개념:** 오차 지표는 작을수록 좋으므로 RMSE가 작은 모델을 고른다. 훈련 R2가 평가 R2보다 크게 높으면 과적합을 의심할 수 있다.\n\n```python\nfrom sklearn.metrics import r2_score\nrmse_rf = np.sqrt(mean_squared_error(y_test, energy_rf_pred))\nbest_energy_model = 'linear' if rmse_lr <= rmse_rf else 'forest'\nrf_train_r2 = r2_score(y_train, energy_rf.predict(X_train))\nrf_test_r2 = r2_score(y_test, energy_rf_pred)\nrf_overfit_gap = rf_train_r2 - rf_test_r2\nprint(rmse_rf, best_energy_model, rf_train_r2, rf_test_r2, rf_overfit_gap)\n```\n\n**기준 결과:** 랜덤포레스트 RMSE 약 19.03 > 선형 17.74 이므로 'linear'. 훈련 R2 약 0.9285, 평가 R2 약 0.7323, 차이 약 0.196.\n\n**다른 풀이 (min 으로 선택):**\n\n```python\nfrom sklearn.metrics import mean_squared_error, r2_score\nimport numpy as np\nrmse_rf = np.sqrt(mean_squared_error(y_test, energy_rf_pred))\nbest_energy_model = min([('linear', rmse_lr), ('forest', rmse_rf)], key=lambda t: (t[1], t[0] != 'linear'))[0]\nrf_train_r2 = r2_score(y_train, energy_rf.predict(X_train))\nrf_test_r2 = energy_rf.score(X_test, y_test)\nrf_overfit_gap = rf_train_r2 - rf_test_r2\n```\n\n**자주 틀리는 부분:** R2 최대와 RMSE 최소 혼동, gap 부호 반대, 훈련과 평가 R2 를 바꾸는 것.\n\n**채점 항목:**\n\n1. 랜덤포레스트 RMSE\n2. RMSE 가 작은 모델\n3. 훈련 R2\n4. 평가 R2\n5. 훈련 R2 - 평가 R2\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import r2_score\nrmse_rf = np.sqrt(mean_squared_error(y_test, energy_rf_pred))\nbest_energy_model = 'linear' if rmse_lr <= rmse_rf else 'forest'\nrf_train_r2 = r2_score(y_train, energy_rf.predict(X_train))\nrf_test_r2 = r2_score(y_test, energy_rf_pred)\nrf_overfit_gap = rf_train_r2 - rf_test_r2\nprint(rmse_rf, best_energy_model, rf_train_r2, rf_test_r2, rf_overfit_gap)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

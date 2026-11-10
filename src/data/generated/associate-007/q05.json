@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-007",
+  "question_id": "q05",
+  "public_id": "associate-007-q05",
+  "revision": 1,
+  "title": "불량 여부별 진동 비교",
+  "topic": "visualization",
+  "difficulty": "medium",
+  "prompt": "불량 배치와 정상 배치의 진동을 비교하시오.\n\n1. `batch_df`에서 `defect_24h`(0, 1)별 `vibration_mm_s` 평균(결측 제외)을 인덱스 0, 1 순서의 Series `vibration_by_defect`에 저장하시오.\n2. 두 평균을 나란히 보여 주는 막대그래프를 그려 그림(Figure)을 `vibration_fig`에 저장하시오. 가로축 이름은 `defect_24h`, 세로축 이름은 `vibration_mm_s`로 표시하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "production_batches",
+      "url_path": "content/associate-007/datasets/production_batches.csv",
+      "sha256": "3a1486511c970411a450b5b11f40a333be71c2f6fe275cc6f59151ec9ba42ee7",
+      "size_bytes": 119702,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261207, SHA-256 3a1486511c97"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 그룹 평균을 비교하는 막대그래프를 그린다.\n\n**핵심 개념:** `mean()`은 결측을 자동으로 빼고 계산한다. 막대 높이는 두 그룹 평균과 순서대로 같아야 한다.\n\n```python\nimport matplotlib.pyplot as plt\nvibration_by_defect = batch_df.groupby('defect_24h')['vibration_mm_s'].mean().sort_index()\nvibration_fig, ax = plt.subplots(figsize=(5, 4))\nax.bar(vibration_by_defect.index.astype(str), vibration_by_defect.to_numpy())\nax.set_xlabel('defect_24h')\nax.set_ylabel('vibration_mm_s')\nplt.show()\n```\n\n**기준 결과:** 정상(0) 약 3.09, 불량(1) 약 4.68 mm/s. 불량 배치의 진동이 크다.\n\n**다른 풀이 (Series.plot.bar):**\n\n```python\nimport matplotlib.pyplot as plt\nvibration_by_defect = batch_df.groupby('defect_24h')['vibration_mm_s'].mean().sort_index()\nvibration_fig, ax = plt.subplots()\nvibration_by_defect.plot.bar(ax=ax)\nax.set_xlabel('defect_24h')\nax.set_ylabel('vibration_mm_s')\n```\n\n**자주 틀리는 부분:** 결측을 0으로 채워 평균을 낮추는 것, 막대 순서를 바꾸는 것.\n\n**채점 항목:**\n\n1. 불량 여부별 진동 평균\n2. 인덱스 0, 1\n3. 막대 높이가 두 평균\n4. 가로축 이름\n5. 세로축 이름\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "import matplotlib.pyplot as plt\nvibration_by_defect = batch_df.groupby('defect_24h')['vibration_mm_s'].mean().sort_index()\nvibration_fig, ax = plt.subplots(figsize=(5, 4))\nax.bar(vibration_by_defect.index.astype(str), vibration_by_defect.to_numpy())\nax.set_xlabel('defect_24h')\nax.set_ylabel('vibration_mm_s')\nplt.show()\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

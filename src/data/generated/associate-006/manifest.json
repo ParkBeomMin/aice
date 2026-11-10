@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.3.0",
+  "pack_id": "associate-006",
+  "title": "AICE Associate 실전 연습 모의고사 6회차: 공유 자전거 수요 예측",
+  "summary": "가상의 공유 자전거 운영사 일별, 지구별 관측 1,920건으로 날짜 처리, 월별 추이 시각화, 결측 처리, 파생 특징, 시간순 분할과 누설 없는 전처리, 회귀 모델 평가, 비 오는 날 오차 분석까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+  "mode": "production",
+  "mock": false,
+  "time_limit_minutes": 90,
+  "question_count": 14,
+  "questions": [
+    {
+      "question_id": "q01",
+      "public_id": "associate-006-q01",
+      "revision": 1,
+      "title": "날짜와 지구별 수요 파일 읽기",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q01.json",
+      "sha256": "8a217d4752079fbb3a3dbdd5b54f3579548272fbb02f587f46a86887ce48ebb1"
+    },
+    {
+      "question_id": "q02",
+      "public_id": "associate-006-q02",
+      "revision": 1,
+      "title": "관측 기간과 결측 수",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q02.json",
+      "sha256": "99b65c64935e5e769d4e12b1b1a66a5de738aafdbe08ffab5f9881cecdf6cb04"
+    },
+    {
+      "question_id": "q03",
+      "public_id": "associate-006-q03",
+      "revision": 1,
+      "title": "비 오는 날 추출",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q03.json",
+      "sha256": "8e22d7f7c02e143925c348e3bc90a8da32409353dd167ed1535d448127506b35"
+    },
+    {
+      "question_id": "q04",
+      "public_id": "associate-006-q04",
+      "revision": 1,
+      "title": "요일별 평균 대여량",
+      "topic": "pandas",
+      "difficulty": "medium",
+      "file": "q04.json",
+      "sha256": "8bce7e46901f13d5a5ba3015c937d62bfca7f0ffe870a88eb1443ce047ff389f"
+    },
+    {
+      "question_id": "q05",
+      "public_id": "associate-006-q05",
+      "revision": 1,
+      "title": "월별 대여 추이 시각화",
+      "topic": "visualization",
+      "difficulty": "medium",
+      "file": "q05.json",
+      "sha256": "02336e2037d1ee8e5191816eaa9151d7d1288a129f8e421b81d679f23860c77f"
+    },
+    {
+      "question_id": "q06",
+      "public_id": "associate-006-q06",
+      "revision": 1,
+      "title": "탐색용 습도 결측 대체",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q06.json",
+      "sha256": "10702d099be565dc260a354b867296665cd30507f5ee0f82ff9b5ffeb07df79d"
+    },
+    {
+      "question_id": "q07",
+      "public_id": "associate-006-q07",
+      "revision": 1,
+      "title": "정류장당 자전거 수",
+      "topic": "preprocessing",
+      "difficulty": "easy",
+      "file": "q07.json",
+      "sha256": "d05cba5e163d05a1dba0195e21b6ecdc8a1dc8913e27a4591f99c901803b1c79"
+    },
+    {
+      "question_id": "q08",
+      "public_id": "associate-006-q08",
+      "revision": 1,
+      "title": "탐색용 지구와 계절 인코딩",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q08.json",
+      "sha256": "8050aad58ff6e115341c1598d7f50b4d08a77dca7d196d4ad49316ef8d203338"
+    },
+    {
+      "question_id": "q09",
+      "public_id": "associate-006-q09",
+      "revision": 1,
+      "title": "날짜 기준 시간순 분할",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q09.json",
+      "sha256": "7800657afecb269c31b7b50c5d22e19cd0855a2ba84618456589b33f551e751d"
+    },
+    {
+      "question_id": "q10",
+      "public_id": "associate-006-q10",
+      "revision": 1,
+      "title": "선형회귀 학습",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q10.json",
+      "sha256": "91163bb136b9c2e3d8d6738a11d8a15edab223b77f0788767f14506deea637e3"
+    },
+    {
+      "question_id": "q11",
+      "public_id": "associate-006-q11",
+      "revision": 1,
+      "title": "랜덤포레스트 회귀 학습",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q11.json",
+      "sha256": "047fc38141e51af9c277f067ff67772a158f8e5c4f66517cd5be953dcdc67fec"
+    },
+    {
+      "question_id": "q12",
+      "public_id": "associate-006-q12",
+      "revision": 1,
+      "title": "선형회귀 MAE와 RMSE",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q12.json",
+      "sha256": "c2370fb5bd587b1397f3bb5427acf6c84aaae6c4ff4f0c13069444c01cafad20"
+    },
+    {
+      "question_id": "q13",
+      "public_id": "associate-006-q13",
+      "revision": 1,
+      "title": "훈련과 평가 기간 확인",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q13.json",
+      "sha256": "0bb91bd6689adc97a1b1956af77ee7863bf1edf5f44989632a27d740184bb806"
+    },
+    {
+      "question_id": "q14",
+      "public_id": "associate-006-q14",
+      "revision": 1,
+      "title": "비 오는 날 예측 오차",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q14.json",
+      "sha256": "8bb55a65722294c099374b8428a4806e93cf3f0a4e3830a5cd33d801a1c019f8"
+    }
+  ],
+  "scenario_md": "가상의 공유 자전거 운영사 RideOn은 지구별 하루 대여 건수를 미리 예측해 자전거 재배치 계획을 세우려고 합니다. 특히 비가 오는 날 예측 오차가 커지는지 확인하려고 합니다.\n\n여러분은 운영 데이터 분석가로서 2025년 320일 동안 6개 지구의 일별 기록을 탐색하고, 날짜 순서를 지키는 분할로 수요 예측 회귀 모델을 만들고 평가해야 합니다.\n\n- 분석 목표: 날짜와 지구별 대여 건수(`rides_count`) 예측\n- 데이터: `bike_demand.csv` (320일 x 6개 지구 = 1,920행, 14개 컬럼)\n- 진행 순서: 데이터 탐색(1~5번) → 탐색용 전처리(6~8번) → 시간순 분할과 전처리(9번) → 모델 학습과 평가(10~14번)\n\n> 기온과 강우량은 운영 계획을 확정하기 직전에 받는 가상의 예보치입니다. `previous_week_same_day_rides`는 같은 지구의 7일 전 대여 건수로 예측 시점에 이미 알 수 있는 값입니다. 미래 날짜의 정보가 훈련에 섞이지 않도록 9번에서는 무작위 분할 대신 날짜 기준으로 나눕니다.",
+  "datasets": [
+    {
+      "dataset_id": "bike_demand",
+      "url_path": "content/associate-006/datasets/bike_demand.csv",
+      "sha256": "8b6b2150909767f79155d692412f850f6d06f59110de572e8af097370836c537",
+      "size_bytes": 112825,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261206, SHA-256 8b6b21509097",
+      "columns": [
+        {
+          "name": "service_date",
+          "type": "문자열",
+          "description": "관측 날짜, 날짜 형식 문자열 (2025-01-01 ~ 2025-11-16, YYYY-MM-DD). 날짜와 지구 조합은 하나씩만 있습니다."
+        },
+        {
+          "name": "district",
+          "type": "문자열",
+          "description": "운영 지구: A, B, C, D, E, F"
+        },
+        {
+          "name": "season",
+          "type": "문자열",
+          "description": "계절: Winter(12~2월), Spring(3~5월), Summer(6~8월), Autumn(9~11월)"
+        },
+        {
+          "name": "is_weekend",
+          "type": "정수",
+          "description": "토요일, 일요일이면 1, 아니면 0"
+        },
+        {
+          "name": "holiday_flag",
+          "type": "정수",
+          "description": "가상 운영 휴일이면 1, 아니면 0 (실제 공휴일 자료 아님)"
+        },
+        {
+          "name": "temp_c",
+          "type": "실수",
+          "description": "예보 기온 (도씨)"
+        },
+        {
+          "name": "rain_mm",
+          "type": "실수",
+          "description": "예보 강우량 (mm). 일부 집중호우"
+        },
+        {
+          "name": "humidity_pct",
+          "type": "실수",
+          "description": "예보 습도 (%). 일부 결측"
+        },
+        {
+          "name": "wind_mps",
+          "type": "실수",
+          "description": "예보 풍속 (m/s)"
+        },
+        {
+          "name": "nearby_events",
+          "type": "정수",
+          "description": "지구 안 예정 행사 수 (0~3)"
+        },
+        {
+          "name": "bike_stations",
+          "type": "정수",
+          "description": "운영 정류장 수 (개)"
+        },
+        {
+          "name": "available_bikes",
+          "type": "정수",
+          "description": "운영 시작 시 배치된 자전거 수 (대)"
+        },
+        {
+          "name": "previous_week_same_day_rides",
+          "type": "정수",
+          "description": "같은 지구의 7일 전 대여 건수. 예측 시점에 이미 알 수 있는 값"
+        },
+        {
+          "name": "rides_count",
+          "type": "정수",
+          "description": "해당 날짜, 지구의 대여 건수. 예측 대상"
+        }
+      ]
+    }
+  ],
+  "generator": {
+    "name": "acf content build",
+    "version": "0.1.0",
+    "content_contract": "1.3.0"
+  },
+  "source_fingerprint": "6cb5515bd8e7c2b81582de034fc5f5d9f5931591df5d136695d4fe83856c5ef0",
+  "notebook": {
+    "kind": "question_notebook",
+    "format": "nbformat4.5",
+    "url_path": "content/associate-006/notebooks/associate-006-questions-075c7c9ffb90.ipynb",
+    "sha256": "075c7c9ffb9034e3e7af59bcac7042b95052e68c27d204748a57c530cfafa0ed",
+    "size_bytes": 14407,
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  },
+  "grading": {
+    "kind": "grading_bundle",
+    "url_path": "content/associate-006/grading/associate-006-grading-e0a96c249326.json",
+    "sha256": "e0a96c24932618cdc44fa93d023de85a97494e407e7d62e9fd878da4e604be20",
+    "size_bytes": 231503,
+    "engine_version": "1.7.0",
+    "grading_version": "associate-006-g67736166171e",
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  }
+}

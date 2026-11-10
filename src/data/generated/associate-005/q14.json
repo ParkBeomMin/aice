@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-005",
+  "question_id": "q14",
+  "public_id": "associate-005-q14",
+  "revision": 1,
+  "title": "오류 비용을 반영한 모델 선택",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "잘못 판정한 비용으로 두 후보를 비교하시오.\n\n1. 후보 `logistic_035`는 `promo_pred_035`(`promo_lr`, `X_test`, 임계값 0.35), 후보 `forest_05`는 `promo_rf_pred`(`promo_rf`, `X_test`)를 씁니다.\n2. `y_test`와 비교해 거짓 양성(FP) 1건의 비용은 1, 거짓 음성(FN) 1건의 비용은 5로 두고, 후보별 `FP + 5 * FN`을 딕셔너리 `candidate_costs`에 저장하시오. 형식: `{'logistic_035': 값, 'forest_05': 값}`\n3. 총비용이 더 낮은 후보 이름을 `best_promo_model`에 저장하시오. 같으면 이름 오름차순으로 앞선 후보를 고르시오.\n\n> 비용 값은 학습용 가정이며 실제 마케팅 비용이 아닙니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "promotion_offers",
+      "url_path": "content/associate-005/datasets/promotion_offers.csv",
+      "sha256": "5e683fcf9ede1ea713edd498976b3751b560d17be2bda1007bc534ad488238b3",
+      "size_bytes": 115132,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261205, SHA-256 5e683fcf9ede"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 오류 종류별 비용으로 모델을 선택한다.\n\n**핵심 개념:** 수락할 고객을 놓치는 FN 이 더 비싸다는 가정(FN 5, FP 1)에서는 재현율이 높은 모델이 유리할 수 있다. 혼동행렬에서 FP, FN 을 세어 비용을 비교한다.\n\n```python\nfrom sklearn.metrics import confusion_matrix\ncandidate_costs = {}\nfor name, pred in [('logistic_035', promo_pred_035), ('forest_05', promo_rf_pred)]:\n    tn, fp, fn, tp = confusion_matrix(y_test, pred, labels=[0, 1]).ravel()\n    candidate_costs[name] = int(fp + 5 * fn)\nbest_promo_model = min(sorted(candidate_costs), key=lambda n: candidate_costs[n])\nprint(candidate_costs, best_promo_model)\n```\n\n**기준 결과:** logistic_035 235, forest_05 441 → logistic_035.\n\n**다른 풀이 (직접 세기):**\n\n```python\nimport numpy as np\nyt = y_test.to_numpy()\ncandidate_costs = {n: int(((yt == 0) & (p == 1)).sum() + 5 * ((yt == 1) & (p == 0)).sum()) for n, p in [('logistic_035', np.asarray(promo_pred_035)), ('forest_05', np.asarray(promo_rf_pred))]}\nbest_promo_model = min(sorted(candidate_costs), key=candidate_costs.get)\n```\n\n**자주 틀리는 부분:** FP 와 FN 비용을 바꾸는 것, 비용이 큰 모델을 고르는 것, 0.5 예측을 쓰는 것.\n\n**채점 항목:**\n\n1. 후보별 FP + 5 * FN\n2. 비용 최소 후보\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import confusion_matrix\ncandidate_costs = {}\nfor name, pred in [('logistic_035', promo_pred_035), ('forest_05', promo_rf_pred)]:\n    tn, fp, fn, tp = confusion_matrix(y_test, pred, labels=[0, 1]).ravel()\n    candidate_costs[name] = int(fp + 5 * fn)\nbest_promo_model = min(sorted(candidate_costs), key=lambda n: candidate_costs[n])\nprint(candidate_costs, best_promo_model)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

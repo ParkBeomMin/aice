@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.3.0",
+  "pack_id": "associate-003",
+  "title": "AICE Associate 실전 연습 모의고사 3회차: 로그인 보안 위험 탐지",
+  "summary": "가상의 로그인 보안 서비스 SecurePortal 인증 이벤트 1,800건으로 데이터 탐색, 결측 처리, 원-핫 인코딩, 계층 분할과 누설 없는 전처리, 불균형 분류 모델 평가까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+  "mode": "production",
+  "mock": false,
+  "time_limit_minutes": 90,
+  "question_count": 14,
+  "questions": [
+    {
+      "question_id": "q01",
+      "public_id": "associate-003-q01",
+      "revision": 1,
+      "title": "인증 이벤트 읽기",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q01.json",
+      "sha256": "8710a55484be2db85f1675084fd3e749ea6c3467d8e6d3f03adba199e9841e5a"
+    },
+    {
+      "question_id": "q02",
+      "public_id": "associate-003-q02",
+      "revision": 2,
+      "title": "위험 판정 비율",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q02.json",
+      "sha256": "93ec244d118915b2fd6bf16fb6a8292ee5ece5ade9a062672bf867f8d27bffef"
+    },
+    {
+      "question_id": "q03",
+      "public_id": "associate-003-q03",
+      "revision": 1,
+      "title": "야간 로그인 추출",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q03.json",
+      "sha256": "5c1c2b10fbb65245f351d2068d4dd6bbf6371e1bc57cae26e6aa3435e8a6fd1f"
+    },
+    {
+      "question_id": "q04",
+      "public_id": "associate-003-q04",
+      "revision": 1,
+      "title": "MFA 사용 여부별 위험 비율",
+      "topic": "pandas",
+      "difficulty": "medium",
+      "file": "q04.json",
+      "sha256": "5c42d8f1729ece3d49b560258e5856569430f1db7448e4abc914348efaa3082c"
+    },
+    {
+      "question_id": "q05",
+      "public_id": "associate-003-q05",
+      "revision": 2,
+      "title": "IP 위험 점수 히스토그램",
+      "topic": "visualization",
+      "difficulty": "easy",
+      "file": "q05.json",
+      "sha256": "05bce838767ab26d6a7c0792154e9903a33d3604dbfc29b74fa2bc8b72f2be35"
+    },
+    {
+      "question_id": "q06",
+      "public_id": "associate-003-q06",
+      "revision": 1,
+      "title": "탐색용 IP 점수 결측 대체",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q06.json",
+      "sha256": "4aac59b680af3fd43ee7c6586d490de0e3e5846a2699628d2d343a3fe2ee8da1"
+    },
+    {
+      "question_id": "q07",
+      "public_id": "associate-003-q07",
+      "revision": 1,
+      "title": "원거리 로그인 표시",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q07.json",
+      "sha256": "a64e195ff43ad1f92052a59b18294e095a5ff13dee6b357451612d5e209fed0e"
+    },
+    {
+      "question_id": "q08",
+      "public_id": "associate-003-q08",
+      "revision": 1,
+      "title": "탐색용 범주형 인코딩",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q08.json",
+      "sha256": "067b4089dc400082b6fc5f583cae68fd21a04d48edd214fb4c482fff63951cbe"
+    },
+    {
+      "question_id": "q09",
+      "public_id": "associate-003-q09",
+      "revision": 1,
+      "title": "계층 분할과 누설 없는 전처리",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q09.json",
+      "sha256": "6ae40529bf969b09890a45eb88bacb969ea64ab51e87010f9dc0bcd7303bb903"
+    },
+    {
+      "question_id": "q10",
+      "public_id": "associate-003-q10",
+      "revision": 1,
+      "title": "로지스틱 회귀 분류",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q10.json",
+      "sha256": "af58fcd9a6bf2cadd99415c53a0b03ca77dadadbdbd24f6c8be55ddaf59bfca1"
+    },
+    {
+      "question_id": "q11",
+      "public_id": "associate-003-q11",
+      "revision": 1,
+      "title": "랜덤포레스트 분류",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q11.json",
+      "sha256": "ca96ff82d9df8c49b5d05b97d1268a79260291e0fb1dd83fe2fe063718e931e4"
+    },
+    {
+      "question_id": "q12",
+      "public_id": "associate-003-q12",
+      "revision": 1,
+      "title": "혼동행렬 구하기",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q12.json",
+      "sha256": "689d2d6fed86d25f328ab65be712a8820725b291ef0d063bb8daa8f4e7dd69b7"
+    },
+    {
+      "question_id": "q13",
+      "public_id": "associate-003-q13",
+      "revision": 1,
+      "title": "분류 임계값 변경",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q13.json",
+      "sha256": "df4dc4696ee5f4b7a79e5d5297821b41317e459ed00d5274893de0523e92e7bc"
+    },
+    {
+      "question_id": "q14",
+      "public_id": "associate-003-q14",
+      "revision": 2,
+      "title": "업무 조건을 반영한 탐지 모델 선택",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q14.json",
+      "sha256": "4c0bc7fe4ff3fc187c8a51f3e106d0709758112560b1f9f18d5c5be84905e7e4"
+    }
+  ],
+  "scenario_md": "가상의 로그인 보안 서비스 SecurePortal은 사용자 계정의 인증 시도 가운데 추가 확인이 필요한 이벤트를 미리 찾아내려고 합니다. 탐지된 이벤트에는 추가 인증을 요청할 계획입니다.\n\n여러분은 보안 데이터 분석가로서 인증 이벤트를 탐색하고, 양성(`suspicious_login=1`)이 상대적으로 적은 분류 문제에서 재현율과 정밀도의 관계를 검토해야 합니다.\n\n- 분석 목표: 인증 이벤트별 이상 로그인 여부(`suspicious_login`) 분류\n- 데이터: `auth_events.csv` (인증 이벤트 1,800건, 14개 컬럼)\n- 진행 순서: 데이터 탐색(1~5번) → 탐색용 전처리(6~8번) → 모델용 분할과 전처리(9번) → 모델 학습과 평가(10~14번)\n\n> 6~8번은 전체 데이터로 하는 탐색 연습입니다. 9번은 반드시 원본 `auth_df`에서 다시 시작해 훈련 데이터 기준으로 전처리합니다. 판정 레이블은 합성 데이터의 가상 값이며 실제 계정 제한이나 보안 판단에 쓰지 않습니다.",
+  "datasets": [
+    {
+      "dataset_id": "auth_events",
+      "url_path": "content/associate-003/datasets/auth_events.csv",
+      "sha256": "7fc3948a9128d78de881a28a390575df52f59a4b3ce2413db5d073952f2f0d0b",
+      "size_bytes": 101231,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261203, SHA-256 7fc3948a9128",
+      "columns": [
+        {
+          "name": "auth_id",
+          "type": "문자열",
+          "description": "인증 이벤트 고유 번호 (AU00001~AU01800). 식별용이라 모델 입력에는 쓰지 않습니다."
+        },
+        {
+          "name": "device_family",
+          "type": "문자열",
+          "description": "접속 기기 종류: Desktop, Mobile, Tablet"
+        },
+        {
+          "name": "region_group",
+          "type": "문자열",
+          "description": "접속 지역 구분: Domestic(국내), Nearby(인접 국가), Overseas(해외)"
+        },
+        {
+          "name": "login_hour",
+          "type": "정수",
+          "description": "로그인 시각 (0~23시)"
+        },
+        {
+          "name": "failed_attempts_24h",
+          "type": "정수",
+          "description": "직전 24시간 동안의 로그인 실패 횟수 (회)"
+        },
+        {
+          "name": "new_device_flag",
+          "type": "정수",
+          "description": "처음 보는 기기에서의 접속이면 1, 아니면 0"
+        },
+        {
+          "name": "ip_risk_score",
+          "type": "실수",
+          "description": "인증 시점에 조회한 접속 IP 위험 점수 (0~100). 일부 결측"
+        },
+        {
+          "name": "distance_from_usual_km",
+          "type": "실수",
+          "description": "평소 접속 위치와의 거리 (km). 일부 결측, 일부 매우 먼 거리"
+        },
+        {
+          "name": "account_age_days",
+          "type": "정수",
+          "description": "계정 생성 후 지난 일수 (일)"
+        },
+        {
+          "name": "mfa_used",
+          "type": "정수",
+          "description": "다중 인증(MFA)을 사용했으면 1, 아니면 0"
+        },
+        {
+          "name": "past_lockouts",
+          "type": "정수",
+          "description": "과거 계정 잠금 횟수 (회)"
+        },
+        {
+          "name": "days_since_last_login",
+          "type": "정수",
+          "description": "마지막 로그인 이후 지난 일수 (일)"
+        },
+        {
+          "name": "is_weekend",
+          "type": "정수",
+          "description": "주말 접속이면 1, 아니면 0"
+        },
+        {
+          "name": "suspicious_login",
+          "type": "정수",
+          "description": "이상 로그인 판정 (1: 추가 확인 필요, 0: 정상). 예측 대상"
+        }
+      ]
+    }
+  ],
+  "generator": {
+    "name": "acf content build",
+    "version": "0.1.0",
+    "content_contract": "1.3.0"
+  },
+  "source_fingerprint": "cc51b53075dc4ac93ed6e60dd95b830a8d52bdedaf9cd20517831042e2d77cba",
+  "notebook": {
+    "kind": "question_notebook",
+    "format": "nbformat4.5",
+    "url_path": "content/associate-003/notebooks/associate-003-questions-8382a0a31c15.ipynb",
+    "sha256": "8382a0a31c154ec964e4f9f181cd56cb8b87c64683d8228c9894e94b573c0b23",
+    "size_bytes": 15241,
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  },
+  "grading": {
+    "kind": "grading_bundle",
+    "url_path": "content/associate-003/grading/associate-003-grading-c9beccba6e66.json",
+    "sha256": "c9beccba6e662e4c15ddc15c09e71f000ccc9a869e4a9c08de0c170de96cdbf3",
+    "size_bytes": 128034,
+    "engine_version": "1.7.0",
+    "grading_version": "associate-003-g3b3d8239494a",
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  }
+}

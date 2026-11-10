@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-002",
+  "question_id": "q11",
+  "public_id": "associate-002-q11",
+  "revision": 1,
+  "title": "랜덤포레스트 회귀 학습",
+  "topic": "machine_learning",
+  "difficulty": "easy",
+  "prompt": "랜덤포레스트 회귀 모델을 학습하시오.\n\n1. `RandomForestRegressor(n_estimators=80, max_depth=9, random_state=42, n_jobs=1)`을 `X_train_encoded`, `y_train`으로 학습하시오.\n2. 학습한 모델을 `forest_model`에 저장하시오.\n\n학습한 모델은 `X_test_encoded`, `y_test`로 평가됩니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "warehouse_orders",
+      "url_path": "content/associate-002/datasets/warehouse_orders.csv",
+      "sha256": "3376dfe0980179ca23c830b98079fb02ec38356cb4a59e1d7e82e5260793ad0c",
+      "size_bytes": 97585,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261202, SHA-256 3376dfe09801"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 랜덤포레스트 회귀 모델을 지정한 설정으로 학습한다.\n\n**핵심 개념:** 랜덤포레스트는 여러 의사결정나무의 예측을 평균한다. 트리 모델은 스케일에 영향을 받지 않으므로 q10과 달리 원-핫까지만 한 `X_train_encoded`로 학습한다. `n_estimators=80, max_depth=9, random_state=42, n_jobs=1`을 그대로 쓴다. 브라우저 실행 환경을 위해 `n_jobs=1`로 제한한다.\n\n```python\nfrom sklearn.ensemble import RandomForestRegressor\nforest_model = RandomForestRegressor(n_estimators=80, max_depth=9, random_state=42, n_jobs=1).fit(X_train_encoded, y_train)\n```\n\n**기준 결과:** 트리 80개, 최대 깊이 9.\n\n**다른 풀이 (생성 후 fit):**\n\n```python\nfrom sklearn.ensemble import RandomForestRegressor\nforest_model = RandomForestRegressor(n_estimators=80, max_depth=9, random_state=42, n_jobs=1)\nforest_model.fit(X_train_encoded, y_train)\n```\n\n**자주 틀리는 부분:** 트리 수나 깊이를 바꾸는 것, `random_state` 누락으로 결과가 매번 달라지는 것, 평가 데이터로 학습.\n\n**채점 항목:**\n\n1. RandomForestRegressor\n2. 지정 하이퍼파라미터\n3. 훈련 데이터로 학습\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.ensemble import RandomForestRegressor\nforest_model = RandomForestRegressor(n_estimators=80, max_depth=9, random_state=42, n_jobs=1).fit(X_train_encoded, y_train)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

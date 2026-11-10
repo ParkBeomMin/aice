@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-007",
+  "question_id": "q12",
+  "public_id": "associate-007-q12",
+  "revision": 1,
+  "title": "재현율과 F1",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "로지스틱 회귀의 불량 탐지 성능을 구하시오.\n\n1. `y_test`와 `defect_lr_pred`(`defect_lr`로 `X_test`를 예측한 값)로 양성(1)의 재현율을 `recall_defect`, F1을 `f1_defect`에 저장하시오.\n2. `zero_division=0`을 사용하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "production_batches",
+      "url_path": "content/associate-007/datasets/production_batches.csv",
+      "sha256": "3a1486511c970411a450b5b11f40a333be71c2f6fe275cc6f59151ec9ba42ee7",
+      "size_bytes": 119702,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261207, SHA-256 3a1486511c97"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 재현율과 F1 을 계산한다.\n\n**핵심 개념:** 불량을 놓치지 않는 것이 중요하므로 재현율과 F1 을 본다.\n\n```python\nfrom sklearn.metrics import recall_score, f1_score\nrecall_defect = recall_score(y_test, defect_lr_pred, zero_division=0)\nf1_defect = f1_score(y_test, defect_lr_pred, zero_division=0)\nprint(recall_defect, f1_defect)\n```\n\n**기준 결과:** 재현율 0.5275, F1 0.5818.\n\n**다른 풀이 (precision_recall_fscore_support):**\n\n```python\nfrom sklearn.metrics import precision_recall_fscore_support\np, r, f, _ = precision_recall_fscore_support(y_test, defect_lr_pred, average='binary', zero_division=0)\nrecall_defect, f1_defect = r, f\n```\n\n**자주 틀리는 부분:** 정밀도를 재현율로 쓰는 것, macro 평균.\n\n**채점 항목:**\n\n1. 재현율\n2. F1\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import recall_score, f1_score\nrecall_defect = recall_score(y_test, defect_lr_pred, zero_division=0)\nf1_defect = f1_score(y_test, defect_lr_pred, zero_division=0)\nprint(recall_defect, f1_defect)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

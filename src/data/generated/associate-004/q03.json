@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-004",
+  "question_id": "q03",
+  "public_id": "associate-004-q03",
+  "revision": 1,
+  "title": "상위 10% 전력 사용 기록",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "전력 사용량이 많은 상위 10% 관측을 고르시오.\n\n1. `energy_kwh`의 90% 분위수를 `quantile(0.9, interpolation='lower')`로 구해 `peak_threshold`에 저장하시오. 이 방식은 데이터에 실제로 있는 값을 기준으로 씁니다.\n2. `energy_kwh`가 이 값 이상인 행을 `peak_hours`에 저장하시오. 기준값과 같은 행도 포함합니다.\n3. 원래 인덱스와 모든 컬럼을 그대로 유지하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "building_energy",
+      "url_path": "content/associate-004/datasets/building_energy.csv",
+      "sha256": "1c3c7b0811527ca4fbc07c17ae33b7da35c8899d93156bcfa4573b0c3914d898",
+      "size_bytes": 108748,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261204, SHA-256 1c3c7b081152"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 90% 분위수 이상의 관측을 원래 행과 인덱스로 반환한다.\n\n**핵심 개념:** `quantile(0.9, interpolation='lower')`는 데이터에 실제로 있는 값 가운데 90% 위치의 값을 돌려준다. 이 값과 같은 행도 포함하려면 `>=`를 쓴다.\n\n```python\npeak_threshold = energy_df['energy_kwh'].quantile(0.9, interpolation='lower')\npeak_hours = energy_df[energy_df['energy_kwh'] >= peak_threshold]\npeak_hours.shape\n```\n\n**기준 결과:** 기준값 116.5 kWh, 이 값 이상 166행 (기준값과 같은 행 1개 포함, `>`이면 165행).\n\n**다른 풀이 (query 사용):**\n\n```python\npeak_threshold = energy_df['energy_kwh'].quantile(0.9, interpolation='lower')\npeak_hours = energy_df.query('energy_kwh >= @peak_threshold')\n```\n\n**자주 틀리는 부분:** > 경계, 상위 10개만 추출, reset_index, 기본 보간 분위수(116.51)를 쓰는 것.\n\n**채점 항목:**\n\n1. lower 방식 90% 분위수\n2. 기준 이상 행과 열 수\n3. 선택된 관측과 인덱스\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "peak_threshold = energy_df['energy_kwh'].quantile(0.9, interpolation='lower')\npeak_hours = energy_df[energy_df['energy_kwh'] >= peak_threshold]\npeak_hours.shape\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

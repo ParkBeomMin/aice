@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-006",
+  "question_id": "q10",
+  "public_id": "associate-006-q10",
+  "revision": 1,
+  "title": "선형회귀 학습",
+  "topic": "machine_learning",
+  "difficulty": "easy",
+  "prompt": "선형회귀 모델을 학습하고 평가 데이터를 예측하시오.\n\n1. `LinearRegression()`을 `X_train`, `y_train`으로 학습해 `bike_lr`에 저장하시오.\n2. `X_test`의 예측 결과를 `bike_lr_pred`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "bike_demand",
+      "url_path": "content/associate-006/datasets/bike_demand.csv",
+      "sha256": "8b6b2150909767f79155d692412f850f6d06f59110de572e8af097370836c537",
+      "size_bytes": 112825,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261206, SHA-256 8b6b21509097"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 선형회귀를 학습하고 예측한다.\n\n**핵심 개념:** 선형회귀로 대여 건수를 예측한다.\n\n```python\nfrom sklearn.linear_model import LinearRegression\nbike_lr = LinearRegression().fit(X_train, y_train)\nbike_lr_pred = bike_lr.predict(X_test)\n```\n\n**기준 결과:** 평가 MAE 약 54.89, RMSE 약 70.28, R2 약 0.652.\n\n**다른 풀이 (생성 후 fit):**\n\n```python\nfrom sklearn.linear_model import LinearRegression\nbike_lr = LinearRegression()\nbike_lr.fit(X_train, y_train)\nbike_lr_pred = bike_lr.predict(X_test)\n```\n\n**자주 틀리는 부분:** 다른 모델, 평가 데이터로 학습.\n\n**채점 항목:**\n\n1. LinearRegression\n2. 훈련 데이터로 학습\n3. 평가 데이터 예측\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.linear_model import LinearRegression\nbike_lr = LinearRegression().fit(X_train, y_train)\nbike_lr_pred = bike_lr.predict(X_test)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

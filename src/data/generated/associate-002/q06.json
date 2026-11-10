@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-002",
+  "question_id": "q06",
+  "public_id": "associate-002-q06",
+  "revision": 1,
+  "title": "작업량 기반 특징 생성",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "모델에 사용할 새 특징을 만드시오.\n\n1. `df_raw`를 복사해 `df_feat`를 만드시오.\n2. `df_feat`에 `items_per_sku` 컬럼을 추가하시오. 값은 `items_count / sku_diversity`입니다.\n3. `df_feat`에 `distance_missing` 컬럼을 추가하시오. 원본 `walking_distance_m`이 결측이면 1, 아니면 0인 정수입니다.\n\n기존 컬럼의 값과 `df_raw`는 바꾸지 마시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "warehouse_orders",
+      "url_path": "content/associate-002/datasets/warehouse_orders.csv",
+      "sha256": "3376dfe0980179ca23c830b98079fb02ec38356cb4a59e1d7e82e5260793ad0c",
+      "size_bytes": 97585,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261202, SHA-256 3376dfe09801"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 원본을 보존하면서 파생 특징을 추가한다.\n\n**핵심 개념:** `df_raw.copy()`로 `df_feat`을 만든 뒤 새 컬럼 두 개만 추가한다. `items_per_sku`는 `items_count / sku_diversity`(SKU 1종당 평균 수량), `distance_missing`은 이동거리가 결측이면 1인 표시 컬럼이다. 결측 표시는 **결측을 채우기 전에** 만들어야 정보가 남는다. `sku_diversity`는 항상 1 이상이라 0으로 나누는 경우는 없다.\n\n```python\ndf_feat = df_raw.copy()\ndf_feat['items_per_sku'] = df_feat['items_count'] / df_feat['sku_diversity']\ndf_feat['distance_missing'] = df_feat['walking_distance_m'].isna().astype(int)\n```\n\n**기준 결과:** `df_feat`은 1,500행, 16열 (기존 14열 + 새 컬럼 2개). `distance_missing` 합계 100.\n\n**다른 풀이 (assign 사용):**\n\n```python\ndf_feat = df_raw.assign(items_per_sku=df_raw['items_count'] / df_raw['sku_diversity'], distance_missing=df_raw['walking_distance_m'].isnull().astype(int))\n```\n\n**자주 틀리는 부분:** 분자와 분모를 바꾸는 것, 결측을 먼저 채워 표시가 모두 0이 되는 것, `df_raw`에 바로 컬럼을 추가하는 것.\n\n**채점 항목:**\n\n1. items_per_sku 값\n2. distance_missing 0/1 값\n3. 원본 df_raw 그대로\n4. 기존 컬럼과 행 보존\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "df_feat = df_raw.copy()\ndf_feat['items_per_sku'] = df_feat['items_count'] / df_feat['sku_diversity']\ndf_feat['distance_missing'] = df_feat['walking_distance_m'].isna().astype(int)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

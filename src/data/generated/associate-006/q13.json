@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-006",
+  "question_id": "q13",
+  "public_id": "associate-006-q13",
+  "revision": 1,
+  "title": "훈련과 평가 기간 확인",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "9번 분할의 기간이 겹치지 않는지 확인하시오.\n\n1. `X_train_raw`, `X_test_raw`의 인덱스로 `bike_df`의 `service_date`를 찾아 각 구간의 첫 날짜와 마지막 날짜를 구하시오.\n2. 훈련 기간을 `'YYYY-MM-DD'` 문자열 2개 튜플 `train_period`, 평가 기간을 같은 형식의 `test_period`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "bike_demand",
+      "url_path": "content/associate-006/datasets/bike_demand.csv",
+      "sha256": "8b6b2150909767f79155d692412f850f6d06f59110de572e8af097370836c537",
+      "size_bytes": 112825,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261206, SHA-256 8b6b21509097"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 분할 기간이 겹치지 않는지 확인한다.\n\n**핵심 개념:** 분할 결과의 인덱스로 원본 날짜를 찾아 기간을 확인하면 두 구간이 겹치지 않는지 알 수 있다.\n\n```python\ntrain_dates = bike_df.loc[X_train_raw.index, 'service_date']\ntest_dates = bike_df.loc[X_test_raw.index, 'service_date']\ntrain_period = (train_dates.min().strftime('%Y-%m-%d'), train_dates.max().strftime('%Y-%m-%d'))\ntest_period = (test_dates.min().strftime('%Y-%m-%d'), test_dates.max().strftime('%Y-%m-%d'))\nprint(train_period, test_period)\n```\n\n**기준 결과:** train_period ('2025-01-01', '2025-09-13'), test_period ('2025-09-14', '2025-11-16').\n\n**다른 풀이 (agg(['min', 'max'])):**\n\n```python\na = bike_df.loc[X_train_raw.index, 'service_date'].agg(['min', 'max'])\nb = bike_df.loc[X_test_raw.index, 'service_date'].agg(['min', 'max'])\ntrain_period = tuple(d.strftime('%Y-%m-%d') for d in a)\ntest_period = tuple(d.strftime('%Y-%m-%d') for d in b)\n```\n\n**자주 틀리는 부분:** 훈련과 평가를 바꾸는 것, 전체 기간을 쓰는 것.\n\n**채점 항목:**\n\n1. 훈련 기간\n2. 평가 기간\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "train_dates = bike_df.loc[X_train_raw.index, 'service_date']\ntest_dates = bike_df.loc[X_test_raw.index, 'service_date']\ntrain_period = (train_dates.min().strftime('%Y-%m-%d'), train_dates.max().strftime('%Y-%m-%d'))\ntest_period = (test_dates.min().strftime('%Y-%m-%d'), test_dates.max().strftime('%Y-%m-%d'))\nprint(train_period, test_period)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

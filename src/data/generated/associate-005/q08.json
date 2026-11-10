@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-005",
+  "question_id": "q08",
+  "public_id": "associate-005-q08",
+  "revision": 1,
+  "title": "탐색용 범주형 인코딩",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "탐색용 데이터의 범주형 컬럼을 원-핫 인코딩하시오.\n\n1. `offers_clean`을 복사하고 `spend_per_visit`를 새 컬럼 `spend_per_visit`로 추가하시오.\n2. `shopper_segment`, `channel`, `region_group`, `promotion_type`, `device_type`을 `pd.get_dummies(..., dtype=int)`로 인코딩해 `offers_encoded`에 저장하시오.\n3. `offer_id`, `responded`와 나머지 수치 컬럼은 그대로 두시오.\n\n> 이 결과는 탐색용이며 모델 학습에 쓰지 않습니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "promotion_offers",
+      "url_path": "content/associate-005/datasets/promotion_offers.csv",
+      "sha256": "5e683fcf9ede1ea713edd498976b3751b560d17be2bda1007bc534ad488238b3",
+      "size_bytes": 115132,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261205, SHA-256 5e683fcf9ede"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 여러 범주형 컬럼을 원-핫 인코딩한다.\n\n**핵심 개념:** 복사본에 새 컬럼을 추가한 뒤 범주 5개만 원-핫으로 바꾼다.\n\n```python\noffers_tmp = offers_clean.copy()\noffers_tmp['spend_per_visit'] = spend_per_visit\noffers_encoded = pd.get_dummies(offers_tmp, columns=['shopper_segment', 'channel', 'region_group', 'promotion_type', 'device_type'], dtype=int)\noffers_encoded.shape\n```\n\n**기준 결과:** 1,600행, 25열.\n\n**다른 풀이 (assign 사용):**\n\n```python\noffers_encoded = pd.get_dummies(offers_clean.assign(spend_per_visit=spend_per_visit), columns=['shopper_segment', 'channel', 'region_group', 'promotion_type', 'device_type'], dtype=int)\n```\n\n**자주 틀리는 부분:** offers_clean 에 직접 컬럼을 추가하는 것, 파생 컬럼 누락.\n\n**채점 항목:**\n\n1. 다섯 컬럼 원-핫 값\n2. ID, 타깃, 파생 컬럼 유지\n3. offers_clean 은 그대로\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "offers_tmp = offers_clean.copy()\noffers_tmp['spend_per_visit'] = spend_per_visit\noffers_encoded = pd.get_dummies(offers_tmp, columns=['shopper_segment', 'channel', 'region_group', 'promotion_type', 'device_type'], dtype=int)\noffers_encoded.shape\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

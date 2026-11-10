@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-005",
+  "question_id": "q12",
+  "public_id": "associate-005-q12",
+  "revision": 1,
+  "title": "수락 예측 F1",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "로지스틱 회귀 예측의 F1 점수를 구하시오.\n\n1. `y_test`와 `promo_lr_pred`(`promo_lr`로 `X_test`를 예측한 값)로 양성(1)의 F1을 계산하시오.\n2. `zero_division=0`을 사용하고 결과를 실수 `promo_f1`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "promotion_offers",
+      "url_path": "content/associate-005/datasets/promotion_offers.csv",
+      "sha256": "5e683fcf9ede1ea713edd498976b3751b560d17be2bda1007bc534ad488238b3",
+      "size_bytes": 115132,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261205, SHA-256 5e683fcf9ede"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 양성 클래스 F1 을 계산한다.\n\n**핵심 개념:** F1 은 정밀도와 재현율의 조화 평균이다. 양성(1) 기준으로 계산한다.\n\n```python\nfrom sklearn.metrics import f1_score\npromo_f1 = f1_score(y_test, promo_lr_pred, zero_division=0)\nprint(promo_f1)\n```\n\n**기준 결과:** promo_f1 0.500.\n\n**다른 풀이 (precision_recall_fscore_support):**\n\n```python\nfrom sklearn.metrics import precision_recall_fscore_support\npromo_f1 = precision_recall_fscore_support(y_test, promo_lr_pred, average='binary', zero_division=0)[2]\n```\n\n**자주 틀리는 부분:** 정확도나 macro 평균을 쓰는 것.\n\n**채점 항목:**\n\n1. 양성 F1\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import f1_score\npromo_f1 = f1_score(y_test, promo_lr_pred, zero_division=0)\nprint(promo_f1)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

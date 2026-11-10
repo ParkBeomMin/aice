@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-005",
+  "question_id": "q09",
+  "public_id": "associate-005-q09",
+  "revision": 2,
+  "title": "층화 분할과 훈련 데이터 기준 전처리, 표준화",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "원본 `offer_df`에서 다시 시작해 훈련 데이터 기준으로 모델 입력을 만드시오.\n\n1. `offer_id`, `responded`를 뺀 컬럼을 `X`, `responded`를 `y`로 정하시오.\n2. `train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)`로 `X_train_raw`, `X_test_raw`, `y_train`, `y_test`를 만드시오.\n3. 훈련 데이터(`X_train_raw`)의 `basket_value_30d`, `email_open_rate` 중앙값으로 훈련 데이터와 평가 데이터의 결측을 각각 채우시오. `X_train_raw`, `X_test_raw`는 바꾸지 마시오.\n4. 결측을 채운 뒤 양쪽에 `spend_per_visit`(`basket_value_30d / (visits_last_30d + 1)`) 컬럼을 추가하시오.\n5. 범주형 5개를 `pd.get_dummies(..., dtype=int)`로 인코딩해 `X_train_encoded`, `X_test_encoded`에 저장하고, 평가 데이터의 컬럼 구성과 순서를 훈련 데이터와 같게 맞추시오 (빠진 컬럼은 0).\n6. 수치형 8개(`discount_pct`, `basket_value_30d`, `visits_last_30d`, `coupon_use_30d`, `loyalty_months`, `email_open_rate`, `days_since_last_purchase`, `spend_per_visit`)만 `StandardScaler`로 표준화하시오. 스케일러는 `promo_scaler`에 저장하고 `X_train_encoded`로만 fit 하시오. 원-핫 컬럼은 0/1 그대로 둡니다.\n7. 컬럼 순서와 인덱스를 `X_train_encoded`, `X_test_encoded`와 같게 유지한 최종 결과를 `X_train`, `X_test`에 저장하시오.\n\n> 6번의 `offers_clean`을 쓰면 전체 데이터 중앙값이 섞여 누설이 됩니다. 금액처럼 값의 크기가 큰 컬럼을 표준화하면 로지스틱 회귀가 안정적으로 수렴합니다. 정수 컬럼에 실수를 바로 덮어쓰면 경고가 날 수 있으니, 표준화한 값으로 새 DataFrame 을 만들어 원-핫 컬럼과 합치는 방법을 권장합니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "promotion_offers",
+      "url_path": "content/associate-005/datasets/promotion_offers.csv",
+      "sha256": "5e683fcf9ede1ea713edd498976b3751b560d17be2bda1007bc534ad488238b3",
+      "size_bytes": 115132,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261205, SHA-256 5e683fcf9ede"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 층화 분할 후 훈련 데이터 기준으로 결측 대체, 인코딩, 표준화를 한다.\n\n**핵심 개념:** 층화 분할 뒤 결측 대체 중앙값과 표준화 기준(평균, 표준편차)을 **훈련 데이터에서만** 계산한다. 금액처럼 큰 값을 그대로 두면 로지스틱 회귀가 1,000회 안에 수렴하지 않으므로 수치형 8개를 표준화한다. 원-핫 컬럼은 0/1 그대로 둔다. 정수 컬럼에 실수를 바로 덮어쓰지 않도록 표준화한 값으로 새 DataFrame 을 만들어 합친다.\n\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nX = offer_df.drop(columns=['offer_id', 'responded'])\ny = offer_df['responded']\nX_train_raw, X_test_raw, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\ntrain_medians = X_train_raw[['basket_value_30d', 'email_open_rate']].median()\nX_train_filled = X_train_raw.fillna(train_medians)\nX_test_filled = X_test_raw.fillna(train_medians)\nfor part in (X_train_filled, X_test_filled):\n    part['spend_per_visit'] = part['basket_value_30d'] / (part['visits_last_30d'] + 1)\ncat_cols = ['shopper_segment', 'channel', 'region_group', 'promotion_type', 'device_type']\nX_train_encoded = pd.get_dummies(X_train_filled, columns=cat_cols, dtype=int)\nX_test_encoded = pd.get_dummies(X_test_filled, columns=cat_cols, dtype=int).reindex(columns=X_train_encoded.columns, fill_value=0)\nnum_cols = ['discount_pct', 'basket_value_30d', 'visits_last_30d', 'coupon_use_30d', 'loyalty_months',\n            'email_open_rate', 'days_since_last_purchase', 'spend_per_visit']\npromo_scaler = StandardScaler().fit(X_train_encoded[num_cols].astype(float))\ndef scale(encoded):\n    scaled = pd.DataFrame(promo_scaler.transform(encoded[num_cols].astype(float)), index=encoded.index, columns=num_cols)\n    return pd.concat([scaled, encoded.drop(columns=num_cols)], axis=1)[encoded.columns]\nX_train = scale(X_train_encoded)\nX_test = scale(X_test_encoded)\n```\n\n**기준 결과:** 훈련 1,280행, 평가 320행, 특징 23개. 훈련 중앙값 basket 63,561원 (전체 65,274원과 다름), email 0.489. 표준화 후 로지스틱이 14회 안에 수렴한다.\n\n**다른 풀이 (astype(float) 후 대입):**\n\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nX = offer_df.drop(columns=['offer_id', 'responded'])\ny = offer_df['responded']\nX_train_raw, X_test_raw, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\ntrain_medians = X_train_raw[['basket_value_30d', 'email_open_rate']].median()\nX_train_filled = X_train_raw.fillna(train_medians)\nX_test_filled = X_test_raw.fillna(train_medians)\nfor part in (X_train_filled, X_test_filled):\n    part['spend_per_visit'] = part['basket_value_30d'] / (part['visits_last_30d'] + 1)\nX_train_encoded = pd.get_dummies(X_train_filled, columns=['shopper_segment', 'channel', 'region_group', 'promotion_type', 'device_type'], dtype=int)\nX_test_encoded = pd.get_dummies(X_test_filled, columns=['shopper_segment', 'channel', 'region_group', 'promotion_type', 'device_type'], dtype=int).reindex(columns=X_train_encoded.columns, fill_value=0)\nnum_cols = ['discount_pct', 'basket_value_30d', 'visits_last_30d', 'coupon_use_30d', 'loyalty_months', 'email_open_rate', 'days_since_last_purchase', 'spend_per_visit']\npromo_scaler = StandardScaler().fit(X_train_encoded[num_cols].astype(float))\nX_train = X_train_encoded.astype({c: float for c in num_cols})\nX_test = X_test_encoded.astype({c: float for c in num_cols})\nX_train[num_cols] = promo_scaler.transform(X_train[num_cols])\nX_test[num_cols] = promo_scaler.transform(X_test[num_cols])\n```\n\n**자주 틀리는 부분:** 전체 중앙값, 평가 데이터로 fit, 더미까지 표준화, spend_per_visit 누락, 탐색용 offers_clean 사용.\n\n**채점 항목:**\n\n1. 층화 분할 그대로\n2. offer_df 는 그대로\n3. 훈련 금액 결측 대체\n4. 훈련 열람률 결측 대체\n5. 평가 금액도 훈련 중앙값\n6. 평가 열람률도 훈련 중앙값\n7. spend_per_visit 추가\n8. 평가 컬럼 정렬\n9. 스케일러는 훈련으로만 fit\n10. 수치형 8개만\n11. 훈련 데이터 표준화 결과\n12. 평가 데이터는 transform 만\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nX = offer_df.drop(columns=['offer_id', 'responded'])\ny = offer_df['responded']\nX_train_raw, X_test_raw, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\ntrain_medians = X_train_raw[['basket_value_30d', 'email_open_rate']].median()\nX_train_filled = X_train_raw.fillna(train_medians)\nX_test_filled = X_test_raw.fillna(train_medians)\nfor part in (X_train_filled, X_test_filled):\n    part['spend_per_visit'] = part['basket_value_30d'] / (part['visits_last_30d'] + 1)\ncat_cols = ['shopper_segment', 'channel', 'region_group', 'promotion_type', 'device_type']\nX_train_encoded = pd.get_dummies(X_train_filled, columns=cat_cols, dtype=int)\nX_test_encoded = pd.get_dummies(X_test_filled, columns=cat_cols, dtype=int).reindex(columns=X_train_encoded.columns, fill_value=0)\nnum_cols = ['discount_pct', 'basket_value_30d', 'visits_last_30d', 'coupon_use_30d', 'loyalty_months',\n            'email_open_rate', 'days_since_last_purchase', 'spend_per_visit']\npromo_scaler = StandardScaler().fit(X_train_encoded[num_cols].astype(float))\ndef scale(encoded):\n    scaled = pd.DataFrame(promo_scaler.transform(encoded[num_cols].astype(float)), index=encoded.index, columns=num_cols)\n    return pd.concat([scaled, encoded.drop(columns=num_cols)], axis=1)[encoded.columns]\nX_train = scale(X_train_encoded)\nX_test = scale(X_test_encoded)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-006",
+  "question_id": "q06",
+  "public_id": "associate-006-q06",
+  "revision": 1,
+  "title": "탐색용 습도 결측 대체",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "탐색용 복사본에서 습도 결측을 채우시오.\n\n1. `bike_df`를 복사해 `bike_clean`을 만드시오.\n2. `bike_clean`의 `humidity_pct` 결측을 원본 `bike_df`의 `humidity_pct` 전체 중앙값으로 채우시오.\n3. 다른 값과 원본 `bike_df`는 바꾸지 마시오.\n\n> 탐색용 실습입니다. 이 결과로 모델을 평가하지 마시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "bike_demand",
+      "url_path": "content/associate-006/datasets/bike_demand.csv",
+      "sha256": "8b6b2150909767f79155d692412f850f6d06f59110de572e8af097370836c537",
+      "size_bytes": 112825,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261206, SHA-256 8b6b21509097"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 탐색용 복사본에서 결측을 채운다.\n\n**핵심 개념:** 탐색용 복사본에서만 습도 결측을 전체 중앙값으로 채운다.\n\n```python\nbike_clean = bike_df.copy()\nbike_clean['humidity_pct'] = bike_clean['humidity_pct'].fillna(bike_df['humidity_pct'].median())\n```\n\n**기준 결과:** 전체 중앙값 59.25.\n\n**다른 풀이 (fillna(dict)):**\n\n```python\nbike_clean = bike_df.copy().fillna({'humidity_pct': bike_df['humidity_pct'].median()})\n```\n\n**자주 틀리는 부분:** 평균 사용, 원본 변경.\n\n**채점 항목:**\n\n1. bike_df 원본 그대로\n2. 결측 위치에 전체 중앙값\n3. 다른 값 보존\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "bike_clean = bike_df.copy()\nbike_clean['humidity_pct'] = bike_clean['humidity_pct'].fillna(bike_df['humidity_pct'].median())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

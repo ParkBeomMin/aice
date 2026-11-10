@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-006",
+  "question_id": "q09",
+  "public_id": "associate-006-q09",
+  "revision": 1,
+  "title": "날짜 기준 시간순 분할",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "원본 `bike_df`에서 다시 시작해 날짜 기준으로 나누고 훈련 데이터 기준으로 전처리하시오.\n\n1. `service_date`, `rides_count`를 뺀 컬럼을 `X`, `rides_count`를 `y`로 정하시오.\n2. `service_date`가 2025-09-14 이전인 행(256일, 1,536행)을 훈련, 2025-09-14 이후인 행(64일, 384행)을 평가로 나누어 `X_train_raw`, `X_test_raw`, `y_train`, `y_test`에 저장하시오. 원래 인덱스와 순서를 유지하고 `train_test_split`은 쓰지 마시오.\n3. 훈련 데이터의 `humidity_pct` 중앙값을 `humidity_median_train`에 저장하고 이 값으로 훈련 데이터와 평가 데이터의 결측을 채우시오. `X_train_raw`, `X_test_raw`는 바꾸지 마시오.\n4. 양쪽에 `bikes_per_station`(`available_bikes / bike_stations`) 컬럼을 추가하시오.\n5. `district`, `season`을 `pd.get_dummies(..., dtype=int)`로 인코딩하고 평가 데이터의 컬럼 구성과 순서를 훈련 데이터와 같게 맞추어 `X_train`, `X_test`에 저장하시오 (빠진 컬럼은 0).\n\n> 무작위로 나누면 미래 날짜가 훈련에 섞여 실제보다 성능이 좋아 보입니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "bike_demand",
+      "url_path": "content/associate-006/datasets/bike_demand.csv",
+      "sha256": "8b6b2150909767f79155d692412f850f6d06f59110de572e8af097370836c537",
+      "size_bytes": 112825,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261206, SHA-256 8b6b21509097"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 날짜 기준으로 분할하고 훈련 데이터 기준으로 전처리한다.\n\n**핵심 개념:** 시간 순서가 있는 데이터에서 무작위로 나누면 미래 날짜가 훈련에 섞인다. 2025-09-14 이전을 훈련, 이후를 평가로 나누고 습도 중앙값은 훈련 데이터에서만 구한다. 평가 기간에는 Autumn 만 있으므로 평가 원-핫 컬럼을 훈련 컬럼에 맞추고 빠진 컬럼은 0으로 채운다.\n\n```python\ncutoff = pd.Timestamp('2025-09-14')\nX = bike_df.drop(columns=['service_date', 'rides_count'])\ny = bike_df['rides_count']\nis_train = bike_df['service_date'] < cutoff\nX_train_raw, X_test_raw = X[is_train], X[~is_train]\ny_train, y_test = y[is_train], y[~is_train]\nhumidity_median_train = X_train_raw['humidity_pct'].median()\nX_train = X_train_raw.copy()\nX_test = X_test_raw.copy()\nfor part in (X_train, X_test):\n    part['humidity_pct'] = part['humidity_pct'].fillna(humidity_median_train)\n    part['bikes_per_station'] = part['available_bikes'] / part['bike_stations']\nX_train = pd.get_dummies(X_train, columns=['district', 'season'], dtype=int)\nX_test = pd.get_dummies(X_test, columns=['district', 'season'], dtype=int).reindex(columns=X_train.columns, fill_value=0)\n```\n\n**기준 결과:** 훈련 1,536행 (2025-01-01 ~ 2025-09-13), 평가 384행 (2025-09-14 ~ 2025-11-16), 훈련 습도 중앙값 59.4 (전체 59.25), 특징 21개.\n\n**다른 풀이 (loc 와 날짜 비교):**\n\n```python\ncutoff = pd.Timestamp('2025-09-14')\nX = bike_df.drop(columns=['service_date', 'rides_count'])\ny = bike_df['rides_count']\nX_train_raw = X.loc[bike_df['service_date'] < '2025-09-14']\nX_test_raw = X.loc[bike_df['service_date'] >= '2025-09-14']\ny_train = y.loc[X_train_raw.index]\ny_test = y.loc[X_test_raw.index]\nhumidity_median_train = X_train_raw['humidity_pct'].median()\nX_train = X_train_raw.copy()\nX_test = X_test_raw.copy()\nfor part in (X_train, X_test):\n    part['humidity_pct'] = part['humidity_pct'].fillna(humidity_median_train)\n    part['bikes_per_station'] = part['available_bikes'] / part['bike_stations']\nX_train = pd.get_dummies(X_train, columns=['district', 'season'], dtype=int)\nX_test = pd.get_dummies(X_test, columns=['district', 'season'], dtype=int).reindex(columns=X_train.columns, fill_value=0)\n```\n\n**자주 틀리는 부분:** train_test_split 무작위 분할, 경계일(9월 14일)을 훈련에 넣는 것, 전체 중앙값, 탐색용 bike_clean 사용.\n\n**채점 항목:**\n\n1. 2025-09-14 기준 시간순 분할\n2. bike_df 는 그대로\n3. 훈련 습도 중앙값\n4. 훈련 습도 결측 대체\n5. 평가 습도도 훈련 중앙값\n6. bikes_per_station 추가\n7. 원-핫 컬럼 구성\n8. 평가 컬럼 정렬\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "cutoff = pd.Timestamp('2025-09-14')\nX = bike_df.drop(columns=['service_date', 'rides_count'])\ny = bike_df['rides_count']\nis_train = bike_df['service_date'] < cutoff\nX_train_raw, X_test_raw = X[is_train], X[~is_train]\ny_train, y_test = y[is_train], y[~is_train]\nhumidity_median_train = X_train_raw['humidity_pct'].median()\nX_train = X_train_raw.copy()\nX_test = X_test_raw.copy()\nfor part in (X_train, X_test):\n    part['humidity_pct'] = part['humidity_pct'].fillna(humidity_median_train)\n    part['bikes_per_station'] = part['available_bikes'] / part['bike_stations']\nX_train = pd.get_dummies(X_train, columns=['district', 'season'], dtype=int)\nX_test = pd.get_dummies(X_test, columns=['district', 'season'], dtype=int).reindex(columns=X_train.columns, fill_value=0)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

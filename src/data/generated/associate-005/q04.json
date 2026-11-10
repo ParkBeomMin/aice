@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-005",
+  "question_id": "q04",
+  "public_id": "associate-005-q04",
+  "revision": 1,
+  "title": "채널과 세그먼트별 수락률",
+  "topic": "pandas",
+  "difficulty": "medium",
+  "prompt": "채널과 고객 세그먼트 조합별 수락률 표를 만드시오.\n\n1. `offer_df`로 행 인덱스가 `channel`, 열이 `shopper_segment`, 값이 `responded` 평균인 DataFrame `response_pivot`을 만드시오.\n2. 행과 열을 모두 이름 오름차순으로 정렬하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "promotion_offers",
+      "url_path": "content/associate-005/datasets/promotion_offers.csv",
+      "sha256": "5e683fcf9ede1ea713edd498976b3751b560d17be2bda1007bc534ad488238b3",
+      "size_bytes": 115132,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261205, SHA-256 5e683fcf9ede"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 두 범주 조합별 평균을 피벗 표로 만든다.\n\n**핵심 개념:** `pivot_table(index='channel', columns='shopper_segment', values='responded', aggfunc='mean')`은 행과 열 조합별 평균 표를 만든다. 정렬은 `sort_index()`와 `sort_index(axis=1)`로 한다.\n\n```python\nresponse_pivot = offer_df.pivot_table(index='channel', columns='shopper_segment', values='responded', aggfunc='mean').sort_index().sort_index(axis=1)\nresponse_pivot\n```\n\n**기준 결과:** App: Active 0.418, Dormant 0.277, Loyal 0.466, New 0.324 / Email: 0.456, 0.385, 0.484, 0.292 / SMS: 0.438, 0.319, 0.500, 0.355. 휴면과 신규 고객의 수락률이 낮다.\n\n**다른 풀이 (groupby 와 unstack):**\n\n```python\nresponse_pivot = offer_df.groupby(['channel', 'shopper_segment'])['responded'].mean().unstack().sort_index().sort_index(axis=1)\n```\n\n**자주 틀리는 부분:** aggfunc 로 sum, count 를 쓰는 것, 행과 열을 바꾸는 것.\n\n**채점 항목:**\n\n1. 열은 세그먼트 4개 오름차순\n2. 행은 채널 3개 오름차순\n3. Active 열 수락률\n4. Dormant 열 수락률\n5. Loyal 열 수락률\n6. New 열 수락률\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "response_pivot = offer_df.pivot_table(index='channel', columns='shopper_segment', values='responded', aggfunc='mean').sort_index().sort_index(axis=1)\nresponse_pivot\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

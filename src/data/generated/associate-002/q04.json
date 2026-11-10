@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-002",
+  "question_id": "q04",
+  "public_id": "associate-002-q04",
+  "revision": 1,
+  "title": "구역별 피킹 시간 중앙값",
+  "topic": "pandas",
+  "difficulty": "medium",
+  "prompt": "`df_raw`를 `warehouse_zone`별로 묶어 구역별 피킹 소요시간을 요약하시오.\n\n1. 구역별 `pick_minutes` 중앙값을 계산하시오.\n2. 인덱스(구역 이름)를 오름차순으로 정렬한 Series를 `zone_pick_median`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "warehouse_orders",
+      "url_path": "content/associate-002/datasets/warehouse_orders.csv",
+      "sha256": "3376dfe0980179ca23c830b98079fb02ec38356cb4a59e1d7e82e5260793ad0c",
+      "size_bytes": 97585,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261202, SHA-256 3376dfe09801"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 그룹별 대표값을 구하고 정렬한다.\n\n**핵심 개념:** `groupby('warehouse_zone')`로 창고 구역을 묶고 `pick_minutes`의 **중앙값**을 구한 뒤 `sort_index()`로 A, B, C, D 오름차순 정렬한다. 피킹 시간처럼 오른쪽으로 긴 분포에서는 평균보다 중앙값이 극단값에 덜 흔들린다.\n\n```python\nzone_pick_median = df_raw.groupby('warehouse_zone')['pick_minutes'].median().sort_index()\nprint(zone_pick_median)\n```\n\n**기준 결과:** A 25.1, B 24.8, C 24.6, D 25.3 (분). 구역 사이 차이는 크지 않다.\n\n**다른 풀이 (pivot_table):**\n\n```python\nzone_pick_median = df_raw.pivot_table(index='warehouse_zone', values='pick_minutes', aggfunc='median')['pick_minutes'].sort_index()\n```\n\n**자주 틀리는 부분:** `mean()`은 평균이므로 중앙값과 다르다. 값이 맞더라도 정렬 조건(오름차순)을 지켜야 한다.\n\n**채점 항목:**\n\n1. 구역별 중앙값\n2. 구역 이름 오름차순\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "zone_pick_median = df_raw.groupby('warehouse_zone')['pick_minutes'].median().sort_index()\nprint(zone_pick_median)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

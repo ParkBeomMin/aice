@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-003",
+  "question_id": "q02",
+  "public_id": "associate-003-q02",
+  "revision": 2,
+  "title": "위험 판정 비율",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "`auth_df`의 전체 이벤트 가운데 이상 로그인(`suspicious_login`이 1)의 비율을 구하시오.\n\n1. 비율을 실수로 계산해 `risk_rate`에 저장하시오.\n2. 숫자를 직접 입력하지 말고 데이터에서 계산하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "auth_events",
+      "url_path": "content/associate-003/datasets/auth_events.csv",
+      "sha256": "7fc3948a9128d78de881a28a390575df52f59a4b3ce2413db5d073952f2f0d0b",
+      "size_bytes": 101231,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261203, SHA-256 7fc3948a9128"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 이진 레이블의 평균은 1의 비율이다.\n\n**핵심 개념:** 0/1 이진 레이블의 평균은 1의 비율과 같다. `mean()` 또는 `sum() / len()`으로 계산한다.\n\n```python\nrisk_rate = float(auth_df['suspicious_login'].mean())\nprint(round(risk_rate, 4))\n```\n\n**기준 결과:** 약 0.1489 (이상 로그인 268건). 양성이 적은 불균형 데이터다.\n\n**다른 풀이 (합계 나누기 행 수):**\n\n```python\nrisk_rate = auth_df['suspicious_login'].sum() / len(auth_df)\n```\n\n**자주 틀리는 부분:** 행 개수를 나누지 않거나 상수를 직접 입력하기, 1에서 비율을 빼거나 개수만 저장하는 것.\n\n**채점 항목:**\n\n1. 이상 로그인 비율\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "risk_rate = float(auth_df['suspicious_login'].mean())\nprint(round(risk_rate, 4))\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

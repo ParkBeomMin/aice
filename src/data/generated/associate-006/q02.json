@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-006",
+  "question_id": "q02",
+  "public_id": "associate-006-q02",
+  "revision": 1,
+  "title": "관측 기간과 결측 수",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "관측 기간과 습도 결측 수를 확인하시오.\n\n1. `bike_df`의 첫 관측일과 마지막 관측일을 `'YYYY-MM-DD'` 문자열 2개로 묶은 튜플 `date_span`에 저장하시오.\n2. `humidity_pct`가 결측인 행 수를 정수 `missing_humidity`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "bike_demand",
+      "url_path": "content/associate-006/datasets/bike_demand.csv",
+      "sha256": "8b6b2150909767f79155d692412f850f6d06f59110de572e8af097370836c537",
+      "size_bytes": 112825,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261206, SHA-256 8b6b21509097"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 관측 기간과 결측 수를 확인한다.\n\n**핵심 개념:** `min()`, `max()`로 첫 날과 마지막 날을 구하고 `strftime('%Y-%m-%d')`로 문자열로 바꾼다.\n\n```python\ndate_span = (bike_df['service_date'].min().strftime('%Y-%m-%d'), bike_df['service_date'].max().strftime('%Y-%m-%d'))\nmissing_humidity = int(bike_df['humidity_pct'].isna().sum())\nprint(date_span, missing_humidity)\n```\n\n**기준 결과:** ('2025-01-01', '2025-11-16'), 습도 결측 112행.\n\n**다른 풀이 (astype(str) 슬라이싱):**\n\n```python\ndate_span = (str(bike_df['service_date'].min())[:10], str(bike_df['service_date'].max())[:10])\nmissing_humidity = int(bike_df['humidity_pct'].isnull().sum())\n```\n\n**자주 틀리는 부분:** 시간까지 포함한 문자열, count() 를 결측 수로 쓰는 것.\n\n**채점 항목:**\n\n1. 첫 날과 마지막 날\n2. 습도 결측 수\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "date_span = (bike_df['service_date'].min().strftime('%Y-%m-%d'), bike_df['service_date'].max().strftime('%Y-%m-%d'))\nmissing_humidity = int(bike_df['humidity_pct'].isna().sum())\nprint(date_span, missing_humidity)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

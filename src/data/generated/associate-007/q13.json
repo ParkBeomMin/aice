@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-007",
+  "question_id": "q13",
+  "public_id": "associate-007-q13",
+  "revision": 1,
+  "title": "5폴드 층화 교차 검증",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "폴드마다 전처리를 새로 학습하는 교차 검증을 하시오.\n\n1. `Pipeline([('preprocessor', clone(preprocessor)), ('model', LogisticRegression(max_iter=1000, random_state=42))])`를 만드시오 (`from sklearn.base import clone`).\n2. `X_train_raw`, `y_train`에 `cross_val_score(..., cv=StratifiedKFold(n_splits=5, shuffle=True, random_state=42), scoring='f1', n_jobs=1)`를 실행해 길이 5의 점수 배열을 `cv_f1_scores`에 저장하시오.\n\n> 이미 fit 한 `X_train`으로 교차 검증하면 전처리 통계가 폴드 사이에 공유되어 누설이 됩니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "production_batches",
+      "url_path": "content/associate-007/datasets/production_batches.csv",
+      "sha256": "3a1486511c970411a450b5b11f40a333be71c2f6fe275cc6f59151ec9ba42ee7",
+      "size_bytes": 119702,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261207, SHA-256 3a1486511c97"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 폴드마다 전처리를 새로 학습하는 교차 검증을 한다.\n\n**핵심 개념:** 교차 검증의 각 폴드는 훈련 부분으로만 전처리를 학습해야 한다. Pipeline 안에 `clone(preprocessor)`를 넣으면 폴드마다 새로 fit 된다. 이미 fit 한 X_train 으로 교차 검증하면 검증 폴드의 통계가 전처리에 섞인다.\n\n```python\nfrom sklearn.base import clone\nfrom sklearn.model_selection import StratifiedKFold, cross_val_score\ncv_pipeline = Pipeline([('preprocessor', clone(preprocessor)), ('model', LogisticRegression(max_iter=1000, random_state=42))])\ncv_f1_scores = cross_val_score(cv_pipeline, X_train_raw, y_train, cv=StratifiedKFold(n_splits=5, shuffle=True, random_state=42), scoring='f1', n_jobs=1)\nprint(cv_f1_scores, cv_f1_scores.mean())\n```\n\n**기준 결과:** F1 [0.6457, 0.5455, 0.6875, 0.6412, 0.5902], 평균 0.622. 미리 fit 한 X_train 으로 하면 5번째 폴드가 0.5785 로 달라진다.\n\n**다른 풀이 (폴드 반복문으로 직접 계산):**\n\n```python\nfrom sklearn.base import clone\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.model_selection import StratifiedKFold, KFold, cross_val_score\nfrom sklearn.metrics import f1_score\nimport numpy as np\nscores = []\nfor tr, va in StratifiedKFold(n_splits=5, shuffle=True, random_state=42).split(X_train_raw, y_train):\n    pp = Pipeline([('preprocessor', clone(preprocessor)), ('model', LogisticRegression(max_iter=1000, random_state=42))])\n    pp.fit(X_train_raw.iloc[tr], y_train.iloc[tr])\n    scores.append(f1_score(y_train.iloc[va], pp.predict(X_train_raw.iloc[va])))\ncv_f1_scores = np.array(scores)\n```\n\n**자주 틀리는 부분:** 미리 변환한 X_train 사용, KFold 사용, 평균만 저장.\n\n**채점 항목:**\n\n1. 폴드별 전처리 교차 검증 F1 5개\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.base import clone\nfrom sklearn.model_selection import StratifiedKFold, cross_val_score\ncv_pipeline = Pipeline([('preprocessor', clone(preprocessor)), ('model', LogisticRegression(max_iter=1000, random_state=42))])\ncv_f1_scores = cross_val_score(cv_pipeline, X_train_raw, y_train, cv=StratifiedKFold(n_splits=5, shuffle=True, random_state=42), scoring='f1', n_jobs=1)\nprint(cv_f1_scores, cv_f1_scores.mean())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

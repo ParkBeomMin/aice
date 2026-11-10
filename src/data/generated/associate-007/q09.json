@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-007",
+  "question_id": "q09",
+  "public_id": "associate-007-q09",
+  "revision": 1,
+  "title": "층화 분할과 ColumnTransformer 전처리",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "원본 `batch_df`에서 다시 시작해 훈련 데이터로만 전처리기를 학습하시오.\n\n1. `batch_id`, `defect_24h`를 뺀 컬럼을 `X`, `defect_24h`를 `y`로 정하시오.\n2. `train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)`로 `X_train_raw`, `X_test_raw`, `y_train`, `y_test`를 만드시오.\n3. 수치형 8개(`machine_age_months`, `temperature_c`, `vibration_mm_s`, `pressure_bar`, `cycle_seconds`, `reject_count_prev_hour`, `calibration_days_ago`, `precheck_score`)에는 `SimpleImputer(strategy='median')` 다음 `StandardScaler`를, 범주형 4개(`plant`, `line_id`, `material_grade`, `operator_shift`)에는 `OneHotEncoder(handle_unknown='ignore', sparse_output=False)`를 적용하는 `ColumnTransformer`를 `preprocessor`에 저장하시오. 수치형을 먼저, 범주형을 다음에 둡니다.\n4. `preprocessor`를 `X_train_raw`로만 fit 하고, 변환 결과 배열을 `X_train`, `X_test`에 저장하시오.\n\n> 6번의 `batch_clean`을 쓰거나 평가 데이터로 fit 하면 누설이 됩니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "production_batches",
+      "url_path": "content/associate-007/datasets/production_batches.csv",
+      "sha256": "3a1486511c970411a450b5b11f40a333be71c2f6fe275cc6f59151ec9ba42ee7",
+      "size_bytes": 119702,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261207, SHA-256 3a1486511c97"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** ColumnTransformer 로 훈련 데이터만으로 전처리를 학습한다.\n\n**핵심 개념:** `ColumnTransformer`는 컬럼 묶음마다 다른 전처리를 적용한다. 수치형은 중앙값 대체 후 표준화, 범주형은 원-핫. `fit`은 훈련 데이터로만 하고 평가 데이터는 `transform`만 한다. `handle_unknown='ignore'`는 평가에 새 범주가 나와도 오류 없이 0으로 둔다.\n\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.compose import ColumnTransformer\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.impute import SimpleImputer\nfrom sklearn.preprocessing import StandardScaler, OneHotEncoder\nX = batch_df.drop(columns=['batch_id', 'defect_24h'])\ny = batch_df['defect_24h']\nX_train_raw, X_test_raw, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\nnum_cols = ['machine_age_months', 'temperature_c', 'vibration_mm_s', 'pressure_bar', 'cycle_seconds',\n            'reject_count_prev_hour', 'calibration_days_ago', 'precheck_score']\ncat_cols = ['plant', 'line_id', 'material_grade', 'operator_shift']\npreprocessor = ColumnTransformer([\n    ('num', Pipeline([('imputer', SimpleImputer(strategy='median')), ('scaler', StandardScaler())]), num_cols),\n    ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=False), cat_cols),\n])\nX_train = preprocessor.fit_transform(X_train_raw)\nX_test = preprocessor.transform(X_test_raw)\n```\n\n**기준 결과:** 훈련 1,680행, 평가 420행, 변환 후 특징 21개. 훈련 중앙값 예: 진동 2.97, 압력 7.0.\n\n**다른 풀이 (make_column_transformer):**\n\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.compose import make_column_transformer\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.impute import SimpleImputer\nfrom sklearn.preprocessing import StandardScaler, OneHotEncoder\nX = batch_df.drop(columns=['batch_id', 'defect_24h'])\ny = batch_df['defect_24h']\nX_train_raw, X_test_raw, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\npreprocessor = make_column_transformer((make_pipeline(SimpleImputer(strategy='median'), StandardScaler()), ['machine_age_months', 'temperature_c', 'vibration_mm_s', 'pressure_bar', 'cycle_seconds', 'reject_count_prev_hour', 'calibration_days_ago', 'precheck_score']), (OneHotEncoder(handle_unknown='ignore', sparse_output=False), ['plant', 'line_id', 'material_grade', 'operator_shift']))\nX_train = preprocessor.fit_transform(X_train_raw)\nX_test = preprocessor.transform(X_test_raw)\n```\n\n**자주 틀리는 부분:** 전체 데이터나 평가 데이터로 fit, 수치형 누락, OneHotEncoder 옵션 다름, 탐색용 batch_clean 사용.\n\n**채점 항목:**\n\n1. 층화 분할 그대로\n2. batch_df 는 그대로\n3. 전처리 구성 (수치 8 중앙값 대체와 표준화, 범주 4 원-핫)\n4. 훈련 변환 결과\n5. 평가 변환 결과\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.model_selection import train_test_split\nfrom sklearn.compose import ColumnTransformer\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.impute import SimpleImputer\nfrom sklearn.preprocessing import StandardScaler, OneHotEncoder\nX = batch_df.drop(columns=['batch_id', 'defect_24h'])\ny = batch_df['defect_24h']\nX_train_raw, X_test_raw, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\nnum_cols = ['machine_age_months', 'temperature_c', 'vibration_mm_s', 'pressure_bar', 'cycle_seconds',\n            'reject_count_prev_hour', 'calibration_days_ago', 'precheck_score']\ncat_cols = ['plant', 'line_id', 'material_grade', 'operator_shift']\npreprocessor = ColumnTransformer([\n    ('num', Pipeline([('imputer', SimpleImputer(strategy='median')), ('scaler', StandardScaler())]), num_cols),\n    ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=False), cat_cols),\n])\nX_train = preprocessor.fit_transform(X_train_raw)\nX_test = preprocessor.transform(X_test_raw)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}
