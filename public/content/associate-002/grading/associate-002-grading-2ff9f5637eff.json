@@ -1,8 +1,8 @@
 {
-  "schema_version": "1.8.0",
+  "schema_version": "1.9.0",
   "pack_id": "associate-002",
-  "engine_version": "1.7.0",
-  "grading_version": "associate-002-gb4a9eaa273aa",
+  "engine_version": "1.8.0",
+  "grading_version": "associate-002-g8310a90dd1cd",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -635,6 +635,40 @@
           },
           "weight": 1,
           "feedback": "숫자가 아닌 컬럼이 남아 있습니다."
+        },
+        {
+          "id": "encoded-values",
+          "label": "전처리 결과 전체 값 (원본 분할에서 다시 계산)",
+          "probe": {
+            "kind": "preprocess_reproduced",
+            "train_raw": "X_train_raw",
+            "test_raw": "X_test_raw",
+            "impute": {
+              "columns": [
+                "walking_distance_m"
+              ],
+              "stat": "median"
+            },
+            "onehot_columns": [
+              "warehouse_zone",
+              "shift",
+              "item_category",
+              "priority"
+            ],
+            "outputs": {
+              "train": "X_train_encoded",
+              "test": "X_test_encoded"
+            }
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "train": true,
+              "test": true
+            }
+          },
+          "weight": 2,
+          "feedback": "X_train_encoded, X_test_encoded 의 값이 X_train_raw, X_test_raw 에서 훈련 중앙값 대체와 원-핫 인코딩으로 만든 결과와 다릅니다."
         }
       ]
     },
@@ -754,6 +788,32 @@
           },
           "weight": 1,
           "feedback": "원-핫 컬럼은 표준화하지 마세요."
+        },
+        {
+          "id": "scaler-stats",
+          "label": "스케일러 통계가 훈련 데이터 기준",
+          "probe": {
+            "kind": "scaler_fitted_on",
+            "var": "scaler",
+            "source": "X_train_encoded",
+            "scale_columns": [
+              "items_count",
+              "sku_diversity",
+              "walking_distance_m",
+              "shelf_levels",
+              "picker_experience_months",
+              "congestion_index",
+              "packing_items",
+              "scanner_errors",
+              "items_per_sku"
+            ]
+          },
+          "expect": {
+            "op": "eq",
+            "value": true
+          },
+          "weight": 1,
+          "feedback": "scaler 의 평균과 분산이 X_train_encoded 의 수치형 컬럼으로 fit 한 값과 다릅니다. 훈련 데이터 전체로만 fit 하세요."
         }
       ]
     },

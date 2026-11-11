@@ -1,10 +1,10 @@
 // T-06 채점 계약 (TS 측). JSON Schema: content/schemas/public-grading-profile.schema.json, attempt-result.schema.json
-export const GRADING_ENGINE_VERSION = '1.7.0'; // 1.7.0: cost_selection, figure_data_match bar, time_split_reproduced, subset_metric, transformer_check, transformed_with, stratified_cv_scores, confusion_matrix cell. 1.6.0: figure_data_match, scaled_with. 1.5.0: figure_info, column_values, onehot_reproduced, confusion_matrix, metric_gap. 1.4.0: split_reproduced, constrained_selection, 후보별 threshold. 1.3.0: 회귀 모델 4종, rmse, 회귀 best_model(최소), selected_predictions, group_metric, imputed_against. 1.2.0: frame_unchanged (원본, 다른 컬럼 보존).  1.1.0: 학생 상태 기반 독립 재계산 evaluator (refit_predictions, predictions, probabilities, best_model, model_params, series_index, imputation_from_source)
+export const GRADING_ENGINE_VERSION = '1.8.0'; // 1.8.0: preprocess_reproduced, scaler_fitted_on. 1.7.0: cost_selection, figure_data_match bar, time_split_reproduced, subset_metric, transformer_check, transformed_with, stratified_cv_scores, confusion_matrix cell. 1.6.0: figure_data_match, scaled_with. 1.5.0: figure_info, column_values, onehot_reproduced, confusion_matrix, metric_gap. 1.4.0: split_reproduced, constrained_selection, 후보별 threshold. 1.3.0: 회귀 모델 4종, rmse, 회귀 best_model(최소), selected_predictions, group_metric, imputed_against. 1.2.0: frame_unchanged (원본, 다른 컬럼 보존).  1.1.0: 학생 상태 기반 독립 재계산 evaluator (refit_predictions, predictions, probabilities, best_model, model_params, series_index, imputation_from_source)
 export const RESULT_SCHEMA_VERSION = '1.0.0';
 
 export type ProbeKind = 'var_type' | 'df_shape' | 'length' | 'columns' | 'null_count' | 'column_stat' | 'non_numeric_columns'
   | 'cell_result' | 'output_numbers' | 'output_text' | 'frames' | 'value' | 'is_fitted' | 'class_name' | 'attr_number' | 'metric' | 'imputed_values'
-  | 'figure_count' | 'bar_count' | 'predictions' | 'probabilities' | 'refit_predictions' | 'model_params' | 'best_model' | 'series_index' | 'imputation_from_source' | 'frame_unchanged' | 'selected_predictions' | 'group_metric' | 'imputed_against' | 'split_reproduced' | 'constrained_selection' | 'figure_info' | 'column_values' | 'onehot_reproduced' | 'confusion_matrix' | 'metric_gap' | 'figure_data_match' | 'scaled_with' | 'cost_selection' | 'time_split_reproduced' | 'subset_metric' | 'transformer_check' | 'transformed_with' | 'stratified_cv_scores';
+  | 'figure_count' | 'bar_count' | 'predictions' | 'probabilities' | 'refit_predictions' | 'model_params' | 'best_model' | 'series_index' | 'imputation_from_source' | 'frame_unchanged' | 'selected_predictions' | 'group_metric' | 'imputed_against' | 'split_reproduced' | 'constrained_selection' | 'figure_info' | 'column_values' | 'onehot_reproduced' | 'confusion_matrix' | 'metric_gap' | 'figure_data_match' | 'scaled_with' | 'cost_selection' | 'time_split_reproduced' | 'subset_metric' | 'transformer_check' | 'transformed_with' | 'stratified_cv_scores' | 'preprocess_reproduced' | 'scaler_fitted_on';
 export interface Probe { kind: ProbeKind; [k: string]: unknown }
 export type ExpectOp = 'eq' | 'approx' | 'in_range' | 'contains_all' | 'excludes_all' | 'set_eq' | 'approx_contains' | 'any_approx' | 'text_contains_all' | 'truthy';
 export interface Expect { op: ExpectOp; value?: unknown; ref_probe?: Probe; abs_tol?: number; rel_tol?: number; min?: number; max?: number }
@@ -14,7 +14,7 @@ export interface QuestionProfile {
   depends_on: string[]; points: number; checks: Check[];
 }
 export interface GradingBundle {
-  schema_version: '1.8.0'; pack_id: string; engine_version: string; grading_version: string;
+  schema_version: '1.9.0'; pack_id: string; engine_version: string; grading_version: string;
   questions: Record<string, QuestionProfile>;
 }
 

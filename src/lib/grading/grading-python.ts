@@ -429,6 +429,67 @@ def _probe(p):
         except Exception:
             return False
         return _same_data(got, exp.astype({c: got[c].dtype for c in cols if c in got.columns}) if set(cols) <= set(got.columns) else exp)
+    if k == "preprocess_reproduced":
+        # (엔진 1.8.0) 학생 현재 train_raw, test_raw 에서 순서대로 abs_diffs (|col - value|), impute (train_raw 통계로 양쪽 결측 대체),
+        # ratios (num / (den + den_add)), onehot (get_dummies dtype=int, 평가는 훈련 컬럼에 맞춰 reindex fill 0) 를 다시 계산해
+        # outputs train, test 변수의 인덱스, 컬럼 집합, 컬럼별 dtype 종류와 값 비교 → {train: bool, test: bool}
+        import pandas as pd
+        tr, te = _df(p["train_raw"]), _df(p["test_raw"])
+        if len(tr) + len(te) > 200000:
+            raise _ProbeError("데이터 크기 초과")
+        def build(x):
+            x = x.copy()
+            for a in (p.get("abs_diffs") or [])[:3]:
+                if a["column"] not in x.columns:
+                    raise _ProbeError("컬럼이 없습니다")
+                x[a["name"]] = (x[a["column"]] - float(a["value"])).abs()
+            return x
+        tr2, te2 = build(tr), build(te)
+        imp = p.get("impute")
+        if imp:
+            cols = list(imp.get("columns") or [])
+            if imp.get("stat") not in ("median", "mean") or any(c2 not in tr2.columns for c2 in cols):
+                raise _ProbeError("결측 대체 설정 오류")
+            stats = getattr(tr2[cols], imp["stat"])()
+            tr2 = tr2.fillna(stats); te2 = te2.fillna(stats)
+        for r in (p.get("ratios") or [])[:3]:
+            add = float(r.get("den_add", 0))
+            for x in (tr2, te2):
+                if r["num"] not in x.columns or r["den"] not in x.columns:
+                    raise _ProbeError("컬럼이 없습니다")
+                x[r["name"]] = x[r["num"]] / (x[r["den"]] + add)
+        oh = list(p.get("onehot_columns") or [])
+        if oh:
+            if any(c2 not in tr2.columns for c2 in oh):
+                raise _ProbeError("인코딩할 컬럼이 없습니다")
+            tr2 = pd.get_dummies(tr2, columns=oh, dtype=int)
+            te2 = pd.get_dummies(te2, columns=oh, dtype=int).reindex(columns=tr2.columns, fill_value=0)
+        res = {}
+        for key, exp in (("train", tr2), ("test", te2)):
+            vn = (p.get("outputs") or {}).get(key)
+            if not vn:
+                continue
+            got = _g_ns.get(vn) if isinstance(vn, str) and _NAME_RE.match(vn) else None
+            if got is None or not _is_df(got) or set(map(str, got.columns)) != set(map(str, exp.columns)):
+                res[key] = False; continue
+            res[key] = _same_data(got[list(exp.columns)], exp)
+        return res
+    if k == "scaler_fitted_on":
+        # (엔진 1.8.0) StandardScaler 의 n_features_in_, n_samples_seen_, mean_, var_ 가 source[columns] (실수) 로 fit 한 값과 같은지
+        import numpy as np
+        sc = _var(p["var"])
+        if type(sc).__name__ != "StandardScaler" or not hasattr(sc, "mean_"):
+            raise _ProbeError(f"{p['var']} 가 fit 된 StandardScaler 가 아닙니다")
+        src = _df(p["source"])
+        cols = list(p.get("scale_columns") or [])
+        if not cols or any(c2 not in src.columns for c2 in cols):
+            raise _ProbeError("컬럼이 없습니다")
+        a = src[cols].to_numpy(dtype=float)
+        nss = sc.n_samples_seen_
+        nss = int(nss if np.ndim(nss) == 0 else np.max(nss))
+        if int(sc.n_features_in_) != len(cols) or nss != len(a):
+            return False
+        return bool(np.allclose(sc.mean_, np.nanmean(a, axis=0), rtol=1e-9, atol=1e-9) and np.allclose(sc.var_, np.nanvar(a, axis=0), rtol=1e-9, atol=1e-9))
     if k == "cost_selection":
         # (엔진 1.7.0) 이진 분류 후보별 비용 fp*FP + fn*FN (labels [0, 1]) 을 학생 상태로 재계산. output scores 면 {이름: 비용}, selected 면 최소 비용 (동률 이름 오름차순)
         import numpy as np

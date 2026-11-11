@@ -1,8 +1,8 @@
 {
-  "schema_version": "1.8.0",
+  "schema_version": "1.9.0",
   "pack_id": "associate-006",
-  "engine_version": "1.7.0",
-  "grading_version": "associate-006-g67736166171e",
+  "engine_version": "1.8.0",
+  "grading_version": "associate-006-g892c9cea8371",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -8963,6 +8963,46 @@
           },
           "weight": 1,
           "feedback": "X_test 의 컬럼 구성과 순서를 X_train 과 같게 맞추세요 (평가에 없는 계절은 0)."
+        },
+        {
+          "id": "encoded-values",
+          "label": "전처리 결과 전체 값 (원본 분할에서 다시 계산)",
+          "probe": {
+            "kind": "preprocess_reproduced",
+            "train_raw": "X_train_raw",
+            "test_raw": "X_test_raw",
+            "impute": {
+              "columns": [
+                "humidity_pct"
+              ],
+              "stat": "median"
+            },
+            "ratios": [
+              {
+                "name": "bikes_per_station",
+                "num": "available_bikes",
+                "den": "bike_stations",
+                "den_add": 0
+              }
+            ],
+            "onehot_columns": [
+              "district",
+              "season"
+            ],
+            "outputs": {
+              "train": "X_train",
+              "test": "X_test"
+            }
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "train": true,
+              "test": true
+            }
+          },
+          "weight": 2,
+          "feedback": "X_train, X_test 의 값이 X_train_raw, X_test_raw 에서 훈련 중앙값 대체, bikes_per_station 추가, 원-핫 인코딩으로 만든 결과와 다릅니다."
         }
       ]
     },

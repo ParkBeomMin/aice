@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://aice-content-factory.local/content/public-grading-profile.schema.json",
   "title": "Public grading bundle",
-  "description": "공개 채점 규칙 묶음 (팩당 1개, public/content/<pack>/grading/<pack>-grading-<sha12>.json). 브라우저 사용자가 볼 수 있음을 전제로 함 (정답 코드는 없음, 기대 결과값은 포함). 사람이 검토·테스트한 프로필만 포함 · 1.1.0: 검사 label 필수 · 1.2.0(엔진 1.1.0): 학생 상태 기반 독립 재계산 probe (이전 계약 파일 보존) · 1.3.0(엔진 1.2.0): frame_unchanged | 1.4.0(엔진 1.3.0): 회귀 모델, rmse, selected_predictions, group_metric, imputed_against | 1.5.0(엔진 1.4.0): split_reproduced (분할 독립 재계산 비교), constrained_selection (제약 조건 분류 후보 선택), 후보별 threshold, alpha 와 min_samples_leaf 파라미터 | 1.6.0(엔진 1.5.0): figure_info, column_values, onehot_reproduced, confusion_matrix, metric_gap | 1.7.0(엔진 1.6.0): figure_data_match (히스토그램 구간 경계와 빈도, 산점도 x-y 쌍 전체), scaled_with (스케일러 transform 결과 비교) | 1.8.0(엔진 1.7.0): cost_selection, figure_data_match bar, time_split_reproduced, subset_metric, transformer_check, transformed_with, stratified_cv_scores, confusion_matrix cell",
+  "description": "공개 채점 규칙 묶음 (팩당 1개, public/content/<pack>/grading/<pack>-grading-<sha12>.json). 브라우저 사용자가 볼 수 있음을 전제로 함 (정답 코드는 없음, 기대 결과값은 포함). 사람이 검토·테스트한 프로필만 포함 · 1.1.0: 검사 label 필수 · 1.2.0(엔진 1.1.0): 학생 상태 기반 독립 재계산 probe (이전 계약 파일 보존) · 1.3.0(엔진 1.2.0): frame_unchanged | 1.4.0(엔진 1.3.0): 회귀 모델, rmse, selected_predictions, group_metric, imputed_against | 1.5.0(엔진 1.4.0): split_reproduced (분할 독립 재계산 비교), constrained_selection (제약 조건 분류 후보 선택), 후보별 threshold, alpha 와 min_samples_leaf 파라미터 | 1.6.0(엔진 1.5.0): figure_info, column_values, onehot_reproduced, confusion_matrix, metric_gap | 1.7.0(엔진 1.6.0): figure_data_match (히스토그램 구간 경계와 빈도, 산점도 x-y 쌍 전체), scaled_with (스케일러 transform 결과 비교) | 1.8.0(엔진 1.7.0): cost_selection, figure_data_match bar, time_split_reproduced, subset_metric, transformer_check, transformed_with, stratified_cv_scores, confusion_matrix cell | 1.9.0(엔진 1.8.0): preprocess_reproduced (원본 분할에서 결측 대체, 파생, 원-핫, 정렬을 다시 계산해 전체 값 비교), scaler_fitted_on (스케일러 통계가 지정 데이터와 같은지)",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -14,7 +14,7 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "1.8.0"
+      "const": "1.9.0"
     },
     "pack_id": {
       "type": "string",
@@ -93,7 +93,9 @@
             "subset_metric",
             "transformer_check",
             "transformed_with",
-            "stratified_cv_scores"
+            "stratified_cv_scores",
+            "preprocess_reproduced",
+            "scaler_fitted_on"
           ]
         },
         "var": {
@@ -369,6 +371,14 @@
               "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
             },
             "y_test": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+            },
+            "train": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+            },
+            "test": {
               "type": "string",
               "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
             }
@@ -657,6 +667,104 @@
             "fn",
             "tp"
           ]
+        },
+        "train_raw": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "test_raw": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+        },
+        "impute": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "columns",
+            "stat"
+          ],
+          "properties": {
+            "columns": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "minItems": 1,
+              "maxItems": 10,
+              "uniqueItems": true
+            },
+            "stat": {
+              "enum": [
+                "median",
+                "mean"
+              ]
+            }
+          }
+        },
+        "ratios": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "num",
+              "den"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "num": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "den": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "den_add": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 10
+              }
+            }
+          }
+        },
+        "abs_diffs": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "column",
+              "value"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "column": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "value": {
+                "type": "number"
+              }
+            }
+          }
         }
       }
     },

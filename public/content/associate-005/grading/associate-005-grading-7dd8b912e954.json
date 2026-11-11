@@ -1,8 +1,8 @@
 {
-  "schema_version": "1.8.0",
+  "schema_version": "1.9.0",
   "pack_id": "associate-005",
-  "engine_version": "1.7.0",
-  "grading_version": "associate-005-g71636ff5a119",
+  "engine_version": "1.8.0",
+  "grading_version": "associate-005-g352b0d6dfb9e",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -4393,6 +4393,75 @@
           },
           "weight": 1,
           "feedback": "X_test 는 같은 promo_scaler 로 X_test_encoded 를 transform 한 결과여야 합니다 (평가 데이터에 fit 금지)."
+        },
+        {
+          "id": "encoded-values",
+          "label": "전처리 결과 전체 값 (원본 분할에서 다시 계산)",
+          "probe": {
+            "kind": "preprocess_reproduced",
+            "train_raw": "X_train_raw",
+            "test_raw": "X_test_raw",
+            "impute": {
+              "columns": [
+                "basket_value_30d",
+                "email_open_rate"
+              ],
+              "stat": "median"
+            },
+            "ratios": [
+              {
+                "name": "spend_per_visit",
+                "num": "basket_value_30d",
+                "den": "visits_last_30d",
+                "den_add": 1
+              }
+            ],
+            "onehot_columns": [
+              "shopper_segment",
+              "channel",
+              "region_group",
+              "promotion_type",
+              "device_type"
+            ],
+            "outputs": {
+              "train": "X_train_encoded",
+              "test": "X_test_encoded"
+            }
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "train": true,
+              "test": true
+            }
+          },
+          "weight": 2,
+          "feedback": "X_train_encoded, X_test_encoded 의 값이 X_train_raw, X_test_raw 에서 훈련 중앙값 대체, spend_per_visit 추가, 원-핫 인코딩으로 만든 결과와 다릅니다."
+        },
+        {
+          "id": "scaler-stats",
+          "label": "스케일러 통계가 훈련 데이터 기준",
+          "probe": {
+            "kind": "scaler_fitted_on",
+            "var": "promo_scaler",
+            "source": "X_train_encoded",
+            "scale_columns": [
+              "discount_pct",
+              "basket_value_30d",
+              "visits_last_30d",
+              "coupon_use_30d",
+              "loyalty_months",
+              "email_open_rate",
+              "days_since_last_purchase",
+              "spend_per_visit"
+            ]
+          },
+          "expect": {
+            "op": "eq",
+            "value": true
+          },
+          "weight": 1,
+          "feedback": "promo_scaler 의 평균과 분산이 X_train_encoded 의 수치형 컬럼으로 fit 한 값과 다릅니다. 훈련 데이터 전체로만 fit 하세요."
         }
       ]
     },
@@ -4437,7 +4506,7 @@
             "value": {
               "max_iter": 1000,
               "random_state": 42,
-              "C": 1
+              "C": 1.0
             }
           },
           "weight": 1,

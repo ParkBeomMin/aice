@@ -130,7 +130,7 @@
   "grading": {
     "description": "공개 채점 규칙 묶음. manifest.grading 에 등록·해시 일치·스키마 통과한 파일만 허용",
     "name_regex": "^[a-z0-9][a-z0-9_-]{2,63}-grading-[0-9a-f]{12}\\.json$",
-    "engine_version": "1.7.0",
+    "engine_version": "1.8.0",
     "preview_review_status": [
       "tested",
       "approved"
@@ -144,7 +144,8 @@
       "1.4.0",
       "1.5.0",
       "1.6.0",
-      "1.7.0"
+      "1.7.0",
+      "1.8.0"
     ]
   }
 }

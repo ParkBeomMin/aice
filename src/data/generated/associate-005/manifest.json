@@ -91,12 +91,12 @@
     {
       "question_id": "q09",
       "public_id": "associate-005-q09",
-      "revision": 2,
+      "revision": 3,
       "title": "층화 분할과 훈련 데이터 기준 전처리, 표준화",
       "topic": "machine_learning",
       "difficulty": "hard",
       "file": "q09.json",
-      "sha256": "746887d9258be2a541a6d69f0c29e54c8ea8721465ec21555610e36f0c4b996d"
+      "sha256": "03e21d1a540d24ab739c6b1e50d361a477cb14d9afb28f1f99ff6bd8c97da5c7"
     },
     {
       "question_id": "q10",
@@ -236,7 +236,7 @@
     "version": "0.1.0",
     "content_contract": "1.3.0"
   },
-  "source_fingerprint": "e2c755ebdc41f74692cfbad839959e605db5963326e8bd9b574256cb8edde8fa",
+  "source_fingerprint": "290b1327bef34825d3952c9bdf0d84498ad9795da6746bcfdaa2d86b3c07aa96",
   "notebook": {
     "kind": "question_notebook",
     "format": "nbformat4.5",
@@ -262,11 +262,11 @@
   },
   "grading": {
     "kind": "grading_bundle",
-    "url_path": "content/associate-005/grading/associate-005-grading-5c88224d9a8f.json",
-    "sha256": "5c88224d9a8f44a59d4bf2baae5f18396cb43f18ed0cbdd6298ffe2fd0ac71bc",
-    "size_bytes": 133243,
-    "engine_version": "1.7.0",
-    "grading_version": "associate-005-g71636ff5a119",
+    "url_path": "content/associate-005/grading/associate-005-grading-7dd8b912e954.json",
+    "sha256": "7dd8b912e95429d134a15a893fa6f93c9f75837bea922e135a2834ab479be3f0",
+    "size_bytes": 135518,
+    "engine_version": "1.8.0",
+    "grading_version": "associate-005-g352b0d6dfb9e",
     "question_ids": [
       "q01",
       "q02",
