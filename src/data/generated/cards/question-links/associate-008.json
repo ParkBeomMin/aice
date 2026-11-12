@@ -41,15 +41,17 @@
     {
       "question_id": "q07",
       "card_ids": [
-        "pd-005"
+        "pd-012"
       ]
     },
     {
       "question_id": "q08",
       "card_ids": [
         "prep-009",
+        "pd-012",
+        "prep-005",
         "prep-010",
-        "prep-005"
+        "ml-008"
       ]
     },
     {

@@ -11,6 +11,7 @@
     {
       "question_id": "q02",
       "card_ids": [
+        "eda-009",
         "eda-008"
       ]
     },
@@ -73,6 +74,7 @@
     {
       "question_id": "q12",
       "card_ids": [
+        "metric-014",
         "metric-001"
       ]
     },

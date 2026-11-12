@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "deck_id": "eda-statistics",
-  "revision": 3,
+  "revision": 4,
   "title": "데이터 탐색과 통계",
   "summary": "대표값, 분포, 비율, 상관관계의 해석",
   "intro_md": "데이터 탐색의 첫 단계는 하나의 숫자만 보는 대신 분포와 집단 차이를 함께 이해하는 것입니다. 극단적인 값이 있으면 평균과 중앙값이 다르게 나타날 수 있고, 표본이 작은 그룹의 비율은 크게 흔들릴 수 있습니다. 상관계수는 두 수치형 변수의 선형 관계를 요약하지만, 인과관계를 증명하지 않고 비선형 관계도 놓칠 수 있습니다. 결과를 해석할 때는 요약 통계와 그래프를 함께 확인하세요.",
@@ -139,6 +139,22 @@
       ],
       "difficulty": "basic",
       "content_digest": "7b73cfc921c3ae76"
+    },
+    {
+      "card_id": "eda-009",
+      "revision": 1,
+      "front": "0과 1 컬럼의 평균은 무엇을 뜻하나?",
+      "back": "1이 양성인 0과 1 컬럼의 평균은 전체 중 1의 비율이다. 예를 들어 평균 0.12는 12%가 양성이라는 뜻이다. 결측이 있으면 mean()은 결측을 빼고 계산한다.",
+      "code_example": "rate = df['target'].mean()",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "statistics",
+        "rate",
+        "binary"
+      ],
+      "difficulty": "basic",
+      "content_digest": "d8ed1f23a341f017"
     }
   ]
 }

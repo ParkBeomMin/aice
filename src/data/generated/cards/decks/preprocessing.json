@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "deck_id": "preprocessing",
-  "revision": 4,
+  "revision": 5,
   "title": "데이터 전처리",
   "summary": "결측, 이상값, 인코딩, 분할, 스케일링, 훈련 기준 전처리, 로그 변환, 구간화",
   "intro_md": "전처리는 데이터를 무조건 깨끗하게 만드는 작업이 아니라 모델에 적합한 입력을 만드는 과정입니다. 결측치는 삭제하거나 대체할 수 있고, IQR로 찾아낸 이상값은 맥락을 확인한 뒤 처리합니다. 범주형 변수를 숫자로 표현할 때는 불필요한 순서 정보가 생기지 않도록 주의하세요. 데이터 분할 후 중앙값, 스케일러 등 학습이 필요한 변환 기준은 훈련 데이터에서만 계산하는 것이 원칙입니다.",
@@ -194,9 +194,9 @@
     },
     {
       "card_id": "prep-012",
-      "revision": 1,
+      "revision": 2,
       "front": "log1p와 expm1은 언제 쓰나?",
-      "back": "오른쪽으로 긴 타깃은 np.log1p로 바꿔 학습하면 큰 값의 영향이 줄어든다. 예측은 np.expm1으로 원래 단위로 되돌린 뒤 평가한다. 두 함수는 짝이다.",
+      "back": "음수가 아니고 오른쪽으로 긴 타깃은 np.log1p로 바꿔 학습할 수 있다. 예측값은 np.expm1으로 원래 단위로 되돌리고, MAE나 RMSE도 원래 단위에서 계산한다. 두 함수는 짝이다.",
       "code_example": "model.fit(X_train, np.log1p(y_train))\npred = np.expm1(model.predict(X_test))",
       "code_language": "python",
       "code_runtime": "reference_only",
@@ -206,7 +206,7 @@
         "regression"
       ],
       "difficulty": "basic",
-      "content_digest": "8ded2554e501357c"
+      "content_digest": "3bc7517485d3d97f"
     },
     {
       "card_id": "prep-013",

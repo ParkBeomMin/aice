@@ -4,32 +4,32 @@
   "decks": [
     {
       "deck_id": "pandas-basics",
-      "revision": 4,
+      "revision": 5,
       "title": "Python과 Pandas 기초",
       "summary": "CSV 읽기, 데이터 구조 확인, 행 선택과 그룹 집계",
-      "card_count": 10,
+      "card_count": 14,
       "file": "decks/pandas-basics.json",
-      "sha256": "e1a7ed38b4cb780377dacdd0b3ff9d87c7586441b49a375506551e9eda5b01dc",
+      "sha256": "497f74bb4b228719a4f8e4c5b725bef58ac1435294b7d4621ba1f38a9f1780b2",
       "publication_status": "approved"
     },
     {
       "deck_id": "eda-statistics",
-      "revision": 3,
+      "revision": 4,
       "title": "데이터 탐색과 통계",
       "summary": "대표값, 분포, 비율, 상관관계의 해석",
-      "card_count": 8,
+      "card_count": 9,
       "file": "decks/eda-statistics.json",
-      "sha256": "27cd68e2be18b0de0fcd9d68b957032507910e1e8e0d9e593d30785348f20d3b",
+      "sha256": "f16293139699433ad06742fea5244a16bb7b5f86769247e5089ba4607752e51f",
       "publication_status": "approved"
     },
     {
       "deck_id": "preprocessing",
-      "revision": 4,
+      "revision": 5,
       "title": "데이터 전처리",
       "summary": "결측, 이상값, 인코딩, 분할, 스케일링, 훈련 기준 전처리, 로그 변환, 구간화",
       "card_count": 14,
       "file": "decks/preprocessing.json",
-      "sha256": "043611e62c02946c7c554b4d44ea8158abe606b48a4221d8259567c21921e36d",
+      "sha256": "2d285cc9f7f0d322d0f261eb3383b7e4464209a3a22923cd494a00c2ceae5e18",
       "publication_status": "approved"
     },
     {
@@ -54,12 +54,12 @@
     },
     {
       "deck_id": "evaluation",
-      "revision": 4,
+      "revision": 5,
       "title": "모델 평가 지표",
       "summary": "혼동행렬, Precision, Recall, F1, 임계값, AUC, 회귀 지표, 오류 비용",
-      "card_count": 13,
+      "card_count": 14,
       "file": "decks/evaluation.json",
-      "sha256": "d2866f3265235f15d4f421943960c07bd9c796de73ca181cb303ff2ca5c4882f",
+      "sha256": "4b46dca5eb11c7ff00a5dfef618289d76f1ccded5f24653216ebc8db67e7b685",
       "publication_status": "approved"
     },
     {
@@ -87,42 +87,42 @@
     {
       "pack_id": "associate-003",
       "file": "question-links/associate-003.json",
-      "sha256": "41f6240d7eb27dc3f5f2efae307aa807a19181e95ae886771a9b928f991bc031"
+      "sha256": "140a6fdb029d043edfb2ce3b89ca60246aee269bff17db60afed54a62d85e858"
     },
     {
       "pack_id": "associate-004",
       "file": "question-links/associate-004.json",
-      "sha256": "20af5cd40e1d0cd78775cc78e79c8c50fa1c2eb40391432874e73aa7cb3fa011"
+      "sha256": "a56eeab9cb28b8904bb4f6dbc79749b87fe670c61fe38a4af319fb9e6ec9267e"
     },
     {
       "pack_id": "associate-005",
       "file": "question-links/associate-005.json",
-      "sha256": "5cad034f278712ba292d9a7d82be55b6afd72c7f0150cbe7a82223fe24196b1f"
+      "sha256": "2f1926011f04cc35ec1a2653c88cd5d667831928986937bd3d2ff6216838cfeb"
     },
     {
       "pack_id": "associate-006",
       "file": "question-links/associate-006.json",
-      "sha256": "41dbbb3d2768c5d53248676d4d4b765b5dd8ad14403b5a4350808dde945ceb46"
+      "sha256": "6d4268c1874a72a654fe3da03c6d73a014e37ba3b13e0befb50ea8175a2d2e35"
     },
     {
       "pack_id": "associate-007",
       "file": "question-links/associate-007.json",
-      "sha256": "ebbef036b0c98c828a025e22481d3c418bb92346f2e6f4dbbfcdef5e993ee1ad"
+      "sha256": "cc5e9fe95172a1af2c2a4221be81c559c0c8e66559ccd68f0c923cabf81e2e6a"
     },
     {
       "pack_id": "associate-008",
       "file": "question-links/associate-008.json",
-      "sha256": "af2edbcdabec83b0381a319efc236d5380b2c33d2b85bee8278fa18d7782f666"
+      "sha256": "5185277d8a6ada5424b1e3f46b53f415bf6a88aede6c816d15011ebaf3e1c131"
     },
     {
       "pack_id": "associate-009",
       "file": "question-links/associate-009.json",
-      "sha256": "d594668da5f86b8f60f70603ad59c118bbc9d10f9b5a2075db3ee3d5c878fa2f"
+      "sha256": "b7e8b659280bb90b1efc4bdb3dfcb7e64fef3569467455c4eeb67e172136aaad"
     },
     {
       "pack_id": "associate-010",
       "file": "question-links/associate-010.json",
-      "sha256": "c33d4c5049a81add0ca0902635b1b18b58ac1a03f07849b9d8917c542223ff62"
+      "sha256": "77dd893bdfccfd16e5a4999bc9b317abc2ab8d2c20d1a1de7fe3f1a2cc6d318e"
     }
   ]
 }
