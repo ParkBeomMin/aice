@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-005",
+  "links": [
+    {
+      "question_id": "q01",
+      "card_ids": [
+        "pd-002"
+      ]
+    },
+    {
+      "question_id": "q02",
+      "card_ids": [
+        "eda-008"
+      ]
+    },
+    {
+      "question_id": "q03",
+      "card_ids": [
+        "pd-006"
+      ]
+    },
+    {
+      "question_id": "q04",
+      "card_ids": [
+        "pd-009"
+      ]
+    },
+    {
+      "question_id": "q05",
+      "card_ids": [
+        "prep-013",
+        "viz-008"
+      ]
+    },
+    {
+      "question_id": "q06",
+      "card_ids": [
+        "prep-001"
+      ]
+    },
+    {
+      "question_id": "q07",
+      "card_ids": [
+        "pd-005"
+      ]
+    },
+    {
+      "question_id": "q08",
+      "card_ids": [
+        "prep-005"
+      ]
+    },
+    {
+      "question_id": "q09",
+      "card_ids": [
+        "prep-007",
+        "prep-009",
+        "prep-010",
+        "prep-008"
+      ]
+    },
+    {
+      "question_id": "q10",
+      "card_ids": [
+        "ml-002"
+      ]
+    },
+    {
+      "question_id": "q11",
+      "card_ids": [
+        "ml-003"
+      ]
+    },
+    {
+      "question_id": "q12",
+      "card_ids": [
+        "metric-005"
+      ]
+    },
+    {
+      "question_id": "q13",
+      "card_ids": [
+        "metric-006",
+        "metric-003",
+        "metric-004"
+      ]
+    },
+    {
+      "question_id": "q14",
+      "card_ids": [
+        "metric-012",
+        "metric-001"
+      ]
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0.0",
   "deck_id": "evaluation",
-  "revision": 3,
+  "revision": 4,
   "title": "모델 평가 지표",
-  "summary": "혼동행렬, Precision, Recall, F1, 임계값과 AUC",
+  "summary": "혼동행렬, Precision, Recall, F1, 임계값, AUC, 회귀 지표, 오류 비용",
   "intro_md": "분류 모델의 성능은 정확도 하나로 설명하기 어렵습니다. 이탈 고객처럼 양성과 음성의 비율이 다를 때는 정밀도와 재현율을 함께 확인해야 합니다. F1은 두 지표의 균형을 나타내고, 분류 임계값을 바꾸면 같은 모델이라도 양성 판정 결과가 달라집니다. 교차 검증은 여러 분할의 성능을 살펴보는 방법이며, ROC-AUC는 특정 임계값 하나의 정확도를 뜻하지 않습니다.",
   "learning_objectives": [
     "혼동행렬을 바탕으로 정확도, 정밀도, 재현율, F1을 구분한다.",
@@ -138,6 +138,86 @@
       ],
       "difficulty": "basic",
       "content_digest": "ded84245f483a285"
+    },
+    {
+      "card_id": "metric-009",
+      "revision": 1,
+      "front": "회귀의 MAE는 무엇을 뜻하나?",
+      "back": "실제값과 예측값 차이의 절댓값을 평균한 값이다. 타깃과 같은 단위라 '평균적으로 몇 분, 몇 원 틀리는지'로 읽을 수 있다.",
+      "code_example": "from sklearn.metrics import mean_absolute_error\nmae = mean_absolute_error(y_test, pred)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "metrics",
+        "regression",
+        "mae"
+      ],
+      "difficulty": "basic",
+      "content_digest": "417a254654721d80"
+    },
+    {
+      "card_id": "metric-010",
+      "revision": 1,
+      "front": "RMSE와 MSE는 어떻게 다른가?",
+      "back": "MSE는 오차 제곱의 평균이고 RMSE는 그 제곱근이다. RMSE는 타깃과 같은 단위이며 큰 오차에 더 민감하다. MSE 값을 그대로 RMSE로 쓰면 안 된다.",
+      "code_example": "import numpy as np\nrmse = np.sqrt(mean_squared_error(y_test, pred))",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "metrics",
+        "regression",
+        "rmse"
+      ],
+      "difficulty": "basic",
+      "content_digest": "7efd76fcbc0333de"
+    },
+    {
+      "card_id": "metric-011",
+      "revision": 1,
+      "front": "회귀의 R2는 무엇을 나타내나?",
+      "back": "평균값 하나로 예측할 때보다 오차를 얼마나 줄였는지를 나타낸다. 1에 가까울수록 좋고 0이면 평균 예측과 같다. r2_score(y_true, y_pred) 순서를 지킨다.",
+      "code_example": "r2 = r2_score(y_true, y_pred)  # 실제값을 먼저",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "metrics",
+        "regression",
+        "r2"
+      ],
+      "difficulty": "basic",
+      "content_digest": "2ffb925be9c51ccc"
+    },
+    {
+      "card_id": "metric-012",
+      "revision": 1,
+      "front": "오류 비용으로 모델이나 임계값을 고르려면?",
+      "back": "FP와 FN의 업무 비용이 다르면 혼동행렬에서 FP, FN을 세어 비용을 계산하고 비용이 가장 작은 후보를 고른다. FN 비용이 크면 낮은 임계값이 유리할 수 있다.",
+      "code_example": "tn, fp, fn, tp = confusion_matrix(y_true, y_pred, labels=[0, 1]).ravel()\ncost = fp * 1 + fn * 5",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "metrics",
+        "cost",
+        "threshold"
+      ],
+      "difficulty": "basic",
+      "content_digest": "318c695b7c817fb4"
+    },
+    {
+      "card_id": "metric-013",
+      "revision": 1,
+      "front": "회귀 모델의 잔차는 어떻게 구하나?",
+      "back": "잔차는 실제값에서 예측값을 뺀 값이다. 실제값과 예측값의 행 순서(인덱스)가 같아야 하며, 잔차가 한쪽으로 치우치면 모델이 특정 구간을 과대 또는 과소 예측한다는 뜻이다.",
+      "code_example": "residual = y_test - pred",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "metrics",
+        "regression",
+        "residual"
+      ],
+      "difficulty": "basic",
+      "content_digest": "85e5d7f5fce08f81"
     }
   ]
 }

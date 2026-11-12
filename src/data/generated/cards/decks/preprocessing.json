@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0.0",
   "deck_id": "preprocessing",
-  "revision": 3,
+  "revision": 4,
   "title": "데이터 전처리",
-  "summary": "결측치, 이상값, 인코딩, 훈련 기준 전처리",
+  "summary": "결측, 이상값, 인코딩, 분할, 스케일링, 훈련 기준 전처리, 로그 변환, 구간화",
   "intro_md": "전처리는 데이터를 무조건 깨끗하게 만드는 작업이 아니라 모델에 적합한 입력을 만드는 과정입니다. 결측치는 삭제하거나 대체할 수 있고, IQR로 찾아낸 이상값은 맥락을 확인한 뒤 처리합니다. 범주형 변수를 숫자로 표현할 때는 불필요한 순서 정보가 생기지 않도록 주의하세요. 데이터 분할 후 중앙값, 스케일러 등 학습이 필요한 변환 기준은 훈련 데이터에서만 계산하는 것이 원칙입니다.",
   "learning_objectives": [
     "결측치와 이상값을 데이터의 의미에 맞는 방법으로 처리한다.",
@@ -143,6 +143,102 @@
       ],
       "difficulty": "basic",
       "content_digest": "a99d0948fa62c0c0"
+    },
+    {
+      "card_id": "prep-009",
+      "revision": 1,
+      "front": "결측 대체 기준값은 어디서 구하나?",
+      "back": "모델 평가용 전처리에서는 훈련 데이터에서만 중앙값이나 평균을 구해 훈련과 평가 데이터에 같은 값을 쓴다. 전체 또는 평가 데이터의 통계를 쓰면 누설이다.",
+      "code_example": "med = X_train['col'].median()\nX_train['col'] = X_train['col'].fillna(med)\nX_test['col'] = X_test['col'].fillna(med)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "missing",
+        "leakage"
+      ],
+      "difficulty": "basic",
+      "content_digest": "cc084a3280c5a8a9"
+    },
+    {
+      "card_id": "prep-010",
+      "revision": 1,
+      "front": "평가 데이터의 원-핫 컬럼은 어떻게 맞추나?",
+      "back": "훈련과 평가를 따로 get_dummies 하면 컬럼 구성이 달라질 수 있다. 평가 결과를 훈련 컬럼 순서로 reindex 하고 빠진 컬럼은 0으로 채운다.",
+      "code_example": "X_test = pd.get_dummies(X_test, dtype=int).reindex(columns=X_train.columns, fill_value=0)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "onehot",
+        "align"
+      ],
+      "difficulty": "basic",
+      "content_digest": "80a373e50af228f6"
+    },
+    {
+      "card_id": "prep-011",
+      "revision": 1,
+      "front": "날짜 순서가 있는 데이터는 어떻게 나누나?",
+      "back": "기준 날짜 이전을 훈련, 이후를 평가로 나눈다. 무작위로 나누면 미래 정보가 훈련에 섞여 성능이 실제보다 좋아 보인다.",
+      "code_example": "train = df[df['date'] < '2025-09-14']\ntest = df[df['date'] >= '2025-09-14']",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "split",
+        "time-series"
+      ],
+      "difficulty": "basic",
+      "content_digest": "fd480d6f669b8e9f"
+    },
+    {
+      "card_id": "prep-012",
+      "revision": 1,
+      "front": "log1p와 expm1은 언제 쓰나?",
+      "back": "오른쪽으로 긴 타깃은 np.log1p로 바꿔 학습하면 큰 값의 영향이 줄어든다. 예측은 np.expm1으로 원래 단위로 되돌린 뒤 평가한다. 두 함수는 짝이다.",
+      "code_example": "model.fit(X_train, np.log1p(y_train))\npred = np.expm1(model.predict(X_test))",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "log-transform",
+        "regression"
+      ],
+      "difficulty": "basic",
+      "content_digest": "8ded2554e501357c"
+    },
+    {
+      "card_id": "prep-013",
+      "revision": 1,
+      "front": "연속형 값을 구간으로 나누려면?",
+      "back": "pd.cut에 경계(bins)와 이름(labels)을 준다. right=True면 오른쪽 경계를 포함하고 include_lowest=True면 첫 경계도 포함한다.",
+      "code_example": "pd.cut(s, bins=[0, 7, 30, 100], labels=['short', 'medium', 'long'], include_lowest=True)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "binning",
+        "cut"
+      ],
+      "difficulty": "basic",
+      "content_digest": "e54de07b0202dc58"
+    },
+    {
+      "card_id": "prep-014",
+      "revision": 1,
+      "front": "ColumnTransformer는 왜 쓰나?",
+      "back": "수치형에는 결측 대체와 표준화, 범주형에는 원-핫처럼 컬럼 묶음마다 다른 전처리를 한 번에 적용한다. 훈련 데이터로만 fit 하고 평가 데이터는 transform만 한다.",
+      "code_example": "pre = ColumnTransformer([('num', num_pipe, num_cols), ('cat', OneHotEncoder(handle_unknown='ignore'), cat_cols)])\nXtr = pre.fit_transform(X_train)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "preprocessing",
+        "columntransformer",
+        "pipeline"
+      ],
+      "difficulty": "basic",
+      "content_digest": "494d59495dcab19d"
     }
   ]
 }

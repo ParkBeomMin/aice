@@ -4,12 +4,12 @@
   "decks": [
     {
       "deck_id": "pandas-basics",
-      "revision": 3,
+      "revision": 4,
       "title": "Python과 Pandas 기초",
       "summary": "CSV 읽기, 데이터 구조 확인, 행 선택과 그룹 집계",
-      "card_count": 8,
+      "card_count": 10,
       "file": "decks/pandas-basics.json",
-      "sha256": "12e2178d3414fb1414dbf6dd77e2fda32e525b5b2331b609a5107f791ae79186",
+      "sha256": "e1a7ed38b4cb780377dacdd0b3ff9d87c7586441b49a375506551e9eda5b01dc",
       "publication_status": "approved"
     },
     {
@@ -24,12 +24,12 @@
     },
     {
       "deck_id": "preprocessing",
-      "revision": 3,
+      "revision": 4,
       "title": "데이터 전처리",
-      "summary": "결측치, 이상값, 인코딩, 훈련 기준 전처리",
-      "card_count": 8,
+      "summary": "결측, 이상값, 인코딩, 분할, 스케일링, 훈련 기준 전처리, 로그 변환, 구간화",
+      "card_count": 14,
       "file": "decks/preprocessing.json",
-      "sha256": "6ea65f1fd3e820c085c6e0295c31b1576e7513657db85d9b52e827e83f6ae7bd",
+      "sha256": "043611e62c02946c7c554b4d44ea8158abe606b48a4221d8259567c21921e36d",
       "publication_status": "approved"
     },
     {
@@ -44,22 +44,22 @@
     },
     {
       "deck_id": "modeling",
-      "revision": 3,
+      "revision": 4,
       "title": "머신러닝 모델링",
-      "summary": "분류 모델, 예측 확률, 재현성과 과적합",
-      "card_count": 8,
+      "summary": "분류와 회귀 모델, 하이퍼파라미터, 과적합, 누설, 교차 검증과 모델 선택",
+      "card_count": 11,
       "file": "decks/modeling.json",
-      "sha256": "f1d59d00a268e1915a6efff39f0872e967b07f0e30aa21af4e07e082ee048fb8",
+      "sha256": "e6369eedd9dc724b4f12478b8f9c80a89d68bc07c5e9a6cfb7568bee525b2306",
       "publication_status": "approved"
     },
     {
       "deck_id": "evaluation",
-      "revision": 3,
+      "revision": 4,
       "title": "모델 평가 지표",
-      "summary": "혼동행렬, Precision, Recall, F1, 임계값과 AUC",
-      "card_count": 8,
+      "summary": "혼동행렬, Precision, Recall, F1, 임계값, AUC, 회귀 지표, 오류 비용",
+      "card_count": 13,
       "file": "decks/evaluation.json",
-      "sha256": "192339dfab1ee40667125d628b4a9d31d2ba8f22d217dd5c3934e7c9747f8e86",
+      "sha256": "d2866f3265235f15d4f421943960c07bd9c796de73ca181cb303ff2ca5c4882f",
       "publication_status": "approved"
     },
     {
@@ -78,6 +78,51 @@
       "pack_id": "associate-001",
       "file": "question-links/associate-001.json",
       "sha256": "4fd7a4a4867b14c17e37d7502e9bfcfa13ce723da0b815713979a54157996665"
+    },
+    {
+      "pack_id": "associate-002",
+      "file": "question-links/associate-002.json",
+      "sha256": "2764535182019f3452fe2aba7ec5ad5e074017ffb4b5a92ae67f3387b2d862d3"
+    },
+    {
+      "pack_id": "associate-003",
+      "file": "question-links/associate-003.json",
+      "sha256": "41f6240d7eb27dc3f5f2efae307aa807a19181e95ae886771a9b928f991bc031"
+    },
+    {
+      "pack_id": "associate-004",
+      "file": "question-links/associate-004.json",
+      "sha256": "20af5cd40e1d0cd78775cc78e79c8c50fa1c2eb40391432874e73aa7cb3fa011"
+    },
+    {
+      "pack_id": "associate-005",
+      "file": "question-links/associate-005.json",
+      "sha256": "5cad034f278712ba292d9a7d82be55b6afd72c7f0150cbe7a82223fe24196b1f"
+    },
+    {
+      "pack_id": "associate-006",
+      "file": "question-links/associate-006.json",
+      "sha256": "41dbbb3d2768c5d53248676d4d4b765b5dd8ad14403b5a4350808dde945ceb46"
+    },
+    {
+      "pack_id": "associate-007",
+      "file": "question-links/associate-007.json",
+      "sha256": "ebbef036b0c98c828a025e22481d3c418bb92346f2e6f4dbbfcdef5e993ee1ad"
+    },
+    {
+      "pack_id": "associate-008",
+      "file": "question-links/associate-008.json",
+      "sha256": "af2edbcdabec83b0381a319efc236d5380b2c33d2b85bee8278fa18d7782f666"
+    },
+    {
+      "pack_id": "associate-009",
+      "file": "question-links/associate-009.json",
+      "sha256": "d594668da5f86b8f60f70603ad59c118bbc9d10f9b5a2075db3ee3d5c878fa2f"
+    },
+    {
+      "pack_id": "associate-010",
+      "file": "question-links/associate-010.json",
+      "sha256": "c33d4c5049a81add0ca0902635b1b18b58ac1a03f07849b9d8917c542223ff62"
     }
   ]
 }

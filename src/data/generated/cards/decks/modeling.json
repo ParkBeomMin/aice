@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0.0",
   "deck_id": "modeling",
-  "revision": 3,
+  "revision": 4,
   "title": "머신러닝 모델링",
-  "summary": "분류 모델, 예측 확률, 재현성과 과적합",
+  "summary": "분류와 회귀 모델, 하이퍼파라미터, 과적합, 누설, 교차 검증과 모델 선택",
   "intro_md": "머신러닝에서는 예측 대상이 범주인지 연속값인지에 따라 문제 유형이 달라집니다. 로지스틱 회귀는 분류 확률을 계산하고, 랜덤포레스트는 여러 결정트리의 결과를 결합합니다. 모델을 만들 때는 난수를 고정해 실험을 재현하고, predict와 predict_proba의 차이를 확인하세요. 훈련 점수만 높은 모델은 과적합일 수 있으므로 평가 데이터 성능과 함께 판단해야 합니다.",
   "learning_objectives": [
     "분류 문제와 회귀 문제의 목적을 구분하고, 로지스틱 회귀와 랜덤포레스트의 특성을 설명한다.",
@@ -138,6 +138,53 @@
       ],
       "difficulty": "basic",
       "content_digest": "34df83df40eed2ce"
+    },
+    {
+      "card_id": "ml-009",
+      "revision": 1,
+      "front": "선형회귀는 무엇을 예측하나?",
+      "back": "특징들의 가중합으로 연속형 값을 예측한다. 관계가 덧셈에 가까우면 복잡한 모델보다 잘 맞을 수 있다. 오차는 MAE, RMSE, R2로 평가한다.",
+      "code_example": "model = LinearRegression()\nmodel.fit(X_tr, y_tr)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "machine_learning",
+        "linear-regression",
+        "regression"
+      ],
+      "difficulty": "basic",
+      "content_digest": "c34e520063c52d00"
+    },
+    {
+      "card_id": "ml-010",
+      "revision": 1,
+      "front": "교차 검증에서 전처리는 어떻게 하나?",
+      "back": "Pipeline에 전처리와 모델을 함께 넣으면 폴드마다 훈련 부분으로만 전처리를 다시 학습한다. 이미 변환한 전체 훈련 데이터로 교차 검증하면 검증 폴드 정보가 섞인다.",
+      "code_example": "pipe = Pipeline([('pre', clone(pre)), ('model', LogisticRegression())])\ncross_val_score(pipe, X_train_raw, y_train, cv=StratifiedKFold(5, shuffle=True, random_state=42), scoring='f1')",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "machine_learning",
+        "pipeline",
+        "cross-validation"
+      ],
+      "difficulty": "basic",
+      "content_digest": "602ebd3bf7dc9fad"
+    },
+    {
+      "card_id": "ml-011",
+      "revision": 1,
+      "front": "업무 조건이 있을 때 모델은 어떻게 고르나?",
+      "back": "먼저 조건(예: 정밀도 0.45 이상)을 만족하는 후보만 남기고, 그 안에서 목표 지표(예: 재현율)가 가장 높은 모델을 고른다. 조건을 만족하는 후보가 없을 때의 규칙도 정해 둔다.",
+      "code_example": null,
+      "code_language": "text",
+      "code_runtime": "reference_only",
+      "tags": [
+        "machine_learning",
+        "model-selection"
+      ],
+      "difficulty": "basic",
+      "content_digest": "ffc88d901ba8bd30"
     }
   ]
 }
