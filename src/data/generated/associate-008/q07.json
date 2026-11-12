@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-008",
+  "question_id": "q07",
+  "public_id": "associate-008-q07",
+  "revision": 1,
+  "title": "항목당 청구액",
+  "topic": "preprocessing",
+  "difficulty": "easy",
+  "prompt": "청구 항목 하나당 청구액을 구하시오.\n\n1. `claims_clean`의 `total_requested_amount / claim_items`를 계산하시오. `claim_items`는 항상 1 이상입니다.\n2. 결과를 `claims_clean`과 인덱스가 같은 Series `requested_per_item`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "claims_cost",
+      "url_path": "content/associate-008/datasets/claims_cost.csv",
+      "sha256": "cec383e4dd3c50961f4ba29f1c6689c0a8cedc4822c34bbe0a8db593ec223eb2",
+      "size_bytes": 142975,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261208, SHA-256 cec383e4dd3c"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 비율 특징을 만든다.\n\n**핵심 개념:** `total_requested_amount / claim_items`. 항목 수는 1 이상이라 0 으로 나누는 경우가 없다.\n\n```python\nrequested_per_item = claims_clean['total_requested_amount'] / claims_clean['claim_items']\nprint(requested_per_item.describe())\n```\n\n**기준 결과:** 평균 약 34,805원.\n\n**다른 풀이 (div):**\n\n```python\nrequested_per_item = claims_clean['total_requested_amount'].div(claims_clean['claim_items'])\n```\n\n**자주 틀리는 부분:** 전체 평균으로 나누는 것, 정렬로 순서 변경.\n\n**채점 항목:**\n\n1. 항목당 청구액\n2. 같은 인덱스\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "requested_per_item = claims_clean['total_requested_amount'] / claims_clean['claim_items']\nprint(requested_per_item.describe())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

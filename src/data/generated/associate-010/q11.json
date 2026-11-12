@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-010",
+  "question_id": "q11",
+  "public_id": "associate-010-q11",
+  "revision": 1,
+  "title": "랜덤포레스트 분류",
+  "topic": "machine_learning",
+  "difficulty": "easy",
+  "prompt": "랜덤포레스트 분류 모델을 학습하고 평가 데이터를 예측하시오.\n\n1. `RandomForestClassifier(n_estimators=100, max_depth=9, random_state=42, n_jobs=1)`를 `X_train`, `y_train`으로 학습해 `hotel_rf`에 저장하시오.\n2. `X_test`의 예측 결과를 `hotel_rf_pred`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "hotel_bookings",
+      "url_path": "content/associate-010/datasets/hotel_bookings.csv",
+      "sha256": "1089d769a53456db5ac12aff55f45d866653f19fad3cbccff50406f48c97b8f8",
+      "size_bytes": 144239,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261210, SHA-256 1089d769a534"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 랜덤포레스트 분류를 학습하고 예측한다.\n\n**핵심 개념:** 랜덤포레스트 분류. `n_jobs=1`.\n\n```python\nfrom sklearn.ensemble import RandomForestClassifier\nhotel_rf = RandomForestClassifier(n_estimators=100, max_depth=9, random_state=42, n_jobs=1).fit(X_train, y_train)\nhotel_rf_pred = hotel_rf.predict(X_test)\n```\n\n**기준 결과:** F1 약 0.550.\n\n**다른 풀이 (생성 후 fit):**\n\n```python\nfrom sklearn.ensemble import RandomForestClassifier\nhotel_rf = RandomForestClassifier(n_estimators=100, max_depth=9, random_state=42, n_jobs=1)\nhotel_rf.fit(X_train, y_train)\nhotel_rf_pred = hotel_rf.predict(X_test)\n```\n\n**자주 틀리는 부분:** 트리 수, 깊이 변경.\n\n**채점 항목:**\n\n1. RandomForestClassifier\n2. 지정 하이퍼파라미터\n3. 훈련 데이터로 학습\n4. 평가 예측\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.ensemble import RandomForestClassifier\nhotel_rf = RandomForestClassifier(n_estimators=100, max_depth=9, random_state=42, n_jobs=1).fit(X_train, y_train)\nhotel_rf_pred = hotel_rf.predict(X_test)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

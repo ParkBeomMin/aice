@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-009",
+  "question_id": "q09",
+  "public_id": "associate-009-q09",
+  "revision": 1,
+  "title": "층화 분할과 ColumnTransformer 전처리",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "원본 `booking_df`에서 다시 시작해 훈련 데이터로만 전처리기를 학습하시오.\n\n1. `reservation_id`, `no_show`를 뺀 컬럼을 `X`, `no_show`를 `y`로 정하시오.\n2. `train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)`로 `X_train_raw`, `X_test_raw`, `y_train`, `y_test`를 만드시오.\n3. `X_train_raw`, `X_test_raw`의 복사본에 7번과 같은 규칙(`pd.cut(lead_days, bins=[0, 7, 30, 100], labels=['short', 'medium', 'long'], include_lowest=True, right=True)`, 문자열)으로 `lead_bucket` 컬럼을 추가해 `X_train_bucketed`, `X_test_bucketed`에 저장하시오.\n4. 수치형 10개(`appointment_weekday`, `lead_days`, `reminder_sent`, `prior_no_shows`, `visits_12m`, `travel_minutes`, `slot_popularity`, `appointment_hour`, `digital_checkin_enabled`, `weather_forecast_alert`)에는 `SimpleImputer(strategy='median')` 다음 `StandardScaler`를, 범주형 3개(`clinic_type`, `booking_channel`, `lead_bucket`)에는 `OneHotEncoder(handle_unknown='ignore', sparse_output=False)`를 적용하는 `ColumnTransformer`를 `preprocessor`에 저장하시오. 수치형을 먼저, 범주형을 다음에 둡니다.\n5. `preprocessor`를 `X_train_bucketed`로만 fit 하고 변환 결과 배열을 `X_train`, `X_test`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "checkup_bookings",
+      "url_path": "content/associate-009/datasets/checkup_bookings.csv",
+      "sha256": "7ca011850295c6a54fe598bb17bf34d8b9417787ff640e06215b40d08bf65ff2",
+      "size_bytes": 89856,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261209, SHA-256 7ca011850295"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 층화 분할과 ColumnTransformer 전처리를 훈련 데이터로만 학습한다.\n\n**핵심 개념:** 층화 분할 후 각 분할에 같은 규칙으로 lead_bucket 을 만든다. ColumnTransformer 는 수치형에 중앙값 대체와 표준화, 범주형에 원-핫을 적용하며 훈련 데이터로만 fit 한다.\n\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.compose import ColumnTransformer\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.impute import SimpleImputer\nfrom sklearn.preprocessing import StandardScaler, OneHotEncoder\nX = booking_df.drop(columns=['reservation_id', 'no_show'])\ny = booking_df['no_show']\nX_train_raw, X_test_raw, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\ndef add_bucket(df):\n    out = df.copy()\n    out['lead_bucket'] = pd.cut(out['lead_days'], bins=[0, 7, 30, 100], labels=['short', 'medium', 'long'], include_lowest=True, right=True).astype(str)\n    return out\nX_train_bucketed = add_bucket(X_train_raw)\nX_test_bucketed = add_bucket(X_test_raw)\nnum_cols = ['appointment_weekday', 'lead_days', 'reminder_sent', 'prior_no_shows', 'visits_12m', 'travel_minutes',\n            'slot_popularity', 'appointment_hour', 'digital_checkin_enabled', 'weather_forecast_alert']\ncat_cols = ['clinic_type', 'booking_channel', 'lead_bucket']\npreprocessor = ColumnTransformer([\n    ('num', Pipeline([('imputer', SimpleImputer(strategy='median')), ('scaler', StandardScaler())]), num_cols),\n    ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=False), cat_cols),\n])\nX_train = preprocessor.fit_transform(X_train_bucketed)\nX_test = preprocessor.transform(X_test_bucketed)\n```\n\n**기준 결과:** 훈련 1,400행, 평가 350행, 변환 후 특징 19개.\n\n**다른 풀이 (fit_transform):**\n\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.compose import ColumnTransformer\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.impute import SimpleImputer\nfrom sklearn.preprocessing import StandardScaler, OneHotEncoder\nX = booking_df.drop(columns=['reservation_id', 'no_show'])\ny = booking_df['no_show']\nX_train_raw, X_test_raw, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\nX_train_bucketed = X_train_raw.copy()\nX_train_bucketed['lead_bucket'] = pd.cut(X_train_raw['lead_days'], bins=[0, 7, 30, 100], labels=['short', 'medium', 'long'], include_lowest=True, right=True).astype(str)\nX_test_bucketed = X_test_raw.copy()\nX_test_bucketed['lead_bucket'] = pd.cut(X_test_raw['lead_days'], bins=[0, 7, 30, 100], labels=['short', 'medium', 'long'], include_lowest=True, right=True).astype(str)\npreprocessor = ColumnTransformer([('num', Pipeline([('imputer', SimpleImputer(strategy='median')), ('scaler', StandardScaler())]), ['appointment_weekday', 'lead_days', 'reminder_sent', 'prior_no_shows', 'visits_12m', 'travel_minutes', 'slot_popularity', 'appointment_hour', 'digital_checkin_enabled', 'weather_forecast_alert']), ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=False), ['clinic_type', 'booking_channel', 'lead_bucket'])])\nX_train = preprocessor.fit_transform(X_train_bucketed)\nX_test = preprocessor.transform(X_test_bucketed)\n```\n\n**자주 틀리는 부분:** 층화 없음, 전체 또는 평가 데이터로 fit, 구간 변조.\n\n**채점 항목:**\n\n1. 층화 분할 그대로\n2. 훈련 구간 값\n3. 평가 구간 값\n4. 전처리 구성과 훈련 fit\n5. 훈련 변환 결과\n6. 평가 변환 결과\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.model_selection import train_test_split\nfrom sklearn.compose import ColumnTransformer\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.impute import SimpleImputer\nfrom sklearn.preprocessing import StandardScaler, OneHotEncoder\nX = booking_df.drop(columns=['reservation_id', 'no_show'])\ny = booking_df['no_show']\nX_train_raw, X_test_raw, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\ndef add_bucket(df):\n    out = df.copy()\n    out['lead_bucket'] = pd.cut(out['lead_days'], bins=[0, 7, 30, 100], labels=['short', 'medium', 'long'], include_lowest=True, right=True).astype(str)\n    return out\nX_train_bucketed = add_bucket(X_train_raw)\nX_test_bucketed = add_bucket(X_test_raw)\nnum_cols = ['appointment_weekday', 'lead_days', 'reminder_sent', 'prior_no_shows', 'visits_12m', 'travel_minutes',\n            'slot_popularity', 'appointment_hour', 'digital_checkin_enabled', 'weather_forecast_alert']\ncat_cols = ['clinic_type', 'booking_channel', 'lead_bucket']\npreprocessor = ColumnTransformer([\n    ('num', Pipeline([('imputer', SimpleImputer(strategy='median')), ('scaler', StandardScaler())]), num_cols),\n    ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=False), cat_cols),\n])\nX_train = preprocessor.fit_transform(X_train_bucketed)\nX_test = preprocessor.transform(X_test_bucketed)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

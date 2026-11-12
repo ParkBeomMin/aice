@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-008",
+  "question_id": "q10",
+  "public_id": "associate-008-q10",
+  "revision": 1,
+  "title": "선형회귀 학습",
+  "topic": "machine_learning",
+  "difficulty": "easy",
+  "prompt": "선형회귀 모델을 학습하고 평가 데이터를 예측하시오.\n\n1. `LinearRegression()`을 `X_train_scaled`, `y_train`으로 학습해 `claims_lr`에 저장하시오.\n2. `X_test_scaled`의 예측(원 단위)을 `claims_lr_pred`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "claims_cost",
+      "url_path": "content/associate-008/datasets/claims_cost.csv",
+      "sha256": "cec383e4dd3c50961f4ba29f1c6689c0a8cedc4822c34bbe0a8db593ec223eb2",
+      "size_bytes": 142975,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261208, SHA-256 cec383e4dd3c"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 선형회귀를 학습하고 예측한다.\n\n**핵심 개념:** 원 단위 비용을 그대로 예측하는 선형회귀.\n\n```python\nfrom sklearn.linear_model import LinearRegression\nclaims_lr = LinearRegression().fit(X_train_scaled, y_train)\nclaims_lr_pred = claims_lr.predict(X_test_scaled)\n```\n\n**기준 결과:** 평가 MAE 약 5,633원, RMSE 약 7,302원, R2 약 0.516.\n\n**다른 풀이 (생성 후 fit):**\n\n```python\nfrom sklearn.linear_model import LinearRegression\nclaims_lr = LinearRegression()\nclaims_lr.fit(X_train_scaled, y_train)\nclaims_lr_pred = claims_lr.predict(X_test_scaled)\n```\n\n**자주 틀리는 부분:** 다른 모델, 평가 데이터로 학습.\n\n**채점 항목:**\n\n1. LinearRegression\n2. 훈련 데이터로 학습\n3. 평가 예측\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.linear_model import LinearRegression\nclaims_lr = LinearRegression().fit(X_train_scaled, y_train)\nclaims_lr_pred = claims_lr.predict(X_test_scaled)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-010",
+  "question_id": "q06",
+  "public_id": "associate-010-q06",
+  "revision": 1,
+  "title": "탐색용 객실 요금 결측 대체",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "탐색용 복사본에서 객실 요금 결측을 채우시오.\n\n1. `hotel_df`를 복사해 `hotel_clean`을 만드시오.\n2. `price_per_night` 결측을 원본 `hotel_df`의 전체 중앙값으로 채우시오.\n3. 다른 값과 원본 `hotel_df`는 바꾸지 마시오.\n\n> 탐색용 실습입니다. 이 결과로 모델을 학습하지 마시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "hotel_bookings",
+      "url_path": "content/associate-010/datasets/hotel_bookings.csv",
+      "sha256": "1089d769a53456db5ac12aff55f45d866653f19fad3cbccff50406f48c97b8f8",
+      "size_bytes": 144239,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261210, SHA-256 1089d769a534"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 탐색용 복사본에서 결측을 채운다.\n\n**핵심 개념:** 탐색용 복사본에서만 요금 결측을 전체 중앙값으로 채운다.\n\n```python\nhotel_clean = hotel_df.copy()\nhotel_clean['price_per_night'] = hotel_clean['price_per_night'].fillna(hotel_df['price_per_night'].median())\n```\n\n**기준 결과:** 결측 134행.\n\n**다른 풀이 (fillna(dict)):**\n\n```python\nhotel_clean = hotel_df.copy().fillna({'price_per_night': hotel_df['price_per_night'].median()})\n```\n\n**자주 틀리는 부분:** 0 으로 채움, 다른 컬럼 변경.\n\n**채점 항목:**\n\n1. hotel_df 원본 그대로\n2. 결측에 전체 중앙값\n3. 다른 값 보존\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "hotel_clean = hotel_df.copy()\nhotel_clean['price_per_night'] = hotel_clean['price_per_night'].fillna(hotel_df['price_per_night'].median())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-010",
+  "question_id": "q14",
+  "public_id": "associate-010-q14",
+  "revision": 1,
+  "title": "임계값과 업무 비용",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "판정 기준을 0.40으로 낮췄을 때의 비용을 비교하시오.\n\n1. `hotel_lr`로 `X_test`의 양성 확률을 구하고, 0.40 이상이면 1인 정수 예측을 `hotel_pred_04`에 저장하시오.\n2. 거짓 양성(FP) 1건의 비용을 3, 거짓 음성(FN) 1건의 비용을 1로 두고, `y_test` 기준 0.40 예측의 비용을 `hotel_cost`, `hotel_lr_pred`(0.50) 의 비용을 `hotel_cost_05`에 정수로 저장하시오.\n3. 비용이 더 작은 임계값을 실수 `preferred_hotel_threshold`에 저장하시오 (0.40 또는 0.50). 같으면 0.50을 고르시오.\n\n> 취소되지 않을 예약을 취소로 잘못 판단해 초과 예약을 받는 비용(FP)을 더 크게 본 학습용 가정입니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "hotel_bookings",
+      "url_path": "content/associate-010/datasets/hotel_bookings.csv",
+      "sha256": "1089d769a53456db5ac12aff55f45d866653f19fad3cbccff50406f48c97b8f8",
+      "size_bytes": 144239,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261210, SHA-256 1089d769a534"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 오류 비용으로 판정 임계값을 정한다.\n\n**핵심 개념:** FP(취소 안 할 예약을 취소로 판단) 비용이 3배이므로 임계값을 낮추면 오히려 비용이 늘 수 있다.\n\n```python\nfrom sklearn.metrics import confusion_matrix\nimport numpy as np\nhotel_pred_04 = (hotel_prob >= 0.40).astype(int)\ndef cost(pred):\n    tn, fp, fn, tp = confusion_matrix(y_test, pred, labels=[0, 1]).ravel()\n    return int(3 * fp + fn)\nhotel_cost = cost(hotel_pred_04)\nhotel_cost_05 = cost(hotel_lr_pred)\npreferred_hotel_threshold = 0.40 if hotel_cost < hotel_cost_05 else 0.50\nprint(hotel_cost, hotel_cost_05, preferred_hotel_threshold)\n```\n\n**기준 결과:** 0.40 비용 233, 0.50 비용 166 → 0.50.\n\n**다른 풀이 (직접 세기):**\n\n```python\nimport numpy as np\nyt = y_test.to_numpy()\nhotel_pred_04 = np.where(hotel_lr.predict_proba(X_test)[:, 1] >= 0.4, 1, 0)\ncost = lambda p: int(3 * ((yt == 0) & (p == 1)).sum() + ((yt == 1) & (p == 0)).sum())\nhotel_cost = cost(hotel_pred_04)\nhotel_cost_05 = cost(np.asarray(hotel_lr_pred))\npreferred_hotel_threshold = 0.50 if hotel_cost_05 <= hotel_cost else 0.40\n```\n\n**자주 틀리는 부분:** 비용 가중치 반대, 비용이 큰 쪽 선택.\n\n**채점 항목:**\n\n1. 0.40 예측\n2. 0.40 비용 3 * FP + FN\n3. 0.50 비용\n4. 비용이 작은 임계값 (동률이면 0.50)\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import confusion_matrix\nimport numpy as np\nhotel_pred_04 = (hotel_prob >= 0.40).astype(int)\ndef cost(pred):\n    tn, fp, fn, tp = confusion_matrix(y_test, pred, labels=[0, 1]).ravel()\n    return int(3 * fp + fn)\nhotel_cost = cost(hotel_pred_04)\nhotel_cost_05 = cost(hotel_lr_pred)\npreferred_hotel_threshold = 0.40 if hotel_cost < hotel_cost_05 else 0.50\nprint(hotel_cost, hotel_cost_05, preferred_hotel_threshold)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

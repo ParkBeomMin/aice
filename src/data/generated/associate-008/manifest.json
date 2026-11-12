@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.3.0",
+  "pack_id": "associate-008",
+  "title": "AICE Associate 실전 연습 모의고사 8회차: 보험 청구 처리 비용 예측",
+  "summary": "가상의 보험사 청구 1,850건으로 데이터 탐색, 분포 시각화, 결측 처리, 파생 특징, 훈련 데이터 기준 전처리와 표준화, 선형회귀, 랜덤포레스트, 로그 타깃 회귀 비교까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+  "mode": "production",
+  "mock": false,
+  "time_limit_minutes": 90,
+  "question_count": 14,
+  "questions": [
+    {
+      "question_id": "q01",
+      "public_id": "associate-008-q01",
+      "revision": 1,
+      "title": "보험 청구 파일 읽기",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q01.json",
+      "sha256": "3135889bc003bcc15c561512928431f86ea3232535be8a259bdcda6168f0bd38"
+    },
+    {
+      "question_id": "q02",
+      "public_id": "associate-008-q02",
+      "revision": 1,
+      "title": "처리 비용 중앙값",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q02.json",
+      "sha256": "09876aad7e8ad08d0aec2d3430d6e01f3a9960fd18397763c5cf4b1e6b9af6fd"
+    },
+    {
+      "question_id": "q03",
+      "public_id": "associate-008-q03",
+      "revision": 1,
+      "title": "서류 쪽수 결측 수",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q03.json",
+      "sha256": "ebefd0ebc3ffc49759dc9d1ee4f61ba825d501b28f9df9352c20a33a94a1b12b"
+    },
+    {
+      "question_id": "q04",
+      "public_id": "associate-008-q04",
+      "revision": 1,
+      "title": "분야별 비용 요약",
+      "topic": "pandas",
+      "difficulty": "medium",
+      "file": "q04.json",
+      "sha256": "16743b67eaebf6eb0277fd083ca2323da558634fc5b030dfe06dd7451a0a58e6"
+    },
+    {
+      "question_id": "q05",
+      "public_id": "associate-008-q05",
+      "revision": 1,
+      "title": "처리 비용 히스토그램",
+      "topic": "visualization",
+      "difficulty": "easy",
+      "file": "q05.json",
+      "sha256": "36eed42442c3b7e01b6536e5e61c71cece4d3deac8b4d0167b14a1c21290f726"
+    },
+    {
+      "question_id": "q06",
+      "public_id": "associate-008-q06",
+      "revision": 1,
+      "title": "탐색용 서류 쪽수 결측 대체",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q06.json",
+      "sha256": "67f3b511c1ccaf6a25e6ae25c750431467d9dee5d2beab1ccb4b21da986d1229"
+    },
+    {
+      "question_id": "q07",
+      "public_id": "associate-008-q07",
+      "revision": 1,
+      "title": "항목당 청구액",
+      "topic": "preprocessing",
+      "difficulty": "easy",
+      "file": "q07.json",
+      "sha256": "5fd5f82e6a2fddf9a4a3ba8d4267d0a7e16d95966164ba2d3de2dae4547c2b41"
+    },
+    {
+      "question_id": "q08",
+      "public_id": "associate-008-q08",
+      "revision": 1,
+      "title": "분할, 결측 대체, 원-핫 인코딩",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q08.json",
+      "sha256": "979578d73abb41c759faca2db43ba43ff02f3757631ba7d9eeb26d2e4563ae9d"
+    },
+    {
+      "question_id": "q09",
+      "public_id": "associate-008-q09",
+      "revision": 1,
+      "title": "모델 입력 표준화",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q09.json",
+      "sha256": "a950490cb7923ed248f0df54f08c8d7a0e1b1dae83e1a464c159e52c327e5076"
+    },
+    {
+      "question_id": "q10",
+      "public_id": "associate-008-q10",
+      "revision": 1,
+      "title": "선형회귀 학습",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q10.json",
+      "sha256": "63dfb9b8727d1a5560ad12a2a35cf230d2e38b0bc9e4e274961cffb82c25cb51"
+    },
+    {
+      "question_id": "q11",
+      "public_id": "associate-008-q11",
+      "revision": 1,
+      "title": "랜덤포레스트 회귀 학습",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q11.json",
+      "sha256": "14d5452f1f09cd4319dccda72eb40d82cf31b08d0ab161ee564241c6b64114bd"
+    },
+    {
+      "question_id": "q12",
+      "public_id": "associate-008-q12",
+      "revision": 1,
+      "title": "로그 타깃 회귀",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q12.json",
+      "sha256": "144a746eefa65bee9b7535563a5e532a15bbe5fda88785bdd6199e6c6326f496"
+    },
+    {
+      "question_id": "q13",
+      "public_id": "associate-008-q13",
+      "revision": 1,
+      "title": "원 단위 MAE와 RMSE",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q13.json",
+      "sha256": "1691b675e04c0f8be6ad4a1b7755c0b2e7c443b4ee2f132a18469aa8ad58e01d"
+    },
+    {
+      "question_id": "q14",
+      "public_id": "associate-008-q14",
+      "revision": 1,
+      "title": "세 회귀 모델 비교",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q14.json",
+      "sha256": "6e5d7d7e7d7ac72a3a09b6ebb728adcc268e59183fe408606c757cdac645d898"
+    }
+  ],
+  "scenario_md": "가상의 보험사 SafeClaim은 청구가 접수되는 시점에 그 청구를 처리하는 데 드는 비용을 미리 예측해 담당 인력을 배정하려고 합니다.\n\n여러분은 운영 데이터 분석가로서 청구 기록을 탐색하고, 오른쪽으로 긴 비용 분포를 고려해 원 단위 회귀와 로그 타깃 회귀를 비교해야 합니다.\n\n- 분석 목표: 청구별 처리 비용(`processing_cost`, 원) 예측\n- 데이터: `claims_cost.csv` (청구 1,850건, 14개 컬럼)\n- 진행 순서: 데이터 탐색(1~5번) → 탐색용 전처리(6~7번) → 모델용 분할과 전처리(8~9번) → 모델 학습과 평가(10~14번)\n\n> 입력 컬럼은 청구 접수와 사전 분류가 끝난 시점에 알 수 있는 값입니다. `triage_estimated_minutes`는 담당자가 처리 전에 추정한 시간입니다. 6~7번은 전체 데이터 탐색 연습이며, 8번은 원본 `claims_df`에서 다시 시작합니다.",
+  "datasets": [
+    {
+      "dataset_id": "claims_cost",
+      "url_path": "content/associate-008/datasets/claims_cost.csv",
+      "sha256": "cec383e4dd3c50961f4ba29f1c6689c0a8cedc4822c34bbe0a8db593ec223eb2",
+      "size_bytes": 142975,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261208, SHA-256 cec383e4dd3c",
+      "columns": [
+        {
+          "name": "claim_id",
+          "type": "문자열",
+          "description": "청구 고유 번호 (CL00001~CL01850). 식별용이라 모델 입력에는 쓰지 않습니다."
+        },
+        {
+          "name": "service_type",
+          "type": "문자열",
+          "description": "청구 분야: Repair(수리), Travel(여행), Device(기기), Property(재산)"
+        },
+        {
+          "name": "region_group",
+          "type": "문자열",
+          "description": "지역 구분: Urban(도시), Suburban(교외), Rural(지방)"
+        },
+        {
+          "name": "claim_channel",
+          "type": "문자열",
+          "description": "접수 경로: Online, Phone, Branch(지점)"
+        },
+        {
+          "name": "coverage_tier",
+          "type": "문자열",
+          "description": "보장 등급: Basic, Standard, Plus"
+        },
+        {
+          "name": "claim_items",
+          "type": "정수",
+          "description": "청구 항목 수 (1~20)"
+        },
+        {
+          "name": "total_requested_amount",
+          "type": "실수",
+          "description": "접수 시 청구한 금액 (원). 일부 매우 큰 값"
+        },
+        {
+          "name": "document_pages",
+          "type": "실수",
+          "description": "제출 서류 쪽수. 일부 결측이라 실수로 저장"
+        },
+        {
+          "name": "triage_estimated_minutes",
+          "type": "실수",
+          "description": "사전 분류 담당자가 추정한 처리 시간 (분)"
+        },
+        {
+          "name": "risk_flag_count",
+          "type": "정수",
+          "description": "사전 점검에서 표시된 위험 신호 수 (0~5)"
+        },
+        {
+          "name": "account_tenure_months",
+          "type": "정수",
+          "description": "가입 기간 (개월)"
+        },
+        {
+          "name": "missing_document_count",
+          "type": "정수",
+          "description": "접수 시 빠진 서류 수 (0~9)"
+        },
+        {
+          "name": "complexity_score",
+          "type": "실수",
+          "description": "사전 분류 복잡도 점수 (0~1)"
+        },
+        {
+          "name": "processing_cost",
+          "type": "실수",
+          "description": "청구 처리 비용 (원). 예측 대상"
+        }
+      ]
+    }
+  ],
+  "generator": {
+    "name": "acf content build",
+    "version": "0.1.0",
+    "content_contract": "1.3.0"
+  },
+  "source_fingerprint": "993f3544657e75abab8341aaea7b9adffcedeb8b797e216e3dcd728a2c42f7f3",
+  "notebook": {
+    "kind": "question_notebook",
+    "format": "nbformat4.5",
+    "url_path": "content/associate-008/notebooks/associate-008-questions-518f02530d4c.ipynb",
+    "sha256": "518f02530d4c63a614534682fa64eb60a2d9da170724d46c6bb2f6a60cc69746",
+    "size_bytes": 14305,
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  },
+  "grading": {
+    "kind": "grading_bundle",
+    "url_path": "content/associate-008/grading/associate-008-grading-b64c7820c53b.json",
+    "sha256": "b64c7820c53bf0d794c56815b4b7fcf96c08396bdeeb7d95cfe15d91675adf99",
+    "size_bytes": 132391,
+    "engine_version": "1.9.0",
+    "grading_version": "associate-008-g25ce3019b333",
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  }
+}

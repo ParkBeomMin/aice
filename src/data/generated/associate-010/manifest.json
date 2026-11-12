@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.3.0",
+  "pack_id": "associate-010",
+  "title": "AICE Associate 실전 연습 모의고사 10회차: 호텔 예약 취소 예측",
+  "summary": "가상의 호텔 예약 2,200건으로 데이터 탐색, 구간별 시각화, 결측과 이상값 처리, ColumnTransformer 전처리, ROC-AUC와 F1 평가, 폴드별 전처리 교차 검증, 오류 비용 기반 임계값 결정까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성입니다.",
+  "mode": "production",
+  "mock": false,
+  "time_limit_minutes": 90,
+  "question_count": 14,
+  "questions": [
+    {
+      "question_id": "q01",
+      "public_id": "associate-010-q01",
+      "revision": 1,
+      "title": "호텔 예약 파일 읽기",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q01.json",
+      "sha256": "e23e06d512f3d6ec9d53cd2127f55047bb84fee10e70226de67182f15bb3dcc4"
+    },
+    {
+      "question_id": "q02",
+      "public_id": "associate-010-q02",
+      "revision": 1,
+      "title": "예약 취소율",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q02.json",
+      "sha256": "e2a5798451525e9df4ecf0c4c2c6f26df4028e5380d6f63643364b7fc57e72af"
+    },
+    {
+      "question_id": "q03",
+      "public_id": "associate-010-q03",
+      "revision": 1,
+      "title": "조기 예약 추출",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q03.json",
+      "sha256": "d593cf45be44f6039b5ce893a46a22c34c1be02f96ff76348a986d6438b11aa5"
+    },
+    {
+      "question_id": "q04",
+      "public_id": "associate-010-q04",
+      "revision": 1,
+      "title": "보증금 유형별 취소율",
+      "topic": "pandas",
+      "difficulty": "medium",
+      "file": "q04.json",
+      "sha256": "9022b97150c637c45b562e951b90240b06d9c84e27a8cf3cd879d8326b03c396"
+    },
+    {
+      "question_id": "q05",
+      "public_id": "associate-010-q05",
+      "revision": 1,
+      "title": "숙박 일수 구간별 취소율 막대그래프",
+      "topic": "visualization",
+      "difficulty": "medium",
+      "file": "q05.json",
+      "sha256": "bff2a63f6c924f9627e2f6074b84f860bbec682dcd17db209e875c59086e3ae2"
+    },
+    {
+      "question_id": "q06",
+      "public_id": "associate-010-q06",
+      "revision": 1,
+      "title": "탐색용 객실 요금 결측 대체",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q06.json",
+      "sha256": "08f79688148898cb56036e7e4570be20798fdb50ba11200371872e4b7744dc2e"
+    },
+    {
+      "question_id": "q07",
+      "public_id": "associate-010-q07",
+      "revision": 1,
+      "title": "예약 기간 이상값 상한",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q07.json",
+      "sha256": "12cca2df9cf9da3bdcdd3afddfc2ec7c723257a3fc0cd38ad0d5554030778ba7"
+    },
+    {
+      "question_id": "q08",
+      "public_id": "associate-010-q08",
+      "revision": 1,
+      "title": "탐색용 범주형 인코딩",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q08.json",
+      "sha256": "39e8e16018cf94a9d37611c3334f5d524b7ee7e80169128cbdcfb6068542d98a"
+    },
+    {
+      "question_id": "q09",
+      "public_id": "associate-010-q09",
+      "revision": 1,
+      "title": "층화 분할과 ColumnTransformer 전처리",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q09.json",
+      "sha256": "408718c89ba17a56f2844759970becc5b1615bd70ebcc8b098417b7e0a08226f"
+    },
+    {
+      "question_id": "q10",
+      "public_id": "associate-010-q10",
+      "revision": 1,
+      "title": "로지스틱 회귀 분류",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q10.json",
+      "sha256": "5a69d41caf662b63b8440b065ce6074e9ee9aabe906099eb33480d91a98b8730"
+    },
+    {
+      "question_id": "q11",
+      "public_id": "associate-010-q11",
+      "revision": 1,
+      "title": "랜덤포레스트 분류",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q11.json",
+      "sha256": "76f06296f886e8d3c18ec324e03fffa8a265cc467f4f3fa5cb77d5b3ba67b1f6"
+    },
+    {
+      "question_id": "q12",
+      "public_id": "associate-010-q12",
+      "revision": 1,
+      "title": "ROC-AUC와 F1",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q12.json",
+      "sha256": "77836c4c8a72cde922ede52b00c39e576951b03d964d0f31f4b9fbe74a58de09"
+    },
+    {
+      "question_id": "q13",
+      "public_id": "associate-010-q13",
+      "revision": 1,
+      "title": "5폴드 층화 교차 검증",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q13.json",
+      "sha256": "e7b3ba6b6df8b2241b1f76fa633417b66963c93249fb65c2590b2b16b0181c2e"
+    },
+    {
+      "question_id": "q14",
+      "public_id": "associate-010-q14",
+      "revision": 1,
+      "title": "임계값과 업무 비용",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q14.json",
+      "sha256": "cc50db03d03c67301da143eeb24b34b0f1841886c5ddff7f8f8b19123ee51807"
+    }
+  ],
+  "scenario_md": "가상의 호텔 체인 StayWell은 예약이 들어오는 시점에 취소 가능성을 예측해 객실 운영 계획을 세우려고 합니다.\n\n여러분은 수익 관리 분석가로서 예약 기록을 탐색하고, 누설 없는 전처리로 취소 분류 모델을 만든 뒤 교차 검증과 업무 비용으로 판정 기준을 정해야 합니다.\n\n- 분석 목표: 예약별 취소 여부(`is_cancelled`) 분류\n- 데이터: `hotel_bookings.csv` (예약 2,200건, 14개 컬럼)\n- 진행 순서: 데이터 탐색(1~5번) → 탐색용 전처리(6~8번) → 모델용 분할과 전처리(9번) → 모델 학습과 평가(10~14번)\n\n> 입력 컬럼은 모두 예약 접수 직후에 알 수 있는 값입니다. 실제 취소일, 환불, 숙박 여부 같은 사후 정보는 없습니다. 6~8번은 전체 데이터 탐색 연습이며, 9번과 13번은 원본에서 훈련 데이터(또는 각 폴드의 훈련 부분) 기준으로만 전처리합니다.",
+  "datasets": [
+    {
+      "dataset_id": "hotel_bookings",
+      "url_path": "content/associate-010/datasets/hotel_bookings.csv",
+      "sha256": "1089d769a53456db5ac12aff55f45d866653f19fad3cbccff50406f48c97b8f8",
+      "size_bytes": 144239,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261210, SHA-256 1089d769a534",
+      "columns": [
+        {
+          "name": "reservation_id",
+          "type": "문자열",
+          "description": "예약 번호 (HT00001~HT02200). 식별용이라 모델 입력에는 쓰지 않습니다."
+        },
+        {
+          "name": "market_segment",
+          "type": "문자열",
+          "description": "고객 유형: Leisure(여가), Business(출장), Group(단체)"
+        },
+        {
+          "name": "booking_channel",
+          "type": "문자열",
+          "description": "예약 경로: Direct(직접), Agency(대행사), Corporate(기업)"
+        },
+        {
+          "name": "room_type",
+          "type": "문자열",
+          "description": "객실 등급: Standard, Deluxe, Suite"
+        },
+        {
+          "name": "lead_days",
+          "type": "정수",
+          "description": "예약일부터 투숙일까지 남은 일수 (0~300). 일부 매우 긴 값"
+        },
+        {
+          "name": "stay_nights",
+          "type": "정수",
+          "description": "숙박 일수 (1~15)"
+        },
+        {
+          "name": "adults_count",
+          "type": "정수",
+          "description": "성인 수"
+        },
+        {
+          "name": "children_count",
+          "type": "정수",
+          "description": "어린이 수"
+        },
+        {
+          "name": "deposit_type",
+          "type": "문자열",
+          "description": "보증금 유형: NoDeposit(없음), Partial(일부), Full(전액)"
+        },
+        {
+          "name": "previous_cancellations",
+          "type": "정수",
+          "description": "과거 취소 횟수"
+        },
+        {
+          "name": "special_requests",
+          "type": "정수",
+          "description": "특별 요청 수"
+        },
+        {
+          "name": "weekend_nights",
+          "type": "정수",
+          "description": "숙박 일수 가운데 주말 박수 (숙박 일수 이하)"
+        },
+        {
+          "name": "price_per_night",
+          "type": "실수",
+          "description": "1박 요금 (원). 일부 결측"
+        },
+        {
+          "name": "is_cancelled",
+          "type": "정수",
+          "description": "취소 여부 (1: 취소, 0: 유지). 예측 대상"
+        }
+      ]
+    }
+  ],
+  "generator": {
+    "name": "acf content build",
+    "version": "0.1.0",
+    "content_contract": "1.3.0"
+  },
+  "source_fingerprint": "59f3b44f72f1c455f70a2a4352836fae9b18d4022b399a6e454d8c1b836195c7",
+  "notebook": {
+    "kind": "question_notebook",
+    "format": "nbformat4.5",
+    "url_path": "content/associate-010/notebooks/associate-010-questions-dd8bb2e745a4.ipynb",
+    "sha256": "dd8bb2e745a41c64bfb526ca6b893bfccb30d026b627ca2ecfb8542705bdfa25",
+    "size_bytes": 14578,
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  },
+  "grading": {
+    "kind": "grading_bundle",
+    "url_path": "content/associate-010/grading/associate-010-grading-a32e4090dd2a.json",
+    "sha256": "a32e4090dd2a33a529de0cd444356afd6d9bf52f0eca4cfcd6ea89728f68133d",
+    "size_bytes": 145125,
+    "engine_version": "1.9.0",
+    "grading_version": "associate-010-gd0905b7855d9",
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  }
+}

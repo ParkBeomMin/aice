@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-010",
+  "question_id": "q04",
+  "public_id": "associate-010-q04",
+  "revision": 1,
+  "title": "보증금 유형별 취소율",
+  "topic": "pandas",
+  "difficulty": "medium",
+  "prompt": "보증금 유형별 취소율을 구하시오.\n\n1. `hotel_df`의 `deposit_type`별 `is_cancelled` 평균을 Series `cancel_by_deposit`에 저장하시오.\n2. 인덱스를 이름 오름차순으로 정렬하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "hotel_bookings",
+      "url_path": "content/associate-010/datasets/hotel_bookings.csv",
+      "sha256": "1089d769a53456db5ac12aff55f45d866653f19fad3cbccff50406f48c97b8f8",
+      "size_bytes": 144239,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261210, SHA-256 1089d769a534"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 그룹별 비율을 구한다.\n\n**핵심 개념:** `groupby('deposit_type')['is_cancelled'].mean()`.\n\n```python\ncancel_by_deposit = hotel_df.groupby('deposit_type')['is_cancelled'].mean().sort_index()\nprint(cancel_by_deposit)\n```\n\n**기준 결과:** Full 0.205, NoDeposit 0.382, Partial 0.427. 전액 보증금이면 취소가 적다.\n\n**다른 풀이 (pivot_table):**\n\n```python\ncancel_by_deposit = hotel_df.pivot_table(index='deposit_type', values='is_cancelled', aggfunc='mean')['is_cancelled'].sort_index()\n```\n\n**자주 틀리는 부분:** NoDeposit 제외, 합계.\n\n**채점 항목:**\n\n1. 보증금 유형별 취소율\n2. 이름 오름차순 (NoDeposit 포함)\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "cancel_by_deposit = hotel_df.groupby('deposit_type')['is_cancelled'].mean().sort_index()\nprint(cancel_by_deposit)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

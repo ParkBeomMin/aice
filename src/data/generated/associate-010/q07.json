@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-010",
+  "question_id": "q07",
+  "public_id": "associate-010-q07",
+  "revision": 1,
+  "title": "예약 기간 이상값 상한",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "IQR 규칙으로 예약 기간의 상한을 구해 자르시오.\n\n1. `hotel_df['lead_days']`의 1사분위수(Q1)와 3사분위수(Q3)로 `Q3 + 1.5 * (Q3 - Q1)`을 구해 `lead_cap`에 저장하시오.\n2. `lead_days`를 이 상한으로 자른(`clip(upper=lead_cap)`) Series를 `lead_days_capped`에 저장하시오. 원래 인덱스를 유지하고 `hotel_df`는 바꾸지 마시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "hotel_bookings",
+      "url_path": "content/associate-010/datasets/hotel_bookings.csv",
+      "sha256": "1089d769a53456db5ac12aff55f45d866653f19fad3cbccff50406f48c97b8f8",
+      "size_bytes": 144239,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261210, SHA-256 1089d769a534"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** IQR 상한으로 이상값을 자른다.\n\n**핵심 개념:** 상한 `Q3 + 1.5 * (Q3 - Q1)`을 넘는 값은 상한으로 바꾼다 (`clip(upper=...)`). 행은 지우지 않고 원본도 그대로 둔다.\n\n```python\nq1, q3 = hotel_df['lead_days'].quantile(0.25), hotel_df['lead_days'].quantile(0.75)\nlead_cap = q3 + 1.5 * (q3 - q1)\nlead_days_capped = hotel_df['lead_days'].clip(upper=lead_cap)\nprint(lead_cap, (hotel_df['lead_days'] > lead_cap).sum())\n```\n\n**기준 결과:** 상한 183.125일, 잘린 행 135.\n\n**다른 풀이 (where):**\n\n```python\nq1, q3 = hotel_df['lead_days'].quantile([0.25, 0.75])\nlead_cap = q3 + 1.5 * (q3 - q1)\nlead_days_capped = hotel_df['lead_days'].where(hotel_df['lead_days'] <= lead_cap, lead_cap)\n```\n\n**자주 틀리는 부분:** 하한식, 원본 덮어쓰기, 행 삭제.\n\n**채점 항목:**\n\n1. IQR 상한\n2. 상한으로 자른 값\n3. hotel_df 는 그대로\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "q1, q3 = hotel_df['lead_days'].quantile(0.25), hotel_df['lead_days'].quantile(0.75)\nlead_cap = q3 + 1.5 * (q3 - q1)\nlead_days_capped = hotel_df['lead_days'].clip(upper=lead_cap)\nprint(lead_cap, (hotel_df['lead_days'] > lead_cap).sum())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

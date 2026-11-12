@@ -187,6 +187,18 @@ def _same_data(a, b):
                 return False
     return True
 
+def _out_transform(v, t):
+    """(엔진 1.9.0) 예측 후처리: identity 또는 expm1 만"""
+    if t in (None, "identity"):
+        return v
+    if t != "expm1":
+        raise _ProbeError("허용되지 않는 output_transform")
+    import numpy as np
+    arr = np.asarray(v, dtype=float)
+    if arr.size > 200000 or not np.all(np.isfinite(arr)) or np.any(arr > 700):
+        raise _ProbeError("expm1 을 적용할 수 없는 예측")
+    return np.expm1(arr)
+
 def _select_candidate(p):
     """(엔진 1.3.0) 후보 모델들의 지표를 학생 상태로 다시 계산해 최선 후보 (오차 지표는 작을수록, 나머지는 클수록). 동률이면 tie"""
     m = p.get("metric", "f1")
@@ -302,6 +314,23 @@ def _probe(p):
         if v is None:
             raise _ProbeError(f"{p['var']}.{attr} 가 없습니다")
         return _norm(v)
+    if k == "metric" and p.get("metric") == "roc_auc":
+        # (엔진 1.9.0) ROC-AUC 는 반드시 predict_proba(X)[:, 1] (양성 확률) 로 계산. threshold 금지
+        import numpy as np
+        from sklearn.metrics import roc_auc_score
+        if p.get("threshold") is not None:
+            raise _ProbeError("roc_auc 에는 threshold 를 쓸 수 없습니다")
+        model, X, y = _var(p["model"]), _var(p["X"]), _var(p["y"])
+        yv = np.asarray(y)
+        if yv.ndim != 1 or set(np.unique(yv).tolist()) != {0, 1}:
+            raise _ProbeError("양쪽 클래스(0, 1)가 모두 있는 이진 레이블만 지원합니다")
+        classes = list(getattr(model, "classes_", []))
+        if 1 not in classes:
+            raise _ProbeError("모델에 양성(1) 클래스가 없습니다")
+        prob = np.asarray(model.predict_proba(X))[:, classes.index(1)]
+        if prob.shape != yv.shape or not np.all(np.isfinite(prob)):
+            raise _ProbeError("확률 길이 또는 값 오류")
+        return float(roc_auc_score(yv, prob))
     if k == "metric":
         m = p.get("metric")
         if m not in _METRICS:
@@ -309,7 +338,8 @@ def _probe(p):
         model, X, y = _var(p["model"]), _var(p["X"]), _var(p["y"])
         return _metric_value(m, y, _predict(model, X, p.get("threshold")))
     if k == "predictions":
-        return _norm(_predict(_var(p["model"]), _var(p["X"]), p.get("threshold")))
+        out = _predict(_var(p["model"]), _var(p["X"]), p.get("threshold"))
+        return _norm(_out_transform(out, p.get("output_transform")))
     if k == "probabilities":
         import numpy as np
         return _norm(np.asarray(_var(p["model"]).predict_proba(_var(p["X"])))[:, 1])
@@ -317,8 +347,17 @@ def _probe(p):
         # 지정 클래스, 하이퍼파라미터로 학생의 학습 데이터에서 새 모델을 학습해 평가 데이터 예측 (학생 객체는 변경하지 않음)
         cls = _model_cls(p.get("model_class"))
         Xtr, ytr, Xev = _var(p["X_train"]), _var(p["y_train"]), _var(p["X_eval"])
+        tt = p.get("target_transform", "identity")
+        if tt not in ("identity", "log1p"):
+            raise _ProbeError("허용되지 않는 target_transform")
+        if tt == "log1p":
+            import numpy as np
+            yv = np.asarray(ytr, dtype=float)
+            if not np.all(np.isfinite(yv)) or np.any(yv <= -1):
+                raise _ProbeError("log1p 를 적용할 수 없는 타깃")
+            ytr = np.log1p(yv)
         model = cls(**_params(p.get("params"))).fit(Xtr.copy() if hasattr(Xtr, "copy") else Xtr, ytr)
-        return _norm(_predict(model, Xev, p.get("threshold")))
+        return _norm(_out_transform(_predict(model, Xev, p.get("threshold")), p.get("output_transform")))
     if k == "model_params":
         keys = p.get("keys") or []
         if not set(keys) <= _PARAM_KEYS:
@@ -429,6 +468,32 @@ def _probe(p):
         except Exception:
             return False
         return _same_data(got, exp.astype({c: got[c].dtype for c in cols if c in got.columns}) if set(cols) <= set(got.columns) else exp)
+    if k == "prediction_metric_selection":
+        # (엔진 1.9.0) 학생 예측 배열(prediction_var) 들의 지표를 y 로 계산. 오차 지표는 최소, r2 는 최대, 동률 이름순. 모델 재학습 없음
+        import numpy as np
+        m = p.get("metric")
+        if m not in ("mae", "mse", "rmse", "r2"):
+            raise _ProbeError("허용되지 않는 지표")
+        cands = p.get("candidates") or []
+        names = [c.get("name") for c in cands]
+        if not 1 <= len(cands) <= 5 or len(set(names)) != len(names) or any(not c.get("prediction_var") for c in cands):
+            raise _ProbeError("후보 구성 오류")
+        y = _var(p["y"]); yv = np.asarray(y, dtype=float)
+        scores = {}
+        for c in cands:
+            pv = _var(c["prediction_var"])
+            if _is_series(pv) and _is_series(y) and list(map(str, pv.index)) != list(map(str, y.index)):
+                raise _ProbeError(f"{c['prediction_var']} 와 {p['y']} 의 인덱스가 다릅니다")
+            arr = np.asarray(pv, dtype=float)
+            if arr.shape != yv.shape or not np.all(np.isfinite(arr)):
+                raise _ProbeError(f"{c['prediction_var']} 길이 또는 값 오류")
+            scores[c["name"]] = _metric_value(m, yv, arr)
+        if p.get("output") == "scores":
+            return scores
+        if p.get("output") != "selected":
+            raise _ProbeError("output 은 selected 또는 scores")
+        sign = -1.0 if m == "r2" else 1.0
+        return sorted(names, key=lambda n: (round(sign * scores[n], 12), n))[0]
     if k == "preprocess_reproduced":
         # (엔진 1.8.0) 학생 현재 train_raw, test_raw 에서 순서대로 abs_diffs (|col - value|), impute (train_raw 통계로 양쪽 결측 대체),
         # ratios (num / (den + den_add)), onehot (get_dummies dtype=int, 평가는 훈련 컬럼에 맞춰 reindex fill 0) 를 다시 계산해
@@ -505,21 +570,41 @@ def _probe(p):
         y = _var(p["y"]); yv = np.asarray(y)
         if yv.ndim != 1 or not set(np.unique(yv).tolist()) <= {0, 1}:
             raise _ProbeError("이진(0/1) 레이블만 지원합니다")
-        scores = {}
+        scores, thr = {}, {}
         for c in cands:
             X = _var(c["X"])
             if hasattr(X, "index") and hasattr(y, "index") and list(map(str, X.index)) != list(map(str, y.index)):
                 raise _ProbeError(f"{c['X']} 와 {p['y']} 의 인덱스가 다릅니다")
-            pred = np.asarray(_predict(_var(c["model"]), X, c.get("threshold")))
+            t = c.get("threshold")
+            if c.get("threshold_var"):
+                # (엔진 1.9.0) 학생 변수의 임계값 (0~1 사이 숫자 스칼라)
+                tv = _num(_var(c["threshold_var"]))
+                if tv is None or not (0.0 < tv < 1.0):
+                    raise _ProbeError(f"{c['threshold_var']} 가 0~1 사이 숫자가 아닙니다")
+                t = tv
+            pred = np.asarray(_predict(_var(c["model"]), X, t))
             if pred.shape != yv.shape:
                 raise _ProbeError("예측 길이가 레이블과 다릅니다")
             tn, fp, fn, tp = _cm(yv, pred, labels=[0, 1]).ravel()
             scores[c["name"]] = int(cfp * fp + cfn * fn)
-        if p.get("output") == "scores":
+            thr[c["name"]] = 0.5 if t is None else float(t)
+        out = p.get("output")
+        if out == "scores":
             return scores
-        if p.get("output") != "selected":
-            raise _ProbeError("output 은 selected 또는 scores")
-        return sorted(names, key=lambda n: (scores[n], n))[0]
+        if out == "cost":
+            if len(cands) != 1:
+                raise _ProbeError("output cost 는 후보 1개만")
+            return scores[names[0]]
+        tb = p.get("tie_break", "name_asc")
+        if tb not in ("name_asc", "lower_threshold", "higher_threshold"):
+            raise _ProbeError("tie_break 오류")
+        key = {"name_asc": lambda n: (scores[n], n), "lower_threshold": lambda n: (scores[n], thr[n], n), "higher_threshold": lambda n: (scores[n], -thr[n], n)}[tb]
+        best = sorted(names, key=key)[0]
+        if out == "selected":
+            return best
+        if out == "selected_threshold":
+            return thr[best]
+        raise _ProbeError("output 은 selected, selected_threshold, scores, cost")
     if k == "time_split_reproduced":
         # (엔진 1.7.0) 학생 현재 frame 에서 date_column < cutoff 를 훈련, 나머지를 평가로 다시 나눠 outputs 와 비교 (output match).
         # output train_period / test_period 는 학생 outputs X_train / X_test 인덱스의 frame 날짜 (최소, 최대) 를 YYYY-MM-DD 로 반환
@@ -639,8 +724,6 @@ def _probe(p):
         import pandas as pd
         src = _df(p["source"])
         cols = list(p.get("onehot_columns") or [])
-        if not cols or any(c not in src.columns for c in cols):
-            raise _ProbeError("인코딩할 컬럼이 없습니다")
         extra = p.get("assign") or {}
         if len(extra) > 3:
             raise _ProbeError("assign 은 3개까지")
@@ -653,6 +736,9 @@ def _probe(p):
                 if not _is_series(sv) or [str(i) for i in sv.index] != [str(i) for i in src.index]:
                     raise _ProbeError(f"{vn} 가 같은 인덱스의 Series 가 아닙니다")
                 src[name] = sv
+        # (엔진 1.9.0 수정) assign 으로 추가한 컬럼도 인코딩 대상이 될 수 있으므로 추가 후 확인
+        if not cols or any(c not in src.columns for c in cols):
+            raise _ProbeError("인코딩할 컬럼이 없습니다")
         exp = pd.get_dummies(src, columns=cols, dtype=int)
         got = _var(p["var"])
         if not _is_df(got) or set(map(str, got.columns)) != set(map(str, exp.columns)):

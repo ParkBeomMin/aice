@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-010",
+  "question_id": "q01",
+  "public_id": "associate-010-q01",
+  "revision": 1,
+  "title": "호텔 예약 파일 읽기",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "`hotel_bookings.csv` 파일을 읽어 DataFrame `hotel_df`에 저장하시오.\n\n1. 파일은 작업 폴더에 있습니다.\n2. `reservation_id`는 인덱스로 바꾸지 말고 일반 컬럼으로 두시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "hotel_bookings",
+      "url_path": "content/associate-010/datasets/hotel_bookings.csv",
+      "sha256": "1089d769a53456db5ac12aff55f45d866653f19fad3cbccff50406f48c97b8f8",
+      "size_bytes": 144239,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261210, SHA-256 1089d769a534"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** CSV 를 읽고 원본 구조를 보존한다.\n\n**핵심 개념:** 기본 `read_csv` 설정으로 읽으면 `NoDeposit`은 일반 문자열이다.\n\n```python\nimport pandas as pd\nhotel_df = pd.read_csv('hotel_bookings.csv')\nhotel_df.head()\n```\n\n**기준 결과:** 2,200행, 14열, deposit_type 결측 0.\n\n**다른 풀이 (os.path 로 같은 파일 로딩):**\n\n```python\nimport pandas as pd\nimport os\nhotel_df = pd.read_csv(os.path.join('.', 'hotel_bookings.csv'))\n```\n\n**자주 틀리는 부분:** ID 를 인덱스로, NoDeposit 을 결측으로 읽는 것.\n\n**채점 항목:**\n\n1. hotel_df 에 DataFrame 저장\n2. CSV 전체 행과 열\n3. reservation_id 일반 컬럼 보존\n4. 보증금 유형 결측 없음 (NoDeposit 은 문자열)\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "import pandas as pd\nhotel_df = pd.read_csv('hotel_bookings.csv')\nhotel_df.head()\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

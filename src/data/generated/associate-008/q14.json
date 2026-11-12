@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-008",
+  "question_id": "q14",
+  "public_id": "associate-008-q14",
+  "revision": 1,
+  "title": "세 회귀 모델 비교",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "세 모델의 원 단위 RMSE를 비교하시오.\n\n1. `claims_lr_pred`, `claims_rf_pred`, `claims_log_pred`의 RMSE를 `y_test` 기준으로 계산해 딕셔너리 `claims_rmse_by_model`에 저장하시오. 키는 `'linear'`, `'forest'`, `'log_linear'`입니다.\n2. RMSE가 가장 작은 모델 이름을 `best_cost_model`에 저장하시오. 같으면 이름 오름차순으로 앞선 모델을 고르시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "claims_cost",
+      "url_path": "content/associate-008/datasets/claims_cost.csv",
+      "sha256": "cec383e4dd3c50961f4ba29f1c6689c0a8cedc4822c34bbe0a8db593ec223eb2",
+      "size_bytes": 142975,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261208, SHA-256 cec383e4dd3c"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 세 모델의 원 단위 RMSE 를 비교해 고른다.\n\n**핵심 개념:** 세 예측을 모두 원 단위로 같은 y_test 와 비교해야 공정하다.\n\n```python\nclaims_rmse_by_model = {name: float(np.sqrt(mean_squared_error(y_test, pred)))\n                        for name, pred in [('linear', claims_lr_pred), ('forest', claims_rf_pred), ('log_linear', claims_log_pred)]}\nbest_cost_model = min(sorted(claims_rmse_by_model), key=claims_rmse_by_model.get)\nprint(claims_rmse_by_model, best_cost_model)\n```\n\n**기준 결과:** linear 7,302, forest 7,605, log_linear 7,217 → log_linear. 로그 타깃이 오른쪽 꼬리가 긴 비용에서 조금 더 잘 맞는다.\n\n**다른 풀이 (반복문):**\n\n```python\nfrom sklearn.metrics import mean_squared_error\nimport numpy as np\nclaims_rmse_by_model = {}\nfor n, p in (('linear', claims_lr_pred), ('forest', claims_rf_pred), ('log_linear', claims_log_pred)):\n    claims_rmse_by_model[n] = np.sqrt(((y_test.to_numpy() - p) ** 2).mean())\nbest_cost_model = sorted(claims_rmse_by_model.items(), key=lambda t: (t[1], t[0]))[0][0]\n```\n\n**자주 틀리는 부분:** MSE, 로그 단위 비교, 최댓값, 키 누락.\n\n**채점 항목:**\n\n1. 모델별 원 단위 RMSE\n2. RMSE 최소 모델\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "claims_rmse_by_model = {name: float(np.sqrt(mean_squared_error(y_test, pred)))\n                        for name, pred in [('linear', claims_lr_pred), ('forest', claims_rf_pred), ('log_linear', claims_log_pred)]}\nbest_cost_model = min(sorted(claims_rmse_by_model), key=claims_rmse_by_model.get)\nprint(claims_rmse_by_model, best_cost_model)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

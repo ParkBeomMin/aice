@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-008",
+  "question_id": "q12",
+  "public_id": "associate-008-q12",
+  "revision": 1,
+  "title": "로그 타깃 회귀",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "비용의 로그 값을 예측하는 선형회귀를 학습하고 원 단위로 되돌리시오.\n\n1. `LinearRegression()`을 `X_train_scaled`와 `np.log1p(y_train)`으로 학습해 `claims_log_model`에 저장하시오.\n2. `X_test_scaled`의 예측을 `np.expm1()`으로 원 단위로 되돌려 `claims_log_pred`에 저장하시오.\n\n> 오른쪽으로 긴 분포의 타깃은 로그로 바꿔 학습하면 큰 값의 영향이 줄어듭니다. 평가는 반드시 원 단위로 합니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "claims_cost",
+      "url_path": "content/associate-008/datasets/claims_cost.csv",
+      "sha256": "cec383e4dd3c50961f4ba29f1c6689c0a8cedc4822c34bbe0a8db593ec223eb2",
+      "size_bytes": 142975,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261208, SHA-256 cec383e4dd3c"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 로그 타깃으로 학습하고 원 단위로 되돌린다.\n\n**핵심 개념:** `np.log1p(y)`로 바꿔 학습하면 큰 비용의 영향이 줄고 곱셈 관계가 덧셈이 된다. 예측은 `np.expm1()`으로 원 단위로 되돌린 뒤 평가한다. `log1p`와 `expm1`은 짝이다.\n\n```python\nimport numpy as np\nclaims_log_model = LinearRegression().fit(X_train_scaled, np.log1p(y_train))\nclaims_log_pred = np.expm1(claims_log_model.predict(X_test_scaled))\n```\n\n**기준 결과:** 원 단위 MAE 약 5,377원, RMSE 약 7,217원, R2 약 0.527.\n\n**다른 풀이 (np.log 대신 log1p 동등식 (np.log(1 + y))):**\n\n```python\nimport numpy as np\nfrom sklearn.linear_model import LinearRegression\nclaims_log_model = LinearRegression().fit(X_train_scaled, np.log(1 + y_train))\nclaims_log_pred = np.exp(claims_log_model.predict(X_test_scaled)) - 1\n```\n\n**자주 틀리는 부분:** 원 타깃으로 학습, 역변환 생략, exp 사용(1 차이), 임의 보정.\n\n**채점 항목:**\n\n1. LinearRegression\n2. log1p(y_train) 으로 학습\n3. 학생 모델 예측에 expm1\n4. 원 단위 예측 독립 검산\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "import numpy as np\nclaims_log_model = LinearRegression().fit(X_train_scaled, np.log1p(y_train))\nclaims_log_pred = np.expm1(claims_log_model.predict(X_test_scaled))\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-008",
+  "question_id": "q03",
+  "public_id": "associate-008-q03",
+  "revision": 1,
+  "title": "서류 쪽수 결측 수",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "`claims_df['document_pages']`에서 결측인 행 수를 정수 `missing_pages`에 저장하시오.\n\n> 0은 결측이 아닙니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "claims_cost",
+      "url_path": "content/associate-008/datasets/claims_cost.csv",
+      "sha256": "cec383e4dd3c50961f4ba29f1c6689c0a8cedc4822c34bbe0a8db593ec223eb2",
+      "size_bytes": 142975,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261208, SHA-256 cec383e4dd3c"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 특정 컬럼의 결측 수를 센다.\n\n**핵심 개념:** `isna().sum()`은 결측(NaN) 만 센다. 0 은 결측이 아니다.\n\n```python\nmissing_pages = int(claims_df['document_pages'].isna().sum())\nprint(missing_pages)\n```\n\n**기준 결과:** 129행 (약 7.0%).\n\n**다른 풀이 (isnull().sum()):**\n\n```python\nmissing_pages = int(claims_df.document_pages.isnull().sum())\n```\n\n**자주 틀리는 부분:** count() 를 결측 수로 쓰는 것.\n\n**채점 항목:**\n\n1. 서류 쪽수 결측 수\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "missing_pages = int(claims_df['document_pages'].isna().sum())\nprint(missing_pages)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

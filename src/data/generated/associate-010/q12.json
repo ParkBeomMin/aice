@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-010",
+  "question_id": "q12",
+  "public_id": "associate-010-q12",
+  "revision": 1,
+  "title": "ROC-AUC와 F1",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "로지스틱 회귀의 성능을 두 지표로 구하시오.\n\n1. `hotel_lr.predict_proba(X_test)[:, 1]`(양성 확률)과 `y_test`로 ROC-AUC를 구해 `hotel_auc`에 저장하시오.\n2. `hotel_lr_pred`(0.5 기준 예측)와 `y_test`로 F1을 구해 `hotel_f1`에 저장하시오.\n\n> ROC-AUC 는 확률로, F1 은 0/1 예측으로 계산합니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "hotel_bookings",
+      "url_path": "content/associate-010/datasets/hotel_bookings.csv",
+      "sha256": "1089d769a53456db5ac12aff55f45d866653f19fad3cbccff50406f48c97b8f8",
+      "size_bytes": 144239,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261210, SHA-256 1089d769a534"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** ROC-AUC 와 F1 을 구분해 계산한다.\n\n**핵심 개념:** ROC-AUC 는 판정 기준과 상관없이 확률의 순서가 얼마나 잘 맞는지 보는 지표라 양성 확률로 계산한다. F1 은 0/1 예측으로 계산한다.\n\n```python\nfrom sklearn.metrics import roc_auc_score, f1_score\nhotel_prob = hotel_lr.predict_proba(X_test)[:, 1]\nhotel_auc = roc_auc_score(y_test, hotel_prob)\nhotel_f1 = f1_score(y_test, hotel_lr_pred)\nprint(hotel_auc, hotel_f1)\n```\n\n**기준 결과:** AUC 0.796, F1 0.565.\n\n**다른 풀이 (roc_curve 와 auc):**\n\n```python\nfrom sklearn.metrics import roc_curve, auc, f1_score\nfpr, tpr, _ = roc_curve(y_test, hotel_lr.predict_proba(X_test)[:, 1])\nhotel_auc = auc(fpr, tpr)\nhotel_f1 = f1_score(y_test, hotel_lr_pred)\n```\n\n**자주 틀리는 부분:** 0/1 예측으로 AUC, 0 클래스 확률, 훈련 데이터 AUC, 정확도를 F1 으로.\n\n**채점 항목:**\n\n1. 확률로 계산한 ROC-AUC\n2. 0.5 예측 F1\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import roc_auc_score, f1_score\nhotel_prob = hotel_lr.predict_proba(X_test)[:, 1]\nhotel_auc = roc_auc_score(y_test, hotel_prob)\nhotel_f1 = f1_score(y_test, hotel_lr_pred)\nprint(hotel_auc, hotel_f1)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

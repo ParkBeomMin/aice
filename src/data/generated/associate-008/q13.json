@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-008",
+  "question_id": "q13",
+  "public_id": "associate-008-q13",
+  "revision": 1,
+  "title": "원 단위 MAE와 RMSE",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "선형회귀 예측의 오차를 원 단위로 구하시오.\n\n1. `y_test`와 `claims_lr_pred`(`claims_lr`로 `X_test_scaled`를 예측한 값)로 평균절대오차를 `claims_mae`에 저장하시오.\n2. 평균제곱오차의 제곱근인 RMSE를 `claims_rmse`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "claims_cost",
+      "url_path": "content/associate-008/datasets/claims_cost.csv",
+      "sha256": "cec383e4dd3c50961f4ba29f1c6689c0a8cedc4822c34bbe0a8db593ec223eb2",
+      "size_bytes": 142975,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261208, SHA-256 cec383e4dd3c"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 원 단위 MAE 와 RMSE 를 계산한다.\n\n**핵심 개념:** MAE 와 RMSE 는 원 단위다. RMSE 는 MSE 의 제곱근이다.\n\n```python\nfrom sklearn.metrics import mean_absolute_error, mean_squared_error\nclaims_mae = mean_absolute_error(y_test, claims_lr_pred)\nclaims_rmse = np.sqrt(mean_squared_error(y_test, claims_lr_pred))\nprint(claims_mae, claims_rmse)\n```\n\n**기준 결과:** MAE 약 5,632.6원, RMSE 약 7,302.1원 (훈련 평균 기준선 RMSE 약 10,501원).\n\n**다른 풀이 (직접 계산):**\n\n```python\nimport numpy as np\ne = y_test.to_numpy() - claims_lr_pred\nclaims_mae = np.abs(e).mean()\nclaims_rmse = np.sqrt((e ** 2).mean())\n```\n\n**자주 틀리는 부분:** MSE 저장, 두 값 바꿈.\n\n**채점 항목:**\n\n1. MAE\n2. RMSE\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import mean_absolute_error, mean_squared_error\nclaims_mae = mean_absolute_error(y_test, claims_lr_pred)\nclaims_rmse = np.sqrt(mean_squared_error(y_test, claims_lr_pred))\nprint(claims_mae, claims_rmse)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

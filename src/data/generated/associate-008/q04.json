@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-008",
+  "question_id": "q04",
+  "public_id": "associate-008-q04",
+  "revision": 1,
+  "title": "분야별 비용 요약",
+  "topic": "pandas",
+  "difficulty": "medium",
+  "prompt": "청구 분야별 처리 비용의 평균과 중앙값을 구하시오.\n\n1. `claims_df`를 `service_type`별로 묶어 `processing_cost`의 평균과 중앙값을 구하시오.\n2. 컬럼 이름과 순서가 `mean`, `median`이고 인덱스가 분야 이름 오름차순인 DataFrame `cost_by_type`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "claims_cost",
+      "url_path": "content/associate-008/datasets/claims_cost.csv",
+      "sha256": "cec383e4dd3c50961f4ba29f1c6689c0a8cedc4822c34bbe0a8db593ec223eb2",
+      "size_bytes": 142975,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261208, SHA-256 cec383e4dd3c"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 그룹별 여러 통계를 한 표로 만든다.\n\n**핵심 개념:** `groupby(...)['processing_cost'].agg(['mean', 'median'])`는 그룹마다 두 통계를 컬럼으로 만든다.\n\n```python\ncost_by_type = claims_df.groupby('service_type')['processing_cost'].agg(['mean', 'median']).sort_index()\ncost_by_type\n```\n\n**기준 결과:** Device 평균 30,394 중앙값 28,751 / Property 29,745, 27,655 / Repair 30,413, 28,488 / Travel 31,128, 29,308 (원). 분야 사이 차이는 작다.\n\n**다른 풀이 (pivot_table 두 함수):**\n\n```python\ncost_by_type = claims_df.pivot_table(index='service_type', values='processing_cost', aggfunc=['mean', 'median'])\ncost_by_type.columns = ['mean', 'median']\n```\n\n**자주 틀리는 부분:** 컬럼 순서 바뀜, 합계.\n\n**채점 항목:**\n\n1. 컬럼 mean, median\n2. 분야 이름 오름차순\n3. 분야별 평균\n4. 분야별 중앙값\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "cost_by_type = claims_df.groupby('service_type')['processing_cost'].agg(['mean', 'median']).sort_index()\ncost_by_type\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

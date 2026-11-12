@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-009",
+  "question_id": "q10",
+  "public_id": "associate-009-q10",
+  "revision": 1,
+  "title": "로지스틱 회귀 분류",
+  "topic": "machine_learning",
+  "difficulty": "easy",
+  "prompt": "로지스틱 회귀 모델을 학습하고 평가 데이터를 예측하시오.\n\n1. `LogisticRegression(max_iter=1000, random_state=42)`를 `X_train`, `y_train`으로 학습해 `booking_lr`에 저장하시오.\n2. `X_test`의 예측 결과를 `booking_lr_pred`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "checkup_bookings",
+      "url_path": "content/associate-009/datasets/checkup_bookings.csv",
+      "sha256": "7ca011850295c6a54fe598bb17bf34d8b9417787ff640e06215b40d08bf65ff2",
+      "size_bytes": 89856,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261209, SHA-256 7ca011850295"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 로지스틱 회귀를 학습하고 예측한다.\n\n**핵심 개념:** 로지스틱 회귀는 확률 0.5 기준으로 판정한다.\n\n```python\nfrom sklearn.linear_model import LogisticRegression\nbooking_lr = LogisticRegression(max_iter=1000, random_state=42).fit(X_train, y_train)\nbooking_lr_pred = booking_lr.predict(X_test)\n```\n\n**기준 결과:** AUC 0.826, 0.5 기준 정밀도 0.722, 재현율 0.576.\n\n**다른 풀이 (생성 후 fit):**\n\n```python\nfrom sklearn.linear_model import LogisticRegression\nbooking_lr = LogisticRegression(max_iter=1000, random_state=42)\nbooking_lr.fit(X_train, y_train)\nbooking_lr_pred = booking_lr.predict(X_test)\n```\n\n**자주 틀리는 부분:** max_iter 변경, 평가 데이터로 학습.\n\n**채점 항목:**\n\n1. LogisticRegression\n2. 지정 하이퍼파라미터\n3. 훈련 데이터로 학습\n4. 평가 예측\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.linear_model import LogisticRegression\nbooking_lr = LogisticRegression(max_iter=1000, random_state=42).fit(X_train, y_train)\nbooking_lr_pred = booking_lr.predict(X_test)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

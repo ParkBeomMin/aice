@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-009",
+  "question_id": "q14",
+  "public_id": "associate-009-q14",
+  "revision": 2,
+  "title": "최종 모델 선택",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "두 후보의 비용을 비교해 최종 모델을 고르시오.\n\n1. 후보 `logistic_best`는 `booking_lr`의 양성 확률을 `best_threshold`로 판정한 예측, 후보 `forest_05`는 `booking_rf`로 `X_test`를 예측한 `booking_rf_pred`입니다.\n2. `y_test`와 비교한 각 후보의 `FP + 4 * FN`을 딕셔너리 `booking_candidate_costs`에 저장하시오. 형식: `{'logistic_best': 값, 'forest_05': 값}`\n3. 비용이 더 작은 후보 이름을 `best_booking_model`에 저장하시오. 같으면 이름 오름차순으로 앞선 후보를 고르시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "checkup_bookings",
+      "url_path": "content/associate-009/datasets/checkup_bookings.csv",
+      "sha256": "7ca011850295c6a54fe598bb17bf34d8b9417787ff640e06215b40d08bf65ff2",
+      "size_bytes": 89856,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261209, SHA-256 7ca011850295"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 비용 기준으로 최종 모델을 고른다.\n\n**핵심 개념:** q13 에서 고른 임계값을 적용한 로지스틱과 랜덤포레스트(0.5)를 같은 비용 규칙으로 비교한다.\n\n```python\nbooking_candidate_costs = {}\nfor name, pred in [('logistic_best', (booking_prob >= best_threshold).astype(int)), ('forest_05', booking_rf_pred)]:\n    tn_, fp_, fn_, tp_ = confusion_matrix(y_test, pred, labels=[0, 1]).ravel()\n    booking_candidate_costs[name] = int(fp_ + 4 * fn_)\nbest_booking_model = min(sorted(booking_candidate_costs), key=booking_candidate_costs.get)\nprint(booking_candidate_costs, best_booking_model)\n```\n\n**기준 결과:** logistic_best 161, forest_05 235 → logistic_best.\n\n**다른 풀이 (직접 세기):**\n\n```python\nimport numpy as np\nyt = y_test.to_numpy()\nlb = (booking_lr.predict_proba(X_test)[:, 1] >= best_threshold).astype(int)\ncost = lambda p: int(((yt == 0) & (p == 1)).sum() + 4 * ((yt == 1) & (p == 0)).sum())\nbooking_candidate_costs = {'logistic_best': cost(lb), 'forest_05': cost(np.asarray(booking_rf_pred))}\nbest_booking_model = sorted(booking_candidate_costs, key=lambda n: (booking_candidate_costs[n], n))[0]\n```\n\n**자주 틀리는 부분:** best_threshold 를 무시하고 0.5 사용, 비용 최대 선택.\n\n**채점 항목:**\n\n1. 후보별 비용\n2. 비용 최소 후보\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "booking_candidate_costs = {}\nfor name, pred in [('logistic_best', (booking_prob >= best_threshold).astype(int)), ('forest_05', booking_rf_pred)]:\n    tn_, fp_, fn_, tp_ = confusion_matrix(y_test, pred, labels=[0, 1]).ravel()\n    booking_candidate_costs[name] = int(fp_ + 4 * fn_)\nbest_booking_model = min(sorted(booking_candidate_costs), key=booking_candidate_costs.get)\nprint(booking_candidate_costs, best_booking_model)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

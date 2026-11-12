@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-008",
+  "question_id": "q11",
+  "public_id": "associate-008-q11",
+  "revision": 1,
+  "title": "랜덤포레스트 회귀 학습",
+  "topic": "machine_learning",
+  "difficulty": "easy",
+  "prompt": "랜덤포레스트 회귀 모델을 학습하고 평가 데이터를 예측하시오.\n\n1. `RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42, n_jobs=1)`를 `X_train_scaled`, `y_train`으로 학습해 `claims_rf`에 저장하시오.\n2. `X_test_scaled`의 예측(원 단위)을 `claims_rf_pred`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "claims_cost",
+      "url_path": "content/associate-008/datasets/claims_cost.csv",
+      "sha256": "cec383e4dd3c50961f4ba29f1c6689c0a8cedc4822c34bbe0a8db593ec223eb2",
+      "size_bytes": 142975,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261208, SHA-256 cec383e4dd3c"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 랜덤포레스트 회귀를 학습하고 예측한다.\n\n**핵심 개념:** 랜덤포레스트 회귀. `n_jobs=1`.\n\n```python\nfrom sklearn.ensemble import RandomForestRegressor\nclaims_rf = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42, n_jobs=1).fit(X_train_scaled, y_train)\nclaims_rf_pred = claims_rf.predict(X_test_scaled)\n```\n\n**기준 결과:** 평가 RMSE 약 7,605원, R2 약 0.475.\n\n**다른 풀이 (생성 후 fit):**\n\n```python\nfrom sklearn.ensemble import RandomForestRegressor\nclaims_rf = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42, n_jobs=1)\nclaims_rf.fit(X_train_scaled, y_train)\nclaims_rf_pred = claims_rf.predict(X_test_scaled)\n```\n\n**자주 틀리는 부분:** 트리 수 변경, 훈련 데이터 예측.\n\n**채점 항목:**\n\n1. RandomForestRegressor\n2. 지정 하이퍼파라미터\n3. 훈련 데이터로 학습\n4. 평가 예측\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.ensemble import RandomForestRegressor\nclaims_rf = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42, n_jobs=1).fit(X_train_scaled, y_train)\nclaims_rf_pred = claims_rf.predict(X_test_scaled)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

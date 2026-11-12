@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-008",
+  "question_id": "q09",
+  "public_id": "associate-008-q09",
+  "revision": 1,
+  "title": "모델 입력 표준화",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "`X_train`, `X_test`의 수치형 9개를 표준화하시오.\n\n1. 대상 컬럼: `claim_items`, `total_requested_amount`, `document_pages`, `triage_estimated_minutes`, `risk_flag_count`, `account_tenure_months`, `missing_document_count`, `complexity_score`, `requested_per_item`\n2. `StandardScaler`를 `X_train`의 대상 컬럼으로만 fit 해 `claims_scaler`에 저장하시오.\n3. 대상 컬럼만 변환하고 원-핫 컬럼은 그대로 둔 결과를 `X_train_scaled`, `X_test_scaled`에 저장하시오. 인덱스와 컬럼 순서는 `X_train`, `X_test`와 같게 유지하시오.\n\n> 평가 데이터에는 transform 만 적용합니다. 정수 컬럼에 실수를 바로 덮어쓰기보다 표준화한 값으로 새 DataFrame 을 만들어 합치는 방법을 권장합니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "claims_cost",
+      "url_path": "content/associate-008/datasets/claims_cost.csv",
+      "sha256": "cec383e4dd3c50961f4ba29f1c6689c0a8cedc4822c34bbe0a8db593ec223eb2",
+      "size_bytes": 142975,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261208, SHA-256 cec383e4dd3c"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 수치형만 훈련 기준으로 표준화한다.\n\n**핵심 개념:** 수치형 9개만 훈련 데이터로 fit 한 스케일러로 변환하고 원-핫 컬럼은 0/1 그대로 둔다.\n\n```python\nfrom sklearn.preprocessing import StandardScaler\nnum_cols = ['claim_items', 'total_requested_amount', 'document_pages', 'triage_estimated_minutes', 'risk_flag_count',\n            'account_tenure_months', 'missing_document_count', 'complexity_score', 'requested_per_item']\nclaims_scaler = StandardScaler().fit(X_train[num_cols].astype(float))\ndef scale(df):\n    s = pd.DataFrame(claims_scaler.transform(df[num_cols].astype(float)), index=df.index, columns=num_cols)\n    return pd.concat([s, df.drop(columns=num_cols)], axis=1)[df.columns]\nX_train_scaled = scale(X_train)\nX_test_scaled = scale(X_test)\n```\n\n**기준 결과:** claims_scaler 학습 행 1,480, 특징 9개.\n\n**다른 풀이 (astype 후 대입):**\n\n```python\nfrom sklearn.preprocessing import StandardScaler\nnum_cols = ['claim_items', 'total_requested_amount', 'document_pages', 'triage_estimated_minutes', 'risk_flag_count', 'account_tenure_months', 'missing_document_count', 'complexity_score', 'requested_per_item']\nclaims_scaler = StandardScaler().fit(X_train[num_cols])\nX_train_scaled = X_train.astype({c: float for c in num_cols})\nX_test_scaled = X_test.astype({c: float for c in num_cols})\nX_train_scaled[num_cols] = claims_scaler.transform(X_train[num_cols])\nX_test_scaled[num_cols] = claims_scaler.transform(X_test[num_cols])\n```\n\n**자주 틀리는 부분:** 평가 데이터로 fit, 원-핫까지 표준화.\n\n**채점 항목:**\n\n1. 스케일러는 X_train 수치 9개로 fit\n2. 훈련 표준화 결과\n3. 평가는 transform 만\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.preprocessing import StandardScaler\nnum_cols = ['claim_items', 'total_requested_amount', 'document_pages', 'triage_estimated_minutes', 'risk_flag_count',\n            'account_tenure_months', 'missing_document_count', 'complexity_score', 'requested_per_item']\nclaims_scaler = StandardScaler().fit(X_train[num_cols].astype(float))\ndef scale(df):\n    s = pd.DataFrame(claims_scaler.transform(df[num_cols].astype(float)), index=df.index, columns=num_cols)\n    return pd.concat([s, df.drop(columns=num_cols)], axis=1)[df.columns]\nX_train_scaled = scale(X_train)\nX_test_scaled = scale(X_test)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

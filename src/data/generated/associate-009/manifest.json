@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.3.0",
+  "pack_id": "associate-009",
+  "title": "AICE Associate 실전 연습 모의고사 9회차: 건강검진 예약 미방문 예측",
+  "summary": "가상의 검진센터 예약 1,750건으로 데이터 탐색, 피벗 표, 결측 처리, 구간화, ColumnTransformer 전처리, 분류 모델 평가, 임계값별 오류 비용 비교와 모델 선택까지 14문항을 하나의 노트북에서 풉니다. 데이터는 모두 합성이며 개인정보와 건강정보를 담지 않습니다.",
+  "mode": "production",
+  "mock": false,
+  "time_limit_minutes": 90,
+  "question_count": 14,
+  "questions": [
+    {
+      "question_id": "q01",
+      "public_id": "associate-009-q01",
+      "revision": 1,
+      "title": "예약 파일 읽기",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q01.json",
+      "sha256": "754d35da4f1617076bea71c1c8fda332dfa6ce1941c8678d6b4f0dfd0978c8f5"
+    },
+    {
+      "question_id": "q02",
+      "public_id": "associate-009-q02",
+      "revision": 1,
+      "title": "미방문 비율",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q02.json",
+      "sha256": "1b5e424887ebe5fc103b36d9daa8a4bdcf1cf44b6d16b6f83b64ec240b022512"
+    },
+    {
+      "question_id": "q03",
+      "public_id": "associate-009-q03",
+      "revision": 1,
+      "title": "오래 전에 잡은 예약 추출",
+      "topic": "pandas",
+      "difficulty": "easy",
+      "file": "q03.json",
+      "sha256": "f348491a9b342a53fc0028576eba89bd3476a0eac6f2948487fbcf7240e129b3"
+    },
+    {
+      "question_id": "q04",
+      "public_id": "associate-009-q04",
+      "revision": 1,
+      "title": "검진 종류별 미방문율",
+      "topic": "pandas",
+      "difficulty": "medium",
+      "file": "q04.json",
+      "sha256": "e4c9f8608dce3f126c87037ee0aaaf3565f82e523fb72dfea3f8e2ce10dab7a4"
+    },
+    {
+      "question_id": "q05",
+      "public_id": "associate-009-q05",
+      "revision": 1,
+      "title": "요일과 예약 경로별 미방문율 표",
+      "topic": "pandas",
+      "difficulty": "medium",
+      "file": "q05.json",
+      "sha256": "546e0309a016fdcad2e59ec535c4be1b2df4b9ed48c3a91693c3de37881c69f3"
+    },
+    {
+      "question_id": "q06",
+      "public_id": "associate-009-q06",
+      "revision": 1,
+      "title": "탐색용 이동 시간 결측 대체",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q06.json",
+      "sha256": "abcb2fd1c741252f8b58641ffc80c8117e21102cb006c43974b6f9d7946befaf"
+    },
+    {
+      "question_id": "q07",
+      "public_id": "associate-009-q07",
+      "revision": 1,
+      "title": "예약 기간 구간화",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q07.json",
+      "sha256": "5cd22d3ee10b89062014a9af351bb16364a1152273c60b3dea1697da506121e6"
+    },
+    {
+      "question_id": "q08",
+      "public_id": "associate-009-q08",
+      "revision": 1,
+      "title": "탐색용 범주형 인코딩",
+      "topic": "preprocessing",
+      "difficulty": "medium",
+      "file": "q08.json",
+      "sha256": "e21c7becdcadc41ee0695a41e40b681edde3c5248add43b6c1ae26eb25bb6dfb"
+    },
+    {
+      "question_id": "q09",
+      "public_id": "associate-009-q09",
+      "revision": 1,
+      "title": "층화 분할과 ColumnTransformer 전처리",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q09.json",
+      "sha256": "92c191aaae559c8b698a3c99373450ad84ff29b3260accdc916a530de56c57ab"
+    },
+    {
+      "question_id": "q10",
+      "public_id": "associate-009-q10",
+      "revision": 1,
+      "title": "로지스틱 회귀 분류",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q10.json",
+      "sha256": "6dffb3fb4ec1fa5e6c8bc25aa0380a4b7c7f4b61039a81dfd3ae86c32e8ac785"
+    },
+    {
+      "question_id": "q11",
+      "public_id": "associate-009-q11",
+      "revision": 1,
+      "title": "랜덤포레스트 분류",
+      "topic": "machine_learning",
+      "difficulty": "easy",
+      "file": "q11.json",
+      "sha256": "787f764c23c8be007cf38bcf29428932f441f68ddca6fe7e5a7af9ce5ac0da38"
+    },
+    {
+      "question_id": "q12",
+      "public_id": "associate-009-q12",
+      "revision": 1,
+      "title": "거짓 양성과 거짓 음성",
+      "topic": "machine_learning",
+      "difficulty": "medium",
+      "file": "q12.json",
+      "sha256": "bf87d541198f42cf411ed96bb55ec08703c2a7ded4953a93c64d7d351c99331d"
+    },
+    {
+      "question_id": "q13",
+      "public_id": "associate-009-q13",
+      "revision": 2,
+      "title": "임계값별 오류 비용",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q13.json",
+      "sha256": "1b28cd981d245bf87b43950838e42f35160d77398e830975e7fb9c02ad3ea572"
+    },
+    {
+      "question_id": "q14",
+      "public_id": "associate-009-q14",
+      "revision": 2,
+      "title": "최종 모델 선택",
+      "topic": "machine_learning",
+      "difficulty": "hard",
+      "file": "q14.json",
+      "sha256": "b29cdcea073282d7203f54b58193c7f5cf23c82211b71d75d70b32f3d96b58e5"
+    }
+  ],
+  "scenario_md": "가상의 검진센터 CareCheck는 예약 전날 저녁에 다음 날 방문하지 않을 가능성이 높은 예약을 찾아 추가 안내를 하려고 합니다.\n\n여러분은 운영 데이터 분석가로서 예약 기록을 탐색하고, 누설 없는 전처리로 미방문 분류 모델을 만든 뒤 임계값과 오류 비용으로 최종 모델을 골라야 합니다.\n\n- 분석 목표: 예약별 미방문 여부(`no_show`) 분류\n- 데이터: `checkup_bookings.csv` (예약 1,750건, 14개 컬럼)\n- 진행 순서: 데이터 탐색(1~5번) → 탐색용 전처리(6~8번) → 모델용 분할과 전처리(9번) → 모델 학습과 평가(10~14번)\n\n> 예측 시점은 예약일 하루 전 18시입니다. `reminder_sent`와 `weather_forecast_alert`는 그 시점에 이미 정해진 안내 발송 여부와 날씨 예보입니다. 데이터에는 이름, 생년월일, 건강 정보 같은 개인정보가 없습니다. 6~8번은 전체 데이터 탐색 연습이며, 9번은 원본 `booking_df`에서 다시 시작합니다.",
+  "datasets": [
+    {
+      "dataset_id": "checkup_bookings",
+      "url_path": "content/associate-009/datasets/checkup_bookings.csv",
+      "sha256": "7ca011850295c6a54fe598bb17bf34d8b9417787ff640e06215b40d08bf65ff2",
+      "size_bytes": 89856,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261209, SHA-256 7ca011850295",
+      "columns": [
+        {
+          "name": "reservation_id",
+          "type": "문자열",
+          "description": "가상 예약 번호 (HC00001~HC01750). 식별용이라 모델 입력에는 쓰지 않습니다."
+        },
+        {
+          "name": "clinic_type",
+          "type": "문자열",
+          "description": "검진 종류: General(일반), Dental(치과), Screening(정밀)"
+        },
+        {
+          "name": "booking_channel",
+          "type": "문자열",
+          "description": "예약 경로: App, Web, Phone"
+        },
+        {
+          "name": "appointment_weekday",
+          "type": "정수",
+          "description": "예약 요일 (0: 월요일 ~ 6: 일요일)"
+        },
+        {
+          "name": "lead_days",
+          "type": "정수",
+          "description": "예약한 날부터 예약일까지 남은 일수 (1~100)"
+        },
+        {
+          "name": "reminder_sent",
+          "type": "정수",
+          "description": "예약 전날 18시까지 안내 문자를 보냈으면 1"
+        },
+        {
+          "name": "prior_no_shows",
+          "type": "정수",
+          "description": "과거 미방문 횟수 (0~5)"
+        },
+        {
+          "name": "visits_12m",
+          "type": "정수",
+          "description": "최근 12개월 방문 횟수"
+        },
+        {
+          "name": "travel_minutes",
+          "type": "실수",
+          "description": "예상 이동 시간 (분). 일부 결측"
+        },
+        {
+          "name": "slot_popularity",
+          "type": "실수",
+          "description": "예약 시간대 인기도 (0~1)"
+        },
+        {
+          "name": "appointment_hour",
+          "type": "정수",
+          "description": "예약 시각 (8~18시)"
+        },
+        {
+          "name": "digital_checkin_enabled",
+          "type": "정수",
+          "description": "모바일 사전 접수를 켰으면 1"
+        },
+        {
+          "name": "weather_forecast_alert",
+          "type": "정수",
+          "description": "예약 전날 발표된 예약일 기상 특보가 있으면 1"
+        },
+        {
+          "name": "no_show",
+          "type": "정수",
+          "description": "미방문 여부 (1: 미방문, 0: 방문). 예측 대상"
+        }
+      ]
+    }
+  ],
+  "generator": {
+    "name": "acf content build",
+    "version": "0.1.0",
+    "content_contract": "1.3.0"
+  },
+  "source_fingerprint": "81d4b5fba522605c8ed668c62177d0fbf222ab27b284bf4b66639659e09c60bd",
+  "notebook": {
+    "kind": "question_notebook",
+    "format": "nbformat4.5",
+    "url_path": "content/associate-009/notebooks/associate-009-questions-978d6f8744de.ipynb",
+    "sha256": "978d6f8744de30346375c6fb9d2a64eda76a41231970858a4015c16e627c9ad7",
+    "size_bytes": 14761,
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  },
+  "grading": {
+    "kind": "grading_bundle",
+    "url_path": "content/associate-009/grading/associate-009-grading-eb02dd3a7184.json",
+    "sha256": "eb02dd3a71846b73f01dcd634d2d8844adba5f888acdb1b928524a3d15311abf",
+    "size_bytes": 219492,
+    "engine_version": "1.9.0",
+    "grading_version": "associate-009-g95e4bd3c7755",
+    "question_ids": [
+      "q01",
+      "q02",
+      "q03",
+      "q04",
+      "q05",
+      "q06",
+      "q07",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q13",
+      "q14"
+    ]
+  }
+}

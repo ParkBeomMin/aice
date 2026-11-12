@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-009",
+  "question_id": "q03",
+  "public_id": "associate-009-q03",
+  "revision": 1,
+  "title": "오래 전에 잡은 예약 추출",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "예약일까지 오래 남은 예약을 골라내시오.\n\n1. `booking_df`에서 `lead_days`가 60 이상인 행만 `long_lead_bookings`에 저장하시오.\n2. 원래 인덱스와 모든 컬럼을 그대로 유지하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "checkup_bookings",
+      "url_path": "content/associate-009/datasets/checkup_bookings.csv",
+      "sha256": "7ca011850295c6a54fe598bb17bf34d8b9417787ff640e06215b40d08bf65ff2",
+      "size_bytes": 89856,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261209, SHA-256 7ca011850295"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 경계값을 포함하는 조건으로 행을 고른다.\n\n**핵심 개념:** `>= 60`은 60일을 포함한다.\n\n```python\nlong_lead_bookings = booking_df[booking_df['lead_days'] >= 60]\nlong_lead_bookings.shape\n```\n\n**기준 결과:** 193행.\n\n**다른 풀이 (query):**\n\n```python\nlong_lead_bookings = booking_df.query('lead_days >= 60')\n```\n\n**자주 틀리는 부분:** > 60, >= 59.\n\n**채점 항목:**\n\n1. 행과 열 수\n2. 선택 행과 인덱스\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "long_lead_bookings = booking_df[booking_df['lead_days'] >= 60]\nlong_lead_bookings.shape\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

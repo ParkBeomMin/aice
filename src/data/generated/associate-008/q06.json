@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-008",
+  "question_id": "q06",
+  "public_id": "associate-008-q06",
+  "revision": 1,
+  "title": "탐색용 서류 쪽수 결측 대체",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "탐색용 복사본에서 서류 쪽수 결측을 채우시오.\n\n1. `claims_df`를 복사해 `claims_clean`을 만드시오.\n2. `document_pages` 결측을 원본 `claims_df`의 전체 중앙값으로 채우시오.\n3. 다른 값과 원본 `claims_df`는 바꾸지 마시오.\n\n> 탐색용 실습입니다. 이 결과로 모델을 학습하지 마시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "claims_cost",
+      "url_path": "content/associate-008/datasets/claims_cost.csv",
+      "sha256": "cec383e4dd3c50961f4ba29f1c6689c0a8cedc4822c34bbe0a8db593ec223eb2",
+      "size_bytes": 142975,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261208, SHA-256 cec383e4dd3c"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 탐색용 복사본에서 결측을 채운다.\n\n**핵심 개념:** 탐색용 복사본에서만 결측을 전체 중앙값으로 채운다.\n\n```python\nclaims_clean = claims_df.copy()\nclaims_clean['document_pages'] = claims_clean['document_pages'].fillna(claims_df['document_pages'].median())\n```\n\n**기준 결과:** 전체 중앙값 13쪽.\n\n**다른 풀이 (fillna(dict)):**\n\n```python\nclaims_clean = claims_df.copy().fillna({'document_pages': claims_df['document_pages'].median()})\n```\n\n**자주 틀리는 부분:** 평균, 다른 컬럼 변경, 원본 변경.\n\n**채점 항목:**\n\n1. claims_df 원본 그대로\n2. 결측에 전체 중앙값\n3. 다른 값 보존\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "claims_clean = claims_df.copy()\nclaims_clean['document_pages'] = claims_clean['document_pages'].fillna(claims_df['document_pages'].median())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

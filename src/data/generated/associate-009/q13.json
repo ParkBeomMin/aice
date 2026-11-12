@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-009",
+  "question_id": "q13",
+  "public_id": "associate-009-q13",
+  "revision": 2,
+  "title": "임계값별 오류 비용",
+  "topic": "machine_learning",
+  "difficulty": "hard",
+  "prompt": "임계값을 바꿔 가며 오류 비용을 비교하시오.\n\n1. `booking_lr.predict_proba(X_test)[:, 1]`로 양성 확률을 구하고, 임계값 0.30, 0.50, 0.70 각각에서 확률이 임계값 이상이면 1로 판정하시오.\n2. `y_test`와 비교한 각 판정의 `FP + 4 * FN`을 딕셔너리 `threshold_costs`에 키 `'0.30'`, `'0.50'`, `'0.70'`으로 저장하시오.\n3. 비용이 가장 작은 임계값을 실수 `best_threshold`에 저장하시오. 같으면 더 작은 임계값을 고르시오.\n\n> 미방문을 놓치는 비용(FN)을 잘못된 안내 비용(FP)의 4배로 가정한 학습용 규칙입니다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "checkup_bookings",
+      "url_path": "content/associate-009/datasets/checkup_bookings.csv",
+      "sha256": "7ca011850295c6a54fe598bb17bf34d8b9417787ff640e06215b40d08bf65ff2",
+      "size_bytes": 89856,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261209, SHA-256 7ca011850295"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 임계값별 오류 비용을 비교한다.\n\n**핵심 개념:** 임계값을 낮추면 미방문으로 판정하는 예약이 늘어 FN 은 줄고 FP 는 늘어난다. FN 비용이 4배이므로 낮은 임계값이 유리할 수 있다.\n\n```python\nbooking_prob = booking_lr.predict_proba(X_test)[:, 1]\nthreshold_costs = {}\nfor t in (0.30, 0.50, 0.70):\n    tn_, fp_, fn_, tp_ = confusion_matrix(y_test, (booking_prob >= t).astype(int), labels=[0, 1]).ravel()\n    threshold_costs[f'{t:.2f}'] = int(fp_ + 4 * fn_)\nbest_threshold = min((0.30, 0.50, 0.70), key=lambda t: (threshold_costs[f'{t:.2f}'], t))\nprint(threshold_costs, best_threshold)\n```\n\n**기준 결과:** 0.30: 161, 0.50: 190, 0.70: 280 → 0.30.\n\n**다른 풀이 (확률 비교를 np.where 로):**\n\n```python\nimport numpy as np\nfrom sklearn.metrics import confusion_matrix\nbooking_prob = booking_lr.predict_proba(X_test)[:, 1]\nthreshold_costs = {}\nfor key, t in (('0.30', 0.3), ('0.50', 0.5), ('0.70', 0.7)):\n    tn_, fp_, fn_, tp_ = confusion_matrix(y_test, np.where(booking_prob >= t, 1, 0), labels=[0, 1]).ravel()\n    threshold_costs[key] = int(fp_ + 4 * fn_)\nbest_threshold = float(min(threshold_costs, key=lambda k: (threshold_costs[k], float(k))))\n```\n\n**자주 틀리는 부분:** 비용 가중치 반대, 최댓값 선택.\n\n**채점 항목:**\n\n1. 임계값별 FP + 4 * FN\n2. 비용 최소 임계값 (동률은 작은 값)\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "booking_prob = booking_lr.predict_proba(X_test)[:, 1]\nthreshold_costs = {}\nfor t in (0.30, 0.50, 0.70):\n    tn_, fp_, fn_, tp_ = confusion_matrix(y_test, (booking_prob >= t).astype(int), labels=[0, 1]).ravel()\n    threshold_costs[f'{t:.2f}'] = int(fp_ + 4 * fn_)\nbest_threshold = min((0.30, 0.50, 0.70), key=lambda t: (threshold_costs[f'{t:.2f}'], t))\nprint(threshold_costs, best_threshold)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

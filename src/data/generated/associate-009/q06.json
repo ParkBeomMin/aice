@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-009",
+  "question_id": "q06",
+  "public_id": "associate-009-q06",
+  "revision": 1,
+  "title": "탐색용 이동 시간 결측 대체",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "탐색용 복사본에서 이동 시간 결측을 채우시오.\n\n1. `booking_df`를 복사해 `booking_clean`을 만드시오.\n2. `travel_minutes` 결측을 원본 `booking_df`의 전체 중앙값으로 채우시오.\n3. 다른 값과 원본 `booking_df`는 바꾸지 마시오.\n\n> 탐색용 실습입니다. 이 결과로 모델을 학습하지 마시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "checkup_bookings",
+      "url_path": "content/associate-009/datasets/checkup_bookings.csv",
+      "sha256": "7ca011850295c6a54fe598bb17bf34d8b9417787ff640e06215b40d08bf65ff2",
+      "size_bytes": 89856,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261209, SHA-256 7ca011850295"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 탐색용 복사본에서 결측을 채운다.\n\n**핵심 개념:** 탐색용 복사본에서만 이동 시간 결측을 전체 중앙값으로 채운다.\n\n```python\nbooking_clean = booking_df.copy()\nbooking_clean['travel_minutes'] = booking_clean['travel_minutes'].fillna(booking_df['travel_minutes'].median())\n```\n\n**기준 결과:** 결측 80행.\n\n**다른 풀이 (fillna(dict)):**\n\n```python\nbooking_clean = booking_df.copy().fillna({'travel_minutes': booking_df['travel_minutes'].median()})\n```\n\n**자주 틀리는 부분:** 평균, 원본 변경.\n\n**채점 항목:**\n\n1. booking_df 원본 그대로\n2. 결측에 전체 중앙값\n3. 다른 값 보존\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "booking_clean = booking_df.copy()\nbooking_clean['travel_minutes'] = booking_clean['travel_minutes'].fillna(booking_df['travel_minutes'].median())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

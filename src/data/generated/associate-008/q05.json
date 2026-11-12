@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-008",
+  "question_id": "q05",
+  "public_id": "associate-008-q05",
+  "revision": 1,
+  "title": "처리 비용 히스토그램",
+  "topic": "visualization",
+  "difficulty": "easy",
+  "prompt": "처리 비용의 분포를 히스토그램으로 확인하시오.\n\n1. `claims_df`의 `processing_cost`(결측 제외)로 구간 12개(`bins=12`)의 히스토그램을 그리시오.\n2. 그림(Figure)을 `cost_hist_fig`에 저장하시오. 예: `cost_hist_fig, ax = plt.subplots()`\n3. 가로축 이름은 `processing_cost`, 세로축 이름은 `count`로 표시하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "claims_cost",
+      "url_path": "content/associate-008/datasets/claims_cost.csv",
+      "sha256": "cec383e4dd3c50961f4ba29f1c6689c0a8cedc4822c34bbe0a8db593ec223eb2",
+      "size_bytes": 142975,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261208, SHA-256 cec383e4dd3c"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 오른쪽으로 긴 분포를 히스토그램으로 확인한다.\n\n**핵심 개념:** `ax.hist(..., bins=12)`는 최솟값부터 최댓값까지를 12개 같은 폭 구간으로 나눈다. 막대 높이는 각 구간의 건수다.\n\n```python\nimport matplotlib.pyplot as plt\ncost_hist_fig, ax = plt.subplots(figsize=(6, 4))\nax.hist(claims_df['processing_cost'].dropna(), bins=12)\nax.set_xlabel('processing_cost')\nax.set_ylabel('count')\nplt.show()\n```\n\n**기준 결과:** 왼쪽에 몰리고 오른쪽 꼬리가 긴 분포 (왜도 약 1.08).\n\n**다른 풀이 (plt.hist 와 gcf):**\n\n```python\nimport matplotlib.pyplot as plt\nplt.figure()\nplt.hist(claims_df['processing_cost'], bins=12)\nplt.xlabel('processing_cost')\nplt.ylabel('count')\ncost_hist_fig = plt.gcf()\n```\n\n**자주 틀리는 부분:** 밀도로 그리는 것, 구간 수 다름.\n\n**채점 항목:**\n\n1. 구간 경계와 빈도\n2. 가로축 이름\n3. 세로축 이름\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "import matplotlib.pyplot as plt\ncost_hist_fig, ax = plt.subplots(figsize=(6, 4))\nax.hist(claims_df['processing_cost'].dropna(), bins=12)\nax.set_xlabel('processing_cost')\nax.set_ylabel('count')\nplt.show()\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

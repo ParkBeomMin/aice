@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-009",
+  "question_id": "q12",
+  "public_id": "associate-009-q12",
+  "revision": 1,
+  "title": "거짓 양성과 거짓 음성",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "로지스틱 회귀 예측의 오류 종류를 세시오.\n\n1. `y_test`와 `booking_lr_pred`(`booking_lr`로 `X_test`를 예측한 값)를 비교하시오. 양성은 `no_show=1`입니다.\n2. 거짓 양성 수를 정수 `fp_count`, 거짓 음성 수를 정수 `fn_count`에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "checkup_bookings",
+      "url_path": "content/associate-009/datasets/checkup_bookings.csv",
+      "sha256": "7ca011850295c6a54fe598bb17bf34d8b9417787ff640e06215b40d08bf65ff2",
+      "size_bytes": 89856,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261209, SHA-256 7ca011850295"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 혼동행렬의 FP, FN 을 센다.\n\n**핵심 개념:** FP 는 실제 방문(0)을 미방문(1)으로 판정한 수, FN 은 실제 미방문을 놓친 수다.\n\n```python\nfrom sklearn.metrics import confusion_matrix\ntn, fp_count, fn_count, tp = confusion_matrix(y_test, booking_lr_pred, labels=[0, 1]).ravel()\nfp_count, fn_count = int(fp_count), int(fn_count)\nprint(fp_count, fn_count)\n```\n\n**기준 결과:** FP 22, FN 42.\n\n**다른 풀이 (직접 세기):**\n\n```python\nyt = y_test.to_numpy()\nfp_count = int(((yt == 0) & (booking_lr_pred == 1)).sum())\nfn_count = int(((yt == 1) & (booking_lr_pred == 0)).sum())\n```\n\n**자주 틀리는 부분:** 두 값을 바꾸는 것, 다른 모델.\n\n**채점 항목:**\n\n1. 거짓 양성 수\n2. 거짓 음성 수\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import confusion_matrix\ntn, fp_count, fn_count, tp = confusion_matrix(y_test, booking_lr_pred, labels=[0, 1]).ravel()\nfp_count, fn_count = int(fp_count), int(fn_count)\nprint(fp_count, fn_count)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

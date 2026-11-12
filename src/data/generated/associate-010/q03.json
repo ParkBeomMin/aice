@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-010",
+  "question_id": "q03",
+  "public_id": "associate-010-q03",
+  "revision": 1,
+  "title": "조기 예약 추출",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "일찍 잡은 예약을 골라내시오.\n\n1. `hotel_df`에서 `lead_days`가 90 이상인 행만 `early_bookings`에 저장하시오.\n2. 원래 인덱스와 모든 컬럼을 그대로 유지하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "hotel_bookings",
+      "url_path": "content/associate-010/datasets/hotel_bookings.csv",
+      "sha256": "1089d769a53456db5ac12aff55f45d866653f19fad3cbccff50406f48c97b8f8",
+      "size_bytes": 144239,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261210, SHA-256 1089d769a534"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 경계값을 포함하는 조건으로 행을 고른다.\n\n**핵심 개념:** `>= 90`은 90일을 포함한다 (90일 예약 7건).\n\n```python\nearly_bookings = hotel_df[hotel_df['lead_days'] >= 90]\nearly_bookings.shape\n```\n\n**기준 결과:** 487행.\n\n**다른 풀이 (query):**\n\n```python\nearly_bookings = hotel_df.query('lead_days >= 90')\n```\n\n**자주 틀리는 부분:** > 90, 행 재정렬.\n\n**채점 항목:**\n\n1. 행과 열 수\n2. 선택 행과 인덱스\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "early_bookings = hotel_df[hotel_df['lead_days'] >= 90]\nearly_bookings.shape\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}
