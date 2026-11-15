@@ -54,7 +54,8 @@
   ],
   "public_dir_allowlist": [
     "favicon.svg",
-    "google6b36f453637478f8.html"
+    "google6b36f453637478f8.html",
+    "about/aice-associate-certificate.webp"
   ],
   "generated_dir": "src/data/generated",
   "public_content_dir": "public/content",

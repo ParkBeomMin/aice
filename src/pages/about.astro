@@ -6,6 +6,8 @@ import { getDecks, totalCards } from '../lib/cards';
 const packs = getManifests();
 const questionCount = packs.reduce((n, p) => n + p.question_count, 0);
 const decks = getDecks();
+// 운영자 AICE Associate 디지털 배지 검증 링크 (수령 후 입력, 비어 있으면 표시 안 함)
+const BADGE_URL = '';
 const ic = {
   exam: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
   check: '<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>',
@@ -21,7 +23,7 @@ const svg = (k: keyof typeof ic) => `<svg viewBox="0 0 24 24" width="20" height=
     <header class="ab-hero">
       <p class="ab-kicker">AICE Associate 대비 개인 학습 프로젝트</p>
       <h1>시험 전에, 실전처럼 한 번 풀어보세요</h1>
-      <p>AICE Associate 시험을 준비하며 직접 만든 연습 문제를 누구나 브라우저에서 바로 풀어볼 수 있게 공개했어요. 설치도, 회원 가입도 필요 없어요.</p>
+      <p>AICE Associate 시험에 직접 응시해 합격한 운영자가 만든 연습 문제를 누구나 브라우저에서 바로 풀어볼 수 있게 공개했어요. 설치도, 회원 가입도 필요 없어요.</p>
       <ul class="ab-stats" aria-label="공개 콘텐츠">
         <li><strong>{packs.length}회차</strong><span>모의고사</span></li>
         <li><strong>{questionCount}문항</strong><span>자동 채점</span></li>
@@ -29,6 +31,27 @@ const svg = (k: keyof typeof ic) => `<svg viewBox="0 0 24 24" width="20" height=
         <li><strong>0원</strong><span>무료</span></li>
       </ul>
     </header>
+
+    <section class="ab-maker" aria-labelledby="ab-maker">
+      <h2 id="ab-maker">만든 사람</h2>
+      <div class="ab-maker-body">
+        <div>
+          <p class="ab-badge">AICE Associate 합격 (2026년 10월 31일 정기시험)</p>
+          <ul class="ab-score" aria-label="영역별 득점">
+            <li><span>데이터 분석</span><strong>24/24</strong></li>
+            <li><span>전처리와 시각화</span><strong>40/40</strong></li>
+            <li><span>모델링</span><strong>36/36</strong></li>
+            <li class="total"><span>총점</span><strong>100/100</strong></li>
+          </ul>
+          <p>실제 시험을 치른 경험을 바탕으로 공개된 출제 범위(데이터 분석, 전처리, AI 모델링)와 90분, 14문항 형식을 참고해 문제를 만들었어요. 실제 시험 문항은 복제하지 않았고, 모든 데이터는 직접 만든 합성 데이터예요.</p>
+          <p class="ab-sub">자격 유효기간 2029년 10월 31일까지. 개인정보 보호를 위해 이름, 생년월일, 자격번호는 가렸어요.{BADGE_URL && <> <a href={BADGE_URL} rel="noopener" target="_blank">디지털 배지 진위 확인</a></>}</p>
+        </div>
+        <figure class="ab-cert">
+          <img src={withBase('about/aice-associate-certificate.webp')} width="960" height="687" loading="lazy" alt="운영자의 AICE Associate 자격증 이미지 (이름, 생년월일, 자격번호 가림)" />
+          <figcaption>운영자 AICE Associate 자격증</figcaption>
+        </figure>
+      </div>
+    </section>
 
     <section aria-labelledby="ab-what">
       <h2 id="ab-what">이 사이트에서 할 수 있는 것</h2>
@@ -63,3 +86,15 @@ const svg = (k: keyof typeof ic) => `<svg viewBox="0 0 24 24" width="20" height=
     </div>
   </div>
 </Base>
+
+<style>
+  .ab-maker-body { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
+  .ab-badge { font-weight: 700; color: var(--accent, #2b5bd7); }
+  .ab-score { list-style: none; padding: 0; margin: .75rem 0 1rem; display: grid; gap: .35rem; max-width: 320px; }
+  .ab-score li { display: flex; justify-content: space-between; border-bottom: 1px solid var(--line, #e5e7eb); padding: .3rem 0; }
+  .ab-score li.total { font-size: 1.1rem; border-bottom: 0; }
+  .ab-cert { margin: 0; }
+  .ab-cert img { width: 100%; height: auto; border: 1px solid var(--line, #e5e7eb); border-radius: 8px; }
+  .ab-cert figcaption { font-size: .85rem; color: var(--muted, #6b7280); margin-top: .35rem; }
+  @media (max-width: 760px) { .ab-maker-body { grid-template-columns: 1fr; } }
+</style>
