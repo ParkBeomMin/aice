@@ -3,11 +3,11 @@
   "pack_id": "associate-009",
   "question_id": "q04",
   "public_id": "associate-009-q04",
-  "revision": 1,
+  "revision": 2,
   "title": "검진 종류별 미방문율",
   "topic": "pandas",
   "difficulty": "medium",
-  "prompt": "검진 종류별 미방문율을 구하시오.\n\n1. `booking_df`의 `clinic_type`별 `no_show` 평균을 Series `no_show_by_clinic`에 저장하시오.\n2. 인덱스를 이름 오름차순으로 정렬하시오.",
+  "prompt": "검진 종류별 미방문율을 구하시오.\n\n`booking_df`의 `clinic_type`별 `no_show` 평균을 Series `no_show_by_clinic`에 저장하시오.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",
@@ -34,11 +34,11 @@
   },
   "explanation": {
     "available": true,
-    "body_md": "**학습 목표:** 그룹별 비율을 구한다.\n\n**핵심 개념:** `groupby('clinic_type')['no_show'].mean()`.\n\n```python\nno_show_by_clinic = booking_df.groupby('clinic_type')['no_show'].mean().sort_index()\nprint(no_show_by_clinic)\n```\n\n**기준 결과:** Dental 0.296, General 0.292, Screening 0.257.\n\n**다른 풀이 (pivot_table):**\n\n```python\nno_show_by_clinic = booking_df.pivot_table(index='clinic_type', values='no_show', aggfunc='mean')['no_show'].sort_index()\n```\n\n**자주 틀리는 부분:** 합계, 내림차순.\n\n**채점 항목:**\n\n1. 검진 종류별 미방문율\n2. 이름 오름차순\n"
+    "body_md": "**학습 목표:** 그룹별 비율을 구한다.\n\n**핵심 개념:** `groupby('clinic_type')['no_show'].mean()`.\n\n```python\nno_show_by_clinic = booking_df.groupby('clinic_type')['no_show'].mean()\nprint(no_show_by_clinic)\n```\n\n**기준 결과:** Dental 0.296, General 0.292, Screening 0.257.\n\n**다른 풀이 (pivot_table):**\n\n```python\nno_show_by_clinic = booking_df.pivot_table(index='clinic_type', values='no_show', aggfunc='mean')['no_show']\n```\n\n**자주 틀리는 부분:** 합계.\n\n**채점 항목:**\n\n1. 검진 종류별 미방문율\n"
   },
   "answer": {
     "available": true,
-    "code": "no_show_by_clinic = booking_df.groupby('clinic_type')['no_show'].mean().sort_index()\nprint(no_show_by_clinic)\n"
+    "code": "no_show_by_clinic = booking_df.groupby('clinic_type')['no_show'].mean()\nprint(no_show_by_clinic)\n"
   },
   "video": {
     "youtube_id": null,

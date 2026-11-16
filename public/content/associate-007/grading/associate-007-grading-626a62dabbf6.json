@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "pack_id": "associate-007",
   "engine_version": "1.9.0",
-  "grading_version": "associate-007-gcb6d2088b3f0",
+  "grading_version": "associate-007-g75769c7cf4f4",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -125,7 +125,7 @@
     "q04": {
       "question_id": "q04",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q01"
@@ -162,25 +162,6 @@
           },
           "weight": 2,
           "feedback": "defect_by_line 의 라인별 불량률(평균)이 기대와 다릅니다."
-        },
-        {
-          "id": "order",
-          "label": "라인 이름 오름차순",
-          "probe": {
-            "kind": "series_index",
-            "var": "defect_by_line"
-          },
-          "expect": {
-            "op": "eq",
-            "value": [
-              "L1",
-              "L2",
-              "L3",
-              "L4"
-            ]
-          },
-          "weight": 1,
-          "feedback": "인덱스를 라인 이름 오름차순으로 두세요."
         }
       ]
     },

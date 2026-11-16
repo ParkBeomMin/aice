@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "pack_id": "associate-003",
   "engine_version": "1.9.0",
-  "grading_version": "associate-003-g91c1a28378ea",
+  "grading_version": "associate-003-geacd6438059a",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -598,7 +598,7 @@
     "q04": {
       "question_id": "q04",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q01"
@@ -631,23 +631,6 @@
           },
           "weight": 2,
           "feedback": "mfa_risk_rates 의 값이 mfa_used 별 suspicious_login 평균과 다릅니다."
-        },
-        {
-          "id": "sorted",
-          "label": "인덱스 0, 1 순서",
-          "probe": {
-            "kind": "series_index",
-            "var": "mfa_risk_rates"
-          },
-          "expect": {
-            "op": "eq",
-            "value": [
-              "0",
-              "1"
-            ]
-          },
-          "weight": 1,
-          "feedback": "인덱스를 0, 1 오름차순으로 정렬하세요."
         }
       ]
     },
@@ -4964,7 +4947,7 @@
             "value": {
               "max_iter": 1000,
               "random_state": 42,
-              "C": 1.0
+              "C": 1
             }
           },
           "weight": 1,

@@ -41,12 +41,12 @@
     {
       "question_id": "q04",
       "public_id": "associate-007-q04",
-      "revision": 1,
+      "revision": 2,
       "title": "라인별 불량률",
       "topic": "pandas",
       "difficulty": "medium",
       "file": "q04.json",
-      "sha256": "b25dcf0e0d8f75abdc0dd61c368d5f56d72e4de3aba61ba3a93d4464aea28d90"
+      "sha256": "7385791983fea1939c76df9b597b46a6247970abfd68a8920ab1aa3cb9acc1d8"
     },
     {
       "question_id": "q05",
@@ -236,13 +236,13 @@
     "version": "0.1.0",
     "content_contract": "1.3.0"
   },
-  "source_fingerprint": "533a14ec7e95c5491c2c4f4694f2929089578d831a4b4bbc5327c6a77c214c1b",
+  "source_fingerprint": "3addbd142057b4e3bb3a772dc5316c5102cbd0870daa4a6d06095cdc1c478ada",
   "notebook": {
     "kind": "question_notebook",
     "format": "nbformat4.5",
-    "url_path": "content/associate-007/notebooks/associate-007-questions-52b922c34a2b.ipynb",
-    "sha256": "52b922c34a2b819c128f885e9d04658758263bad0d90af319fff77be80711238",
-    "size_bytes": 14410,
+    "url_path": "content/associate-007/notebooks/associate-007-questions-541ce3cf9d76.ipynb",
+    "sha256": "541ce3cf9d76a447c50b3da04e007e6c748ca9bbc5ed63042f166da6d3103484",
+    "size_bytes": 14340,
     "question_ids": [
       "q01",
       "q02",
@@ -262,11 +262,11 @@
   },
   "grading": {
     "kind": "grading_bundle",
-    "url_path": "content/associate-007/grading/associate-007-grading-4b44c2c5311a.json",
-    "sha256": "4b44c2c5311af03e56029d55a4e156c77106640f90b4e073181b653f8d0596fc",
-    "size_bytes": 125595,
+    "url_path": "content/associate-007/grading/associate-007-grading-626a62dabbf6.json",
+    "sha256": "626a62dabbf6fc9ee8ee3320298305405a09660efcc24f32e631857b3c536790",
+    "size_bytes": 125115,
     "engine_version": "1.9.0",
-    "grading_version": "associate-007-gcb6d2088b3f0",
+    "grading_version": "associate-007-g75769c7cf4f4",
     "question_ids": [
       "q01",
       "q02",

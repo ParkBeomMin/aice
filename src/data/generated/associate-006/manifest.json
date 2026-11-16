@@ -41,12 +41,12 @@
     {
       "question_id": "q04",
       "public_id": "associate-006-q04",
-      "revision": 1,
+      "revision": 2,
       "title": "요일별 평균 대여량",
       "topic": "pandas",
       "difficulty": "medium",
       "file": "q04.json",
-      "sha256": "8bce7e46901f13d5a5ba3015c937d62bfca7f0ffe870a88eb1443ce047ff389f"
+      "sha256": "ab2ee5bd5ae06a1faf74012c935e7d10bb9cab39b34fb2319003a63a1ad23553"
     },
     {
       "question_id": "q05",
@@ -236,13 +236,13 @@
     "version": "0.1.0",
     "content_contract": "1.3.0"
   },
-  "source_fingerprint": "72818d4207c45d2cea7395c4be78a28a5b1ca0fe2cc7c2bc68b99e3f9aa2ef86",
+  "source_fingerprint": "616d1bb32f6dd5114a8c983a272ff339bfa05fd331a8d64fc95390ff4f92abec",
   "notebook": {
     "kind": "question_notebook",
     "format": "nbformat4.5",
-    "url_path": "content/associate-006/notebooks/associate-006-questions-075c7c9ffb90.ipynb",
-    "sha256": "075c7c9ffb9034e3e7af59bcac7042b95052e68c27d204748a57c530cfafa0ed",
-    "size_bytes": 14407,
+    "url_path": "content/associate-006/notebooks/associate-006-questions-88199f013ac2.ipynb",
+    "sha256": "88199f013ac2646c26e61535f116a8d7c8c602147b44f4dcd98b29f1aaaa8425",
+    "size_bytes": 14410,
     "question_ids": [
       "q01",
       "q02",
@@ -262,11 +262,11 @@
   },
   "grading": {
     "kind": "grading_bundle",
-    "url_path": "content/associate-006/grading/associate-006-grading-f6b95eeeeb64.json",
-    "sha256": "f6b95eeeeb645baf9ef5d9bf84abd0a022e0a8f56fffdd09a0abae3bdb002fcd",
-    "size_bytes": 232736,
+    "url_path": "content/associate-006/grading/associate-006-grading-5fb7f6f496dc.json",
+    "sha256": "5fb7f6f496dc527402423bf6913367f0588cfd101c22e3f12abc8513fee053c5",
+    "size_bytes": 232211,
     "engine_version": "1.9.0",
-    "grading_version": "associate-006-g892c9cea8371",
+    "grading_version": "associate-006-g24255c44c85c",
     "question_ids": [
       "q01",
       "q02",

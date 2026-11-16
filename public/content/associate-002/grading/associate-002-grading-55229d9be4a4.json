@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "pack_id": "associate-002",
   "engine_version": "1.9.0",
-  "grading_version": "associate-002-g8310a90dd1cd",
+  "grading_version": "associate-002-ga0fa1b980e6b",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -211,7 +211,7 @@
     "q04": {
       "question_id": "q04",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q01"
@@ -248,25 +248,6 @@
           },
           "weight": 2,
           "feedback": "zone_pick_median 의 구역별 중앙값이 기대와 다릅니다."
-        },
-        {
-          "id": "sorted",
-          "label": "구역 이름 오름차순",
-          "probe": {
-            "kind": "series_index",
-            "var": "zone_pick_median"
-          },
-          "expect": {
-            "op": "eq",
-            "value": [
-              "A",
-              "B",
-              "C",
-              "D"
-            ]
-          },
-          "weight": 1,
-          "feedback": "인덱스를 구역 이름 오름차순으로 정렬하세요."
         }
       ]
     },
@@ -1150,7 +1131,7 @@
     "q14": {
       "question_id": "q14",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q13"

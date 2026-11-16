@@ -41,12 +41,12 @@
     {
       "question_id": "q04",
       "public_id": "associate-008-q04",
-      "revision": 1,
+      "revision": 2,
       "title": "분야별 비용 요약",
       "topic": "pandas",
       "difficulty": "medium",
       "file": "q04.json",
-      "sha256": "16743b67eaebf6eb0277fd083ca2323da558634fc5b030dfe06dd7451a0a58e6"
+      "sha256": "6fb1ff5583e5234020ef6e59f2e5f95bf849139b57de749e2a289556edba5a00"
     },
     {
       "question_id": "q05",
@@ -236,13 +236,13 @@
     "version": "0.1.0",
     "content_contract": "1.3.0"
   },
-  "source_fingerprint": "993f3544657e75abab8341aaea7b9adffcedeb8b797e216e3dcd728a2c42f7f3",
+  "source_fingerprint": "eba968cf51299349383f7e43b819b6280f479616ede72039739ec32852f3eebb",
   "notebook": {
     "kind": "question_notebook",
     "format": "nbformat4.5",
-    "url_path": "content/associate-008/notebooks/associate-008-questions-518f02530d4c.ipynb",
-    "sha256": "518f02530d4c63a614534682fa64eb60a2d9da170724d46c6bb2f6a60cc69746",
-    "size_bytes": 14305,
+    "url_path": "content/associate-008/notebooks/associate-008-questions-c1b601ef34f4.ipynb",
+    "sha256": "c1b601ef34f44ccb28e5a68671ac3266a0d24db96e57869fb30c7504f29f9387",
+    "size_bytes": 14292,
     "question_ids": [
       "q01",
       "q02",
@@ -262,11 +262,11 @@
   },
   "grading": {
     "kind": "grading_bundle",
-    "url_path": "content/associate-008/grading/associate-008-grading-b64c7820c53b.json",
-    "sha256": "b64c7820c53bf0d794c56815b4b7fcf96c08396bdeeb7d95cfe15d91675adf99",
-    "size_bytes": 132391,
+    "url_path": "content/associate-008/grading/associate-008-grading-1df01e6e4dbb.json",
+    "sha256": "1df01e6e4dbba0f7a5d3418ec7646159f1ce28661d5af9dd8fa2c494f3c913d5",
+    "size_bytes": 132378,
     "engine_version": "1.9.0",
-    "grading_version": "associate-008-g25ce3019b333",
+    "grading_version": "associate-008-g3736a383a17b",
     "question_ids": [
       "q01",
       "q02",

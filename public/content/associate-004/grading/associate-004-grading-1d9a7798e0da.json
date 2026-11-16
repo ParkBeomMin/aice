@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "pack_id": "associate-004",
   "engine_version": "1.9.0",
-  "grading_version": "associate-004-g749aa4f19503",
+  "grading_version": "associate-004-g8c290488c277",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -64,7 +64,7 @@
     "q02": {
       "question_id": "q02",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q01"
@@ -85,38 +85,20 @@
             "value": {
               "__series__": {
                 "index": [
-                  "Central",
+                  "South",
                   "North",
-                  "South"
+                  "Central"
                 ],
                 "values": [
-                  510,
+                  575,
                   565,
-                  575
+                  510
                 ]
               }
             }
           },
           "weight": 2,
           "feedback": "zone_counts 가 usage_zone 별 행 수와 다릅니다."
-        },
-        {
-          "id": "sorted",
-          "label": "구역 이름 오름차순",
-          "probe": {
-            "kind": "series_index",
-            "var": "zone_counts"
-          },
-          "expect": {
-            "op": "eq",
-            "value": [
-              "Central",
-              "North",
-              "South"
-            ]
-          },
-          "weight": 1,
-          "feedback": "인덱스를 구역 이름 오름차순으로 정렬하세요."
         }
       ]
     },
@@ -347,7 +329,7 @@
     "q04": {
       "question_id": "q04",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q01"
@@ -384,25 +366,6 @@
           },
           "weight": 2,
           "feedback": "building_energy_mean 의 값이 building_type 별 energy_kwh 평균과 다릅니다."
-        },
-        {
-          "id": "sorted",
-          "label": "유형 이름 오름차순",
-          "probe": {
-            "kind": "series_index",
-            "var": "building_energy_mean"
-          },
-          "expect": {
-            "op": "eq",
-            "value": [
-              "Factory",
-              "Library",
-              "Office",
-              "Retail"
-            ]
-          },
-          "weight": 1,
-          "feedback": "인덱스를 건물 유형 이름 오름차순으로 정렬하세요."
         }
       ]
     },

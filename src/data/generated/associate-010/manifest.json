@@ -41,12 +41,12 @@
     {
       "question_id": "q04",
       "public_id": "associate-010-q04",
-      "revision": 1,
+      "revision": 2,
       "title": "보증금 유형별 취소율",
       "topic": "pandas",
       "difficulty": "medium",
       "file": "q04.json",
-      "sha256": "9022b97150c637c45b562e951b90240b06d9c84e27a8cf3cd879d8326b03c396"
+      "sha256": "c96c0db20c307c567d7d2f19736e07d7cce5bafe59d5f60ebf3373f38b177d83"
     },
     {
       "question_id": "q05",
@@ -236,13 +236,13 @@
     "version": "0.1.0",
     "content_contract": "1.3.0"
   },
-  "source_fingerprint": "59f3b44f72f1c455f70a2a4352836fae9b18d4022b399a6e454d8c1b836195c7",
+  "source_fingerprint": "ceba870ab43160be5ed599275883bf075f4f95fe7b3c9a82ce87273ec9c80e6f",
   "notebook": {
     "kind": "question_notebook",
     "format": "nbformat4.5",
-    "url_path": "content/associate-010/notebooks/associate-010-questions-dd8bb2e745a4.ipynb",
-    "sha256": "dd8bb2e745a41c64bfb526ca6b893bfccb30d026b627ca2ecfb8542705bdfa25",
-    "size_bytes": 14578,
+    "url_path": "content/associate-010/notebooks/associate-010-questions-f069eedbd691.ipynb",
+    "sha256": "f069eedbd691ff0d37024c123754b5e3b7a1fabc104f6b5b1c269b2d354b7fbb",
+    "size_bytes": 14515,
     "question_ids": [
       "q01",
       "q02",
@@ -262,11 +262,11 @@
   },
   "grading": {
     "kind": "grading_bundle",
-    "url_path": "content/associate-010/grading/associate-010-grading-a32e4090dd2a.json",
-    "sha256": "a32e4090dd2a33a529de0cd444356afd6d9bf52f0eca4cfcd6ea89728f68133d",
-    "size_bytes": 145125,
+    "url_path": "content/associate-010/grading/associate-010-grading-0e100d7b6a93.json",
+    "sha256": "0e100d7b6a9335de92761aa7c4d317c0bde97585f2b20ae871050dbce992e8f9",
+    "size_bytes": 144638,
     "engine_version": "1.9.0",
-    "grading_version": "associate-010-gd0905b7855d9",
+    "grading_version": "associate-010-gd07cf1493be9",
     "question_ids": [
       "q01",
       "q02",

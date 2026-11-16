@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "pack_id": "associate-009",
   "engine_version": "1.9.0",
-  "grading_version": "associate-009-g95e4bd3c7755",
+  "grading_version": "associate-009-g606d20271712",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -334,7 +334,7 @@
     "q04": {
       "question_id": "q04",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q01"
@@ -369,31 +369,13 @@
           },
           "weight": 2,
           "feedback": "no_show_by_clinic 의 값이 clinic_type 별 no_show 평균과 다릅니다."
-        },
-        {
-          "id": "order",
-          "label": "이름 오름차순",
-          "probe": {
-            "kind": "series_index",
-            "var": "no_show_by_clinic"
-          },
-          "expect": {
-            "op": "eq",
-            "value": [
-              "Dental",
-              "General",
-              "Screening"
-            ]
-          },
-          "weight": 1,
-          "feedback": "인덱스를 이름 오름차순으로 두세요."
         }
       ]
     },
     "q05": {
       "question_id": "q05",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q01"
@@ -408,7 +390,7 @@
             "var": "weekday_pivot"
           },
           "expect": {
-            "op": "eq",
+            "op": "set_eq",
             "value": [
               "App",
               "Phone",
@@ -416,7 +398,7 @@
             ]
           },
           "weight": 1,
-          "feedback": "열은 booking_channel 3개를 오름차순(App, Phone, Web)으로 두세요."
+          "feedback": "열은 booking_channel 3개(App, Phone, Web)여야 합니다."
         },
         {
           "id": "rows",
@@ -426,7 +408,7 @@
             "var": "weekday_pivot"
           },
           "expect": {
-            "op": "eq",
+            "op": "set_eq",
             "value": [
               "0",
               "1",
@@ -438,7 +420,7 @@
             ]
           },
           "weight": 1,
-          "feedback": "행 인덱스는 appointment_weekday 0~6 오름차순입니다."
+          "feedback": "행 인덱스는 appointment_weekday 0~6 이어야 합니다."
         },
         {
           "id": "val-app",

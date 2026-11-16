@@ -21,12 +21,12 @@
     {
       "question_id": "q02",
       "public_id": "associate-004-q02",
-      "revision": 1,
+      "revision": 2,
       "title": "관리 구역별 관측 수",
       "topic": "pandas",
       "difficulty": "easy",
       "file": "q02.json",
-      "sha256": "45d1156b0159999bbe2c7e3f2281f462dc72f44425ee74c5da66dfc8a24f66b6"
+      "sha256": "c643a9c244eaa848c09f2e208e8c4e1a2f0b2af4d85d5f125fb37dc5a0338aa4"
     },
     {
       "question_id": "q03",
@@ -41,12 +41,12 @@
     {
       "question_id": "q04",
       "public_id": "associate-004-q04",
-      "revision": 1,
+      "revision": 2,
       "title": "건물 유형별 평균 사용량",
       "topic": "pandas",
       "difficulty": "medium",
       "file": "q04.json",
-      "sha256": "657df71d6bff7d4442f266696c46ce4993e1698df351c343a21e5b42b414a5fa"
+      "sha256": "90f62272d50afd2347d0ac131f526271efd0637aae96b3096596347129a04c2b"
     },
     {
       "question_id": "q05",
@@ -236,13 +236,13 @@
     "version": "0.1.0",
     "content_contract": "1.3.0"
   },
-  "source_fingerprint": "0a087a47d0f3c40ae8750f4dffc4e14f80304f151657f44a017391dcf4897dcd",
+  "source_fingerprint": "69d724d64ba361fa53230455186e594ca2d801449234071af96634b476d44bcd",
   "notebook": {
     "kind": "question_notebook",
     "format": "nbformat4.5",
-    "url_path": "content/associate-004/notebooks/associate-004-questions-f9b02abd2a91.ipynb",
-    "sha256": "f9b02abd2a9142ef4c63162dd01cd8d9fad7d382fef2012a2896bdd9487b939e",
-    "size_bytes": 14826,
+    "url_path": "content/associate-004/notebooks/associate-004-questions-45e91b739d50.ipynb",
+    "sha256": "45e91b739d5057eb66ecc571f215cbbb458c820a6802a17e5cae42324374e4f7",
+    "size_bytes": 14679,
     "question_ids": [
       "q01",
       "q02",
@@ -262,11 +262,11 @@
   },
   "grading": {
     "kind": "grading_bundle",
-    "url_path": "content/associate-004/grading/associate-004-grading-22874206c203.json",
-    "sha256": "22874206c2034135364704677a1474c04ad45eecbf3837f3f217428eaf6dae0e",
-    "size_bytes": 129682,
+    "url_path": "content/associate-004/grading/associate-004-grading-1d9a7798e0da.json",
+    "sha256": "1d9a7798e0da480341b7172a389faa5609601da1f87c30cff016bfe00c658875",
+    "size_bytes": 128689,
     "engine_version": "1.9.0",
-    "grading_version": "associate-004-g749aa4f19503",
+    "grading_version": "associate-004-g8c290488c277",
     "question_ids": [
       "q01",
       "q02",

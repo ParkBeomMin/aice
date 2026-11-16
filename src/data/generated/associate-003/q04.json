@@ -3,11 +3,11 @@
   "pack_id": "associate-003",
   "question_id": "q04",
   "public_id": "associate-003-q04",
-  "revision": 1,
+  "revision": 2,
   "title": "MFA 사용 여부별 위험 비율",
   "topic": "pandas",
   "difficulty": "medium",
-  "prompt": "다중 인증(MFA) 사용 여부에 따라 이상 로그인 비율이 어떻게 다른지 구하시오.\n\n1. `mfa_used`(0 또는 1)별 `suspicious_login` 평균을 Series `mfa_risk_rates`에 저장하시오.\n2. 인덱스를 오름차순(0, 1)으로 정렬하시오.",
+  "prompt": "다중 인증(MFA) 사용 여부에 따라 이상 로그인 비율이 어떻게 다른지 구하시오.\n\n`mfa_used`(0 또는 1)별 `suspicious_login` 평균을 Series `mfa_risk_rates`에 저장하시오.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",
@@ -34,11 +34,11 @@
   },
   "explanation": {
     "available": true,
-    "body_md": "**학습 목표:** groupby(mfa_used)의 suspicious_login 평균을 Series로 반환한다.\n\n**핵심 개념:** `groupby('mfa_used')['suspicious_login'].mean()`은 MFA 사용 여부별 이상 로그인 비율이다.\n\n```python\nmfa_risk_rates = auth_df.groupby('mfa_used')['suspicious_login'].mean().sort_index()\nprint(mfa_risk_rates)\n```\n\n**기준 결과:** MFA 미사용(0) 약 0.2361, 사용(1) 약 0.1018. MFA를 쓰는 로그인의 위험 비율이 절반 이하다.\n\n**다른 풀이 (pivot_table):**\n\n```python\nmfa_risk_rates = auth_df.pivot_table(index='mfa_used', values='suspicious_login', aggfunc='mean')['suspicious_login'].sort_index()\n```\n\n**자주 틀리는 부분:** 0/1 레이블 순서 변경, 합계 사용, 다른 컬럼을 집계하는 것.\n\n**채점 항목:**\n\n1. MFA 여부별 평균\n2. 인덱스 0, 1 순서\n"
+    "body_md": "**학습 목표:** groupby(mfa_used)의 suspicious_login 평균을 Series로 반환한다.\n\n**핵심 개념:** `groupby('mfa_used')['suspicious_login'].mean()`은 MFA 사용 여부별 이상 로그인 비율이다.\n\n```python\nmfa_risk_rates = auth_df.groupby('mfa_used')['suspicious_login'].mean()\nprint(mfa_risk_rates)\n```\n\n**기준 결과:** MFA 미사용(0) 약 0.2361, 사용(1) 약 0.1018. MFA를 쓰는 로그인의 위험 비율이 절반 이하다.\n\n**다른 풀이 (pivot_table):**\n\n```python\nmfa_risk_rates = auth_df.pivot_table(index='mfa_used', values='suspicious_login', aggfunc='mean')['suspicious_login']\n```\n\n**자주 틀리는 부분:** 합계 사용, 다른 컬럼을 집계하는 것.\n\n**채점 항목:**\n\n1. MFA 여부별 평균\n"
   },
   "answer": {
     "available": true,
-    "code": "mfa_risk_rates = auth_df.groupby('mfa_used')['suspicious_login'].mean().sort_index()\nprint(mfa_risk_rates)\n"
+    "code": "mfa_risk_rates = auth_df.groupby('mfa_used')['suspicious_login'].mean()\nprint(mfa_risk_rates)\n"
   },
   "video": {
     "youtube_id": null,

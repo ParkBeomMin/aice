@@ -41,22 +41,22 @@
     {
       "question_id": "q04",
       "public_id": "associate-009-q04",
-      "revision": 1,
+      "revision": 2,
       "title": "검진 종류별 미방문율",
       "topic": "pandas",
       "difficulty": "medium",
       "file": "q04.json",
-      "sha256": "e4c9f8608dce3f126c87037ee0aaaf3565f82e523fb72dfea3f8e2ce10dab7a4"
+      "sha256": "d8f6e704281f050ea37daeb868ff1c67b763d856d06cae9a3e05b4ae59161349"
     },
     {
       "question_id": "q05",
       "public_id": "associate-009-q05",
-      "revision": 1,
+      "revision": 2,
       "title": "요일과 예약 경로별 미방문율 표",
       "topic": "pandas",
       "difficulty": "medium",
       "file": "q05.json",
-      "sha256": "546e0309a016fdcad2e59ec535c4be1b2df4b9ed48c3a91693c3de37881c69f3"
+      "sha256": "9eb058b7da27fa0f039d654fdb7551b38c46994745d7c0faac17e524ee211e01"
     },
     {
       "question_id": "q06",
@@ -236,13 +236,13 @@
     "version": "0.1.0",
     "content_contract": "1.3.0"
   },
-  "source_fingerprint": "81d4b5fba522605c8ed668c62177d0fbf222ab27b284bf4b66639659e09c60bd",
+  "source_fingerprint": "1bd1513ddc964c0add3f6d0845ef253fb26c9ffedb082ca35ef74b7723d2b51e",
   "notebook": {
     "kind": "question_notebook",
     "format": "nbformat4.5",
-    "url_path": "content/associate-009/notebooks/associate-009-questions-978d6f8744de.ipynb",
-    "sha256": "978d6f8744de30346375c6fb9d2a64eda76a41231970858a4015c16e627c9ad7",
-    "size_bytes": 14761,
+    "url_path": "content/associate-009/notebooks/associate-009-questions-380816527c85.ipynb",
+    "sha256": "380816527c85cf9440bb48d8e05ae72ed8b352af360d83e8082f90cb852ab908",
+    "size_bytes": 14634,
     "question_ids": [
       "q01",
       "q02",
@@ -262,11 +262,11 @@
   },
   "grading": {
     "kind": "grading_bundle",
-    "url_path": "content/associate-009/grading/associate-009-grading-eb02dd3a7184.json",
-    "sha256": "eb02dd3a71846b73f01dcd634d2d8844adba5f888acdb1b928524a3d15311abf",
-    "size_bytes": 219492,
+    "url_path": "content/associate-009/grading/associate-009-grading-92ea1bcbf6f7.json",
+    "sha256": "92ea1bcbf6f7bc57ce7d509f769aa2cd334ab607d10e6fed8e089e04f10d648d",
+    "size_bytes": 219017,
     "engine_version": "1.9.0",
-    "grading_version": "associate-009-g95e4bd3c7755",
+    "grading_version": "associate-009-g606d20271712",
     "question_ids": [
       "q01",
       "q02",

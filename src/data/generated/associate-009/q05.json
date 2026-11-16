@@ -3,11 +3,11 @@
   "pack_id": "associate-009",
   "question_id": "q05",
   "public_id": "associate-009-q05",
-  "revision": 1,
+  "revision": 2,
   "title": "요일과 예약 경로별 미방문율 표",
   "topic": "pandas",
   "difficulty": "medium",
-  "prompt": "요일과 예약 경로 조합별 미방문율 표를 만드시오.\n\n1. `booking_df`로 행 인덱스가 `appointment_weekday`(0~6), 열이 `booking_channel`, 값이 `no_show` 평균인 DataFrame `weekday_pivot`을 만드시오.\n2. 행과 열을 모두 오름차순으로 정렬하시오.",
+  "prompt": "요일과 예약 경로 조합별 미방문율 표를 만드시오.\n\n`booking_df`로 행 인덱스가 `appointment_weekday`(0~6), 열이 `booking_channel`, 값이 `no_show` 평균인 DataFrame `weekday_pivot`을 만드시오.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",
@@ -34,11 +34,11 @@
   },
   "explanation": {
     "available": true,
-    "body_md": "**학습 목표:** 두 범주 조합별 평균 표를 만든다.\n\n**핵심 개념:** `pivot_table(index='appointment_weekday', columns='booking_channel', values='no_show', aggfunc='mean')`. 행과 열을 모두 정렬한다.\n\n```python\nweekday_pivot = booking_df.pivot_table(index='appointment_weekday', columns='booking_channel', values='no_show', aggfunc='mean').sort_index().sort_index(axis=1)\nweekday_pivot\n```\n\n**기준 결과:** 7행 x 3열 (App, Phone, Web).\n\n**다른 풀이 (groupby 와 unstack):**\n\n```python\nweekday_pivot = booking_df.groupby(['appointment_weekday', 'booking_channel'])['no_show'].mean().unstack().sort_index().sort_index(axis=1)\n```\n\n**자주 틀리는 부분:** 합계, 행과 열 바뀜.\n\n**채점 항목:**\n\n1. 열은 App, Phone, Web\n2. 행은 요일 0~6\n3. App 열 미방문율\n4. Phone 열 미방문율\n5. Web 열 미방문율\n"
+    "body_md": "**학습 목표:** 두 범주 조합별 평균 표를 만든다.\n\n**핵심 개념:** `pivot_table(index='appointment_weekday', columns='booking_channel', values='no_show', aggfunc='mean')`. `pivot_table`은 행과 열을 정렬된 순서로 만든다.\n\n```python\nweekday_pivot = booking_df.pivot_table(index='appointment_weekday', columns='booking_channel', values='no_show', aggfunc='mean')\nweekday_pivot\n```\n\n**기준 결과:** 7행 x 3열 (App, Phone, Web).\n\n**다른 풀이 (groupby 와 unstack):**\n\n```python\nweekday_pivot = booking_df.groupby(['appointment_weekday', 'booking_channel'])['no_show'].mean().unstack()\n```\n\n**자주 틀리는 부분:** 합계, 행과 열 바뀜.\n\n**채점 항목:**\n\n1. 열은 App, Phone, Web\n2. 행은 요일 0~6\n3. App 열 미방문율\n4. Phone 열 미방문율\n5. Web 열 미방문율\n"
   },
   "answer": {
     "available": true,
-    "code": "weekday_pivot = booking_df.pivot_table(index='appointment_weekday', columns='booking_channel', values='no_show', aggfunc='mean').sort_index().sort_index(axis=1)\nweekday_pivot\n"
+    "code": "weekday_pivot = booking_df.pivot_table(index='appointment_weekday', columns='booking_channel', values='no_show', aggfunc='mean')\nweekday_pivot\n"
   },
   "video": {
     "youtube_id": null,

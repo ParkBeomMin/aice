@@ -3,11 +3,11 @@
   "pack_id": "associate-004",
   "question_id": "q04",
   "public_id": "associate-004-q04",
-  "revision": 1,
+  "revision": 2,
   "title": "건물 유형별 평균 사용량",
   "topic": "pandas",
   "difficulty": "medium",
-  "prompt": "건물 유형별 평균 전력 사용량을 구하시오.\n\n1. `building_type`별 `energy_kwh` 평균을 Series `building_energy_mean`에 저장하시오.\n2. 인덱스를 건물 유형 이름 오름차순으로 정렬하시오.",
+  "prompt": "건물 유형별 평균 전력 사용량을 구하시오.\n\n`building_type`별 `energy_kwh` 평균을 Series `building_energy_mean`에 저장하시오.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",
@@ -34,11 +34,11 @@
   },
   "explanation": {
     "available": true,
-    "body_md": "**학습 목표:** building_type별 energy_kwh 평균을 정렬된 Series로 만든다.\n\n**핵심 개념:** `groupby('building_type')['energy_kwh'].mean()`은 건물 유형별 평균 사용량이다.\n\n```python\nbuilding_energy_mean = energy_df.groupby('building_type')['energy_kwh'].mean().sort_index()\nprint(building_energy_mean)\n```\n\n**기준 결과:** Factory 약 93.53, Library 약 58.38, Office 약 68.24, Retail 약 55.25 (kWh).\n\n**다른 풀이 (pivot_table):**\n\n```python\nbuilding_energy_mean = energy_df.pivot_table(index='building_type', values='energy_kwh', aggfunc='mean')['energy_kwh'].sort_index()\n```\n\n**자주 틀리는 부분:** 전체 평균 사용, 합계 사용, 중앙값, 내림차순.\n\n**채점 항목:**\n\n1. 건물 유형별 평균\n2. 유형 이름 오름차순\n"
+    "body_md": "**학습 목표:** building_type별 energy_kwh 평균을 Series로 만든다.\n\n**핵심 개념:** `groupby('building_type')['energy_kwh'].mean()`은 건물 유형별 평균 사용량이다.\n\n```python\nbuilding_energy_mean = energy_df.groupby('building_type')['energy_kwh'].mean()\nprint(building_energy_mean)\n```\n\n**기준 결과:** Factory 약 93.53, Library 약 58.38, Office 약 68.24, Retail 약 55.25 (kWh).\n\n**다른 풀이 (pivot_table):**\n\n```python\nbuilding_energy_mean = energy_df.pivot_table(index='building_type', values='energy_kwh', aggfunc='mean')['energy_kwh']\n```\n\n**자주 틀리는 부분:** 전체 평균 사용, 합계 사용, 중앙값.\n\n**채점 항목:**\n\n1. 건물 유형별 평균\n"
   },
   "answer": {
     "available": true,
-    "code": "building_energy_mean = energy_df.groupby('building_type')['energy_kwh'].mean().sort_index()\nprint(building_energy_mean)\n"
+    "code": "building_energy_mean = energy_df.groupby('building_type')['energy_kwh'].mean()\nprint(building_energy_mean)\n"
   },
   "video": {
     "youtube_id": null,

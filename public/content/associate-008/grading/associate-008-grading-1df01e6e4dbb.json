@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "pack_id": "associate-008",
   "engine_version": "1.9.0",
-  "grading_version": "associate-008-g25ce3019b333",
+  "grading_version": "associate-008-g3736a383a17b",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -127,7 +127,7 @@
     "q04": {
       "question_id": "q04",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q01"
@@ -153,13 +153,13 @@
         },
         {
           "id": "rows",
-          "label": "분야 이름 오름차순",
+          "label": "분야 4개",
           "probe": {
             "kind": "series_index",
             "var": "cost_by_type"
           },
           "expect": {
-            "op": "eq",
+            "op": "set_eq",
             "value": [
               "Device",
               "Property",
@@ -168,7 +168,7 @@
             ]
           },
           "weight": 1,
-          "feedback": "인덱스를 분야 이름 오름차순으로 두세요."
+          "feedback": "인덱스는 service_type 4개 분야여야 합니다."
         },
         {
           "id": "mean",

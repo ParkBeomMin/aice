@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "pack_id": "associate-010",
   "engine_version": "1.9.0",
-  "grading_version": "associate-010-gd0905b7855d9",
+  "grading_version": "associate-010-gd07cf1493be9",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -643,7 +643,7 @@
     "q04": {
       "question_id": "q04",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q01"
@@ -678,24 +678,6 @@
           },
           "weight": 2,
           "feedback": "cancel_by_deposit 의 값이 deposit_type 별 is_cancelled 평균과 다릅니다."
-        },
-        {
-          "id": "order",
-          "label": "이름 오름차순 (NoDeposit 포함)",
-          "probe": {
-            "kind": "series_index",
-            "var": "cancel_by_deposit"
-          },
-          "expect": {
-            "op": "eq",
-            "value": [
-              "Full",
-              "NoDeposit",
-              "Partial"
-            ]
-          },
-          "weight": 1,
-          "feedback": "인덱스는 Full, NoDeposit, Partial 순서입니다."
         }
       ]
     },

@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "pack_id": "associate-006",
   "engine_version": "1.9.0",
-  "grading_version": "associate-006-g892c9cea8371",
+  "grading_version": "associate-006-g24255c44c85c",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -4531,7 +4531,7 @@
     "q04": {
       "question_id": "q04",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q01"
@@ -4574,28 +4574,6 @@
           },
           "weight": 2,
           "feedback": "weekday_mean_rides 의 요일별 평균 대여량이 기대와 다릅니다."
-        },
-        {
-          "id": "order",
-          "label": "요일 0~6 순서",
-          "probe": {
-            "kind": "series_index",
-            "var": "weekday_mean_rides"
-          },
-          "expect": {
-            "op": "eq",
-            "value": [
-              "0",
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6"
-            ]
-          },
-          "weight": 1,
-          "feedback": "인덱스는 요일 번호 0~6 오름차순입니다."
         }
       ]
     },

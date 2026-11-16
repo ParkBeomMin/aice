@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "pack_id": "associate-001",
   "engine_version": "1.9.0",
-  "grading_version": "associate-001-g0a0850a4a1e5",
+  "grading_version": "associate-001-g9da3647251c0",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -149,7 +149,7 @@
     "q04": {
       "question_id": "q04",
       "profile": "associate-v1",
-      "profile_revision": 2,
+      "profile_revision": 3,
       "review_status": "approved",
       "depends_on": [
         "q01"
@@ -212,24 +212,6 @@
           },
           "weight": 1,
           "feedback": "등급별 이탈률을 출력하세요."
-        },
-        {
-          "id": "sorted",
-          "label": "인덱스 문자 오름차순",
-          "probe": {
-            "kind": "series_index",
-            "var": "churn_by_membership"
-          },
-          "expect": {
-            "op": "eq",
-            "value": [
-              "Basic",
-              "Plus",
-              "Premium"
-            ]
-          },
-          "weight": 1,
-          "feedback": "churn_by_membership 의 인덱스를 문자 오름차순으로 정렬하세요."
         }
       ]
     },

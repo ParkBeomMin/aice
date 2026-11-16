@@ -41,12 +41,12 @@
     {
       "question_id": "q04",
       "public_id": "associate-003-q04",
-      "revision": 1,
+      "revision": 2,
       "title": "MFA 사용 여부별 위험 비율",
       "topic": "pandas",
       "difficulty": "medium",
       "file": "q04.json",
-      "sha256": "5c42d8f1729ece3d49b560258e5856569430f1db7448e4abc914348efaa3082c"
+      "sha256": "496e532c067d417dba475d97209ce7812513deb120df23b11066aa7c520b4bb4"
     },
     {
       "question_id": "q05",
@@ -236,13 +236,13 @@
     "version": "0.1.0",
     "content_contract": "1.3.0"
   },
-  "source_fingerprint": "621a66416197c968fbdd22525451dfb1d33ece1e5ee23d0cfc43547e3b3c5311",
+  "source_fingerprint": "6995a96dea2be1be7b1faf5dd6242e32c6d0fc7b1cb53ea022cb2c0e6b88b097",
   "notebook": {
     "kind": "question_notebook",
     "format": "nbformat4.5",
-    "url_path": "content/associate-003/notebooks/associate-003-questions-8382a0a31c15.ipynb",
-    "sha256": "8382a0a31c154ec964e4f9f181cd56cb8b87c64683d8228c9894e94b573c0b23",
-    "size_bytes": 15241,
+    "url_path": "content/associate-003/notebooks/associate-003-questions-4482203733d8.ipynb",
+    "sha256": "4482203733d849b6c8170a57f3ede0b039f83c36de0489c5ed9732ad4a0b0460",
+    "size_bytes": 15179,
     "question_ids": [
       "q01",
       "q02",
@@ -262,11 +262,11 @@
   },
   "grading": {
     "kind": "grading_bundle",
-    "url_path": "content/associate-003/grading/associate-003-grading-3f769be1bfb3.json",
-    "sha256": "3f769be1bfb345c16eebdef1d7cd97ba8af6f8ffa107bff9b8ea3683d1f9d557",
-    "size_bytes": 129932,
+    "url_path": "content/associate-003/grading/associate-003-grading-36394177543e.json",
+    "sha256": "36394177543e0ab85c865b71b87b5d337f257843ed70e9955633fc8c6189bab7",
+    "size_bytes": 129499,
     "engine_version": "1.9.0",
-    "grading_version": "associate-003-g91c1a28378ea",
+    "grading_version": "associate-003-geacd6438059a",
     "question_ids": [
       "q01",
       "q02",

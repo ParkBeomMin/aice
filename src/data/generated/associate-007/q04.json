@@ -3,11 +3,11 @@
   "pack_id": "associate-007",
   "question_id": "q04",
   "public_id": "associate-007-q04",
-  "revision": 1,
+  "revision": 2,
   "title": "라인별 불량률",
   "topic": "pandas",
   "difficulty": "medium",
-  "prompt": "생산 라인별 불량률을 구하시오.\n\n1. `batch_df`의 `line_id`별 `defect_24h` 평균을 Series `defect_by_line`에 저장하시오.\n2. 인덱스를 라인 이름 오름차순으로 정렬하시오.",
+  "prompt": "생산 라인별 불량률을 구하시오.\n\n`batch_df`의 `line_id`별 `defect_24h` 평균을 Series `defect_by_line`에 저장하시오.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",
@@ -34,11 +34,11 @@
   },
   "explanation": {
     "available": true,
-    "body_md": "**학습 목표:** 그룹별 비율을 구한다.\n\n**핵심 개념:** `groupby('line_id')['defect_24h'].mean()`.\n\n```python\ndefect_by_line = batch_df.groupby('line_id')['defect_24h'].mean().sort_index()\nprint(defect_by_line)\n```\n\n**기준 결과:** L1 0.2016, L2 0.2135, L3 0.2411, L4 0.2119.\n\n**다른 풀이 (pivot_table):**\n\n```python\ndefect_by_line = batch_df.pivot_table(index='line_id', values='defect_24h', aggfunc='mean')['defect_24h'].sort_index()\n```\n\n**자주 틀리는 부분:** 합계, 다른 그룹 컬럼.\n\n**채점 항목:**\n\n1. 라인별 불량률\n2. 라인 이름 오름차순\n"
+    "body_md": "**학습 목표:** 그룹별 비율을 구한다.\n\n**핵심 개념:** `groupby('line_id')['defect_24h'].mean()`.\n\n```python\ndefect_by_line = batch_df.groupby('line_id')['defect_24h'].mean()\nprint(defect_by_line)\n```\n\n**기준 결과:** L1 0.2016, L2 0.2135, L3 0.2411, L4 0.2119.\n\n**다른 풀이 (pivot_table):**\n\n```python\ndefect_by_line = batch_df.pivot_table(index='line_id', values='defect_24h', aggfunc='mean')['defect_24h']\n```\n\n**자주 틀리는 부분:** 합계, 다른 그룹 컬럼.\n\n**채점 항목:**\n\n1. 라인별 불량률\n"
   },
   "answer": {
     "available": true,
-    "code": "defect_by_line = batch_df.groupby('line_id')['defect_24h'].mean().sort_index()\nprint(defect_by_line)\n"
+    "code": "defect_by_line = batch_df.groupby('line_id')['defect_24h'].mean()\nprint(defect_by_line)\n"
   },
   "video": {
     "youtube_id": null,

@@ -2,7 +2,7 @@
   "schema_version": "2.0.0",
   "pack_id": "associate-005",
   "engine_version": "1.9.0",
-  "grading_version": "associate-005-g352b0d6dfb9e",
+  "grading_version": "associate-005-g51f1887e898c",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -412,7 +412,7 @@
     "q04": {
       "question_id": "q04",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q01"
@@ -421,13 +421,13 @@
       "checks": [
         {
           "id": "cols",
-          "label": "열은 세그먼트 4개 오름차순",
+          "label": "열은 세그먼트 4개",
           "probe": {
             "kind": "columns",
             "var": "response_pivot"
           },
           "expect": {
-            "op": "eq",
+            "op": "set_eq",
             "value": [
               "Active",
               "Dormant",
@@ -436,17 +436,17 @@
             ]
           },
           "weight": 1,
-          "feedback": "열은 shopper_segment 4개를 이름 오름차순으로 두세요."
+          "feedback": "열은 shopper_segment 4개(Active, Dormant, Loyal, New)여야 합니다."
         },
         {
           "id": "rows",
-          "label": "행은 채널 3개 오름차순",
+          "label": "행은 채널 3개",
           "probe": {
             "kind": "series_index",
             "var": "response_pivot"
           },
           "expect": {
-            "op": "eq",
+            "op": "set_eq",
             "value": [
               "App",
               "Email",
@@ -454,7 +454,7 @@
             ]
           },
           "weight": 1,
-          "feedback": "행 인덱스는 channel 3개를 이름 오름차순으로 두세요."
+          "feedback": "행 인덱스는 channel 3개(App, Email, SMS)여야 합니다."
         },
         {
           "id": "val-active",
@@ -4506,7 +4506,7 @@
             "value": {
               "max_iter": 1000,
               "random_state": 42,
-              "C": 1.0
+              "C": 1
             }
           },
           "weight": 1,
