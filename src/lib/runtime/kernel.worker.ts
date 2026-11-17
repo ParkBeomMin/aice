@@ -11,6 +11,7 @@ let sessionId = '';
 let execCount = 0;
 let datasets: DatasetSpec[] = [];
 const loaded = new Set<string>();
+let busy = 0; // 셀 실행이나 도우미 작업 중이면 새 도우미 요청은 busy 로 응답 (Python 동시 사용 방지)
 
 const post = (m: FromWorker) => self.postMessage(m);
 
@@ -47,6 +48,11 @@ async function init(indexURL: string) {
 }
 
 async function execute(requestId: string, cellId: string, code: string) {
+  busy++;
+  try { await executeInner(requestId, cellId, code); } finally { busy--; }
+}
+
+async function executeInner(requestId: string, cellId: string, code: string) {
   const outputs: Output[] = [];
   let streamChars = 0;
   const emit = (o: Output) => { outputs.push(o); post({ type: 'CELL_OUTPUT', sessionId, requestId, cellId, output: o }); };
@@ -82,6 +88,28 @@ async function execute(requestId: string, cellId: string, code: string) {
   post({ type: res.ok ? 'CELL_COMPLETED' : 'CELL_ERROR', sessionId, requestId, cellId, executionCount: execCount, durationMs, outputs });
 }
 
+// 셀 코드에서 import 한 최상위 모듈 (작성 중이라 문법 오류여도 동작하도록 정규식)
+function importedModules(code: string): string[] {
+  const out = new Set<string>();
+  for (const m of code.matchAll(/^\s*(?:from\s+([A-Za-z_][\w]*)|import\s+([A-Za-z_][\w]*))/gm)) out.add(m[1] || m[2]);
+  return [...out];
+}
+
+async function assist(requestId: string, mode: 'complete' | 'inspect', code: string, line: number, col: number) {
+  if (busy > 0 || !pyodide) { post({ type: 'ASSIST_RESULT', sessionId, requestId, busy: true }); return; }
+  busy++;
+  try {
+    const pkgs = [...new Set(['jedi', ...packagesFor(importedModules(code))])].filter((p) => !loaded.has(p));
+    if (pkgs.length) { await pyodide.loadPackage(pkgs, { messageCallback: () => {}, errorCallback: () => {} }); pkgs.forEach((p) => loaded.add(p)); }
+    const fn = pyodide.globals.get(mode === 'complete' ? '_acf_complete' : '_acf_inspect');
+    const raw: string = fn(code, line, col);
+    fn.destroy?.();
+    post({ type: 'ASSIST_RESULT', sessionId, requestId, result: JSON.parse(raw) });
+  } catch (e) {
+    post({ type: 'ASSIST_RESULT', sessionId, requestId, error: (e as Error).message.slice(0, 300) });
+  } finally { busy--; }
+}
+
 self.onmessage = async (ev: MessageEvent<ToWorker>) => {
   const m = ev.data;
   try {
@@ -94,6 +122,7 @@ self.onmessage = async (ev: MessageEvent<ToWorker>) => {
       return;
     }
     if (m.type === 'EXECUTE_CELL') { await execute(m.requestId, m.cellId, m.code); return; }
+    if (m.type === 'ASSIST') { await assist(m.requestId, m.mode, m.code, m.line, m.col); return; }
     if (m.type === 'TERMINATE_KERNEL') { self.close(); }
   } catch (e) {
     const err = e as Error;

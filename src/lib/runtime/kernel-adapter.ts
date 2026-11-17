@@ -1,3 +1,4 @@
+import type { AssistResult } from './worker-protocol.ts';
 // Worker 생명주기, 세션, 실행 큐, 시간 제한 관리. 무한 루프 등은 Worker 종료 후 새 커널로 복구 (SharedArrayBuffer 인터럽트 미사용).
 // T-05-R1 FIX-03: 초기화, 패키지 로딩 watchdog, Worker 오류 시 모든 대기 요청 실패 처리, epoch 기반으로 재시작 이전 요청이 새 커널에서 실행되지 않게 함.
 import { PYODIDE_INDEX_URL, isFromWorker, type DatasetSpec, type FromWorker, type Output } from './worker-protocol.ts';
@@ -188,6 +189,27 @@ export class PyodideKernel {
       } });
       try { w.postMessage({ type: 'EXECUTE_CELL', sessionId: session, requestId, cellId, code }); }
       catch (e) { this.failKernel(session, `Worker 전송 실패: ${(e as Error).message}`); }
+    });
+  }
+
+  /** 편집 도우미 (Tab 자동 완성, Shift+Tab 설명). 커널이 준비되지 않았거나 실행 중이면 바로 상태만 돌려준다. 절대 reject 하지 않는다. */
+  assist(mode: 'complete' | 'inspect', code: string, line: number, col: number, timeoutMs = 15000): Promise<{ status: 'ok'; result: AssistResult } | { status: 'not_ready' | 'busy' | 'error' | 'timeout'; error?: string }> {
+    const w = this.worker;
+    if (!w || (this.state !== 'ready' && this.state !== 'busy')) return Promise.resolve({ status: 'not_ready' });
+    if (this.state === 'busy') return Promise.resolve({ status: 'busy' });
+    const session = this.session;
+    const requestId = nextId('as');
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => { this.pending.delete(requestId); resolve({ status: 'timeout' }); }, timeoutMs);
+      this.pending.set(requestId, { cellId: '', on: (m) => {
+        if (m.type !== 'ASSIST_RESULT') return;
+        clearTimeout(timer); this.pending.delete(requestId);
+        if (m.busy) resolve({ status: 'busy' });
+        else if (m.error || !m.result) resolve({ status: 'error', error: m.error });
+        else resolve({ status: 'ok', result: m.result });
+      } });
+      try { w.postMessage({ type: 'ASSIST', sessionId: session, requestId, mode, code, line, col }); }
+      catch (e) { clearTimeout(timer); this.pending.delete(requestId); resolve({ status: 'error', error: (e as Error).message }); }
     });
   }
 

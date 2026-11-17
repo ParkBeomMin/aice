@@ -13,6 +13,7 @@ import { createNotebookSnapshot, sha256Text, type NotebookSnapshot } from '../li
 import { IndexedDbStorage, type Draft, type DraftStore } from '../lib/storage/indexeddb-storage.ts';
 import { DraftSaver } from '../lib/storage/draft-saver.ts';
 import { DEBUG, expose } from '../lib/debug.ts';
+import { editorAssist } from '../lib/notebook/editor-assist.ts';
 
 interface NbCell { cell_type: string; id: string; metadata: { tags?: string[] }; source: string | string[]; outputs?: unknown[]; execution_count?: number | null }
 interface Nb { nbformat: number; nbformat_minor: number; metadata: Record<string, unknown>; cells: NbCell[] }
@@ -102,6 +103,12 @@ const kernel = new PyodideKernel(datasets, {
   onPackages(cellId, pk) { const c = cells.get(cellId); if (c?.running) { const d = document.createElement('div'); d.className = 'nb-pkg'; d.textContent = `패키지 불러오는 중: ${pk.join(', ')} (처음 한 번만)`; c.out.append(d); } },
   onMetric(name, ms) { metrics[name] = ms; },
 }, () => new Worker(new URL('../lib/runtime/kernel.worker.ts', import.meta.url), { type: 'module' }), kernelOptions());
+// Tab 자동 완성, Shift+Tab 함수 설명 (Jupyter 와 같은 단축키). 안내는 10초에 한 번만
+let assistNoticeAt = 0;
+const assistExt = editorAssist((mode, code, line, col) => kernel.assist(mode, code, line, col), (msg) => {
+  if (Date.now() - assistNoticeAt < 10_000) return;
+  assistNoticeAt = Date.now(); notice(msg, 'info');
+});
 
 function kernelOptions() {
   // 검증용: ?acf_init_timeout_ms= / ?acf_pkg_timeout_ms= / ?acf_index_url= (기본값은 운영 값)
@@ -286,7 +293,7 @@ function renderCell(cell: NbCell, n: number): HTMLElement {
   ]));
   const view = new EditorView({
     doc: src(cell.source),
-    extensions: [runKeys, basicSetup, python(), editable.of(editableExt(!locked)), EditorView.theme({ '&': { fontSize: '14px' } }),
+    extensions: [runKeys, ...(external ? [] : [assistExt]), basicSetup, python(), editable.of(editableExt(!locked)), EditorView.theme({ '&': { fontSize: '14px' } }),
       EditorView.updateListener.of((u) => {
         if (!u.docChanged) return;
         if (!programmaticEdit) saver.markDirty();

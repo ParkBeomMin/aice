@@ -10,6 +10,12 @@ export const MAX_STREAM_CHARS = 100_000;
 export const MAX_TABLE_ROWS = 50;
 export const MAX_TABLE_COLS = 30;
 
+/** 편집 도우미 결과. complete: 후보와 이미 입력한 접두어 길이. inspect: 함수 시그니처와 docstring (Jupyter Shift+Tab) */
+export type AssistResult =
+  | { items: { label: string; type: string }[]; prefix: number }
+  | { found: false }
+  | { found: true; title: string; kind: string; type_name: string; signatures: string[]; doc: string; truncated: boolean; param_index?: number | null };
+
 export interface DatasetSpec { name: string; url: string; sha256: string; size: number }
 
 export type Output =
@@ -24,6 +30,7 @@ export type ToWorker =
   | { type: 'LOAD_DATASETS'; sessionId: string; requestId: string; datasets: DatasetSpec[] }
   | { type: 'EXECUTE_CELL'; sessionId: string; requestId: string; cellId: string; code: string }
   | { type: 'RESTART_KERNEL'; sessionId: string }
+  | { type: 'ASSIST'; sessionId: string; requestId: string; mode: 'complete' | 'inspect'; code: string; line: number; col: number }
   | { type: 'TERMINATE_KERNEL'; sessionId: string };
 
 export type FromWorker =
@@ -35,10 +42,11 @@ export type FromWorker =
   | { type: 'CELL_STARTED'; sessionId: string; requestId: string; cellId: string; packageMs: number }
   | { type: 'CELL_OUTPUT'; sessionId: string; requestId: string; cellId: string; output: Output }
   | { type: 'CELL_COMPLETED'; sessionId: string; requestId: string; cellId: string; executionCount: number; durationMs: number; outputs: Output[] }
-  | { type: 'CELL_ERROR'; sessionId: string; requestId: string; cellId: string; executionCount: number; durationMs: number; outputs: Output[] };
+  | { type: 'CELL_ERROR'; sessionId: string; requestId: string; cellId: string; executionCount: number; durationMs: number; outputs: Output[] }
+  | { type: 'ASSIST_RESULT'; sessionId: string; requestId: string; busy?: boolean; error?: string; result?: AssistResult };
 
-export const TO_WORKER_TYPES = ['INIT_KERNEL', 'LOAD_DATASETS', 'EXECUTE_CELL', 'RESTART_KERNEL', 'TERMINATE_KERNEL'];
-export const FROM_WORKER_TYPES = ['KERNEL_STATUS', 'KERNEL_READY', 'DATASETS_LOADED', 'DATASETS_ERROR', 'PACKAGES_LOADING', 'CELL_STARTED', 'CELL_OUTPUT', 'CELL_COMPLETED', 'CELL_ERROR'];
+export const TO_WORKER_TYPES = ['INIT_KERNEL', 'LOAD_DATASETS', 'EXECUTE_CELL', 'RESTART_KERNEL', 'TERMINATE_KERNEL', 'ASSIST'];
+export const FROM_WORKER_TYPES = ['KERNEL_STATUS', 'KERNEL_READY', 'DATASETS_LOADED', 'DATASETS_ERROR', 'PACKAGES_LOADING', 'CELL_STARTED', 'CELL_OUTPUT', 'CELL_COMPLETED', 'CELL_ERROR', 'ASSIST_RESULT'];
 
 export function isFromWorker(m: unknown): m is FromWorker {
   return !!m && typeof m === 'object' && FROM_WORKER_TYPES.includes((m as { type?: string }).type ?? '') && typeof (m as { sessionId?: unknown }).sessionId === 'string';
