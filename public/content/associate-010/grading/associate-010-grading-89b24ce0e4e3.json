@@ -1,7 +1,7 @@
 {
   "schema_version": "2.1.0",
   "pack_id": "associate-010",
-  "engine_version": "1.10.0",
+  "engine_version": "1.10.1",
   "grading_version": "associate-010-gb0ddecb91b37",
   "questions": {
     "q01": {

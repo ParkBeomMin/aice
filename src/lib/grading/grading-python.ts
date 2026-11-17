@@ -1018,6 +1018,9 @@ def _approx(a, b, abs_tol, rel_tol):
         sa, sb = a["__series__"], b["__series__"]
         da = dict(zip(sa["index"], sa["values"]))
         db = dict(zip(sb["index"], sb["values"]))
+        # (엔진 1.10.1) 이름 집합만이 아니라 개수까지 같아야 함: 중복 행(같은 이름 두 번)이 dict 로 합쳐져 통과하는 것을 막음
+        if sorted(map(str, sa["index"])) != sorted(map(str, sb["index"])):
+            return False
         return set(da) == set(db) and all(_close(da[k], db[k], abs_tol, rel_tol) for k in db)
     if isinstance(b, list):
         return isinstance(a, list) and len(a) == len(b) and all(_approx(x, y, abs_tol, rel_tol) for x, y in zip(a, b))
@@ -1049,7 +1052,8 @@ def _expect(actual, e, expected):
     if op == "excludes_all":
         return isinstance(actual, list) and not any(x in actual for x in expected)
     if op == "set_eq":
-        return isinstance(actual, list) and set(map(str, actual)) == set(map(str, expected))
+        # (엔진 1.10.1) 순서는 무시하되 중복은 구별 (같은 이름이 두 번이면 다름)
+        return isinstance(actual, list) and sorted(map(str, actual)) == sorted(map(str, expected))
     if op == "approx_contains":
         exp = _flat_numbers(expected)
         return isinstance(actual, list) and len(exp) > 0 and all(any(_close(a, x, at, rt) for a in actual) for x in exp)
