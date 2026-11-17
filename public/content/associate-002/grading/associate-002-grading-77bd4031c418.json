@@ -1,8 +1,8 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "pack_id": "associate-002",
-  "engine_version": "1.9.0",
-  "grading_version": "associate-002-ga0fa1b980e6b",
+  "engine_version": "1.10.0",
+  "grading_version": "associate-002-gd3833f726a57",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -863,7 +863,7 @@
     "q11": {
       "question_id": "q11",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q09"
@@ -933,6 +933,45 @@
           },
           "weight": 2,
           "feedback": "X_train_encoded, y_train 과 지정한 설정으로 학습한 모델의 예측과 다릅니다."
+        },
+        {
+          "id": "fi-values",
+          "label": "중요도 상위 5개 특징과 값",
+          "probe": {
+            "kind": "value",
+            "var": "top_features"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "feature_importance_top",
+              "model": "forest_model",
+              "top_n": 5
+            },
+            "abs_tol": 1e-09,
+            "rel_tol": 1e-09
+          },
+          "weight": 2,
+          "feedback": "top_features 는 forest_model 의 feature_importances_ 중 큰 값 5개를 특징 이름 인덱스와 함께 담아야 합니다."
+        },
+        {
+          "id": "fi-order",
+          "label": "중요도 내림차순",
+          "probe": {
+            "kind": "series_index",
+            "var": "top_features"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "feature_importance_top",
+              "model": "forest_model",
+              "top_n": 5,
+              "field": "index"
+            }
+          },
+          "weight": 1,
+          "feedback": "top_features 를 중요도가 큰 값부터 내림차순으로 정렬하세요."
         }
       ]
     },

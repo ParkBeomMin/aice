@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "deck_id": "modeling",
-  "revision": 4,
+  "revision": 5,
   "title": "머신러닝 모델링",
   "summary": "분류와 회귀 모델, 하이퍼파라미터, 과적합, 누설, 교차 검증과 모델 선택",
   "intro_md": "머신러닝에서는 예측 대상이 범주인지 연속값인지에 따라 문제 유형이 달라집니다. 로지스틱 회귀는 분류 확률을 계산하고, 랜덤포레스트는 여러 결정트리의 결과를 결합합니다. 모델을 만들 때는 난수를 고정해 실험을 재현하고, predict와 predict_proba의 차이를 확인하세요. 훈련 점수만 높은 모델은 과적합일 수 있으므로 평가 데이터 성능과 함께 판단해야 합니다.",
@@ -185,6 +185,22 @@
       ],
       "difficulty": "basic",
       "content_digest": "ffc88d901ba8bd30"
+    },
+    {
+      "card_id": "ml-012",
+      "revision": 1,
+      "front": "특징 중요도는 어떻게 확인하나?",
+      "back": "랜덤포레스트 같은 트리 모델은 학습 후 feature_importances_에 특징별 중요도를 담는다. 값만 있는 배열이라 컬럼 이름과 묶어 Series로 만들고, sort_values(ascending=False)로 큰 값부터 정렬해 상위 특징을 본다. 중요도가 높다고 그 특징이 원인이라는 뜻은 아니다.",
+      "code_example": "imp = pd.Series(model.feature_importances_, index=X.columns)\nimp.sort_values(ascending=False).head(5)",
+      "code_language": "python",
+      "code_runtime": "reference_only",
+      "tags": [
+        "machine_learning",
+        "feature-importance",
+        "randomforest"
+      ],
+      "difficulty": "basic",
+      "content_digest": "6ca656b16aaaf710"
     }
   ]
 }

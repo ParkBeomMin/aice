@@ -358,6 +358,33 @@ def _probe(p):
             ytr = np.log1p(yv)
         model = cls(**_params(p.get("params"))).fit(Xtr.copy() if hasattr(Xtr, "copy") else Xtr, ytr)
         return _norm(_out_transform(_predict(model, Xev, p.get("threshold")), p.get("output_transform")))
+    if k == "feature_importance_top":
+        # (엔진 1.10.0) 학생이 학습한 트리 모델(model)의 feature_importances_ 를 특징 이름과 묶어 큰 값부터 top_n 개.
+        # 이름은 model.feature_names_in_ (DataFrame 으로 학습), 없으면 transformer.get_feature_names_out(), 그다음 X 변수의 컬럼. 동률은 원래 컬럼 순서를 유지(안정 정렬).
+        # field=index 면 이름 목록(순서 검사용), 아니면 이름별 값 Series
+        import numpy as np
+        mdl = _var(p["model"])
+        imp = getattr(mdl, "feature_importances_", None)
+        if imp is None:
+            raise _ProbeError(f"{p['model']} 에 feature_importances_ 가 없습니다. 학습된 트리 모델이어야 합니다")
+        imp = np.asarray(imp, dtype=float).ravel()
+        names = getattr(mdl, "feature_names_in_", None)
+        if names is None and p.get("transformer"):
+            tr = _var(p["transformer"])
+            if not hasattr(tr, "get_feature_names_out"):
+                raise _ProbeError(f"{p['transformer']} 에 get_feature_names_out 이 없습니다")
+            names = [str(x) for x in tr.get_feature_names_out()]
+        if names is None and p.get("X"):
+            names = list(_df(p["X"]).columns)
+        if names is None or len(names) != len(imp):
+            raise _ProbeError("특징 이름을 알 수 없습니다. DataFrame 으로 학습했는지 확인하세요")
+        n = int(p.get("top_n", 5))
+        if not 1 <= n <= 30:
+            raise _ProbeError("top_n 범위 오류")
+        order = sorted(range(len(imp)), key=lambda i: -imp[i])[:n]
+        if p.get("field") == "index":
+            return [str(names[i]) for i in order]
+        return {"__series__": {"index": [str(names[i]) for i in order], "values": [_norm(float(imp[i])) for i in order]}}
     if k == "model_params":
         keys = p.get("keys") or []
         if not set(keys) <= _PARAM_KEYS:

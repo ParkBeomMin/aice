@@ -111,12 +111,12 @@
     {
       "question_id": "q11",
       "public_id": "associate-009-q11",
-      "revision": 1,
+      "revision": 2,
       "title": "랜덤포레스트 분류",
       "topic": "machine_learning",
       "difficulty": "easy",
       "file": "q11.json",
-      "sha256": "787f764c23c8be007cf38bcf29428932f441f68ddca6fe7e5a7af9ce5ac0da38"
+      "sha256": "13c285cc115222017e56d0e96169da17eef4072f2d668a40b9f2b9ef2a5940c6"
     },
     {
       "question_id": "q12",
@@ -236,13 +236,13 @@
     "version": "0.1.0",
     "content_contract": "1.3.0"
   },
-  "source_fingerprint": "1bd1513ddc964c0add3f6d0845ef253fb26c9ffedb082ca35ef74b7723d2b51e",
+  "source_fingerprint": "3f985f1549446cdd2e9f99bff3fb2c6af5def23f4996762ce413926ec1b1f8fa",
   "notebook": {
     "kind": "question_notebook",
     "format": "nbformat4.5",
-    "url_path": "content/associate-009/notebooks/associate-009-questions-380816527c85.ipynb",
-    "sha256": "380816527c85cf9440bb48d8e05ae72ed8b352af360d83e8082f90cb852ab908",
-    "size_bytes": 14634,
+    "url_path": "content/associate-009/notebooks/associate-009-questions-1af06013081e.ipynb",
+    "sha256": "1af06013081e49f8afa278513fe1a1da1e08b403c190f030da1480eee5f5ef35",
+    "size_bytes": 14891,
     "question_ids": [
       "q01",
       "q02",
@@ -262,11 +262,11 @@
   },
   "grading": {
     "kind": "grading_bundle",
-    "url_path": "content/associate-009/grading/associate-009-grading-92ea1bcbf6f7.json",
-    "sha256": "92ea1bcbf6f7bc57ce7d509f769aa2cd334ab607d10e6fed8e089e04f10d648d",
-    "size_bytes": 219017,
-    "engine_version": "1.9.0",
-    "grading_version": "associate-009-g606d20271712",
+    "url_path": "content/associate-009/grading/associate-009-grading-27c3468e9cde.json",
+    "sha256": "27c3468e9cdecac4e34d42486e7055e87231f7752072d155d785c4ed5d909c2e",
+    "size_bytes": 220329,
+    "engine_version": "1.10.0",
+    "grading_version": "associate-009-g3e6d84cb2d9b",
     "question_ids": [
       "q01",
       "q02",

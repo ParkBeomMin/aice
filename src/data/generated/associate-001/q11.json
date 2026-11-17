@@ -3,11 +3,11 @@
   "pack_id": "associate-001",
   "question_id": "q11",
   "public_id": "associate-001-q11",
-  "revision": 3,
+  "revision": 4,
   "title": "랜덤포레스트 학습",
   "topic": "machine_learning",
   "difficulty": "easy",
-  "prompt": "랜덤포레스트 모델을 학습하시오.\n\n1. `RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=1)`를 `X_train`, `y_train`으로 학습하시오.\n2. 학습한 모델을 `rf_model`에 저장하시오.\n\n학습한 모델은 q09에서 만든 `X_test`, `y_test`로 평가됩니다.",
+  "prompt": "랜덤포레스트 모델을 학습하시오.\n\n1. `RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=1)`를 `X_train`, `y_train`으로 학습하시오.\n2. 학습한 모델을 `rf_model`에 저장하시오.\n3. `rf_model.feature_importances_`를 학습에 쓴 컬럼 이름(`X_train.columns`)을 인덱스로 하는 Series로 만들고, 중요도가 큰 값부터 내림차순으로 정렬한 상위 5개를 `top_features`에 저장하시오.\n\n학습한 모델은 q09에서 만든 `X_test`, `y_test`로 평가됩니다.",
   "starter_code": "# 여기에 코드를 작성하세요\n",
   "runtime": {
     "type": "pyodide",
@@ -33,11 +33,11 @@
   },
   "explanation": {
     "available": true,
-    "body_md": "**핵심:** 지정한 `RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=1)`를 원본 숫자 피처와 원-핫 피처를 포함한 `X_train`으로 학습한다.\n\n```python\nfrom sklearn.ensemble import RandomForestClassifier\nrf_model = RandomForestClassifier(\n    n_estimators=100, random_state=42, n_jobs=1\n).fit(X_train, y_train)\n```\n**검증:** 모형 종류, 100개 트리, 학습된 상태 및 테스트 예측 일치. **흔한 오류:** 의도와 다른 분할 또는 서로 다른 시드 사용.\n\n---"
+    "body_md": "**핵심:** 지정한 `RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=1)`를 원본 숫자 피처와 원-핫 피처를 포함한 `X_train`으로 학습한다.\n\n```python\nfrom sklearn.ensemble import RandomForestClassifier\nrf_model = RandomForestClassifier(\n    n_estimators=100, random_state=42, n_jobs=1\n).fit(X_train, y_train)\n```\n**검증:** 모형 종류, 100개 트리, 학습된 상태 및 테스트 예측 일치. **흔한 오류:** 의도와 다른 분할 또는 서로 다른 시드 사용.\n\n**특징 중요도:** `feature_importances_`는 각 특징이 트리의 분할에서 오차(불순도)를 얼마나 줄였는지 나타내는 값의 배열이다. 값만 있으므로 특징 이름과 묶어 Series로 만들고 `sort_values(ascending=False)`로 큰 값부터 정렬해야 어떤 특징을 많이 썼는지 읽을 수 있다. `nlargest(5)`도 같은 결과다. 이 데이터의 상위 3개는 `days_since_last_login`(0.153), `completion_rate`(0.150), `sessions_last_30d`(0.117) 순서다. 중요도가 높다는 것은 모델이 그 특징을 많이 썼다는 뜻이지, 그 특징이 결과의 원인이라는 뜻은 아니다.\n\n```python\ntop_features = pd.Series(rf_model.feature_importances_, index=X_train.columns).sort_values(ascending=False).head(5)\nprint(top_features)\n```\n"
   },
   "answer": {
     "available": true,
-    "code": "from sklearn.ensemble import RandomForestClassifier\nrf_model = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=1).fit(X_train, y_train)"
+    "code": "from sklearn.ensemble import RandomForestClassifier\nrf_model = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=1).fit(X_train, y_train)\ntop_features = pd.Series(rf_model.feature_importances_, index=X_train.columns).sort_values(ascending=False).head(5)\nprint(top_features)\n"
   },
   "video": {
     "youtube_id": null,

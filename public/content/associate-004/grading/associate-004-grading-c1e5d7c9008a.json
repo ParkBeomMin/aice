@@ -1,8 +1,8 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "pack_id": "associate-004",
-  "engine_version": "1.9.0",
-  "grading_version": "associate-004-g8c290488c277",
+  "engine_version": "1.10.0",
+  "grading_version": "associate-004-g652e7bbb029e",
   "questions": {
     "q01": {
       "question_id": "q01",
@@ -4326,7 +4326,7 @@
     "q11": {
       "question_id": "q11",
       "profile": "associate-v1",
-      "profile_revision": 1,
+      "profile_revision": 2,
       "review_status": "approved",
       "depends_on": [
         "q09"
@@ -4416,6 +4416,45 @@
           },
           "weight": 1,
           "feedback": "energy_rf_pred 는 energy_rf 로 X_test 를 예측한 결과입니다."
+        },
+        {
+          "id": "fi-values",
+          "label": "중요도 상위 5개 특징과 값",
+          "probe": {
+            "kind": "value",
+            "var": "top_features"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "feature_importance_top",
+              "model": "energy_rf",
+              "top_n": 5
+            },
+            "abs_tol": 1e-09,
+            "rel_tol": 1e-09
+          },
+          "weight": 2,
+          "feedback": "top_features 는 energy_rf 의 feature_importances_ 중 큰 값 5개를 특징 이름 인덱스와 함께 담아야 합니다."
+        },
+        {
+          "id": "fi-order",
+          "label": "중요도 내림차순",
+          "probe": {
+            "kind": "series_index",
+            "var": "top_features"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "feature_importance_top",
+              "model": "energy_rf",
+              "top_n": 5,
+              "field": "index"
+            }
+          },
+          "weight": 1,
+          "feedback": "top_features 를 중요도가 큰 값부터 내림차순으로 정렬하세요."
         }
       ]
     },

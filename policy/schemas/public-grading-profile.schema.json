@@ -14,7 +14,7 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "2.0.0"
+      "const": "2.1.0"
     },
     "pack_id": {
       "type": "string",
@@ -96,7 +96,8 @@
             "stratified_cv_scores",
             "preprocess_reproduced",
             "scaler_fitted_on",
-            "prediction_metric_selection"
+            "prediction_metric_selection",
+            "feature_importance_top"
           ]
         },
         "var": {
@@ -492,7 +493,8 @@
             "points",
             "bar_total",
             "x_mean",
-            "y_mean"
+            "y_mean",
+            "index"
           ]
         },
         "minus_column": {
@@ -794,6 +796,11 @@
             "lower_threshold",
             "higher_threshold"
           ]
+        },
+        "top_n": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30
         }
       }
     },
