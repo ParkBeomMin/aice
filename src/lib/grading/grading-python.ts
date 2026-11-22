@@ -30,6 +30,8 @@ def _g_seed():
         np.random.seed(0)
     except Exception:
         pass
+    if "_acf_keras" in sys.modules:
+        sys.modules["_acf_keras"].set_random_seed(0)
     return "ok"
 
 def _var(name):

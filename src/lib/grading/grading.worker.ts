@@ -1,6 +1,7 @@
 /// <reference lib="webworker" />
 // T-06 채점 전용 Worker: 제출 1건 = Pyodide 인스턴스 1개 (학습용 커널과 완전히 분리). 끝나면 메인 스레드가 terminate.
 import { GRADING_PY } from './grading-python.ts';
+import { installTfShim } from '../runtime/tf-shim.ts';
 import type { DatasetSpec } from '../runtime/worker-protocol.ts';
 
 declare const self: DedicatedWorkerGlobalScope;
@@ -27,6 +28,7 @@ async function init(indexURL: string, datasets: DatasetSpec[]) {
     py.FS.writeFile(`/home/pyodide/${d.name}`, new Uint8Array(buf));
   }
   await py.runPythonAsync(GRADING_PY);
+  installTfShim(py);
 }
 
 const call = (name: string, ...args: unknown[]) => { const f = py.globals.get(name); try { return f(...args); } finally { f.destroy?.(); } };

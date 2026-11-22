@@ -3,6 +3,7 @@
 import type { ToWorker, FromWorker, Output, DatasetSpec } from './worker-protocol.ts';
 import { packagesFor, implicitPackages, truncate, MAX_STREAM_CHARS } from './worker-protocol.ts';
 import { PY_HELPERS } from './python-helpers';
+import { installTfShim } from './tf-shim.ts';
 
 declare const self: DedicatedWorkerGlobalScope;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,6 +44,7 @@ async function init(indexURL: string) {
   pyodide = await mod.loadPyodide({ indexURL });
   pyodide.FS.chdir('/home/pyodide');
   await pyodide.runPythonAsync(PY_HELPERS);
+  installTfShim(pyodide);
   const ver = pyodide.runPython('import sys; sys.version.split()[0]');
   post({ type: 'KERNEL_READY', sessionId, ms: Math.round(performance.now() - t0), pythonVersion: ver });
 }

@@ -5,6 +5,8 @@ export const PYODIDE_INDEX_URL = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VE
 export const ALLOWED_PACKAGES = ['numpy', 'pandas', 'matplotlib', 'scikit-learn', 'scipy'] as const;
 export const IMPORT_TO_PACKAGE: Record<string, string> = {
   numpy: 'numpy', pandas: 'pandas', matplotlib: 'matplotlib', sklearn: 'scikit-learn', scipy: 'scipy',
+  // 딥러닝: 브라우저용 Keras 호환 모듈(tf-shim.ts, numpy 구현)이 대신한다
+  tensorflow: 'numpy', keras: 'numpy',
 };
 export const MAX_STREAM_CHARS = 100_000;
 export const MAX_TABLE_ROWS = 50;
