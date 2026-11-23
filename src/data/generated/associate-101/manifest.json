@@ -11,145 +11,145 @@
     {
       "question_id": "q01",
       "public_id": "associate-101-q01",
-      "revision": 2,
-      "title": "라이브러리와 데이터 확인",
+      "revision": 3,
+      "title": "라이브러리 임포트와 데이터 읽기",
       "topic": "pandas",
       "difficulty": "easy",
       "file": "q01.json",
-      "sha256": "cfe730c5f0edf99c83fdfd67344fcee5d70123a5d9126646834faa9641407238"
+      "sha256": "73c159a1ac838fcb385fb8170a7b305f4e7191269632b614369766bdc3ca6ac1"
     },
     {
       "question_id": "q02",
       "public_id": "associate-101-q02",
-      "revision": 2,
-      "title": "등급별 이탈 분포 (countplot)",
+      "revision": 3,
+      "title": "멤버십 등급별 이탈 분포 (countplot)",
       "topic": "visualization",
       "difficulty": "easy",
       "file": "q02.json",
-      "sha256": "5921d4a44c46c7cad5a5177d96bc2a2d79d556bcccc031403c65a923bd88685a"
+      "sha256": "1254340031515562b893d79fe4073080323a13f6762a79f61e7bf77ce373ae3b"
     },
     {
       "question_id": "q03",
       "public_id": "associate-101-q03",
-      "revision": 3,
-      "title": "이탈 여부별 접속 공백 (boxplot)",
+      "revision": 4,
+      "title": "이탈 여부별 마지막 접속 경과일 (boxplot)",
       "topic": "visualization",
       "difficulty": "medium",
       "file": "q03.json",
-      "sha256": "0cdc50270509c89910ad95f589b4dbecd335919db183403e3131a67631c76fb5"
+      "sha256": "c782a67ba438c89a6678051e58c367f891fef9cdec7eccf7ad89267ed8a7b4cd"
     },
     {
       "question_id": "q04",
       "public_id": "associate-101-q04",
-      "revision": 2,
-      "title": "상관관계 히트맵",
+      "revision": 3,
+      "title": "수치형 변수의 상관관계 (heatmap)",
       "topic": "visualization",
       "difficulty": "medium",
       "file": "q04.json",
-      "sha256": "4c5cacb48cf393e688d169a7ff790c732e6cfb6c634b31c84fcf9fc5a7f55a1c"
+      "sha256": "635f272c93aa0bfc41bb50daec04aae951a8444f735ce8cade955396d8031cf9"
     },
     {
       "question_id": "q05",
       "public_id": "associate-101-q05",
-      "revision": 1,
-      "title": "기기별 이탈률 (groupby)",
+      "revision": 2,
+      "title": "기기 유형별 이탈률 (groupby)",
       "topic": "pandas",
       "difficulty": "easy",
       "file": "q05.json",
-      "sha256": "df5d3a39b5d0fd24b869aca6161609b3d9dad01c141979f2949866b760601365"
+      "sha256": "54475516e90509ff4cc992cc88ae807862ea329e54588e445068b613fb0a3b85"
     },
     {
       "question_id": "q06",
       "public_id": "associate-101-q06",
-      "revision": 1,
-      "title": "이상치와 불필요한 컬럼 삭제",
+      "revision": 2,
+      "title": "이상치와 불필요한 변수 삭제",
       "topic": "preprocessing",
       "difficulty": "easy",
       "file": "q06.json",
-      "sha256": "ce9f1ba58e07e3f8830ebf3476b404a2b60b5e2eb11a8b94be3c6b80d7c9c198"
+      "sha256": "f1327321c4c047341cf9cb49957ca0de77bfdd87c29a986fd64c58ba2ed30983"
     },
     {
       "question_id": "q07",
       "public_id": "associate-101-q07",
-      "revision": 1,
+      "revision": 2,
       "title": "결측치 처리",
       "topic": "preprocessing",
       "difficulty": "easy",
       "file": "q07.json",
-      "sha256": "8b174d642a0f4c051992ed6f6aa7e35d6af3f2739e98eaf19ce827115d7c194c"
+      "sha256": "b22a66a8a033d202f2f482adb25a99bf7cb18a5c2c037fa69c8ccdecf6fadc70"
     },
     {
       "question_id": "q08",
       "public_id": "associate-101-q08",
-      "revision": 2,
-      "title": "원-핫 인코딩",
+      "revision": 3,
+      "title": "원-핫 인코딩 (빈칸 채우기)",
       "topic": "preprocessing",
       "difficulty": "easy",
       "file": "q08.json",
-      "sha256": "c93db1de51837c412ddc39a5101a8814ae326c424f833ef8bca75b4e7efe1944"
+      "sha256": "232454bb41805425a30035c53201733dbf367e031d1b9e1339e4b8b8d8e3e9f8"
     },
     {
       "question_id": "q09",
       "public_id": "associate-101-q09",
-      "revision": 1,
-      "title": "데이터 분할과 스케일링",
+      "revision": 2,
+      "title": "데이터셋 분리와 스케일링",
       "topic": "preprocessing",
       "difficulty": "medium",
       "file": "q09.json",
-      "sha256": "4c1eca8f4bf6048f95370a2d43d8e1c69c31690621a07e29eed2856754c02a49"
+      "sha256": "10cf8e72290e0125f3fcff056caf544a94c5b1ca63d909cfee9ca2690c5d57f8"
     },
     {
       "question_id": "q10",
       "public_id": "associate-101-q10",
-      "revision": 2,
+      "revision": 3,
       "title": "의사결정나무와 랜덤포레스트 학습",
       "topic": "machine_learning",
       "difficulty": "medium",
       "file": "q10.json",
-      "sha256": "2e068dd4a67d8be6b539de43bdcb90160a0fc62df1cf21a260b98b25f60af60b"
+      "sha256": "b50ef404e4f772431cd75a034ba2a9a1f300760054b17b0359687c5227dbb0cc"
     },
     {
       "question_id": "q11",
       "public_id": "associate-101-q11",
-      "revision": 1,
-      "title": "두 모델 성능 비교",
+      "revision": 3,
+      "title": "두 모델의 성능 평가",
       "topic": "evaluation",
       "difficulty": "medium",
       "file": "q11.json",
-      "sha256": "226ce499a0fe396533ccf169d92a274771c9c32956995317ea30efc8c4eda123"
+      "sha256": "86808439555f583b529c8002a427c192c499f30153188718390b82f247f62b3d"
     },
     {
       "question_id": "q12",
       "public_id": "associate-101-q12",
-      "revision": 1,
-      "title": "특징 중요도",
+      "revision": 2,
+      "title": "특징 중요도 확인",
       "topic": "machine_learning",
       "difficulty": "medium",
       "file": "q12.json",
-      "sha256": "c074e8d03f707f97a4532958a3c50dc7449327acba786557872f9d7e1e6d0984"
+      "sha256": "7e538382d463f7322e2ecc8f5b9642c8e2a5c74332043ec5f93340db5f1a6eaf"
     },
     {
       "question_id": "q13",
       "public_id": "associate-101-q13",
-      "revision": 2,
+      "revision": 3,
       "title": "딥러닝 모델 학습",
       "topic": "deep_learning",
       "difficulty": "hard",
       "file": "q13.json",
-      "sha256": "6f8c613e56a44a16430eb4276bddfd1a9d23bed31497878d49db5ab0866efdfe"
+      "sha256": "8537ae6f22a220f0968e26c611d9149d1b44443305e86eb9e345aa50e24d6f2d"
     },
     {
       "question_id": "q14",
       "public_id": "associate-101-q14",
-      "revision": 3,
+      "revision": 4,
       "title": "학습 곡선과 저장 모델 시뮬레이션",
       "topic": "deep_learning",
       "difficulty": "medium",
       "file": "q14.json",
-      "sha256": "582dcf8788576e4b695105c016c26796775e189973e2ad0851fb38309bfb3659"
+      "sha256": "81bd5a101b8ad23a37b4d0b22ffa2b5015fe2c6dc47ab9e0502320f595e785e9"
     }
   ],
-  "scenario_md": "온라인 교육 플랫폼 LearnFlow(가상)는 수강생이 학습을 그만두고 떠나는 이탈 문제를 줄이려고 합니다. 최근 30일 동안의 학습 활동 기록을 바탕으로, 앞으로 30일 안에 이탈할 가능성이 높은 수강생을 미리 찾아 맞춤 안내를 보내려고 합니다.\n\n여러분은 데이터 분석 담당자로서 수강생 데이터를 탐색하고, 결측값과 이상값을 처리한 뒤, 이탈 여부를 예측하는 분류 모델을 만들고 성능을 평가해야 합니다.\n\n- 분석 목표: 수강생의 30일 내 이탈 여부(`churn_30d`) 예측\n- 데이터: `learners.csv` (수강생 1,400명, 14개 컬럼)\n- 진행 순서: 데이터 확인과 시각화(1~5번) → 전처리(6~9번) → 머신러닝(10~12번) → 딥러닝(13~14번)\n\n> 모든 데이터는 실제 개인과 관계없는 합성 데이터입니다.",
+  "scenario_md": "온라인 교육 플랫폼 LearnFlow(가상)의 수강생 데이터를 읽어들여 데이터를 분석 및 전처리한 후 머신러닝과 딥러닝으로 수강생의 30일 내 이탈 여부(**churn_30d: 1 이탈, 0 유지**)를 예측하고 결과를 분석하세요.\n\n- 데이터: `learners.csv` (수강생 1,400명, 14개 컬럼)\n- 문항 구성: 데이터 확인과 시각화(1~5번), 전처리(6~9번), 머신러닝(10~12번), 딥러닝(13~14번)\n\n> 모든 데이터는 실제 개인과 관계없는 합성 데이터입니다.",
   "datasets": [
     {
       "dataset_id": "learners",
@@ -236,13 +236,13 @@
     "version": "0.1.0",
     "content_contract": "1.3.0"
   },
-  "source_fingerprint": "35e8d3ab89c78acd0f31126ce89da59fef2abb88bad223ef870e3296615710cb",
+  "source_fingerprint": "adf12fe813d0c24f3e46859abd7034b88de29722918b84975c0e3011b168fa2a",
   "notebook": {
     "kind": "question_notebook",
     "format": "nbformat4.5",
-    "url_path": "content/associate-101/notebooks/associate-101-questions-2b5fff24c190.ipynb",
-    "sha256": "2b5fff24c190d0e4c7b4ef1e299f636ba042fc827bcc889ae067d5a995e61ade",
-    "size_bytes": 17128,
+    "url_path": "content/associate-101/notebooks/associate-101-questions-163061beea97.ipynb",
+    "sha256": "163061beea9722a789e41320ca1f4070679048f796baea58e18cf779600fa454",
+    "size_bytes": 21005,
     "question_ids": [
       "q01",
       "q02",
