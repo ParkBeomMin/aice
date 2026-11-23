@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q01",
+  "public_id": "associate-101-q01",
+  "revision": 2,
+  "title": "라이브러리와 데이터 확인",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "필요한 라이브러리를 불러오고 데이터를 읽어 구조를 확인하시오.\n\n1. pandas 를 별칭 `pd`, seaborn 을 별칭 `sns` 로 임포트하시오.\n2. `learners.csv` 파일을 읽어 DataFrame `df` 에 저장하시오.\n3. `info()` 와 `describe()` 로 데이터를 확인하시오. (확인 과정은 채점하지 않고 4번의 답으로 채점합니다)\n4. 확인한 내용과 **일치하지 않는** 설명을 골라 번호를 `답안01` 에 저장하시오. (예: 답안01 = 1)\n   1. 데이터는 1,400행, 14열이다.\n   2. 결측값이 있는 컬럼은 `quiz_avg_score` 하나다.\n   3. `avg_session_minutes` 의 최댓값은 289.0 이다.\n   4. `days_since_last_login` 의 중앙값은 8 이다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 라이브러리를 별칭으로 불러오고 info, describe 결과에서 행 수, 결측, 최댓값, 중앙값을 읽어 낸다.\n\n**핵심 개념:** `df.info()` 는 행 수, 컬럼별 결측 아닌 값 개수, 타입을 보여 주고 `df.describe()` 는 수치형 컬럼의 평균, 표준편차, 사분위수를 보여 준다. 중앙값은 `50%` 행이다.\n\n```python\nimport pandas as pd\nimport seaborn as sns\ndf = pd.read_csv('learners.csv')\ndf.info()\nprint(df.describe())\n답안01 = 4\n```\n\n**기준 결과:** 1,400행 14열, 결측 컬럼은 `quiz_avg_score`(91개) 하나, `avg_session_minutes` 최댓값 289.0, `days_since_last_login` 은 평균 약 8.44, 중앙값 6.0. 따라서 4번이 틀린 설명이다.\n\n**다른 풀이 (head 와 shape 로 확인):**\n\n```python\nimport pandas as pd\nimport seaborn as sns\ndf = pd.read_csv('learners.csv')\nprint(df.shape)\n답안01 = 4\n```\n\n**자주 틀리는 부분:** 평균(mean)을 중앙값으로 읽는 것.\n\n**채점 항목:**\n\n1. pandas 를 pd 로 임포트\n2. seaborn 을 sns 로 임포트\n3. CSV 를 그대로 읽은 df\n4. 답안01 정답\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "import pandas as pd\nimport seaborn as sns\ndf = pd.read_csv('learners.csv')\ndf.info()\nprint(df.describe())\n답안01 = 4\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

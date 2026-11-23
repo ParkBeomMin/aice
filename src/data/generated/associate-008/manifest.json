@@ -262,10 +262,10 @@
   },
   "grading": {
     "kind": "grading_bundle",
-    "url_path": "content/associate-008/grading/associate-008-grading-2cf74cf57369.json",
-    "sha256": "2cf74cf573695db600ed887e2c6cfc26a85075ccf103507f9334d2233d31e9f9",
+    "url_path": "content/associate-008/grading/associate-008-grading-d777a06e9e12.json",
+    "sha256": "d777a06e9e12eacd736738dac4a2056b75ac75f332a618c5809388e53f9f34ab",
     "size_bytes": 133597,
-    "engine_version": "1.10.1",
+    "engine_version": "1.11.0",
     "grading_version": "associate-008-g5e308845614e",
     "question_ids": [
       "q01",

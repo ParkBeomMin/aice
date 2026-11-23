@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q10",
+  "public_id": "associate-101-q10",
+  "revision": 2,
+  "title": "의사결정나무와 랜덤포레스트 학습",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "이탈 여부를 예측하는 머신러닝 모델 두 개를 학습하시오.\n\n- 의사결정나무: `DecisionTreeClassifier`, 최대 깊이 5, `min_samples_split=3`, `random_state=120`, 변수 `dt`\n- 랜덤포레스트: `RandomForestClassifier`, 최대 깊이 5, `min_samples_split=3`, `random_state=120`, 변수 `rf`\n- 두 모델을 `X_train`, `y_train` 으로 학습(fit)하시오. 검증 데이터 `X_valid` 는 학습에 쓰지 마시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 트리 계열 두 모델을 같은 하이퍼파라미터로 만들고 학습한다.\n\n**핵심 개념:** 의사결정나무는 나무 하나, 랜덤포레스트는 나무 여러 개의 투표다. `max_depth` 로 깊이를, `min_samples_split` 으로 노드를 나누는 최소 샘플 수를 제한한다.\n\n```python\nfrom sklearn.tree import DecisionTreeClassifier\nfrom sklearn.ensemble import RandomForestClassifier\ndt = DecisionTreeClassifier(max_depth=5, min_samples_split=3, random_state=120)\nrf = RandomForestClassifier(max_depth=5, min_samples_split=3, random_state=120)\ndt.fit(X_train, y_train)\nrf.fit(X_train, y_train)\n```\n\n**기준 결과:** 두 모델 모두 `X_train` 1,097행 22열로 학습.\n\n**다른 풀이 (생성과 fit 을 한 줄로):**\n\n```python\nfrom sklearn.tree import DecisionTreeClassifier\nfrom sklearn.ensemble import RandomForestClassifier\ndt = DecisionTreeClassifier(random_state=120, max_depth=5, min_samples_split=3).fit(X_train, y_train)\nrf = RandomForestClassifier(random_state=120, max_depth=5, min_samples_split=3).fit(X_train, y_train)\n```\n\n**자주 틀리는 부분:** 검증 데이터로 학습하는 것, 하이퍼파라미터 하나를 빠뜨리는 것.\n\n**채점 항목:**\n\n1. DecisionTreeClassifier\n2. dt 하이퍼파라미터\n3. dt 를 훈련 데이터로 학습\n4. RandomForestClassifier\n5. rf 하이퍼파라미터\n6. rf 를 훈련 데이터로 학습\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.tree import DecisionTreeClassifier\nfrom sklearn.ensemble import RandomForestClassifier\ndt = DecisionTreeClassifier(max_depth=5, min_samples_split=3, random_state=120)\nrf = RandomForestClassifier(max_depth=5, min_samples_split=3, random_state=120)\ndt.fit(X_train, y_train)\nrf.fit(X_train, y_train)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

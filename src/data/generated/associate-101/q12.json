@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q12",
+  "public_id": "associate-101-q12",
+  "revision": 1,
+  "title": "특징 중요도",
+  "topic": "machine_learning",
+  "difficulty": "medium",
+  "prompt": "랜덤포레스트 모델이 어떤 특징을 많이 썼는지 확인하시오.\n\n- `rf.feature_importances_` 와 `X` 의 컬럼 이름으로 컬럼이 `Feature`, `Importance` 인 DataFrame `fi_df` 를 만드시오.\n- `Importance` 기준 내림차순으로 정렬하고 인덱스를 0부터 다시 매기시오 (`reset_index(drop=True)`).\n- 중요도가 가장 높은 특징 이름을 `답안12` 에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** feature_importances_ 를 컬럼 이름과 묶어 내림차순으로 정리한다.\n\n**핵심 개념:** `feature_importances_` 는 `X` 의 컬럼 순서와 같은 순서로 들어 있다. 이름과 묶은 뒤 `sort_values(ascending=False)` 로 큰 값부터 정렬한다.\n\n```python\nfi_df = pd.DataFrame({'Feature': X.columns, 'Importance': rf.feature_importances_})\nfi_df = fi_df.sort_values(by='Importance', ascending=False).reset_index(drop=True)\nprint(fi_df.head(10))\n답안12 = fi_df.loc[0, 'Feature']\n```\n\n**기준 결과:** 상위 3개: `completion_rate` 0.223, `days_since_last_login` 0.213, `sessions_last_30d` 0.208.\n\n**다른 풀이 (Series 로 정렬 후 DataFrame):**\n\n```python\nimport pandas as pd\ns = pd.Series(rf.feature_importances_, index=X.columns).sort_values(ascending=False)\nfi_df = pd.DataFrame({'Feature': s.index, 'Importance': s.values})\n답안12 = fi_df['Feature'][0]\n```\n\n**자주 틀리는 부분:** ascending 을 빼서 오름차순이 되는 것, reset_index 를 빼서 0번 행이 1등이 아닌 것.\n\n**채점 항목:**\n\n1. 중요도 내림차순 특징 이름\n2. 중요도 값\n3. 인덱스 0부터\n4. 컬럼 Feature, Importance\n5. 답안12 정답\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "fi_df = pd.DataFrame({'Feature': X.columns, 'Importance': rf.feature_importances_})\nfi_df = fi_df.sort_values(by='Importance', ascending=False).reset_index(drop=True)\nprint(fi_df.head(10))\n답안12 = fi_df.loc[0, 'Feature']\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q09",
+  "public_id": "associate-101-q09",
+  "revision": 1,
+  "title": "데이터 분할과 스케일링",
+  "topic": "preprocessing",
+  "difficulty": "medium",
+  "prompt": "훈련 데이터와 검증 데이터로 나누고 스케일링하시오.\n\n- 대상 데이터프레임: `df_preset`\n- `churn_30d` 를 `y`, 나머지 컬럼을 `X` 로 할당하시오.\n- `train_test_split` 으로 `X_train, X_valid, y_train, y_valid` 를 만드시오. 비율 80:20, `random_state=42`, 이탈 비율이 두 데이터에 비슷하게 유지되도록 `stratify=y` 를 지정하시오.\n- `StandardScaler` 를 `X_train` 에 `fit_transform`, `X_valid` 에는 `transform` 만 적용해 각각 `X_train`, `X_valid` 에 다시 저장하시오.\n- 훈련 데이터의 행 수를 정수로 `답안09` 에 저장하시오.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** train_test_split 의 stratify 와 StandardScaler 의 fit 대상 구분을 익힌다.\n\n**핵심 개념:** `stratify=y` 는 두 데이터의 타깃 비율을 같게 맞춘다. 스케일러는 훈련 데이터로만 fit 하고 검증 데이터에는 transform 만 해야 정보가 새지 않는다.\n\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nX = df_preset.drop('churn_30d', axis=1)\ny = df_preset['churn_30d']\nX_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\nscaler = StandardScaler()\nX_train = scaler.fit_transform(X_train)\nX_valid = scaler.transform(X_valid)\n답안09 = X_train.shape[0]\n```\n\n**기준 결과:** 훈련 1,097행, 검증 275행 (1,372 x 0.2 = 274.4 를 올림).\n\n**다른 풀이 (fit 과 transform 따로):**\n\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nX = df_preset.drop('churn_30d', axis=1)\ny = df_preset['churn_30d']\nX_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\nscaler = StandardScaler()\nscaler.fit(X_train)\nX_train = scaler.transform(X_train)\nX_valid = scaler.transform(X_valid)\n답안09 = len(X_train)\n```\n\n**자주 틀리는 부분:** 검증 데이터에도 fit_transform 을 해서 기준이 달라지는 것.\n\n**채점 항목:**\n\n1. 답안09 정답\n2. 분할 (stratify) 재현\n3. 훈련 데이터로만 fit 한 표준화\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nX = df_preset.drop('churn_30d', axis=1)\ny = df_preset['churn_30d']\nX_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)\nscaler = StandardScaler()\nX_train = scaler.fit_transform(X_train)\nX_valid = scaler.transform(X_valid)\n답안09 = X_train.shape[0]\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

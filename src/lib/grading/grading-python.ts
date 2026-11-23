@@ -2,7 +2,8 @@
 // 채점 프로필은 데이터(JSON)일 뿐이며, 여기 정의된 probe, 비교 연산(allowlist)만 실행한다. 프로필 안의 문자열을 Python 코드로 실행하지 않는다.
 export const GRADING_PY = String.raw`
 import sys, io, json, math, re, random, traceback, warnings, contextlib
-import os
+import os, logging
+logging.getLogger('matplotlib.font_manager').setLevel(logging.ERROR)  # (엔진 1.11.0) plt.rc 로 없는 한글 폰트를 지정해도 경고 숨김
 # (엔진 1.5.0) 채점 Worker 에는 window 가 없으므로 matplotlib 은 항상 Agg (plt.show() 가 오류 없이 지나가도록, 연습 런타임과 동일)
 os.environ.setdefault("MPLBACKEND", "Agg")
 from pyodide.code import eval_code_async, find_imports
@@ -10,7 +11,7 @@ from pyodide.code import eval_code_async, find_imports
 _g_ns = {"__name__": "__main__"}
 _g_last = {"result": None, "stdout": "", "figures": [], "changed": []}
 _g_pre = {}
-_NAME_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]{0,63}$")
+_NAME_RE = re.compile(r"^[A-Za-z_\uac00-\ud7a3][A-Za-z0-9_\uac00-\ud7a3]{0,63}$")  # (엔진 1.11.0) 답안03 같은 한글 변수명 허용
 MAX_STDOUT = 20000
 
 class _ProbeError(Exception):
@@ -109,9 +110,10 @@ _MODEL_CLASSES = {"LogisticRegression": ("sklearn.linear_model", "LogisticRegres
                   "LinearRegression": ("sklearn.linear_model", "LinearRegression"),
                   "Ridge": ("sklearn.linear_model", "Ridge"),
                   "RandomForestRegressor": ("sklearn.ensemble", "RandomForestRegressor"),
-                  "DecisionTreeRegressor": ("sklearn.tree", "DecisionTreeRegressor")}
-_PARAM_KEYS = {"max_iter", "random_state", "n_estimators", "n_jobs", "C", "max_depth", "alpha", "min_samples_leaf"}
-_PARAM_LIMITS = {"n_estimators": (1, 300), "max_depth": (1, 50), "n_jobs": (1, 1), "max_iter": (1, 10000), "min_samples_leaf": (1, 200)}
+                  "DecisionTreeRegressor": ("sklearn.tree", "DecisionTreeRegressor"),
+                  "DecisionTreeClassifier": ("sklearn.tree", "DecisionTreeClassifier")}
+_PARAM_KEYS = {"max_iter", "random_state", "n_estimators", "n_jobs", "C", "max_depth", "alpha", "min_samples_leaf", "min_samples_split"}
+_PARAM_LIMITS = {"n_estimators": (1, 300), "max_depth": (1, 50), "n_jobs": (1, 1), "max_iter": (1, 10000), "min_samples_leaf": (1, 200), "min_samples_split": (2, 200)}
 
 def _model_cls(name):
     import importlib
@@ -386,6 +388,8 @@ def _probe(p):
         order = sorted(range(len(imp)), key=lambda i: -imp[i])[:n]
         if p.get("field") == "index":
             return [str(names[i]) for i in order]
+        if p.get("field") == "values":
+            return [_norm(float(imp[i])) for i in order]
         return {"__series__": {"index": [str(names[i]) for i in order], "values": [_norm(float(imp[i])) for i in order]}}
     if k == "model_params":
         keys = p.get("keys") or []
@@ -998,12 +1002,331 @@ def _probe(p):
         if any(v is None for v in vals):
             return float("inf")
         return max(abs(v - target) for v in vals)
+    if k == "cell_figure":
+        # (엔진 1.11.0) 이 셀이 만든 그림 (index 번째, 기본 0) 의 정보 하나. field=count 는 그림 수
+        figs = _g_last["figures"]
+        f = p.get("field")
+        if f == "count":
+            return len(figs)
+        i = int(p.get("index", 0))
+        if not 0 <= i < len(figs):
+            raise _ProbeError("이 셀에서 그린 그래프가 없습니다. 그래프를 그리는 코드를 실행했는지 확인하세요")
+        if f not in ("bars", "axes", "lines", "line_ydata", "title", "xlabel", "ylabel", "legend", "texts", "points", "suptitle",
+                     "bar_table", "box_table", "heatmap_values", "heatmap_labels", "legend_line"):
+            raise _ProbeError("허용되지 않는 field")
+        if f == "legend_line":
+            lab = p.get("label")
+            if lab not in figs[i].get("legend_lines", {}):
+                raise _ProbeError(f"범례가 '{lab}' 인 선이 없습니다")
+            return figs[i]["legend_lines"][lab]
+        if f in ("heatmap_values", "heatmap_labels"):
+            hm = figs[i].get("heatmap")
+            if not hm:
+                raise _ProbeError("히트맵이 없습니다")
+            return hm["values"] if f == "heatmap_values" else {"x": hm["x"], "y": hm["y"]}
+        if f == "line_ydata" and p.get("line") is not None:
+            ln = int(p["line"])
+            if not 0 <= ln < len(figs[i]["line_ydata"]):
+                raise _ProbeError(f"그래프에 선이 {len(figs[i]['line_ydata'])}개뿐입니다")
+            return figs[i]["line_ydata"][ln]
+        return figs[i][f]
+    if k in ("keras_model", "keras_history", "keras_callback", "keras_predict", "keras_fit", "keras_checkpoint"):
+        return _keras_probe(k, p)
+    if k == "module_name":
+        # (엔진 1.11.0) 별칭 변수가 가리키는 모듈 이름 (import pandas as pd → 'pandas')
+        v = _g_ns.get(p["var"]) if _NAME_RE.match(str(p.get("var", ""))) else None
+        return getattr(v, "__name__", None) if type(v).__name__ == "module" else None
+    if k == "group_counts":
+        # (엔진 1.11.0) source 를 x_column (그리고 y_column) 으로 나눈 행 수. {x 값 문자열: 개수들(정렬, 0 제외)}
+        df = _df(p["source"])
+        xc, hc = p.get("x_column"), p.get("y_column")
+        if xc not in df.columns or (hc is not None and hc not in df.columns):
+            raise _ProbeError("컬럼이 없습니다")
+        out = {}
+        if hc is None:
+            for key, n in df[xc].value_counts(dropna=True).items():
+                out[str(key)] = {"": float(n)}
+        else:
+            for (a, b), n in df.groupby([xc, hc], dropna=True).size().items():
+                if int(n) > 0:
+                    out.setdefault(str(a), {})[str(b)] = float(n)
+        return out
+    if k == "group_quantiles":
+        # (엔진 1.11.0) source 를 x_column 으로 나눈 y_column 의 [Q1, 중앙값, Q3] (결측 제외, 선형 보간 = matplotlib boxplot 과 같음)
+        df = _df(p["source"])
+        xc, yc = p.get("x_column"), p.get("y_column")
+        if xc not in df.columns or yc not in df.columns:
+            raise _ProbeError("컬럼이 없습니다")
+        out = {}
+        for key, g in df[[xc, yc]].dropna().groupby(xc):
+            q = g[yc].astype(float).quantile([0.25, 0.5, 0.75]).tolist()
+            out[str(key)] = [round(float(x), 9) for x in q]
+        return out
+    if k == "corr_values":
+        # (엔진 1.11.0) source 수치형 컬럼 상관계수 행렬. field=labels 면 컬럼 이름, 아니면 행 순서로 펼친 값
+        df = _df(p["source"])
+        cm = df.corr(numeric_only=True)
+        if p.get("field") == "labels":
+            return [str(c) for c in cm.columns]
+        return [None if v != v else round(float(v), 9) for v in cm.to_numpy().reshape(-1)]
+    if k == "heatmap_annot_match":
+        # (엔진 1.11.0) 이 셀 히트맵의 칸별 주석 숫자가 source 상관계수와 같은지 (표시 자릿수만큼 반올림 허용). 모든 칸에 하나씩
+        figs = _g_last["figures"]
+        hm = figs[0].get("heatmap") if figs else None
+        if not hm:
+            return False
+        cm = _df(p["source"]).corr(numeric_only=True)
+        n = len(cm.columns)
+        def _near(ticks, labs, v):
+            if not ticks or len(ticks) != len(labs):
+                return None
+            i = min(range(len(ticks)), key=lambda j: abs(ticks[j] - v))
+            return labs[i] if abs(ticks[i] - v) <= 0.5 else None
+        seen = set()
+        for x, y, txt in hm["annots"]:
+            cx, ry = _near(hm["xt"], hm["x"], x), _near(hm["yt"], hm["y"], y)
+            if cx not in cm.columns or ry not in cm.index or (ry, cx) in seen:
+                return False
+            seen.add((ry, cx))
+            t = str(txt).strip().replace("−", "-")
+            try:
+                got = float(t)
+            except ValueError:
+                return False
+            d = len(t.split(".")[1]) if "." in t else 0
+            if abs(got - float(cm.loc[ry, cx])) > 0.5 * 10 ** (-d) + 1e-9:
+                return False
+        return len(seen) == n * n
+    if k == "threshold_yn":
+        # (엔진 1.11.0) var 의 첫 값이 threshold 이상이면 'Y', 아니면 'N' (학생 예측값으로 독립 검산)
+        import numpy as np
+        th = p.get("threshold", 0.5)
+        try:
+            a = np.asarray(_var(p["var"]), dtype=float).reshape(-1)
+        except (TypeError, ValueError):
+            raise _ProbeError(f"{p['var']} 가 숫자 배열이 아닙니다")
+        if a.size == 0 or not np.isfinite(a[0]):
+            raise _ProbeError(f"{p['var']} 에 값이 없습니다")
+        return "Y" if float(a[0]) >= float(th) else "N"
+    if k == "frame_digest":
+        # (엔진 1.11.0) DataFrame 의 인덱스, 컬럼 순서, dtype 종류, 값(실수는 9자리 반올림) 지문
+        import hashlib
+        df = _df(p["var"])
+        h = hashlib.sha256()
+        h.update(json.dumps([[str(i) for i in df.index], [str(c) for c in df.columns], [df[c].dtype.kind for c in df.columns]]).encode())
+        for c in df.columns:
+            vals = []
+            for x in df[c].tolist():
+                fx = _num(x)
+                vals.append(None if (fx is None and (x is None or x != x)) else (round(fx, 9) if isinstance(x, float) else str(x)))
+            h.update(json.dumps(vals).encode())
+        return h.hexdigest()[:32]
+    if k == "split_scaled_reproduced":
+        # (엔진 1.11.0) 학생의 현재 frame 으로 분할을 다시 하고 StandardScaler 를 훈련 데이터에만 fit 해 변환한 값과 학생 변수를 비교
+        import numpy as np
+        from sklearn.model_selection import train_test_split
+        from sklearn.preprocessing import StandardScaler
+        df = _df(p["frame"])
+        tgt = p.get("target")
+        drop = list(p.get("drop") or [])
+        if tgt not in drop or any(c not in df.columns for c in drop):
+            raise _ProbeError("분할 기준 컬럼이 없습니다")
+        ts, rs = p.get("test_size"), p.get("random_state")
+        if not isinstance(ts, (int, float)) or isinstance(ts, bool) or not (0.0 < float(ts) < 1.0) or not isinstance(rs, int) or isinstance(rs, bool):
+            raise _ProbeError("분할 설정 오류")
+        X = df.drop(columns=drop); y = df[tgt]
+        Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=float(ts), random_state=rs, stratify=(y if p.get("stratify") is True else None))
+        sc = StandardScaler().fit(Xtr)
+        exp = {"X_train": sc.transform(Xtr), "X_test": sc.transform(Xte), "y_train": ytr.to_numpy(), "y_test": yte.to_numpy()}
+        res = {}
+        for key, vn in (p.get("outputs") or {}).items():
+            got = _g_ns.get(vn) if isinstance(vn, str) and _NAME_RE.match(vn) else None
+            try:
+                g = np.asarray(got, dtype=float)
+                res[key] = bool(g.shape == exp[key].shape and np.allclose(g, exp[key], rtol=1e-7, atol=1e-7))
+            except Exception:
+                res[key] = False
+        return res
+    if k == "path_exists":
+        nm = p.get("path")
+        if not isinstance(nm, str) or not re.fullmatch(r"[A-Za-z0-9_.-]{1,64}", nm):
+            raise _ProbeError("경로 형식 오류")
+        return os.path.isfile(nm)
     if k == "figure_count":
         return len(_g_last["figures"])
     if k == "bar_count":
         figs = _g_last["figures"]
         return figs[0]["bars"] if figs else 0
     raise _ProbeError(f"허용되지 않는 probe: {k}")
+
+def _keras_obj(name):
+    v = _var(name)
+    if "_acf_keras" not in sys.modules:
+        raise _ProbeError("tensorflow.keras 를 사용하지 않았습니다")
+    return v, sys.modules["_acf_keras"]
+
+def _keras_probe(k, p):
+    # (엔진 1.11.0) 브라우저 Keras 호환 모듈의 학생 객체를 읽는다 (학습을 다시 하지 않음)
+    if k == "keras_model" and p.get("path"):
+        if "_acf_keras" not in sys.modules:
+            raise _ProbeError("tensorflow.keras 를 사용하지 않았습니다")
+        K = sys.modules["_acf_keras"]
+        nm = p["path"]
+        if not re.fullmatch(r"[A-Za-z0-9_.-]{1,64}", nm) or not os.path.isfile(nm):
+            raise _ProbeError(f"저장된 모델 파일 {nm} 이 없습니다")
+        try:
+            m = K.load_model(nm)
+        except Exception:
+            raise _ProbeError(f"{nm} 을 load_model 로 불러올 수 없습니다")
+    elif k == "keras_model":
+        m, K = _keras_obj(p["var"])
+    if k == "keras_model":
+        if not isinstance(m, K.Sequential):
+            raise _ProbeError(f"{p['var']} 가 Sequential 모델이 아닙니다")
+        f = p.get("field")
+        if f == "layers":
+            out = []
+            for l in m.layers:
+                t = type(l).__name__
+                if t == "Dense":
+                    out.append([t, l.units, l.activation])
+                elif t == "Dropout":
+                    out.append([t, round(l.rate, 6)])
+                elif t == "Activation":
+                    out.append([t, l.activation])
+                else:
+                    out.append([t])
+            return out
+        if f == "loss":
+            return getattr(m, "loss", None)
+        if f == "optimizer":
+            o = getattr(m, "optimizer", None)
+            return type(o).__name__.lower() if o is not None else None
+        if f == "metrics":
+            return list(getattr(m, "metrics_names", []))
+        if f == "trained":
+            return m.history is not None and len(m.history.epoch) > 0
+        if f == "weights_fp":
+            return K._weights_fp(m)
+        if f == "model_fp":
+            return K._model_fp(m)
+        if f == "input_dim":
+            shp = getattr(m, "_input", None)
+            return int(shp[-1]) if shp else None
+        raise _ProbeError("허용되지 않는 field")
+    if k == "keras_history":
+        h, K = _keras_obj(p["var"])
+        if isinstance(h, K.Sequential):
+            h = h.history
+        if not isinstance(h, K.History):
+            raise _ProbeError(f"{p['var']} 가 fit 이 돌려준 History 가 아닙니다")
+        f = p.get("field")
+        if f == "keys":
+            return sorted(h.history)
+        if f == "of_model":
+            # model 의 마지막 fit 이 돌려준 History 이고 실제 에포크가 있으면 지표 이름, 아니면 None
+            m2, _ = _keras_obj(p["model"])
+            return sorted(h.history) if (m2.history is h and len(h.epoch) > 0) else None
+        if f == "epochs":
+            return len(h.epoch)
+        if f == "values":
+            key = p.get("key")
+            if key not in h.history:
+                raise _ProbeError(f"history 에 '{key}' 가 없습니다")
+            return [float(v) for v in h.history[key]]
+        if f == "params":
+            return {kk: h.params.get(kk) for kk in ("epochs",)}
+        raise _ProbeError("허용되지 않는 field")
+    if k == "keras_callback":
+        c, K = _keras_obj(p["var"])
+        f = p.get("field")
+        if f == "class":
+            return type(c).__name__
+        if not isinstance(c, K.Callback):
+            raise _ProbeError(f"{p['var']} 가 콜백이 아닙니다")
+        if f == "monitor_mode":
+            # 감시 지표와 실제 개선 방향 (mode auto 는 지표 이름으로 결정)
+            return [getattr(c, "monitor", None), K._mode(getattr(c, "monitor", ""), getattr(c, "mode", "auto"))]
+        if f not in ("monitor", "patience", "restore_best_weights", "save_best_only", "filepath", "mode"):
+            raise _ProbeError("허용되지 않는 field")
+        return _norm(getattr(c, f, None))
+    if k == "keras_checkpoint":
+        # (엔진 1.11.0) ModelCheckpoint(var) 가 마지막으로 저장한 가중치가 지금 path 파일과 같은지, 저장 에포크가 감시 지표 최적 에포크인지
+        import numpy as np
+        c, K = _keras_obj(p["var"])
+        if not isinstance(c, K.ModelCheckpoint):
+            raise _ProbeError(f"{p['var']} 가 ModelCheckpoint 가 아닙니다")
+        rec = getattr(c, "_acf_saved", None)
+        nm = p.get("path")
+        if not rec or not isinstance(nm, str) or not re.fullmatch(r"[A-Za-z0-9_.-]{1,64}", nm) or not os.path.isfile(nm):
+            return {"file_is_saved": False, "best_epoch": False}
+        try:
+            fm = K.load_model(nm)
+        except Exception:
+            return {"file_is_saved": False, "best_epoch": False}
+        same = rec["path"] == nm and K._model_fp(fm) == rec.get("model")
+        h = getattr(getattr(c, "model", None), "history", None)
+        vals = (h.history.get(c.monitor) if h is not None else None) or []
+        best_ep = None
+        if vals:
+            arr = np.asarray(vals, dtype=float)
+            best_ep = h.epoch[int(np.argmin(arr) if K._mode(c.monitor, c.mode) == "min" else np.argmax(arr))]
+        return {"file_is_saved": bool(same), "best_epoch": bool(best_ep is not None and rec["epoch"] == best_ep and K._mode(c.monitor, c.mode) == "min")}
+    if k == "keras_fit":
+        # (엔진 1.11.0) 모델의 마지막 fit 호출 기록: params (epochs, batch_size), data (넘긴 훈련, 검증 데이터가 학생 변수와 같은지), callbacks (vars 가 모두 전달됐는지)
+        m, K = _keras_obj(p["var"])
+        rec = getattr(m, "_acf_fit", None)
+        if not rec:
+            raise _ProbeError(f"{p['var']} 로 fit 을 실행하지 않았습니다")
+        f = p.get("field")
+        if f == "params":
+            return {"epochs": rec["epochs"], "batch_size": rec["batch_size"]}
+        if f == "data":
+            def same(fp, vn):
+                if fp is None or not isinstance(vn, str) or not _NAME_RE.match(vn) or vn not in _g_ns:
+                    return False
+                return K._fingerprint(_g_ns[vn]) == fp
+            out = {"train": same(rec["train"][0], p.get("X")) and same(rec["train"][1], p.get("y"))}
+            if p.get("X_eval"):
+                out["valid"] = bool(rec["valid"]) and same(rec["valid"][0], p.get("X_eval")) and same(rec["valid"][1], p.get("y_eval"))
+            return out
+        if f == "callbacks":
+            names = list(p.get("vars") or [])
+            if not names or any(not _NAME_RE.match(str(n)) for n in names):
+                raise _ProbeError("콜백 변수 이름 오류")
+            return all(n in _g_ns and id(_g_ns[n]) in rec["callbacks"] for n in names)
+        raise _ProbeError("허용되지 않는 field")
+    if k == "keras_predict":
+        import numpy as np
+        if "_acf_keras" not in sys.modules:
+            raise _ProbeError("tensorflow.keras 를 사용하지 않았습니다")
+        K = sys.modules["_acf_keras"]
+        if p.get("path"):
+            nm = p["path"]
+            if not re.fullmatch(r"[A-Za-z0-9_.-]{1,64}", nm) or not os.path.isfile(nm):
+                raise _ProbeError(f"저장된 모델 파일 {nm} 이 없습니다")
+            m = K.load_model(nm)
+        else:
+            m = _var(p["model"])
+        X = np.asarray(_var(p["X"]), dtype=float)
+        if X.ndim == 1:
+            X = X.reshape(1, -1)
+        pr = m.predict(X, verbose=0)
+        out = p.get("output", "proba")
+        if out == "proba":
+            return [[float(v) for v in r] for r in pr]
+        if out == "proba01":
+            # 분류 확률: 모두 유한하고 0~1 이어야 함 (회귀형에는 쓰지 않음)
+            if not np.all(np.isfinite(pr)) or np.any(pr < 0) or np.any(pr > 1):
+                raise _ProbeError("저장 모델의 예측이 0~1 확률 범위를 벗어납니다. 출력층 활성화 함수를 확인하세요")
+            return [[float(v) for v in r] for r in pr]
+        if out == "label":
+            if pr.shape[1] == 1:
+                return [int(v >= float(p.get("threshold", 0.5))) for v in pr[:, 0]]
+            return [int(v) for v in pr.argmax(1)]
+        if out == "round":
+            return [int(round(float(v))) for v in pr[:, 0]]
+        raise _ProbeError("허용되지 않는 output")
 
 def _close(a, b, abs_tol, rel_tol):
     if isinstance(a, bool) or isinstance(b, bool):
@@ -1138,17 +1461,111 @@ def _g_pre_capture(profile_json):
                 pass
     return "ok"
 
+def _g_tick_label(ax, x):
+    # x 위치에서 가장 가까운 x 눈금 글자
+    ticks = list(ax.get_xticks()); labs = [t.get_text() for t in ax.get_xticklabels()]
+    if not ticks or len(ticks) != len(labs):
+        return None
+    i = min(range(len(ticks)), key=lambda j: abs(ticks[j] - x))
+    return labs[i] if abs(ticks[i] - x) <= 0.5 else None
+
+def _g_fig_tables(ax):
+    # (엔진 1.11.0) 그래프 데이터 검증용: 막대 표 {x 눈금: 높이들(정렬)}, 상자 표 {x 눈금: [Q1, 중앙값, Q3]}, 히트맵 값과 눈금, 범례 글자별 선 y 값
+    import numpy as np
+    out = {"bar_table": {}, "box_table": {}, "heatmap": None, "legend_lines": {}}
+    # 막대 색 -> 범례 글자 (hue). 범례가 없으면 ""
+    colmap = {}
+    lg = ax.get_legend()
+    if lg is not None:
+        hs = getattr(lg, "legend_handles", None) or getattr(lg, "legendHandles", [])
+        for h, t in zip(hs, lg.get_texts()):
+            try:
+                colmap[tuple(round(float(x), 4) for x in h.get_facecolor())] = t.get_text()
+            except Exception:
+                pass
+    for r in ax.patches:
+        if type(r).__name__ == "Rectangle" and r.get_height() != 0 and np.isfinite(r.get_height()):
+            lab = _g_tick_label(ax, r.get_x() + r.get_width() / 2)
+            if lab is None:
+                continue
+            hue = colmap.get(tuple(round(float(x), 4) for x in r.get_facecolor()), "?") if colmap else ""
+            cell = out["bar_table"].setdefault(lab, {})
+            cell[hue] = round(cell.get(hue, 0.0) + float(r.get_height()), 9)
+    boxes = []
+    for pp in ax.patches:
+        if type(pp).__name__ == "PathPatch":
+            vs = np.asarray(pp.get_path().vertices, dtype=float)
+            if len(vs):
+                vs = pp.get_patch_transform().transform(vs) if hasattr(pp, "get_patch_transform") else vs
+                boxes.append((float(vs[:, 0].min()), float(vs[:, 0].max()), float(vs[:, 1].min()), float(vs[:, 1].max())))
+    if not boxes:
+        for l in ax.get_lines():
+            xd, yd = np.asarray(l.get_xdata(), dtype=float), np.asarray(l.get_ydata(), dtype=float)
+            if len(xd) == 5 and xd[0] == xd[-1] and yd[0] == yd[-1] and len(set(np.round(xd, 9))) == 2 and len(set(np.round(yd, 9))) == 2:
+                boxes.append((float(xd.min()), float(xd.max()), float(yd.min()), float(yd.max())))
+    for x0, x1, q1, q3 in boxes:
+        med = None
+        for l in ax.get_lines():
+            xd, yd = np.asarray(l.get_xdata(), dtype=float), np.asarray(l.get_ydata(), dtype=float)
+            if len(xd) == 2 and yd[0] == yd[1] and q1 - 1e-9 <= yd[0] <= q3 + 1e-9 and abs((xd.max() - xd.min()) - (x1 - x0)) <= 1e-6 * max(1.0, x1 - x0) and abs(xd.min() - x0) <= 1e-6 * max(1.0, x1 - x0):
+                med = float(yd[0]); break
+        lab = _g_tick_label(ax, (x0 + x1) / 2)
+        if lab is not None:
+            out["box_table"][lab] = [round(q1, 9), (round(med, 9) if med is not None else None), round(q3, 9)]
+    for c in ax.collections:
+        if type(c).__name__ == "QuadMesh":
+            a = np.asarray(c.get_array(), dtype=float)
+            if a.size <= 900:
+                out["heatmap"] = {"x": [t.get_text() for t in ax.get_xticklabels()], "y": [t.get_text() for t in ax.get_yticklabels()],
+                                  "xt": [float(v) for v in ax.get_xticks()], "yt": [float(v) for v in ax.get_yticks()],
+                                  "values": [None if not np.isfinite(v) else round(float(v), 9) for v in a.reshape(-1)],
+                                  "annots": [[float(t.get_position()[0]), float(t.get_position()[1]), t.get_text()] for t in ax.texts[:900]]}
+            break
+    hs, ls = ax.get_legend_handles_labels()
+    for h, lab in zip(hs, ls):
+        if hasattr(h, "get_ydata") and lab not in out["legend_lines"]:
+            try:
+                out["legend_lines"][str(lab)] = [float(v) for v in list(h.get_ydata())[:500]]
+            except Exception:
+                pass
+    return out
+
 def _g_figs():
+    # (엔진 1.11.0) 셀이 만든 그림마다 막대, 선, 제목, 축 이름, 범례, 주석 글자, 산점도 점, 선 y값까지 기록 (seaborn 포함)
     if "matplotlib.pyplot" not in sys.modules:
         return []
     import matplotlib.pyplot as plt
     out = []
     for num in plt.get_fignums()[:5]:
         fig = plt.figure(num)
-        bars = 0
-        for ax in fig.axes:
-            bars += sum(1 for p in ax.patches if type(p).__name__ == "Rectangle")
-        out.append({"bars": bars})
+        info = {"bars": 0, "axes": len(fig.axes), "lines": 0, "line_ydata": [], "title": "", "xlabel": "", "ylabel": "",
+                "legend": [], "texts": 0, "points": 0, "suptitle": (fig._suptitle.get_text() if getattr(fig, "_suptitle", None) else "")}
+        for i, ax in enumerate(fig.axes):
+            info["bars"] += sum(1 for p in ax.patches if type(p).__name__ == "Rectangle" and p.get_height() != 0)
+            ls = [l for l in ax.get_lines() if len(l.get_ydata()) > 1 or i == 0]
+            info["lines"] += len(ls)
+            for l in ls[:6]:
+                try:
+                    info["line_ydata"].append([float(v) for v in list(l.get_ydata())[:500]])
+                except Exception:
+                    pass
+            info["texts"] += len(ax.texts)
+            info["points"] += int(sum(len(c.get_offsets()) for c in ax.collections if hasattr(c, "get_offsets")))
+            if i == 0 or not info["title"]:
+                info["title"] = info["title"] or str(ax.get_title())
+            if i == 0:
+                info["xlabel"], info["ylabel"] = str(ax.get_xlabel()), str(ax.get_ylabel())
+            lg = ax.get_legend()
+            if lg is not None:
+                info["legend"] += [t.get_text() for t in lg.get_texts()]
+        for lg in getattr(fig, "legends", []):
+            info["legend"] += [t.get_text() for t in lg.get_texts()]
+        if fig.axes:
+            try:
+                info.update(_g_fig_tables(fig.axes[0]))
+            except Exception:
+                pass
+        out.append(info)
     plt.close("all")
     return out
 

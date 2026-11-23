@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q14",
+  "public_id": "associate-101-q14",
+  "revision": 3,
+  "title": "학습 곡선과 저장 모델 시뮬레이션",
+  "topic": "deep_learning",
+  "difficulty": "medium",
+  "prompt": "학습 결과를 그래프로 확인하고, 저장한 모델로 새 수강생을 예측하시오.\n\n1. matplotlib 으로 `history` 의 학습 정확도와 검증 정확도를 한 그래프에 그리시오.\n   - 범례는 `'acc'`, `'val_acc'`, 제목은 `'Model Accuracy'`, x 축 이름은 `'Epochs'`, y 축 이름은 `'Accuracy'`\n2. `load_model` 로 `'best_model.h5'` 를 불러와 `best` 에 저장하고, 셀에 주어진 `simul` (스케일링을 마친 수강생 1명)의 이탈 확률을 `best.predict` 로 예측해 `sim_pred` 에 저장하시오. (`simul` 은 바꾸지 마시오)\n3. `sim_pred` 의 확률이 0.5 이상이면 'Y', 아니면 'N' 을 `답안14` 에 저장하시오.",
+  "starter_code": "simul = np.array([[-1.468149, -1.341364, -0.9013, -0.513712, 0.944394, 2.833344, -0.749671, 2.601551, 0.990022, -0.633263, -0.513639, -0.496579, 2.085958, -0.623384, -0.710494, -0.554535, 1.49852, -0.505123, -0.582613, -0.928697, 1.12125, -0.321903]])\n\n# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** history 로 학습 곡선을 그리고 저장한 모델을 불러와 새 데이터 1건을 예측한다.\n\n**핵심 개념:** `history.history` 는 에포크마다 기록한 지표 딕셔너리다. `load_model` 로 불러온 모델의 `predict` 결과(`sim_pred`)는 2차원 배열이므로 `[0][0]` 으로 확률 하나를 꺼낸다.\n\n```python\nsimul = np.array([[-1.468149, -1.341364, -0.9013, -0.513712, 0.944394, 2.833344, -0.749671, 2.601551, 0.990022, -0.633263, -0.513639, -0.496579, 2.085958, -0.623384, -0.710494, -0.554535, 1.49852, -0.505123, -0.582613, -0.928697, 1.12125, -0.321903]])\n\nplt.plot(history.history['accuracy'], label='acc')\nplt.plot(history.history['val_accuracy'], label='val_acc')\nplt.title('Model Accuracy')\nplt.xlabel('Epochs')\nplt.ylabel('Accuracy')\nplt.legend()\nplt.show()\nbest = load_model('best_model.h5')\nsim_pred = best.predict(simul)\nprint(sim_pred)\n답안14 = 'Y' if sim_pred[0][0] >= 0.5 else 'N'\n```\n\n**기준 결과:** 주어진 수강생의 이탈 확률은 약 0.98 로 0.5 이상이므로 'Y'.\n\n**다른 풀이 (선 순서를 바꿔 그림):**\n\n```python\nsimul = np.array([[-1.468149, -1.341364, -0.9013, -0.513712, 0.944394, 2.833344, -0.749671, 2.601551, 0.990022, -0.633263, -0.513639, -0.496579, 2.085958, -0.623384, -0.710494, -0.554535, 1.49852, -0.505123, -0.582613, -0.928697, 1.12125, -0.321903]])\nimport matplotlib.pyplot as plt\nplt.figure()\nplt.plot(history.history['val_accuracy'], label='val_acc')\nplt.plot(history.history['accuracy'], label='acc')\nplt.legend()\nplt.title('Model Accuracy')\nplt.xlabel('Epochs')\nplt.ylabel('Accuracy')\nplt.show()\nbest = load_model('best_model.h5')\nsim_pred = best.predict(simul, verbose=0)\n답안14 = 'Y' if sim_pred[0, 0] >= 0.5 else 'N'\n```\n\n**자주 틀리는 부분:** loss 그래프를 그리는 것, predict 결과 배열을 그대로 비교하는 것.\n\n**채점 항목:**\n\n1. 제목 Model Accuracy\n2. 범례 acc, val_acc\n3. x 축 Epochs\n4. y 축 Accuracy\n5. acc 선은 학습 정확도\n6. val_acc 선은 검증 정확도\n7. simul 그대로\n8. 저장 모델을 불러온 best\n9. 저장 모델의 예측 확률\n10. 답안14 정답\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "simul = np.array([[-1.468149, -1.341364, -0.9013, -0.513712, 0.944394, 2.833344, -0.749671, 2.601551, 0.990022, -0.633263, -0.513639, -0.496579, 2.085958, -0.623384, -0.710494, -0.554535, 1.49852, -0.505123, -0.582613, -0.928697, 1.12125, -0.321903]])\n\nplt.plot(history.history['accuracy'], label='acc')\nplt.plot(history.history['val_accuracy'], label='val_acc')\nplt.title('Model Accuracy')\nplt.xlabel('Epochs')\nplt.ylabel('Accuracy')\nplt.legend()\nplt.show()\nbest = load_model('best_model.h5')\nsim_pred = best.predict(simul)\nprint(sim_pred)\n답안14 = 'Y' if sim_pred[0][0] >= 0.5 else 'N'\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

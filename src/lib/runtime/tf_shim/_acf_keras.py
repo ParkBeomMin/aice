@@ -451,6 +451,7 @@ class ModelCheckpoint(Callback):
         path = self.filepath.format(epoch=epoch + 1, **{k: v for k, v in logs.items()})
         if not self.save_best_only:
             self.model.save(path)
+            self._acf_saved = {"epoch": epoch, "path": path, "weights": _weights_fp(self.model), "model": _model_fp(self.model)}
             return
         v = logs.get(self.monitor)
         if v is None:
@@ -461,6 +462,7 @@ class ModelCheckpoint(Callback):
                 print(f"Epoch {epoch + 1}: {self.monitor} improved from {self.best:.5f} to {v:.5f}, saving model to {path}")
             self.best = v
             self.model.save(path)
+            self._acf_saved = {"epoch": epoch, "path": path, "weights": _weights_fp(self.model), "model": _model_fp(self.model)}
         elif self.verbose:
             print(f"Epoch {epoch + 1}: {self.monitor} did not improve from {self.best:.5f}")
 
@@ -600,6 +602,11 @@ class Sequential:
         else:
             Xv = Yv = None
         bs = int(batch_size or 32)
+        # 채점용 기록: fit 에 넘긴 설정, 데이터 지문, 콜백 (학습 결과에는 영향 없음)
+        self._acf_fit = {"epochs": epochs, "batch_size": batch_size, "train": [_fingerprint(x), _fingerprint(y)],
+                         "valid": ([_fingerprint(validation_data[0]), _fingerprint(validation_data[1])] if validation_data is not None else None),
+                         "validation_split": float(validation_split or 0), "callbacks": [id(c) for c in (callbacks or [])],
+                         "callback_types": [type(c).__name__ for c in (callbacks or [])]}
         hist = History(); hist.set_model(self)
         hist.params = {"verbose": verbose, "epochs": epochs, "steps": math.ceil(len(X) / bs)}
         cbs = list(callbacks or [])
@@ -701,6 +708,51 @@ class Sequential:
 
 
 Model = Sequential
+
+
+def _fingerprint(a):
+    """배열 지문: 모양과 float64 값 바이트의 SHA-256 (값이나 순서가 하나라도 바뀌면 달라짐)"""
+    import hashlib
+    try:
+        v = np.ascontiguousarray(np.asarray(getattr(a, "values", a), dtype=np.float64))
+    except Exception:
+        return None
+    return [list(v.shape), hashlib.sha256(v.tobytes()).hexdigest()]
+
+
+def _weights_fp(model):
+    """모델 가중치 지문 (층 순서대로 모양과 값)"""
+    import hashlib
+    h = hashlib.sha256()
+    try:
+        ws = model.get_weights()
+    except Exception:
+        return None
+    for w in ws:
+        w = np.ascontiguousarray(np.asarray(w, dtype=np.float64))
+        h.update(str(w.shape).encode()); h.update(w.tobytes())
+    return h.hexdigest()
+
+
+def _model_fp(model):
+    """모델 동일성 지문: 입력 크기, 층 종류와 순서, 층별 설정(이름 제외 스칼라 속성, 활성화 함수 포함), 가중치 모양과 값"""
+    import hashlib, json as _json
+    layers = []
+    for l in getattr(model, "layers", []):
+        cfg = {}
+        for k2, v2 in sorted(vars(l).items()):
+            if k2 in ("name",) or k2.startswith("_") and k2 not in ("_input",):
+                continue
+            if v2 is None or isinstance(v2, (bool, int, float, str)):
+                cfg[k2] = v2
+            elif isinstance(v2, (tuple, list)) and all(isinstance(x, (int, float, str, type(None))) for x in v2):
+                cfg[k2] = list(v2)
+            elif callable(v2):
+                cfg[k2] = getattr(v2, "__name__", type(v2).__name__)
+        layers.append([type(l).__name__, cfg])
+    inp = getattr(model, "_input", None)
+    head = _json.dumps({"input": list(inp) if inp is not None else None, "layers": layers}, sort_keys=True, default=str)
+    return hashlib.sha256((head + "|" + str(_weights_fp(model))).encode()).hexdigest()
 
 
 def load_model(filepath, **kw):

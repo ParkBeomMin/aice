@@ -1,7 +1,10 @@
 /// <reference lib="webworker" />
 // Pyodide 커널 Worker: 노트북 세션 하나 = Pyodide 인스턴스 하나 (셀 간 변수 공유).
 import type { ToWorker, FromWorker, Output, DatasetSpec } from './worker-protocol.ts';
-import { packagesFor, implicitPackages, truncate, MAX_STREAM_CHARS } from './worker-protocol.ts';
+import { packagesFor, implicitPackages, truncate, MAX_STREAM_CHARS, resolvePackages } from './worker-protocol.ts';
+// 사이트에 함께 올린 휠의 기준 주소 (Worker 스크립트는 <base>/_astro/ 아래)
+// 사이트 루트 (base 포함). dev 에서는 워커 경로가 /src/... 라서 상대 경로 대신 BASE_URL 사용
+const VENDOR_BASE = new URL(String(import.meta.env.BASE_URL ?? '/').replace(/\/?$/, '/'), self.location.origin).href;
 import { PY_HELPERS } from './python-helpers';
 import { installTfShim } from './tf-shim.ts';
 
@@ -74,7 +77,7 @@ async function executeInner(requestId: string, cellId: string, code: string) {
   const pkgs = [...new Set([...packagesFor(imports), ...implicitPackages(code)])].filter((p) => !loaded.has(p));
   if (pkgs.length) {
     post({ type: 'PACKAGES_LOADING', sessionId, requestId, cellId, packages: pkgs });
-    await pyodide.loadPackage(pkgs, { messageCallback: () => {}, errorCallback: () => {} });
+    await pyodide.loadPackage(resolvePackages(pkgs, VENDOR_BASE), { messageCallback: () => {}, errorCallback: () => {} });
     pkgs.forEach((p) => loaded.add(p));
   }
   const packageMs = Math.round(performance.now() - tp);
@@ -102,7 +105,7 @@ async function assist(requestId: string, mode: 'complete' | 'inspect', code: str
   busy++;
   try {
     const pkgs = [...new Set(['jedi', ...packagesFor(importedModules(code))])].filter((p) => !loaded.has(p));
-    if (pkgs.length) { await pyodide.loadPackage(pkgs, { messageCallback: () => {}, errorCallback: () => {} }); pkgs.forEach((p) => loaded.add(p)); }
+    if (pkgs.length) { await pyodide.loadPackage(resolvePackages(pkgs, VENDOR_BASE), { messageCallback: () => {}, errorCallback: () => {} }); pkgs.forEach((p) => loaded.add(p)); }
     const fn = pyodide.globals.get(mode === 'complete' ? '_acf_complete' : '_acf_inspect');
     const raw: string = fn(code, line, col);
     fn.destroy?.();

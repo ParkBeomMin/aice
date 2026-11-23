@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q08",
+  "public_id": "associate-101-q08",
+  "revision": 2,
+  "title": "원-핫 인코딩",
+  "topic": "preprocessing",
+  "difficulty": "easy",
+  "prompt": "범주형 컬럼을 0과 1 컬럼으로 바꾸시오.\n\n- 대상 데이터프레임: `df_na`\n- 원-핫 인코딩 대상: 문자열(범주형) 타입의 전체 컬럼\n- 활용 함수: pandas 의 `get_dummies` (`dtype=int`)\n- 결과를 데이터프레임 `df_preset` 에 저장하시오. 컬럼 순서는 `get_dummies` 결과 그대로 두시오 (14번의 `simul` 이 이 순서를 따릅니다).",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** get_dummies 로 문자열 컬럼 전체를 원-핫 인코딩한다.\n\n**핵심 개념:** `pd.get_dummies(df_na, dtype=int)` 는 문자열 컬럼만 골라 범주마다 0과 1 컬럼을 만든다. 수치형 컬럼과 타깃은 그대로 남는다.\n\n```python\ndf_preset = pd.get_dummies(df_na, dtype=int)\nprint(df_preset.shape)\n```\n\n**기준 결과:** 문자열 4개 컬럼(범주 3+4+4+3=14개) 이 원-핫 컬럼 14개가 되어 `df_preset` 1,372행 23열.\n\n**다른 풀이 (columns 를 직접 지정):**\n\n```python\nimport pandas as pd\ndf_preset = pd.get_dummies(df_na, columns=['membership_type', 'signup_channel', 'course_category', 'device_type'], dtype=int)\n```\n\n**자주 틀리는 부분:** drop_first=True 로 범주 하나씩을 빠뜨리는 것.\n\n**채점 항목:**\n\n1. 문자열 컬럼 전체 원-핫 (df_na 기준 재계산)\n2. 컬럼 순서 그대로\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "df_preset = pd.get_dummies(df_na, dtype=int)\nprint(df_preset.shape)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

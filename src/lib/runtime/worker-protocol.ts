@@ -2,11 +2,25 @@
 export const PYODIDE_VERSION = '314.0.7';
 export const PYODIDE_INDEX_URL = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
 // 브라우저에서 로드 허용하는 패키지 (find_imports 결과를 이 목록으로 제한)
-export const ALLOWED_PACKAGES = ['numpy', 'pandas', 'matplotlib', 'scikit-learn', 'scipy'] as const;
+export const ALLOWED_PACKAGES = ['numpy', 'pandas', 'matplotlib', 'scikit-learn', 'scipy', 'seaborn', 'xgboost'] as const;
+/** Pyodide 기본 저장소에 없는 순수 파이썬 패키지: 사이트에 함께 올린 휠 (경로는 사이트 루트 기준) */
+export const VENDOR_WHEELS: Record<string, { file: string; deps: string[] }> = {
+  seaborn: { file: 'vendor/seaborn-0.13.2-py3-none-any.whl', deps: ['numpy', 'pandas', 'matplotlib'] },
+};
+/** loadPackage 에 넘길 목록: 휠 패키지는 의존 패키지와 휠 URL 로 바꾼다 */
+export function resolvePackages(pkgs: string[], vendorBase: string): string[] {
+  const out: string[] = [];
+  for (const p of pkgs) {
+    const v = VENDOR_WHEELS[p];
+    if (v) { for (const d of v.deps) if (!out.includes(d)) out.push(d); out.push(vendorBase + v.file); }
+    else if (!out.includes(p)) out.push(p);
+  }
+  return out;
+}
 export const IMPORT_TO_PACKAGE: Record<string, string> = {
   numpy: 'numpy', pandas: 'pandas', matplotlib: 'matplotlib', sklearn: 'scikit-learn', scipy: 'scipy',
   // 딥러닝: 브라우저용 Keras 호환 모듈(tf-shim.ts, numpy 구현)이 대신한다
-  tensorflow: 'numpy', keras: 'numpy',
+  tensorflow: 'numpy', keras: 'numpy', seaborn: 'seaborn', xgboost: 'xgboost',
 };
 export const MAX_STREAM_CHARS = 100_000;
 export const MAX_TABLE_ROWS = 50;

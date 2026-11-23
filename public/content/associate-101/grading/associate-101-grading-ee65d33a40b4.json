@@ -1,0 +1,1506 @@
+{
+  "schema_version": "2.2.0",
+  "pack_id": "associate-101",
+  "engine_version": "1.11.0",
+  "grading_version": "associate-101-g0c545c50b43f",
+  "questions": {
+    "q01": {
+      "question_id": "q01",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [],
+      "points": 1,
+      "checks": [
+        {
+          "id": "alias-pd",
+          "label": "pandas 를 pd 로 임포트",
+          "probe": {
+            "kind": "module_name",
+            "var": "pd"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "pandas"
+          },
+          "weight": 1,
+          "feedback": "import pandas as pd 로 별칭을 지정하세요."
+        },
+        {
+          "id": "alias-sns",
+          "label": "seaborn 을 sns 로 임포트",
+          "probe": {
+            "kind": "module_name",
+            "var": "sns"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "seaborn"
+          },
+          "weight": 1,
+          "feedback": "import seaborn as sns 로 별칭을 지정하세요."
+        },
+        {
+          "id": "df-data",
+          "label": "CSV 를 그대로 읽은 df",
+          "probe": {
+            "kind": "frame_digest",
+            "var": "df"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "f08b938f4c4b33a62b55c72fc501af72"
+          },
+          "weight": 1,
+          "feedback": "learners.csv 를 바꾸지 말고 그대로 df 에 읽으세요 (learner_id 는 일반 컬럼)."
+        },
+        {
+          "id": "answer",
+          "label": "답안01 정답",
+          "probe": {
+            "kind": "value",
+            "var": "답안01"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 4
+          },
+          "weight": 2,
+          "feedback": "답안01 에 저장한 답이 다릅니다. 출력 결과를 다시 확인하세요."
+        }
+      ]
+    },
+    "q02": {
+      "question_id": "q02",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "bar-data",
+          "label": "등급별, 이탈 여부별 실제 건수 막대",
+          "probe": {
+            "kind": "cell_figure",
+            "field": "bar_table"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "group_counts",
+              "source": "df",
+              "x_column": "membership_type",
+              "y_column": "churn_30d"
+            }
+          },
+          "weight": 2,
+          "feedback": "x 는 membership_type, hue 는 churn_30d 로 df 의 countplot 을 그리세요. 등급과 이탈 여부별 막대 높이가 실제 건수와 달라요."
+        },
+        {
+          "id": "answer",
+          "label": "답안02 정답",
+          "probe": {
+            "kind": "value",
+            "var": "답안02"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 2
+          },
+          "weight": 2,
+          "feedback": "답안02 에 저장한 답이 다릅니다. 출력 결과를 다시 확인하세요."
+        }
+      ]
+    },
+    "q03": {
+      "question_id": "q03",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "box-data",
+          "label": "이탈 여부별 사분위수 상자",
+          "probe": {
+            "kind": "cell_figure",
+            "field": "box_table"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "group_quantiles",
+              "source": "df",
+              "x_column": "churn_30d",
+              "y_column": "days_since_last_login"
+            },
+            "abs_tol": 1e-06,
+            "rel_tol": 1e-09
+          },
+          "weight": 2,
+          "feedback": "x 는 churn_30d, y 는 days_since_last_login 으로 df 의 boxplot 을 그리세요. 상자의 사분위수와 중앙값이 실제 데이터와 달라요."
+        },
+        {
+          "id": "answer",
+          "label": "답안03 정답",
+          "probe": {
+            "kind": "value",
+            "var": "답안03"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 3
+          },
+          "weight": 2,
+          "feedback": "답안03 에 저장한 답이 다릅니다. 출력 결과를 다시 확인하세요."
+        }
+      ]
+    },
+    "q04": {
+      "question_id": "q04",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "hm-values",
+          "label": "상관계수 행렬 값",
+          "probe": {
+            "kind": "cell_figure",
+            "field": "heatmap_values"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "corr_values",
+              "source": "df"
+            },
+            "abs_tol": 1e-06,
+            "rel_tol": 1e-09
+          },
+          "weight": 1,
+          "feedback": "df 의 수치형 컬럼 상관계수 표(df.corr(numeric_only=True))로 heatmap 을 그리세요."
+        },
+        {
+          "id": "hm-labels",
+          "label": "행과 열 컬럼 이름",
+          "probe": {
+            "kind": "cell_figure",
+            "field": "heatmap_labels"
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "x": [
+                "days_since_signup",
+                "sessions_last_30d",
+                "avg_session_minutes",
+                "completion_rate",
+                "quiz_avg_score",
+                "days_since_last_login",
+                "support_tickets_30d",
+                "payment_delay_days",
+                "churn_30d"
+              ],
+              "y": [
+                "days_since_signup",
+                "sessions_last_30d",
+                "avg_session_minutes",
+                "completion_rate",
+                "quiz_avg_score",
+                "days_since_last_login",
+                "support_tickets_30d",
+                "payment_delay_days",
+                "churn_30d"
+              ]
+            }
+          },
+          "weight": 1,
+          "feedback": "히트맵의 행과 열 이름이 수치형 컬럼 이름과 같아야 합니다."
+        },
+        {
+          "id": "hm-annot",
+          "label": "칸마다 올바른 상관계수 표시",
+          "probe": {
+            "kind": "heatmap_annot_match",
+            "source": "df"
+          },
+          "expect": {
+            "op": "eq",
+            "value": true
+          },
+          "weight": 1,
+          "feedback": "annot=True 로 칸마다 상관계수 값을 표시하세요. 표시된 숫자가 실제 상관계수와 달라요."
+        },
+        {
+          "id": "answer",
+          "label": "답안04 정답",
+          "probe": {
+            "kind": "value",
+            "var": "답안04"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "days_since_last_login"
+          },
+          "weight": 3,
+          "feedback": "답안04 에 저장한 답이 다릅니다. 출력 결과를 다시 확인하세요."
+        }
+      ]
+    },
+    "q05": {
+      "question_id": "q05",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "rates",
+          "label": "기기별 이탈률",
+          "probe": {
+            "kind": "value",
+            "var": "device_churn"
+          },
+          "expect": {
+            "op": "approx",
+            "abs_tol": 1e-09,
+            "rel_tol": 1e-09,
+            "value": {
+              "__series__": {
+                "index": [
+                  "Desktop",
+                  "Mobile",
+                  "Tablet"
+                ],
+                "values": [
+                  0.30697674418604654,
+                  0.3354330708661417,
+                  0.3
+                ]
+              }
+            }
+          },
+          "weight": 2,
+          "feedback": "device_churn 은 device_type 별 churn_30d 평균이어야 합니다."
+        },
+        {
+          "id": "answer",
+          "label": "답안05 정답",
+          "probe": {
+            "kind": "value",
+            "var": "답안05"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 4
+          },
+          "weight": 1,
+          "feedback": "답안05 에 저장한 답이 다릅니다. 출력 결과를 다시 확인하세요."
+        }
+      ]
+    },
+    "q06": {
+      "question_id": "q06",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q01"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "data",
+          "label": "이상치 행과 learner_id 를 지운 결과",
+          "probe": {
+            "kind": "frame_digest",
+            "var": "df_del"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "0440b846a8872a0e7ea7d699d6d85570"
+          },
+          "weight": 3,
+          "feedback": "avg_session_minutes 가 150 이상인 행과 learner_id 컬럼만 지우고 나머지 값과 인덱스는 그대로 두세요."
+        },
+        {
+          "id": "orig",
+          "label": "df 는 그대로",
+          "probe": {
+            "kind": "frame_unchanged",
+            "var": "df",
+            "source": "df"
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "same_rows": true,
+              "same_columns": true,
+              "changed_columns": []
+            }
+          },
+          "weight": 1,
+          "feedback": "df 는 바꾸지 말고 새 데이터프레임 df_del 에 저장하세요."
+        }
+      ]
+    },
+    "q07": {
+      "question_id": "q07",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q06"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "answer",
+          "label": "답안07 정답",
+          "probe": {
+            "kind": "value",
+            "var": "답안07"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 89
+          },
+          "weight": 2,
+          "feedback": "답안07 에 저장한 답이 다릅니다. 출력 결과를 다시 확인하세요."
+        },
+        {
+          "id": "median",
+          "label": "df_del 중앙값으로 채움",
+          "probe": {
+            "kind": "imputation_from_source",
+            "var": "df_na",
+            "source": "df_del",
+            "column": "quiz_avg_score",
+            "stat": "median"
+          },
+          "expect": {
+            "op": "approx",
+            "value": {
+              "filled_dev": 0,
+              "kept_dev": 0,
+              "same_rows": true
+            },
+            "abs_tol": 1e-09,
+            "rel_tol": 0
+          },
+          "weight": 2,
+          "feedback": "quiz_avg_score 결측만 df_del 의 중앙값으로 채우고 나머지 값과 행은 그대로 두세요."
+        },
+        {
+          "id": "others",
+          "label": "다른 컬럼은 그대로",
+          "probe": {
+            "kind": "frame_unchanged",
+            "var": "df_na",
+            "source": "df_del",
+            "except_columns": [
+              "quiz_avg_score"
+            ]
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "same_rows": true,
+              "same_columns": true,
+              "changed_columns": []
+            }
+          },
+          "weight": 1,
+          "feedback": "quiz_avg_score 외 컬럼은 바꾸지 마세요."
+        },
+        {
+          "id": "del-kept",
+          "label": "df_del 은 그대로",
+          "probe": {
+            "kind": "frame_unchanged",
+            "var": "df_del",
+            "source": "df_del"
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "same_rows": true,
+              "same_columns": true,
+              "changed_columns": []
+            }
+          },
+          "weight": 1,
+          "feedback": "df_del 은 바꾸지 말고 복사본 df_na 에서 처리하세요."
+        }
+      ]
+    },
+    "q08": {
+      "question_id": "q08",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q07"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "onehot",
+          "label": "문자열 컬럼 전체 원-핫 (df_na 기준 재계산)",
+          "probe": {
+            "kind": "onehot_reproduced",
+            "var": "df_preset",
+            "source": "df_na",
+            "onehot_columns": [
+              "membership_type",
+              "signup_channel",
+              "course_category",
+              "device_type"
+            ]
+          },
+          "expect": {
+            "op": "eq",
+            "value": true
+          },
+          "weight": 2,
+          "feedback": "pd.get_dummies(df_na, dtype=int) 결과와 값이 다릅니다. 문자열 컬럼 4개를 모두 0과 1로 바꾸세요."
+        },
+        {
+          "id": "order",
+          "label": "컬럼 순서 그대로",
+          "probe": {
+            "kind": "columns",
+            "var": "df_preset"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              "days_since_signup",
+              "sessions_last_30d",
+              "avg_session_minutes",
+              "completion_rate",
+              "quiz_avg_score",
+              "days_since_last_login",
+              "support_tickets_30d",
+              "payment_delay_days",
+              "churn_30d",
+              "membership_type_Basic",
+              "membership_type_Plus",
+              "membership_type_Premium",
+              "signup_channel_Ads",
+              "signup_channel_Referral",
+              "signup_channel_SNS",
+              "signup_channel_Search",
+              "course_category_Business",
+              "course_category_Data",
+              "course_category_Design",
+              "course_category_Language",
+              "device_type_Desktop",
+              "device_type_Mobile",
+              "device_type_Tablet"
+            ]
+          },
+          "weight": 1,
+          "feedback": "get_dummies 결과의 컬럼 순서를 바꾸지 마세요 (14번 simul 이 이 순서를 따릅니다)."
+        }
+      ]
+    },
+    "q09": {
+      "question_id": "q09",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q08"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "answer",
+          "label": "답안09 정답",
+          "probe": {
+            "kind": "value",
+            "var": "답안09"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 1097
+          },
+          "weight": 1,
+          "feedback": "답안09 에 저장한 답이 다릅니다. 출력 결과를 다시 확인하세요."
+        },
+        {
+          "id": "split",
+          "label": "분할 (stratify) 재현",
+          "probe": {
+            "kind": "split_scaled_reproduced",
+            "frame": "df_preset",
+            "target": "churn_30d",
+            "drop": [
+              "churn_30d"
+            ],
+            "test_size": 0.2,
+            "random_state": 42,
+            "stratify": true,
+            "outputs": {
+              "y_train": "y_train",
+              "y_test": "y_valid"
+            }
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "y_train": true,
+              "y_test": true
+            }
+          },
+          "weight": 2,
+          "feedback": "test_size=0.2, random_state=42, stratify=y 로 나누고 y_train, y_valid 는 그대로 두세요."
+        },
+        {
+          "id": "scaled",
+          "label": "훈련 데이터로만 fit 한 표준화",
+          "probe": {
+            "kind": "split_scaled_reproduced",
+            "frame": "df_preset",
+            "target": "churn_30d",
+            "drop": [
+              "churn_30d"
+            ],
+            "test_size": 0.2,
+            "random_state": 42,
+            "stratify": true,
+            "outputs": {
+              "X_train": "X_train",
+              "X_test": "X_valid"
+            }
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "X_train": true,
+              "X_test": true
+            }
+          },
+          "weight": 2,
+          "feedback": "StandardScaler 를 X_train 에 fit_transform, X_valid 에는 transform 만 적용하세요."
+        }
+      ]
+    },
+    "q10": {
+      "question_id": "q10",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q09"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "dt-class",
+          "label": "DecisionTreeClassifier",
+          "probe": {
+            "kind": "class_name",
+            "var": "dt"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "DecisionTreeClassifier"
+          },
+          "weight": 1,
+          "feedback": "dt 는 DecisionTreeClassifier 여야 합니다."
+        },
+        {
+          "id": "dt-params",
+          "label": "dt 하이퍼파라미터",
+          "probe": {
+            "kind": "model_params",
+            "var": "dt",
+            "keys": [
+              "max_depth",
+              "min_samples_split",
+              "random_state"
+            ]
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "max_depth": 5,
+              "min_samples_split": 3,
+              "random_state": 120
+            }
+          },
+          "weight": 1,
+          "feedback": "dt 는 max_depth=5, min_samples_split=3, random_state=120 으로 만드세요."
+        },
+        {
+          "id": "dt-fit",
+          "label": "dt 를 훈련 데이터로 학습",
+          "probe": {
+            "kind": "predictions",
+            "model": "dt",
+            "X": "X_valid"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "refit_predictions",
+              "model_class": "DecisionTreeClassifier",
+              "params": {
+                "max_depth": 5,
+                "min_samples_split": 3,
+                "random_state": 120
+              },
+              "X_train": "X_train",
+              "y_train": "y_train",
+              "X_eval": "X_valid"
+            }
+          },
+          "weight": 1,
+          "feedback": "dt 를 X_train, y_train 으로 학습하세요."
+        },
+        {
+          "id": "rf-class",
+          "label": "RandomForestClassifier",
+          "probe": {
+            "kind": "class_name",
+            "var": "rf"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "RandomForestClassifier"
+          },
+          "weight": 1,
+          "feedback": "rf 는 RandomForestClassifier 여야 합니다."
+        },
+        {
+          "id": "rf-params",
+          "label": "rf 하이퍼파라미터",
+          "probe": {
+            "kind": "model_params",
+            "var": "rf",
+            "keys": [
+              "max_depth",
+              "min_samples_split",
+              "random_state"
+            ]
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "max_depth": 5,
+              "min_samples_split": 3,
+              "random_state": 120
+            }
+          },
+          "weight": 1,
+          "feedback": "rf 는 max_depth=5, min_samples_split=3, random_state=120 으로 만드세요."
+        },
+        {
+          "id": "rf-fit",
+          "label": "rf 를 훈련 데이터로 학습",
+          "probe": {
+            "kind": "predictions",
+            "model": "rf",
+            "X": "X_valid"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "refit_predictions",
+              "model_class": "RandomForestClassifier",
+              "params": {
+                "max_depth": 5,
+                "min_samples_split": 3,
+                "random_state": 120,
+                "n_jobs": 1
+              },
+              "X_train": "X_train",
+              "y_train": "y_train",
+              "X_eval": "X_valid"
+            }
+          },
+          "weight": 1,
+          "feedback": "rf 를 X_train, y_train 으로 학습하세요."
+        }
+      ]
+    },
+    "q11": {
+      "question_id": "q11",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q10"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "pred-dt",
+          "label": "dt 예측",
+          "probe": {
+            "kind": "value",
+            "var": "y_pred_dt"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "predictions",
+              "model": "dt",
+              "X": "X_valid"
+            }
+          },
+          "weight": 1,
+          "feedback": "y_pred_dt 는 dt 로 X_valid 를 예측한 값이어야 합니다."
+        },
+        {
+          "id": "pred-rf",
+          "label": "rf 예측",
+          "probe": {
+            "kind": "value",
+            "var": "y_pred_rf"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "predictions",
+              "model": "rf",
+              "X": "X_valid"
+            }
+          },
+          "weight": 1,
+          "feedback": "y_pred_rf 는 rf 로 X_valid 를 예측한 값이어야 합니다."
+        },
+        {
+          "id": "acc-dt",
+          "label": "dt 정확도",
+          "probe": {
+            "kind": "value",
+            "var": "dt_acc"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "accuracy",
+              "model": "dt",
+              "X": "X_valid",
+              "y": "y_valid"
+            }
+          },
+          "weight": 1,
+          "feedback": "dt_acc 는 accuracy_score(y_valid, y_pred_dt) 입니다."
+        },
+        {
+          "id": "acc-rf",
+          "label": "rf 정확도",
+          "probe": {
+            "kind": "value",
+            "var": "rf_acc"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "metric",
+              "metric": "accuracy",
+              "model": "rf",
+              "X": "X_valid",
+              "y": "y_valid"
+            }
+          },
+          "weight": 1,
+          "feedback": "rf_acc 는 accuracy_score(y_valid, y_pred_rf) 입니다."
+        },
+        {
+          "id": "best",
+          "label": "더 높은 모델",
+          "probe": {
+            "kind": "value",
+            "var": "답안11"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "best_model",
+              "metric": "accuracy",
+              "y": "y_valid",
+              "tie": "RandomForest",
+              "candidates": [
+                {
+                  "name": "DecisionTree",
+                  "model": "dt",
+                  "X": "X_valid"
+                },
+                {
+                  "name": "RandomForest",
+                  "model": "rf",
+                  "X": "X_valid"
+                }
+              ]
+            }
+          },
+          "weight": 2,
+          "feedback": "두 정확도를 비교해 더 높은 모델 이름을 적으세요 ('DecisionTree' 또는 'RandomForest')."
+        }
+      ]
+    },
+    "q12": {
+      "question_id": "q12",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q10"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "order",
+          "label": "중요도 내림차순 특징 이름",
+          "probe": {
+            "kind": "column_values",
+            "var": "fi_df",
+            "column": "Feature",
+            "as_list": true
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "feature_importance_top",
+              "model": "rf",
+              "X": "X",
+              "top_n": 30,
+              "field": "index"
+            }
+          },
+          "weight": 2,
+          "feedback": "fi_df 를 Importance 기준 내림차순으로 정렬하세요. Feature 는 X 의 컬럼 이름입니다."
+        },
+        {
+          "id": "values",
+          "label": "중요도 값",
+          "probe": {
+            "kind": "column_values",
+            "var": "fi_df",
+            "column": "Importance",
+            "as_list": true
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "feature_importance_top",
+              "model": "rf",
+              "X": "X",
+              "top_n": 30,
+              "field": "values"
+            },
+            "abs_tol": 1e-12,
+            "rel_tol": 1e-09
+          },
+          "weight": 1,
+          "feedback": "Importance 는 rf.feature_importances_ 값이어야 합니다."
+        },
+        {
+          "id": "index",
+          "label": "인덱스 0부터",
+          "probe": {
+            "kind": "series_index",
+            "var": "fi_df"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21"
+            ]
+          },
+          "weight": 1,
+          "feedback": "정렬 뒤 reset_index(drop=True) 로 인덱스를 0부터 매기세요."
+        },
+        {
+          "id": "cols",
+          "label": "컬럼 Feature, Importance",
+          "probe": {
+            "kind": "columns",
+            "var": "fi_df"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              "Feature",
+              "Importance"
+            ]
+          },
+          "weight": 1,
+          "feedback": "fi_df 의 컬럼은 'Feature', 'Importance' 두 개입니다."
+        },
+        {
+          "id": "answer",
+          "label": "답안12 정답",
+          "probe": {
+            "kind": "value",
+            "var": "답안12"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "completion_rate"
+          },
+          "weight": 1,
+          "feedback": "답안12 에 저장한 답이 다릅니다. 출력 결과를 다시 확인하세요."
+        }
+      ]
+    },
+    "q13": {
+      "question_id": "q13",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q09"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "model-layers",
+          "label": "층 구성",
+          "probe": {
+            "kind": "keras_model",
+            "var": "model",
+            "field": "layers"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              [
+                "Dense",
+                64,
+                "relu"
+              ],
+              [
+                "Dropout",
+                0.2
+              ],
+              [
+                "Dense",
+                32,
+                "relu"
+              ],
+              [
+                "Dense",
+                1,
+                "sigmoid"
+              ]
+            ]
+          },
+          "weight": 3,
+          "feedback": "Dense(64, relu), Dropout(0.2), Dense(32, relu), Dense(1, sigmoid) 순서로 쌓으세요."
+        },
+        {
+          "id": "model-input-dim",
+          "label": "입력 크기",
+          "probe": {
+            "kind": "keras_model",
+            "var": "model",
+            "field": "input_dim"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 22
+          },
+          "weight": 1,
+          "feedback": "입력 크기는 X_train 의 컬럼 수(22)입니다."
+        },
+        {
+          "id": "model-loss",
+          "label": "손실함수",
+          "probe": {
+            "kind": "keras_model",
+            "var": "model",
+            "field": "loss"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "binary_crossentropy"
+          },
+          "weight": 1,
+          "feedback": "loss 는 'binary_crossentropy' 입니다."
+        },
+        {
+          "id": "model-optimizer",
+          "label": "최적화 adam",
+          "probe": {
+            "kind": "keras_model",
+            "var": "model",
+            "field": "optimizer"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "adam"
+          },
+          "weight": 1,
+          "feedback": "optimizer 는 'adam' 입니다."
+        },
+        {
+          "id": "model-metrics",
+          "label": "평가지표 accuracy",
+          "probe": {
+            "kind": "keras_model",
+            "var": "model",
+            "field": "metrics"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              "accuracy"
+            ]
+          },
+          "weight": 1,
+          "feedback": "metrics=['accuracy'] 로 compile 하세요."
+        },
+        {
+          "id": "es-monitor-mode",
+          "label": "EarlyStopping 이 val_loss 최소화를 봄",
+          "probe": {
+            "kind": "keras_callback",
+            "var": "es",
+            "field": "monitor_mode"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              "val_loss",
+              "min"
+            ]
+          },
+          "weight": 1,
+          "feedback": "es 는 monitor='val_loss' 로 만들고 mode 는 기본값(auto) 또는 'min' 으로 두세요."
+        },
+        {
+          "id": "es-patience",
+          "label": "EarlyStopping patience 5",
+          "probe": {
+            "kind": "keras_callback",
+            "var": "es",
+            "field": "patience"
+          },
+          "expect": {
+            "op": "eq",
+            "value": 5
+          },
+          "weight": 1,
+          "feedback": "patience=5 로 지정하세요."
+        },
+        {
+          "id": "es-restore-best-weights",
+          "label": "가장 좋은 가중치로 복원",
+          "probe": {
+            "kind": "keras_callback",
+            "var": "es",
+            "field": "restore_best_weights"
+          },
+          "expect": {
+            "op": "eq",
+            "value": true
+          },
+          "weight": 1,
+          "feedback": "restore_best_weights=True 를 지정하세요."
+        },
+        {
+          "id": "mc-monitor-mode",
+          "label": "ModelCheckpoint 가 val_loss 최소화를 봄",
+          "probe": {
+            "kind": "keras_callback",
+            "var": "mc",
+            "field": "monitor_mode"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              "val_loss",
+              "min"
+            ]
+          },
+          "weight": 1,
+          "feedback": "mc 는 monitor='val_loss' 로 만들고 mode 는 기본값(auto) 또는 'min' 으로 두세요."
+        },
+        {
+          "id": "mc-save-best-only",
+          "label": "가장 좋은 모델만 저장",
+          "probe": {
+            "kind": "keras_callback",
+            "var": "mc",
+            "field": "save_best_only"
+          },
+          "expect": {
+            "op": "eq",
+            "value": true
+          },
+          "weight": 1,
+          "feedback": "save_best_only=True 로 지정하세요."
+        },
+        {
+          "id": "mc-filepath",
+          "label": "저장 파일 best_model.h5",
+          "probe": {
+            "kind": "keras_callback",
+            "var": "mc",
+            "field": "filepath"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "best_model.h5"
+          },
+          "weight": 1,
+          "feedback": "ModelCheckpoint 파일 이름은 'best_model.h5' 입니다."
+        },
+        {
+          "id": "fit-params",
+          "label": "epochs 50, batch_size 32",
+          "probe": {
+            "kind": "keras_fit",
+            "var": "model",
+            "field": "params"
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "epochs": 50,
+              "batch_size": 32
+            }
+          },
+          "weight": 2,
+          "feedback": "fit 에 epochs=50, batch_size=32 를 지정하세요."
+        },
+        {
+          "id": "fit-data",
+          "label": "훈련, 검증 데이터로 학습",
+          "probe": {
+            "kind": "keras_fit",
+            "var": "model",
+            "field": "data",
+            "X": "X_train",
+            "y": "y_train",
+            "X_eval": "X_valid",
+            "y_eval": "y_valid"
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "train": true,
+              "valid": true
+            }
+          },
+          "weight": 2,
+          "feedback": "fit(X_train, y_train, validation_data=(X_valid, y_valid)) 로 학습하세요."
+        },
+        {
+          "id": "fit-callbacks",
+          "label": "콜백 es, mc 전달",
+          "probe": {
+            "kind": "keras_fit",
+            "var": "model",
+            "field": "callbacks",
+            "vars": [
+              "es",
+              "mc"
+            ]
+          },
+          "expect": {
+            "op": "eq",
+            "value": true
+          },
+          "weight": 1,
+          "feedback": "fit 의 callbacks=[es, mc] 로 두 콜백을 넘기세요."
+        },
+        {
+          "id": "history",
+          "label": "model 학습 결과인 history (검증 기록 포함)",
+          "probe": {
+            "kind": "keras_history",
+            "var": "history",
+            "model": "model",
+            "field": "of_model"
+          },
+          "expect": {
+            "op": "eq",
+            "value": [
+              "accuracy",
+              "loss",
+              "val_accuracy",
+              "val_loss"
+            ]
+          },
+          "weight": 1,
+          "feedback": "history 는 model.fit(..., validation_data=...) 이 돌려준 값이어야 합니다."
+        },
+        {
+          "id": "checkpoint",
+          "label": "val_loss 가 가장 낮은 에포크의 모델 저장",
+          "probe": {
+            "kind": "keras_checkpoint",
+            "var": "mc",
+            "path": "best_model.h5"
+          },
+          "expect": {
+            "op": "eq",
+            "value": {
+              "file_is_saved": true,
+              "best_epoch": true
+            }
+          },
+          "weight": 1,
+          "feedback": "best_model.h5 는 ModelCheckpoint 가 val_loss 가 가장 낮았던 에포크에 저장한 모델이어야 합니다."
+        }
+      ]
+    },
+    "q14": {
+      "question_id": "q14",
+      "profile": "associate-v1",
+      "profile_revision": 1,
+      "review_status": "approved",
+      "depends_on": [
+        "q13"
+      ],
+      "points": 1,
+      "checks": [
+        {
+          "id": "fig-title",
+          "label": "제목 Model Accuracy",
+          "probe": {
+            "kind": "cell_figure",
+            "field": "title"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "Model Accuracy"
+          },
+          "weight": 1,
+          "feedback": "제목은 'Model Accuracy' 입니다."
+        },
+        {
+          "id": "fig-legend",
+          "label": "범례 acc, val_acc",
+          "probe": {
+            "kind": "cell_figure",
+            "field": "legend"
+          },
+          "expect": {
+            "op": "set_eq",
+            "value": [
+              "acc",
+              "val_acc"
+            ]
+          },
+          "weight": 1,
+          "feedback": "범례는 'acc', 'val_acc' 로 표시하세요 (plt.legend())."
+        },
+        {
+          "id": "fig-xlabel",
+          "label": "x 축 Epochs",
+          "probe": {
+            "kind": "cell_figure",
+            "field": "xlabel"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "Epochs"
+          },
+          "weight": 1,
+          "feedback": "x 축 이름은 'Epochs' 입니다."
+        },
+        {
+          "id": "fig-ylabel",
+          "label": "y 축 Accuracy",
+          "probe": {
+            "kind": "cell_figure",
+            "field": "ylabel"
+          },
+          "expect": {
+            "op": "eq",
+            "value": "Accuracy"
+          },
+          "weight": 1,
+          "feedback": "y 축 이름은 'Accuracy' 입니다."
+        },
+        {
+          "id": "line-acc",
+          "label": "acc 선은 학습 정확도",
+          "probe": {
+            "kind": "cell_figure",
+            "field": "legend_line",
+            "label": "acc"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "keras_history",
+              "var": "history",
+              "field": "values",
+              "key": "accuracy"
+            },
+            "abs_tol": 1e-09,
+            "rel_tol": 0
+          },
+          "weight": 1,
+          "feedback": "범례 'acc' 선은 history.history['accuracy'] 입니다."
+        },
+        {
+          "id": "line-val",
+          "label": "val_acc 선은 검증 정확도",
+          "probe": {
+            "kind": "cell_figure",
+            "field": "legend_line",
+            "label": "val_acc"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "keras_history",
+              "var": "history",
+              "field": "values",
+              "key": "val_accuracy"
+            },
+            "abs_tol": 1e-09,
+            "rel_tol": 0
+          },
+          "weight": 1,
+          "feedback": "범례 'val_acc' 선은 history.history['val_accuracy'] 입니다."
+        },
+        {
+          "id": "simul",
+          "label": "simul 그대로",
+          "probe": {
+            "kind": "value",
+            "var": "simul"
+          },
+          "expect": {
+            "op": "approx",
+            "abs_tol": 1e-12,
+            "rel_tol": 0,
+            "value": [
+              [
+                -1.468149,
+                -1.341364,
+                -0.9013,
+                -0.513712,
+                0.944394,
+                2.833344,
+                -0.749671,
+                2.601551,
+                0.990022,
+                -0.633263,
+                -0.513639,
+                -0.496579,
+                2.085958,
+                -0.623384,
+                -0.710494,
+                -0.554535,
+                1.49852,
+                -0.505123,
+                -0.582613,
+                -0.928697,
+                1.12125,
+                -0.321903
+              ]
+            ]
+          },
+          "weight": 1,
+          "feedback": "셀에 주어진 simul 은 바꾸지 마세요."
+        },
+        {
+          "id": "best",
+          "label": "저장 모델과 같은 best (구조, 활성화 함수, 가중치)",
+          "probe": {
+            "kind": "keras_model",
+            "var": "best",
+            "field": "model_fp"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "keras_model",
+              "path": "best_model.h5",
+              "field": "model_fp"
+            }
+          },
+          "weight": 1,
+          "feedback": "load_model('best_model.h5') 로 불러온 모델을 best 에 저장하세요."
+        },
+        {
+          "id": "sim-pred",
+          "label": "저장 모델의 예측 확률",
+          "probe": {
+            "kind": "value",
+            "var": "sim_pred"
+          },
+          "expect": {
+            "op": "approx",
+            "ref_probe": {
+              "kind": "keras_predict",
+              "path": "best_model.h5",
+              "X": "simul",
+              "output": "proba01"
+            },
+            "abs_tol": 1e-06,
+            "rel_tol": 0
+          },
+          "weight": 1,
+          "feedback": "sim_pred 는 best.predict(simul) 결과여야 합니다."
+        },
+        {
+          "id": "answer",
+          "label": "sim_pred 로 판단한 Y/N",
+          "probe": {
+            "kind": "value",
+            "var": "답안14"
+          },
+          "expect": {
+            "op": "eq",
+            "ref_probe": {
+              "kind": "threshold_yn",
+              "var": "sim_pred",
+              "threshold": 0.5
+            }
+          },
+          "weight": 3,
+          "feedback": "sim_pred 의 확률이 0.5 이상이면 'Y', 아니면 'N' 입니다."
+        }
+      ]
+    }
+  }
+}

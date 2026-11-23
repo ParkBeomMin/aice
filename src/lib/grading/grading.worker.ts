@@ -2,7 +2,9 @@
 // T-06 채점 전용 Worker: 제출 1건 = Pyodide 인스턴스 1개 (학습용 커널과 완전히 분리). 끝나면 메인 스레드가 terminate.
 import { GRADING_PY } from './grading-python.ts';
 import { installTfShim } from '../runtime/tf-shim.ts';
-import type { DatasetSpec } from '../runtime/worker-protocol.ts';
+import { resolvePackages, type DatasetSpec } from '../runtime/worker-protocol.ts';
+// 사이트 루트 (base 포함). dev 에서는 워커 경로가 /src/... 라서 상대 경로 대신 BASE_URL 사용
+const VENDOR_BASE = new URL(String(import.meta.env.BASE_URL ?? '/').replace(/\/?$/, '/'), self.location.origin).href;
 
 declare const self: DedicatedWorkerGlobalScope;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,7 +40,7 @@ self.onmessage = async (ev: MessageEvent) => {
   try {
     let value: unknown = null;
     if (m.type === 'G_INIT') await init(m.indexURL as string, m.datasets as DatasetSpec[]);
-    else if (m.type === 'G_LOAD') { const pk = m.packages as string[]; if (pk.length) await py.loadPackage(pk, { messageCallback() {}, errorCallback() {} }); call('_g_seed'); }
+    else if (m.type === 'G_LOAD') { const pk = m.packages as string[]; if (pk.length) await py.loadPackage(resolvePackages(pk, VENDOR_BASE), { messageCallback() {}, errorCallback() {} }); call('_g_seed'); }
     else if (m.type === 'G_IMPORTS') { const r = call('_g_imports', m.code); value = r.toJs(); r.destroy?.(); }
     else if (m.type === 'G_RUN') value = JSON.parse(await call('_g_run', m.code));
     else if (m.type === 'G_PRE') call('_g_pre_capture', m.profile);

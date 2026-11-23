@@ -14,7 +14,7 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "2.1.0"
+      "const": "2.2.0"
     },
     "pack_id": {
       "type": "string",
@@ -97,24 +97,40 @@
             "preprocess_reproduced",
             "scaler_fitted_on",
             "prediction_metric_selection",
-            "feature_importance_top"
+            "feature_importance_top",
+            "cell_figure",
+            "keras_model",
+            "keras_history",
+            "keras_callback",
+            "keras_predict",
+            "path_exists",
+            "module_name",
+            "group_counts",
+            "group_quantiles",
+            "corr_values",
+            "frame_digest",
+            "split_scaled_reproduced",
+            "keras_fit",
+            "heatmap_annot_match",
+            "threshold_yn",
+            "keras_checkpoint"
           ]
         },
         "var": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "model": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "X": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "y": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "column": {
           "type": "string",
@@ -167,19 +183,19 @@
         },
         "source": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "X_train": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "y_train": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "X_eval": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "model_class": {
           "type": "string",
@@ -189,7 +205,8 @@
             "LinearRegression",
             "Ridge",
             "RandomForestRegressor",
-            "DecisionTreeRegressor"
+            "DecisionTreeRegressor",
+            "DecisionTreeClassifier"
           ]
         },
         "params": {
@@ -219,6 +236,9 @@
             },
             "min_samples_leaf": {
               "type": "number"
+            },
+            "min_samples_split": {
+              "type": "number"
             }
           }
         },
@@ -233,7 +253,8 @@
               "C",
               "max_depth",
               "alpha",
-              "min_samples_leaf"
+              "min_samples_leaf",
+              "min_samples_split"
             ]
           },
           "uniqueItems": true,
@@ -257,15 +278,15 @@
             "properties": {
               "name": {
                 "type": "string",
-                "pattern": "^[a-z0-9_.]{1,40}$"
+                "pattern": "^[A-Za-z0-9_.]{1,40}$"
               },
               "model": {
                 "type": "string",
-                "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+                "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
               },
               "X": {
                 "type": "string",
-                "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+                "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
               },
               "threshold": {
                 "type": "number",
@@ -274,18 +295,18 @@
               },
               "threshold_var": {
                 "type": "string",
-                "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+                "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
               },
               "prediction_var": {
                 "type": "string",
-                "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+                "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
               }
             }
           }
         },
         "tie": {
           "type": "string",
-          "pattern": "^[a-z0-9_]{1,40}$"
+          "pattern": "^[A-Za-z0-9_]{1,40}$"
         },
         "except_columns": {
           "type": "array",
@@ -299,15 +320,15 @@
         },
         "frame": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "raw": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "stat_var": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "reduce": {
           "enum": [
@@ -369,27 +390,27 @@
           "properties": {
             "X_train": {
               "type": "string",
-              "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+              "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
             },
             "X_test": {
               "type": "string",
-              "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+              "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
             },
             "y_train": {
               "type": "string",
-              "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+              "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
             },
             "y_test": {
               "type": "string",
-              "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+              "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
             },
             "train": {
               "type": "string",
-              "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+              "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
             },
             "test": {
               "type": "string",
-              "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+              "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
             }
           }
         },
@@ -475,13 +496,17 @@
         },
         "output": {
           "enum": [
-            "selected",
-            "scores",
+            "cost",
+            "label",
             "match",
-            "train_period",
-            "test_period",
+            "proba",
+            "round",
+            "scores",
+            "selected",
             "selected_threshold",
-            "cost"
+            "test_period",
+            "train_period",
+            "proba01"
           ]
         },
         "field": {
@@ -494,7 +519,43 @@
             "bar_total",
             "x_mean",
             "y_mean",
-            "index"
+            "index",
+            "count",
+            "lines",
+            "line_ydata",
+            "title",
+            "legend",
+            "texts",
+            "suptitle",
+            "layers",
+            "loss",
+            "optimizer",
+            "metrics",
+            "trained",
+            "keys",
+            "epochs",
+            "values",
+            "params",
+            "class",
+            "monitor",
+            "patience",
+            "restore_best_weights",
+            "save_best_only",
+            "filepath",
+            "mode",
+            "bar_table",
+            "box_table",
+            "heatmap_values",
+            "heatmap_labels",
+            "legend_line",
+            "input_dim",
+            "data",
+            "callbacks",
+            "labels",
+            "monitor_mode",
+            "of_model",
+            "weights_fp",
+            "model_fp"
           ]
         },
         "minus_column": {
@@ -520,16 +581,16 @@
           "type": "object",
           "maxProperties": 3,
           "propertyNames": {
-            "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+            "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
           },
           "additionalProperties": {
             "type": "string",
-            "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+            "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
           }
         },
         "pred": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "labels": {
           "type": "array",
@@ -544,19 +605,19 @@
         },
         "X_a": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "y_a": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "X_b": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "y_b": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "plot": {
           "enum": [
@@ -582,7 +643,7 @@
         },
         "scaler": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "scale_columns": {
           "type": "array",
@@ -617,7 +678,7 @@
         },
         "series": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "check_labels": {
           "type": "boolean"
@@ -657,7 +718,7 @@
         },
         "transformer": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "n_splits": {
           "type": "integer",
@@ -682,11 +743,11 @@
         },
         "train_raw": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "test_raw": {
           "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,63}$"
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
         },
         "impute": {
           "type": "object",
@@ -801,6 +862,42 @@
           "type": "integer",
           "minimum": 1,
           "maximum": 30
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "key": {
+          "type": "string",
+          "pattern": "^[a-z_]{1,32}$"
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]{1,64}$"
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "y_eval": {
+          "type": "string",
+          "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
+        },
+        "vars": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z_가-힣][A-Za-z0-9_가-힣]{0,63}$"
+          }
         }
       }
     },

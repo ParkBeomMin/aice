@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q02",
+  "public_id": "associate-101-q02",
+  "revision": 2,
+  "title": "등급별 이탈 분포 (countplot)",
+  "topic": "visualization",
+  "difficulty": "easy",
+  "prompt": "멤버십 등급에 따른 이탈 여부 분포를 확인하시오.\n\n1. seaborn 의 `countplot` 으로 `df` 의 x 축은 `membership_type`, 색(hue)은 `churn_30d` 인 그래프를 그리시오.\n2. 그래프를 보고 **옳은** 해석을 골라 번호를 `답안02` 에 저장하시오.\n   1. Premium 등급은 이탈한 수강생(1)이 이탈하지 않은 수강생(0)보다 많다.\n   2. 이탈한 수강생이 가장 많은 등급은 Basic 이다.\n   3. Plus 등급에서 이탈한 수강생은 200명이 넘는다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** countplot 에 hue 를 주어 범주별 개수를 두 그룹으로 나눠 비교한다.\n\n**핵심 개념:** `hue` 를 지정하면 x 축 범주마다 막대가 hue 값 수만큼 나뉜다. 등급 3개 x 이탈 여부 2개로 막대 6개가 그려진다.\n\n```python\nimport matplotlib.pyplot as plt\nsns.countplot(data=df, x='membership_type', hue='churn_30d')\nplt.show()\n답안02 = 2\n```\n\n**기준 결과:** Basic 0:409, 1:295, Plus 0:288, 1:107, Premium 0:256, 1:45. 이탈자가 가장 많은 등급은 Basic 이므로 2번이 옳다.\n\n**다른 풀이 (order 지정):**\n\n```python\nimport matplotlib.pyplot as plt\nsns.countplot(data=df, x='membership_type', hue='churn_30d', order=['Basic', 'Plus', 'Premium'])\nplt.show()\n답안02 = 2\n```\n\n**자주 틀리는 부분:** hue 를 빼서 이탈 여부 구분이 사라지는 것.\n\n**채점 항목:**\n\n1. 등급별, 이탈 여부별 실제 건수 막대\n2. 답안02 정답\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "import matplotlib.pyplot as plt\nsns.countplot(data=df, x='membership_type', hue='churn_30d')\nplt.show()\n답안02 = 2\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

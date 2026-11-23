@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q06",
+  "public_id": "associate-101-q06",
+  "revision": 1,
+  "title": "이상치와 불필요한 컬럼 삭제",
+  "topic": "preprocessing",
+  "difficulty": "easy",
+  "prompt": "모델링에 방해가 되는 행과 컬럼을 정리하시오.\n\n- 대상 데이터프레임: `df`\n- `avg_session_minutes` 가 150 이상인 행을 이상치로 보고 삭제하시오.\n- 수강생 구별용 컬럼 `learner_id` 를 삭제하시오.\n- 결과를 새로운 데이터프레임 `df_del` 에 저장하시오. (`df` 는 바꾸지 마시오)",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 조건 필터로 이상치 행을 지우고 drop 으로 식별용 컬럼을 지운다.\n\n**핵심 개념:** `df[조건]` 은 조건이 참인 행만 남긴다. 150 이상을 지우려면 150 미만을 남긴다. `drop(columns=[...])` 은 새 DataFrame 을 돌려주므로 `df` 는 그대로다.\n\n```python\ndf_del = df[df['avg_session_minutes'] < 150].drop(columns=['learner_id'])\nprint(df_del.shape)\n```\n\n**기준 결과:** `avg_session_minutes` 150 이상 28행 삭제, `learner_id` 삭제 후 `df_del` 1,372행 13열.\n\n**다른 풀이 (인덱스로 행 삭제):**\n\n```python\ndf_del = df.drop(df[df['avg_session_minutes'] >= 150].index).drop('learner_id', axis=1)\n```\n\n**자주 틀리는 부분:** inplace=True 로 원본 df 까지 바꾸는 것.\n\n**채점 항목:**\n\n1. 이상치 행과 learner_id 를 지운 결과\n2. df 는 그대로\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "df_del = df[df['avg_session_minutes'] < 150].drop(columns=['learner_id'])\nprint(df_del.shape)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,6 +1,7 @@
 // Worker 안 Pyodide 에 한 번 정의하는 Python 헬퍼. 사용자 코드는 _acf_ns 네임스페이스(셀 간 공유)에서 실행된다.
 export const PY_HELPERS = String.raw`
-import os, sys, io, json, base64, traceback, warnings
+import os, sys, io, json, base64, traceback, warnings, logging
+logging.getLogger('matplotlib.font_manager').setLevel(logging.ERROR)  # 시험 코드의 plt.rc(font='NanumGothicCoding') 경고 숨김
 os.environ.setdefault("MPLBACKEND", "Agg")
 # plt.show() 는 그림을 셀 출력으로 보여 주므로 Agg 백엔드의 "non-interactive" 경고는 숨긴다 (학습자 혼란 방지)
 warnings.filterwarnings("ignore", message=".*non-interactive, and thus cannot be shown.*")

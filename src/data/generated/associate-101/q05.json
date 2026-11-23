@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q05",
+  "public_id": "associate-101-q05",
+  "revision": 1,
+  "title": "기기별 이탈률 (groupby)",
+  "topic": "pandas",
+  "difficulty": "easy",
+  "prompt": "주로 쓰는 기기에 따라 이탈률이 어떻게 다른지 구하시오.\n\n1. `df` 를 `device_type` 별로 묶어 `churn_30d` 의 평균을 구하고 Series `device_churn` 에 저장하시오.\n2. 결과를 출력하고, **옳지 않은** 해석을 골라 번호를 `답안05` 에 저장하시오.\n   1. Mobile 의 이탈률이 가장 높다.\n   2. Desktop 과 Tablet 의 이탈률 차이는 0.01 보다 작다.\n   3. Tablet 의 이탈률이 가장 낮다.\n   4. Desktop 의 이탈률이 Mobile 보다 높다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** groupby 와 mean 으로 0과 1 타깃의 그룹별 비율을 구한다.\n\n**핵심 개념:** 타깃이 0과 1이면 그룹별 평균이 곧 그룹별 이탈 비율이다.\n\n```python\ndevice_churn = df.groupby('device_type')['churn_30d'].mean()\nprint(device_churn)\n답안05 = 4\n```\n\n**기준 결과:** Desktop 0.307, Mobile 0.335, Tablet 0.300. Desktop 이 Mobile 보다 낮으므로 4번이 옳지 않다.\n\n**다른 풀이 (pivot_table):**\n\n```python\ndevice_churn = df.pivot_table(index='device_type', values='churn_30d', aggfunc='mean')['churn_30d']\n답안05 = 4\n```\n\n**자주 틀리는 부분:** mean 대신 sum 을 써서 인원 수가 많은 그룹이 크게 보이는 것.\n\n**채점 항목:**\n\n1. 기기별 이탈률\n2. 답안05 정답\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "device_churn = df.groupby('device_type')['churn_30d'].mean()\nprint(device_churn)\n답안05 = 4\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

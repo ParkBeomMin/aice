@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q11",
+  "public_id": "associate-101-q11",
+  "revision": 1,
+  "title": "두 모델 성능 비교",
+  "topic": "evaluation",
+  "difficulty": "medium",
+  "prompt": "검증 데이터로 두 모델의 정확도를 비교하시오.\n\n- `dt` 로 `X_valid` 를 예측해 `y_pred_dt`, `rf` 로 예측해 `y_pred_rf` 에 저장하시오.\n- `y_valid` 와 비교한 정확도(accuracy)를 각각 `dt_acc`, `rf_acc` 에 저장하고 출력하시오.\n- 정확도가 더 높은 모델을 `답안11` 에 저장하시오. 의사결정나무면 'DecisionTree', 랜덤포레스트면 'RandomForest' 로 적으시오. (같으면 'RandomForest')",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** 검증 데이터 정확도로 두 모델을 비교한다.\n\n**핵심 개념:** `accuracy_score(정답, 예측)` 순서로 넣는다. `model.score(X, y)` 도 분류 모델에서는 같은 정확도를 준다.\n\n```python\nfrom sklearn.metrics import accuracy_score\ny_pred_dt = dt.predict(X_valid)\ny_pred_rf = rf.predict(X_valid)\ndt_acc = accuracy_score(y_valid, y_pred_dt)\nrf_acc = accuracy_score(y_valid, y_pred_rf)\nprint('의사결정나무:', dt_acc, '랜덤포레스트:', rf_acc)\n답안11 = 'DecisionTree'\n```\n\n**기준 결과:** 의사결정나무 0.7818, 랜덤포레스트 0.7782 로 이 데이터에서는 의사결정나무가 조금 더 높다. 답은 'DecisionTree'.\n\n**다른 풀이 (model.score 로 정확도):**\n\n```python\ny_pred_dt = dt.predict(X_valid)\ny_pred_rf = rf.predict(X_valid)\ndt_acc = dt.score(X_valid, y_valid)\nrf_acc = rf.score(X_valid, y_valid)\n답안11 = 'DecisionTree' if dt_acc > rf_acc else 'RandomForest'\n```\n\n**자주 틀리는 부분:** 랜덤포레스트가 항상 더 좋다고 보고 출력 없이 답을 적는 것.\n\n**채점 항목:**\n\n1. dt 예측\n2. rf 예측\n3. dt 정확도\n4. rf 정확도\n5. 더 높은 모델\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "from sklearn.metrics import accuracy_score\ny_pred_dt = dt.predict(X_valid)\ny_pred_rf = rf.predict(X_valid)\ndt_acc = accuracy_score(y_valid, y_pred_dt)\nrf_acc = accuracy_score(y_valid, y_pred_rf)\nprint('의사결정나무:', dt_acc, '랜덤포레스트:', rf_acc)\n답안11 = 'DecisionTree'\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

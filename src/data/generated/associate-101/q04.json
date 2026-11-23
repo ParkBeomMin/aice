@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q04",
+  "public_id": "associate-101-q04",
+  "revision": 2,
+  "title": "상관관계 히트맵",
+  "topic": "visualization",
+  "difficulty": "medium",
+  "prompt": "수치형 컬럼들의 상관관계를 확인하시오.\n\n1. seaborn 의 `heatmap` 으로 `df` 의 수치형 컬럼 상관계수 표를 그리고, 그래프 안에 상관계수 값을 표시하시오 (`annot=True`).\n2. `churn_30d` 와 피어슨 상관계수 값이 가장 큰 컬럼 이름(절댓값 기준 아님, 자기 자신 제외)을 문자열로 `답안04` 에 저장하시오. (예: 답안04 = 'col1')",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** heatmap 으로 상관계수 표를 그리고 타깃과 가장 큰 상관을 가진 컬럼을 찾는다.\n\n**핵심 개념:** `df.corr(numeric_only=True)` 로 수치형 컬럼만 상관계수를 계산하고 `annot=True` 로 칸마다 값을 적는다. 여기서 가장 크다는 것은 부호를 포함한 피어슨 상관계수 값이 가장 크다는 뜻이다 (절댓값 기준 아님).\n\n```python\nsns.heatmap(df.corr(numeric_only=True), annot=True, fmt='.2f')\nplt.show()\n답안04 = 'days_since_last_login'\n```\n\n**기준 결과:** `churn_30d` 와의 상관계수: `days_since_last_login` 0.361 (가장 큼), `payment_delay_days` 0.232, `sessions_last_30d` -0.375, `completion_rate` -0.348.\n\n**다른 풀이 (수치형만 골라 corr):**\n\n```python\nimport matplotlib.pyplot as plt\nsns.heatmap(df.select_dtypes('number').corr(), annot=True)\nplt.show()\n답안04 = 'days_since_last_login'\n```\n\n**자주 틀리는 부분:** 음의 상관까지 절댓값으로 비교해 `sessions_last_30d` 를 고르는 것.\n\n**채점 항목:**\n\n1. 상관계수 행렬 값\n2. 행과 열 컬럼 이름\n3. 상관계수 값 표시 (81칸)\n4. 답안04 정답\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "sns.heatmap(df.corr(numeric_only=True), annot=True, fmt='.2f')\nplt.show()\n답안04 = 'days_since_last_login'\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

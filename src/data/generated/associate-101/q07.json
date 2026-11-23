@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q07",
+  "public_id": "associate-101-q07",
+  "revision": 1,
+  "title": "결측치 처리",
+  "topic": "preprocessing",
+  "difficulty": "easy",
+  "prompt": "결측치를 확인하고 처리하시오.\n\n- 대상 데이터프레임: `df_del`\n- 컬럼별 결측치 개수를 확인하는 코드를 작성하시오.\n- 전체 결측치 개수를 정수로 `답안07` 에 저장하시오.\n- `quiz_avg_score` 의 결측치를 `df_del` 의 `quiz_avg_score` 중앙값으로 채운 결과를 새로운 데이터프레임 `df_na` 에 저장하시오. (`df_del` 은 바꾸지 마시오)",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** isnull().sum() 으로 결측을 세고 중앙값으로 채운다.\n\n**핵심 개념:** `isnull().sum()` 은 컬럼별 결측 개수, 한 번 더 `.sum()` 하면 전체 개수다. 중앙값은 이상치 영향을 덜 받는다. 이 문제는 시험 형식에 맞춰 분할 전에 채우지만, 실무에서는 훈련 데이터로만 중앙값을 구해 검증 데이터에도 같은 값을 쓰는 것이 원칙이다.\n\n```python\nprint(df_del.isnull().sum())\n답안07 = int(df_del.isnull().sum().sum())\ndf_na = df_del.copy()\ndf_na['quiz_avg_score'] = df_na['quiz_avg_score'].fillna(df_na['quiz_avg_score'].median())\n```\n\n**기준 결과:** `df_del` 전체 결측 89개 (모두 `quiz_avg_score`). 중앙값으로 채운 뒤 `df_na` 결측 0개.\n\n**다른 풀이 (fillna 에 딕셔너리):**\n\n```python\nprint(df_del.isnull().sum())\n답안07 = 89\ndf_na = df_del.fillna({'quiz_avg_score': df_del['quiz_avg_score'].median()})\n```\n\n**자주 틀리는 부분:** 원본 df 에서 결측을 세 91 을 적는 것, dropna 로 행을 지우는 것, df_del 을 직접 바꾸는 것.\n\n**채점 항목:**\n\n1. 답안07 정답\n2. df_del 중앙값으로 채움\n3. 다른 컬럼은 그대로\n4. df_del 은 그대로\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "print(df_del.isnull().sum())\n답안07 = int(df_del.isnull().sum().sum())\ndf_na = df_del.copy()\ndf_na['quiz_avg_score'] = df_na['quiz_avg_score'].fillna(df_na['quiz_avg_score'].median())\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

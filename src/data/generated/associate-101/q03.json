@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q03",
+  "public_id": "associate-101-q03",
+  "revision": 3,
+  "title": "이탈 여부별 접속 공백 (boxplot)",
+  "topic": "visualization",
+  "difficulty": "medium",
+  "prompt": "이탈 여부에 따라 마지막 접속 후 지난 일수가 어떻게 다른지 확인하시오.\n\n1. seaborn 의 `boxplot` 으로 `df` 의 x 축은 `churn_30d`, y 축은 `days_since_last_login` 인 그래프를 그리시오.\n2. 그래프와 **다른** 해석을 골라 번호를 `답안03` 에 저장하시오.\n   1. 이탈한 수강생(1)의 중앙값이 이탈하지 않은 수강생(0)보다 크다.\n   2. 이탈하지 않은 수강생(0)의 가장 큰 값(이상치 점 포함)은 30일을 넘지 않는다.\n   3. 두 그룹의 사분위 범위(상자 높이) 차이는 2일 이내이다.",
+  "starter_code": "# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** boxplot 에서 중앙값, 사분위 범위(상자), 이상치 점을 구분해 읽는다.\n\n**핵심 개념:** 상자는 1사분위부터 3사분위(사분위 범위), 가운데 선은 중앙값, 수염 밖 점은 이상치다.\n\n```python\nsns.boxplot(data=df, x='churn_30d', y='days_since_last_login')\nplt.show()\n답안03 = 3\n```\n\n**기준 결과:** 이탈 0 그룹 중앙값 5, 사분위 3~9, 최댓값 29. 이탈 1 그룹 중앙값 9, 사분위 4~18, 최댓값 45. 사분위 범위가 6일과 14일로 8일 차이가 나므로 3번이 틀린 해석이다.\n\n**다른 풀이 (x, y 를 Series 로):**\n\n```python\nsns.boxplot(x=df['churn_30d'], y=df['days_since_last_login'])\n답안03 = 3\n```\n\n**자주 틀리는 부분:** x 와 y 를 바꿔 그리는 것.\n\n**채점 항목:**\n\n1. 이탈 여부별 사분위수 상자\n2. 답안03 정답\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "sns.boxplot(data=df, x='churn_30d', y='days_since_last_login')\nplt.show()\n답안03 = 3\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "associate-101",
+  "question_id": "q13",
+  "public_id": "associate-101-q13",
+  "revision": 2,
+  "title": "딥러닝 모델 학습",
+  "topic": "deep_learning",
+  "difficulty": "hard",
+  "prompt": "이탈 여부를 예측하는 딥러닝 모델을 만들고 학습하시오. 먼저 셀에 있는 준비 코드를 그대로 두고 아래에 작성하시오.\n\n- `Sequential` 모델 `model` 을 다음 순서로 만드시오: `Dense(64, activation='relu')`(입력 크기는 `X_train` 의 컬럼 수), `Dropout(0.2)`, `Dense(32, activation='relu')`, `Dense(1, activation='sigmoid')`\n- 손실함수 `'binary_crossentropy'`, 최적화 `'adam'`, 평가지표 `['accuracy']` 로 compile 하시오.\n- `EarlyStopping` 으로 `val_loss` 가 5번 연속 나아지지 않으면 멈추고 가장 좋았던 가중치로 되돌리도록 `es` 에 저장하시오 (`patience=5`, `restore_best_weights=True`).\n- `ModelCheckpoint` 로 `val_loss` 가 가장 낮은 모델만 `'best_model.h5'` 에 저장하도록 `mc` 에 저장하시오.\n- 훈련 데이터 `X_train`, `y_train` 으로 `epochs=50`, `batch_size=32`, 검증 데이터 `(X_valid, y_valid)`, 콜백 `[es, mc]` 로 학습하고 결과를 `history` 에 저장하시오.",
+  "starter_code": "import random\nimport numpy as np\nimport tensorflow as tf\nfrom tensorflow.keras.models import Sequential, load_model\nfrom tensorflow.keras.layers import Dense, Dropout\nfrom tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint\n\nrandom.seed(42)\nnp.random.seed(42)\ntf.random.set_seed(42)\n\n# 여기에 코드를 작성하세요\n",
+  "runtime": {
+    "type": "pyodide",
+    "max_execution_ms": 30000,
+    "packages": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "matplotlib",
+      "seaborn"
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "learners",
+      "url_path": "content/associate-101/datasets/learners.csv",
+      "sha256": "af2cea765f744a565593a8f354dd6ca7878ad01b2c32041d6aa0a34420053a13",
+      "size_bytes": 91796,
+      "license": "CC BY 4.0 (출처: ParkBeomMin, AICE 실전 모의고사), 합성 데이터, 생성 시드 20261101, SHA-256 af2cea765f74"
+    }
+  ],
+  "grading": {
+    "type": "result_assertions",
+    "profile": "associate-v1"
+  },
+  "explanation": {
+    "available": true,
+    "body_md": "**학습 목표:** Sequential 모델을 쌓고 EarlyStopping, ModelCheckpoint 콜백으로 학습한다.\n\n**핵심 개념:** 이진 분류의 마지막 층은 `Dense(1, activation='sigmoid')` 와 `binary_crossentropy` 를 쓴다. EarlyStopping 은 검증 손실이 더 나아지지 않으면 학습을 멈추고, ModelCheckpoint 는 가장 좋은 모델을 파일로 남긴다.\n\n```python\nimport random\nimport numpy as np\nimport tensorflow as tf\nfrom tensorflow.keras.models import Sequential, load_model\nfrom tensorflow.keras.layers import Dense, Dropout\nfrom tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint\n\nrandom.seed(42)\nnp.random.seed(42)\ntf.random.set_seed(42)\n\nmodel = Sequential()\nmodel.add(Dense(64, activation='relu', input_shape=(X_train.shape[1],)))\nmodel.add(Dropout(0.2))\nmodel.add(Dense(32, activation='relu'))\nmodel.add(Dense(1, activation='sigmoid'))\nmodel.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])\nes = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True, verbose=1)\nmc = ModelCheckpoint('best_model.h5', monitor='val_loss', save_best_only=True, verbose=1)\nhistory = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_valid, y_valid), callbacks=[es, mc], verbose=0)\n```\n\n**기준 결과:** 이 사이트의 실행 환경(브라우저용 Keras 학습 호환 모듈) 기준으로 15 에포크에서 조기 종료된다. 실제 TensorFlow 환경과 학습 결과 및 지원 기능이 다를 수 있다.\n\n**다른 풀이 (Sequential 에 리스트로):**\n\n```python\nimport random\nimport numpy as np\nimport tensorflow as tf\nfrom tensorflow.keras.models import Sequential, load_model\nfrom tensorflow.keras.layers import Dense, Dropout\nfrom tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint\nrandom.seed(42)\nnp.random.seed(42)\ntf.random.set_seed(42)\nmodel = Sequential([Dense(64, activation='relu', input_shape=(X_train.shape[1],)), Dropout(0.2), Dense(32, activation='relu'), Dense(1, activation='sigmoid')])\nmodel.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])\nes = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)\nmc = ModelCheckpoint('best_model.h5', monitor='val_loss', save_best_only=True)\nhistory = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_valid, y_valid), callbacks=[es, mc], verbose=0)\n```\n\n**자주 틀리는 부분:** validation_data 를 빼서 val_loss 가 없는 것, 회귀용 손실 mse 를 쓰는 것.\n\n**채점 항목:**\n\n1. 층 구성\n2. 입력 크기\n3. 손실함수\n4. 최적화 adam\n5. 평가지표 accuracy\n6. EarlyStopping 이 val_loss 를 봄\n7. EarlyStopping patience 5\n8. 가장 좋은 가중치로 복원\n9. ModelCheckpoint 가 val_loss 를 봄\n10. 가장 좋은 모델만 저장\n11. 저장 파일 best_model.h5\n12. epochs 50, batch_size 32\n13. 훈련, 검증 데이터로 학습\n14. 콜백 es, mc 전달\n15. 검증 기록이 있는 history\n16. 저장 파일을 불러올 수 있음\n"
+  },
+  "answer": {
+    "available": true,
+    "code": "import random\nimport numpy as np\nimport tensorflow as tf\nfrom tensorflow.keras.models import Sequential, load_model\nfrom tensorflow.keras.layers import Dense, Dropout\nfrom tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint\n\nrandom.seed(42)\nnp.random.seed(42)\ntf.random.set_seed(42)\n\nmodel = Sequential()\nmodel.add(Dense(64, activation='relu', input_shape=(X_train.shape[1],)))\nmodel.add(Dropout(0.2))\nmodel.add(Dense(32, activation='relu'))\nmodel.add(Dense(1, activation='sigmoid'))\nmodel.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])\nes = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True, verbose=1)\nmc = ModelCheckpoint('best_model.h5', monitor='val_loss', save_best_only=True, verbose=1)\nhistory = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_valid, y_valid), callbacks=[es, mc], verbose=0)\n"
+  },
+  "video": {
+    "youtube_id": null,
+    "start_seconds": null
+  },
+  "publication_status": "approved"
+}
